@@ -1,0 +1,237 @@
+//
+//  EBSearchBusView.m
+//  EBus
+//
+//  Created by Kowloon on 15/10/14.
+//  Copyright © 2015年 Goome. All rights reserved.
+//
+#define EB_HeightOfButton 50
+#define EB_WidthOfButton (EB_WidthOfScreen > 320 ? 300 : 270)
+#define EB_PaddingOfSearchBusView 10
+#import "EBSearchBusView.h"
+#import "EBSearchBusButton.h"
+#import <Masonry/Masonry.h>
+
+@interface EBSearchBusView ()
+
+@property (nonatomic, weak) EBSearchBusButton *myPositionBtn;
+@property (nonatomic, weak) EBSearchBusButton *endPositionBtn;
+
+@property (nonatomic, weak) UIButton *myPositionDeleteBtn;
+@property (nonatomic, weak) UIButton *endPositionDeleteBtn;
+
+@property (nonatomic, weak) UIButton *exchangeBtn;
+@property (nonatomic, weak) UIButton *searchBtn;
+
+@end
+
+@implementation EBSearchBusView
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self searchBusButtonImplementation];
+        [self exchangeButtonImplementation];
+        [self searchBtnImplementation];
+    }
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        [self searchBusButtonImplementation];
+        [self exchangeButtonImplementation];
+        [self searchBtnImplementation];
+    }
+    return self;
+}
+#pragma mark - Implementation
+- (void)searchBusButtonImplementation {
+    EBSearchBusButton *searchBtnOne = [self searchBusButtonWithTitle:@"我的位置" normalImageName:@"search_myPosition"];
+    EBSearchBusButton *searchBtnTwo = [self searchBusButtonWithTitle:@"终点" normalImageName:@"search_endPosition"];
+    searchBtnOne.tag = EBSearchBusClickTypeMyPosition;
+    searchBtnTwo.tag = EBSearchBusClickTypeEndPosition;
+    
+    UIButton *deleteOne = [self deleteBtn];
+    UIButton *deleteTwo = [self deleteBtn];
+    deleteOne.tag = EBSearchBusClickTypeDeleteOfMyPosition;
+    deleteTwo.tag = EBSearchBusClickTypeDeleteOfEndPosition;
+    
+    [searchBtnOne addSubview:deleteOne];
+    [searchBtnTwo addSubview:deleteTwo];
+    
+    [self addSubview:searchBtnOne];
+    [self addSubview:searchBtnTwo];
+    
+    self.myPositionBtn = searchBtnOne;
+    self.endPositionBtn = searchBtnTwo;
+    self.myPositionDeleteBtn = deleteOne;
+    self.endPositionDeleteBtn = deleteTwo;
+}
+
+- (void)exchangeButtonImplementation {
+    UIButton *exchange = [UIButton buttonWithType:UIButtonTypeCustom];
+    exchange.imageView.contentMode = UIViewContentModeCenter;
+    [exchange setImage:[UIImage imageNamed:@"search_exchange"] forState:UIControlStateNormal];
+    [exchange addTarget:self action:@selector(searchBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    exchange.tag = EBSearchBusClickTypeExchange;
+    [self addSubview:exchange];
+    self.exchangeBtn = exchange;
+}
+
+- (void)searchBtnImplementation {
+    UIButton *search = [UIButton buttonWithType:UIButtonTypeCustom];
+    search.tag = EBSearchBusClickTypeSearch;
+    [search setTitle:@"查询班车" forState:UIControlStateNormal];
+    [search setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [search addTarget:self action:@selector(searchBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    search.layer.cornerRadius = 25;
+    [search setBackgroundColor:EB_RGBColor(157, 197, 236)];
+    [self addSubview:search];
+    self.searchBtn = search;
+}
+
+- (EBSearchBusButton *)searchBusButtonWithTitle:(NSString *)title normalImageName:(NSString *)normalImageName {
+    EBSearchBusButton *searchBtn = [EBSearchBusButton searchBusButtonWithTitle:title];
+    searchBtn.layer.cornerRadius = 25;
+    searchBtn.layer.borderWidth = 1;
+    searchBtn.layer.borderColor = EB_RGBAColor(199, 204, 215, 0.7).CGColor;
+    [searchBtn setImage:[UIImage imageNamed:normalImageName] forState:UIControlStateNormal];
+    [searchBtn addTarget:self action:@selector(searchBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    return searchBtn;
+}
+
+- (UIButton *)deleteBtn {
+    UIButton *delete = [UIButton buttonWithType:UIButtonTypeCustom];
+    [delete setImage:[UIImage imageNamed:@"search_delete"] forState:UIControlStateNormal];
+    [delete addTarget:self action:@selector(searchBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    return delete;
+}
+
+- (void)searchBtnClick:(UIButton *)sender {
+    switch (sender.tag) {
+        case EBSearchBusClickTypeDeleteOfMyPosition:
+            self.myPositionTitle = nil;
+            break;
+        case EBSearchBusClickTypeDeleteOfEndPosition:
+            self.endPositionTitle = nil;
+            break;
+        case EBSearchBusClickTypeExchange:
+        {
+            NSString *title = self.myPositionTitle;
+            self.myPositionTitle = self.endPositionTitle;
+            self.endPositionTitle = title;
+        }
+            break;
+        default:
+            break;
+    }
+    if ([self.delegate respondsToSelector:@selector(searchBusView:clickType:)]) {
+        [self.delegate searchBusView:self clickType:sender.tag];
+    }
+}
+
+#pragma mark - DidMoveToSuperView
+- (void)didMoveToSuperview {
+    [self positionBtnAutoLayout];
+    [self exchangeBtnAutoLayout];
+    [self searchBtnAutoLayout];
+}
+
+- (void)positionBtnAutoLayout {
+    EB_WS(ws);
+    CGFloat padding = EB_PaddingOfSearchBusView;
+    CGFloat width = EB_WidthOfButton;
+    CGFloat height = EB_HeightOfButton;
+    [self.myPositionBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(ws.mas_centerX);
+        make.top.equalTo(ws).with.offset(padding + 10);
+        make.width.mas_equalTo(width);
+        make.height.mas_equalTo(height);
+    }];
+    
+    [self.endPositionBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(ws.mas_centerX);
+        make.top.equalTo(self.myPositionBtn.mas_bottom).with.offset(padding);
+        make.width.mas_equalTo(width);
+        make.height.mas_equalTo(height);
+    }];
+    
+    [self.myPositionDeleteBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(ws.myPositionBtn).with.offset(0);
+        make.right.equalTo(ws.myPositionBtn).with.offset(0);
+        make.height.mas_equalTo(height);//高度
+        make.width.mas_equalTo(height);//宽度
+    }];
+    
+    [self.endPositionDeleteBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(ws.endPositionBtn).with.offset(0);
+        make.right.equalTo(ws.endPositionBtn).with.offset(0);
+        make.height.mas_equalTo(height);//高度
+        make.width.mas_equalTo(height);//宽度
+    }];
+}
+
+- (void)exchangeBtnAutoLayout {
+    EB_WS(ws);
+    CGFloat width = 30;
+    CGFloat height = 40;
+    CGFloat padding = EB_PaddingOfSearchBusView;
+    [self.exchangeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(ws).with.offset(padding / 2 + EB_HeightOfButton + padding * 2 - height / 2);
+        make.left.equalTo(ws.myPositionBtn.mas_right).with.offset(0);
+        make.height.mas_equalTo(height);//高度
+        make.width.mas_equalTo(width);//宽度
+    }];
+}
+
+- (void)searchBtnAutoLayout {
+    EB_WS(ws);
+    CGFloat padding = EB_PaddingOfSearchBusView;
+    CGFloat width = EB_WidthOfButton;
+    CGFloat height = EB_HeightOfButton;
+    [self.searchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(ws.mas_centerX);
+        make.top.equalTo(self.endPositionBtn.mas_bottom).with.offset(padding);
+        make.width.mas_equalTo(width);
+        make.height.mas_equalTo(height);
+    }];
+}
+
+#pragma mark - Public Method 
+- (void)setMyPositionTitle:(NSString *)myPositionTitle {
+    _myPositionTitle = myPositionTitle;
+    if (myPositionTitle.length != 0) {
+        [self.myPositionBtn setTitle:myPositionTitle forState:UIControlStateNormal];
+        [self.myPositionBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    } else {
+        [self.myPositionBtn setTitle:@"我的位置" forState:UIControlStateNormal];
+        [self.myPositionBtn setTitleColor:EB_RGBColor(199, 204, 215) forState:UIControlStateNormal];
+    }
+}
+
+- (void)setEndPositionTitle:(NSString *)endPositionTitle {
+    _endPositionTitle = endPositionTitle;
+    if (endPositionTitle.length != 0) {
+        [self.endPositionBtn setTitle:endPositionTitle forState:UIControlStateNormal];
+        [self.endPositionBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    } else {
+        [self.endPositionBtn setTitle:@"终点" forState:UIControlStateNormal];
+        [self.endPositionBtn setTitleColor:EB_RGBColor(199, 204, 215) forState:UIControlStateNormal];
+    }
+    
+}
+
+@end
+
+
+
+
+
+
+
+
+
+
+

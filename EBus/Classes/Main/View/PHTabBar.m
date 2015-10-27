@@ -28,7 +28,7 @@
     [button setImage:[UIImage imageNamed:selName] forState:UIControlStateSelected];
     
     [button setTitle:title forState:UIControlStateNormal];
-    [button setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [button setTitleColor:EB_RGBColor(128, 138, 165) forState:UIControlStateNormal];
     [button setTitleColor:EB_RGBColor(90, 155, 255) forState:UIControlStateSelected];
     button.titleLabel.font = [UIFont systemFontOfSize:12];
     button.titleLabel.textAlignment = NSTextAlignmentCenter;

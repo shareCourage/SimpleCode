@@ -62,6 +62,7 @@
     if (cell == nil) {
         cell = [[PHTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ID];
     }
+    cell.arrowViewName = @"me_accessoryView";
     return cell;
 }
 

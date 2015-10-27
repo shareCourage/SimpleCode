@@ -64,7 +64,7 @@
     NSString *loginName = [EBUserInfo sharedEBUserInfo].loginName;
     NSString *loginId = [EBUserInfo sharedEBUserInfo].loginId;
 #warning 为了测试，现在这里设为==
-    if (loginName.length == 0 && loginId.length == 0) {
+    if (loginName.length != 0 && loginId.length != 0) {
         if (completion) completion();
         return NO;
     }
@@ -112,5 +112,22 @@
     NSArray *array = [unarc decodeObjectForKey:PHArchiver_memberArray];
     NSMutableArray *mutableArray = [[NSMutableArray alloc] initWithArray:array];
     return mutableArray;
+}
+
+// 验证手机号
+#pragma mark ValidateCorrelation
+//正则表达式判断是否是电话号码
++ (BOOL)isPureTelephoneNumber:(NSString*)string{
+    if ([string length] == 0) {
+        return NO;
+    }
+    //正则表达式
+    NSString *regex=@"1\\d{10}";
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",regex];
+    BOOL isMatch = [pred evaluateWithObject:string];
+    if (!isMatch) {
+        return NO;
+    }
+    return YES;
 }
 @end

@@ -21,7 +21,9 @@
 @end
 
 @implementation EBLineDetailController
-
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -35,7 +37,8 @@
     
     NSString *documents = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
     self.filePath = [documents stringByAppendingPathComponent:[NSString stringWithFormat:@"%@lineId.arc",self.resultModel.lineId]];
-
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginCenter) name:EBLoginSuccessNotification object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -68,13 +71,18 @@
         
     }];
 }
-
+- (void)loginCenter {
+    [self pushToTicket];
+}
+- (void)pushToTicket {
+    EBBuyTicketController *buyT = [[EBBuyTicketController alloc] init];
+    buyT.resultModel = self.resultModel;
+    [self.navigationController pushViewController:buyT animated:YES];
+}
 #pragma mark - EBLineMapViewDelegate
 - (void)lineMapViewBuyClick:(EBLineMapView *)lineMapView {
     if (![EBTool presentLoginVC:self completion:nil]) {
-        EBBuyTicketController *buyT = [[EBBuyTicketController alloc] init];
-        buyT.resultModel = self.resultModel;
-        [self.navigationController pushViewController:buyT animated:YES];
+        [self pushToTicket];
     }
 }
 

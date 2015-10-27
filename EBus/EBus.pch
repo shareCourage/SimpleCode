@@ -29,6 +29,7 @@
 
 #define EB_WS(weakSelf) __weak __typeof(&*self)weakSelf = self;
 
+#define EB_DefaultColor          EB_RGBColor(156, 195, 234)
 #define EB_HeightOfNavigationBar 64
 #define EB_HeightOfTabBar        49
 #define EB_WidthOfScreen         [UIScreen mainScreen].bounds.size.width

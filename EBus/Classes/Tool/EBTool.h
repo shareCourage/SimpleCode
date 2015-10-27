@@ -38,4 +38,9 @@
 
 + (BOOL)encoderObjectArray:(NSMutableArray *)memberArray path:(NSString *)filePath;
 + (NSMutableArray *)decoderObjectPath:(NSString *)filePath;
+
+/*
+ *正则表达式判断是否是电话号码
+ */
++ (BOOL)isPureTelephoneNumber:(NSString*)string;
 @end

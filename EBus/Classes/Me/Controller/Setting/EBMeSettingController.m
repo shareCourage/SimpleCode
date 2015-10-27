@@ -11,36 +11,142 @@
 #import "PHSettingItem.h"
 #import "PHSettingArrowItem.h"
 #import "PHSettingSwitchItem.h"
+#import "EBUserInfo.h"
 
-@interface EBMeSettingController ()
+#import "EBMoreViewController.h"
+#import "EBMyOrderController.h"
+#import "EBSuggestController.h"
+#import "EBSZTViewController.h"
 
+@interface EBMeSettingController () <UIAlertViewDelegate>
+{
+    BOOL _hasLogin;
+}
+@property(nonatomic, strong)UIAlertView *alertView;
+@property (nonatomic, weak) UIView *footerView;
 @end
 
 @implementation EBMeSettingController
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+#pragma mark - 懒加载
+- (UIAlertView *)alertView {
+    if (!_alertView) {
+        _alertView = [[UIAlertView alloc] initWithTitle:@"注销当前账户" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    }
+    return _alertView;
+}
 
-
-
+#pragma mark - super
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationItem.title = @"我的";
+    [self headerViewImplementation];
+    [self initImplementation];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginCenter) name:EBLoginSuccessNotification object:nil];
+
+}
+#pragma mark - Implementation
+- (void)initImplementation {
+    if ([EBUserInfo sharedEBUserInfo].loginName.length != 0 && [EBUserInfo sharedEBUserInfo].loginId.length != 0) {
+        _hasLogin = YES;
+    }
+    [self footerViewImplementation];
     [self one];
-    
+}
+
+- (void)headerViewImplementation {
+    UIImageView *headerImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, EB_WidthOfScreen, 100)];
+    headerImageView.image = [UIImage imageNamed:@"me_header"];
+    self.tableView.tableHeaderView = headerImageView;
+}
+
+- (void)footerViewImplementation {
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, EB_WidthOfScreen, 50)];
+    footerView.backgroundColor = [UIColor clearColor];
+    if (_hasLogin) {
+        UILabel *idLabel = [[UILabel alloc] init];
+        idLabel.center = footerView.center;
+        idLabel.bounds = CGRectMake(0, 0, 280, 30);
+        idLabel.textAlignment = NSTextAlignmentCenter;
+        idLabel.text = [NSString stringWithFormat:@"ID: %@",[EBUserInfo sharedEBUserInfo].loginName];
+        [footerView addSubview:idLabel];
+    } else {
+        UIButton *loginBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+        CGFloat loginH = 40;
+        loginBtn.center = footerView.center;
+        loginBtn.bounds = CGRectMake(0, 0, 280, loginH);
+        loginBtn.layer.cornerRadius = loginH / 2;
+        [loginBtn setTitle:@"登录" forState:UIControlStateNormal];
+        [loginBtn setTintColor:[UIColor whiteColor]];
+        [loginBtn setBackgroundColor:EB_DefaultColor];
+        [loginBtn addTarget:self action:@selector(loginClick) forControlEvents:UIControlEventTouchUpInside];
+        [footerView addSubview:loginBtn];
+    }
+    self.tableView.tableFooterView = footerView;
+    self.footerView = footerView;
 }
 
 - (void)one
 {
-    PHSettingItem *ticket = [PHSettingArrowItem itemWithTitle:@"我的订单" destVcClass:nil];
+    PHSettingItem *ticket = [PHSettingArrowItem itemWithTitle:@"我的订单" destVcClass:[EBMyOrderController class]];
     PHSettingItem *notification = [PHSettingArrowItem itemWithTitle:@"我的通知" destVcClass:nil];
-    PHSettingItem *szt = [PHSettingArrowItem itemWithTitle:@"深圳通卡" destVcClass:nil];
+    PHSettingItem *szt = [PHSettingArrowItem itemWithTitle:@"深圳通卡" destVcClass:[EBSZTViewController class]];
     PHSettingItem *freeCertificate = [PHSettingArrowItem itemWithTitle:@"免费证件" destVcClass:nil];
-    PHSettingItem *advice = [PHSettingArrowItem itemWithTitle:@"投诉建议" destVcClass:nil];
+    PHSettingItem *advice = [PHSettingArrowItem itemWithTitle:@"投诉建议" destVcClass:[EBSuggestController class]];
     PHSettingItem *versionUpdate = [PHSettingArrowItem itemWithTitle:@"版本更新" destVcClass:nil];
-    PHSettingItem *more = [PHSettingArrowItem itemWithTitle:@"更多" destVcClass:nil];
-
+    PHSettingItem *more = [PHSettingArrowItem itemWithTitle:@"更多" destVcClass:[EBMoreViewController class]];
+    PHSettingItem *logout = [PHSettingArrowItem itemWithTitle:@"注销"];
+    EB_WS(ws);
+    logout.option = ^{
+        [ws.alertView show];
+    };
     PHSettingGroup *group = [[PHSettingGroup alloc] init];
-    group.items = @[ticket,notification,szt,freeCertificate,advice,versionUpdate,more];
+    if (_hasLogin) {
+        group.items = @[ticket,notification,szt,freeCertificate,advice,versionUpdate,more,logout];
+    } else {
+        group.items = @[ticket,notification,szt,freeCertificate,advice,versionUpdate,more];
+    }
     [self.dataSource addObject:group];
 }
+#pragma mark - Private Method
+- (void)loginClick {
+    [EBTool presentLoginVC:self completion:nil];
+}
 
+- (void)loginCenter {
+    _hasLogin = NO;
+    [self.dataSource removeAllObjects];
+    [self.footerView removeFromSuperview];
+    [self initImplementation];
+    [self.tableView reloadData];
+}
+
+#pragma mark - UITableViewDataSource
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 50.f;
+}
+
+#pragma mark - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView == self.alertView) {
+        if (buttonIndex == 1) {
+            [EBUserInfo sharedEBUserInfo].loginName = nil;
+            [EBUserInfo sharedEBUserInfo].loginId = nil;
+            _hasLogin = NO;
+            [self.dataSource removeAllObjects];
+            [self.footerView removeFromSuperview];
+            [self initImplementation];
+            [self.tableView reloadData];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+                [notificationCenter postNotificationName:EBLogoutSuccessNotification object:self];
+            });
+        }
+    }
+}
 @end
 
 

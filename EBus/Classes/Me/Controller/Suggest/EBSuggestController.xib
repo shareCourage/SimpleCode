@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EBSuggestController">
+            <connections>
+                <outlet property="commitBtn" destination="lGN-F0-bsr" id="ZV7-bC-AyE"/>
+                <outlet property="suggestTextView" destination="y2g-FU-3Mx" id="fd6-h3-9PB"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+                <outletCollection property="suggestBtns" destination="cWE-Ln-kqy" id="idH-pr-Pfy"/>
+                <outletCollection property="suggestBtns" destination="m89-gg-FKw" id="KwE-uL-gCQ"/>
+                <outletCollection property="suggestBtns" destination="wZf-9f-SC2" id="BKd-VK-hnl"/>
+                <outletCollection property="suggestBtns" destination="fcp-eK-NWj" id="RCC-F9-8z0"/>
+                <outletCollection property="suggestBtns" destination="eAQ-FI-fjM" id="Bfh-qx-gBg"/>
+                <outletCollection property="suggestBtns" destination="7i8-2g-RaJ" id="L3x-ij-v8A"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GyD-hW-Jms">
+                    <rect key="frame" x="10" y="224" width="355" height="200"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="请输入您的宝贵意见" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="84u-4I-W7c">
+                            <rect key="frame" x="0.0" y="0.0" width="355" height="40"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="40" id="bnP-HS-ZtQ"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" red="0.75294125079999996" green="0.75294125079999996" blue="0.75294125079999996" alpha="1" colorSpace="deviceRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="y2g-FU-3Mx">
+                            <rect key="frame" x="0.0" y="40" width="355" height="160"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="y2g-FU-3Mx" secondAttribute="trailing" id="1Kz-Rx-AuE"/>
+                        <constraint firstAttribute="height" constant="200" id="8H4-X3-pXI"/>
+                        <constraint firstItem="y2g-FU-3Mx" firstAttribute="leading" secondItem="GyD-hW-Jms" secondAttribute="leading" id="BfS-t6-GQd"/>
+                        <constraint firstAttribute="trailing" secondItem="84u-4I-W7c" secondAttribute="trailing" id="Lgh-fo-HM9"/>
+                        <constraint firstItem="84u-4I-W7c" firstAttribute="top" secondItem="GyD-hW-Jms" secondAttribute="top" id="dhM-Aq-IzQ"/>
+                        <constraint firstItem="y2g-FU-3Mx" firstAttribute="top" secondItem="84u-4I-W7c" secondAttribute="bottom" id="hG4-9Z-ADM"/>
+                        <constraint firstItem="84u-4I-W7c" firstAttribute="leading" secondItem="GyD-hW-Jms" secondAttribute="leading" id="spT-Dr-JMv"/>
+                        <constraint firstAttribute="bottom" secondItem="y2g-FU-3Mx" secondAttribute="bottom" id="ta2-9a-TO7"/>
+                    </constraints>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lGN-F0-bsr" customClass="EBButton">
+                    <rect key="frame" x="20" y="597" width="335" height="40"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="r6k-kd-ep8"/>
+                    </constraints>
+                    <state key="normal" title="提交"/>
+                    <connections>
+                        <action selector="commitClick:" destination="-1" eventType="touchUpInside" id="FlG-aK-orj"/>
+                    </connections>
+                </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DXK-KM-mte" userLabel="firstView">
+                    <rect key="frame" x="0.0" y="64" width="375" height="150"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dbz-N3-JEw" userLabel="secondView">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cWE-Ln-kqy" customClass="EBButton">
+                                    <rect key="frame" x="0.0" y="0.0" width="188" height="50"/>
+                                    <state key="normal" title="线路优化"/>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m89-gg-FKw" customClass="EBButton">
+                                    <rect key="frame" x="188" y="0.0" width="187" height="50"/>
+                                    <state key="normal" title="功能/操作"/>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="bottom" secondItem="m89-gg-FKw" secondAttribute="bottom" id="0pE-C3-ePT"/>
+                                <constraint firstItem="m89-gg-FKw" firstAttribute="leading" secondItem="cWE-Ln-kqy" secondAttribute="trailing" id="9cl-8a-COZ"/>
+                                <constraint firstAttribute="bottom" secondItem="cWE-Ln-kqy" secondAttribute="bottom" id="EHY-ZP-4TM"/>
+                                <constraint firstAttribute="height" constant="50" id="FpD-fa-u3J"/>
+                                <constraint firstAttribute="trailing" secondItem="m89-gg-FKw" secondAttribute="trailing" id="NDh-sB-dfo"/>
+                                <constraint firstItem="cWE-Ln-kqy" firstAttribute="leading" secondItem="Dbz-N3-JEw" secondAttribute="leading" id="RmZ-M3-q3p"/>
+                                <constraint firstItem="m89-gg-FKw" firstAttribute="top" secondItem="Dbz-N3-JEw" secondAttribute="top" id="a8v-Xr-Y98"/>
+                                <constraint firstAttribute="trailing" secondItem="cWE-Ln-kqy" secondAttribute="trailing" multiplier="2" id="cO9-zL-qPS"/>
+                                <constraint firstItem="cWE-Ln-kqy" firstAttribute="top" secondItem="Dbz-N3-JEw" secondAttribute="top" id="uLl-d0-sLf"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AQB-K3-QIl" userLabel="secondView">
+                            <rect key="frame" x="0.0" y="50" width="375" height="50"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wZf-9f-SC2" customClass="EBButton">
+                                    <rect key="frame" x="0.0" y="0.0" width="188" height="50"/>
+                                    <state key="normal" title="司机服务"/>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fcp-eK-NWj" customClass="EBButton">
+                                    <rect key="frame" x="188" y="0.0" width="187" height="50"/>
+                                    <state key="normal" title="车辆配置"/>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="wZf-9f-SC2" firstAttribute="leading" secondItem="AQB-K3-QIl" secondAttribute="leading" id="97Q-C3-KR6"/>
+                                <constraint firstItem="wZf-9f-SC2" firstAttribute="top" secondItem="AQB-K3-QIl" secondAttribute="top" id="9Di-Kh-vFa"/>
+                                <constraint firstAttribute="trailing" secondItem="wZf-9f-SC2" secondAttribute="trailing" multiplier="2" id="Dbq-Si-Fd8"/>
+                                <constraint firstAttribute="bottom" secondItem="fcp-eK-NWj" secondAttribute="bottom" id="F0d-El-rct"/>
+                                <constraint firstAttribute="height" constant="50" id="MCJ-ah-jP7"/>
+                                <constraint firstItem="fcp-eK-NWj" firstAttribute="leading" secondItem="wZf-9f-SC2" secondAttribute="trailing" id="ccf-ox-WZM"/>
+                                <constraint firstAttribute="bottom" secondItem="wZf-9f-SC2" secondAttribute="bottom" id="m95-Fv-GD0"/>
+                                <constraint firstItem="fcp-eK-NWj" firstAttribute="top" secondItem="AQB-K3-QIl" secondAttribute="top" id="sKo-ho-p7V"/>
+                                <constraint firstAttribute="trailing" secondItem="fcp-eK-NWj" secondAttribute="trailing" id="tyf-ve-YgF"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IqX-UL-n00" userLabel="secondView">
+                            <rect key="frame" x="0.0" y="100" width="375" height="50"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eAQ-FI-fjM" customClass="EBButton">
+                                    <rect key="frame" x="0.0" y="0.0" width="188" height="50"/>
+                                    <state key="normal" title="订单/费用"/>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7i8-2g-RaJ" customClass="EBButton">
+                                    <rect key="frame" x="188" y="0.0" width="187" height="50"/>
+                                    <state key="normal" title="其它"/>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstItem="eAQ-FI-fjM" firstAttribute="leading" secondItem="IqX-UL-n00" secondAttribute="leading" id="3Xz-XV-a9c"/>
+                                <constraint firstAttribute="bottom" secondItem="eAQ-FI-fjM" secondAttribute="bottom" id="4Gy-Eu-KRq"/>
+                                <constraint firstItem="7i8-2g-RaJ" firstAttribute="leading" secondItem="eAQ-FI-fjM" secondAttribute="trailing" id="Jef-kJ-JPA"/>
+                                <constraint firstAttribute="trailing" secondItem="eAQ-FI-fjM" secondAttribute="trailing" multiplier="2" id="ZsV-t6-4z6"/>
+                                <constraint firstAttribute="trailing" secondItem="7i8-2g-RaJ" secondAttribute="trailing" id="aDn-k6-r5B"/>
+                                <constraint firstAttribute="bottom" secondItem="7i8-2g-RaJ" secondAttribute="bottom" id="e9R-In-cpd"/>
+                                <constraint firstItem="eAQ-FI-fjM" firstAttribute="top" secondItem="IqX-UL-n00" secondAttribute="top" id="isz-Ij-IMP"/>
+                                <constraint firstAttribute="height" constant="50" id="mI2-ft-bHT"/>
+                                <constraint firstItem="7i8-2g-RaJ" firstAttribute="top" secondItem="IqX-UL-n00" secondAttribute="top" id="pTE-fQ-mmn"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" red="0.61568627450000002" green="0.64705882349999999" blue="0.70196078429999997" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstItem="Dbz-N3-JEw" firstAttribute="top" secondItem="DXK-KM-mte" secondAttribute="top" id="4Xx-Je-FE1"/>
+                        <constraint firstItem="AQB-K3-QIl" firstAttribute="top" secondItem="Dbz-N3-JEw" secondAttribute="bottom" id="5ie-n4-NVR"/>
+                        <constraint firstItem="AQB-K3-QIl" firstAttribute="leading" secondItem="DXK-KM-mte" secondAttribute="leading" id="Btb-HY-7xT"/>
+                        <constraint firstAttribute="trailing" secondItem="AQB-K3-QIl" secondAttribute="trailing" id="CPj-0y-DQ5"/>
+                        <constraint firstItem="IqX-UL-n00" firstAttribute="top" secondItem="AQB-K3-QIl" secondAttribute="bottom" id="Eik-de-grc"/>
+                        <constraint firstAttribute="trailing" secondItem="IqX-UL-n00" secondAttribute="trailing" id="Pk1-er-FC8"/>
+                        <constraint firstAttribute="height" constant="150" id="gBU-S1-W19"/>
+                        <constraint firstItem="Dbz-N3-JEw" firstAttribute="leading" secondItem="DXK-KM-mte" secondAttribute="leading" id="hXx-Fa-fQp"/>
+                        <constraint firstAttribute="trailing" secondItem="Dbz-N3-JEw" secondAttribute="trailing" id="mfX-pw-ofF"/>
+                        <constraint firstItem="IqX-UL-n00" firstAttribute="leading" secondItem="DXK-KM-mte" secondAttribute="leading" id="ogB-e9-J93"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="lGN-F0-bsr" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="0En-Oe-624"/>
+                <constraint firstItem="DXK-KM-mte" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="4T2-jC-y0b"/>
+                <constraint firstAttribute="bottom" secondItem="lGN-F0-bsr" secondAttribute="bottom" constant="30" id="5H9-0q-DPr"/>
+                <constraint firstAttribute="trailing" secondItem="DXK-KM-mte" secondAttribute="trailing" id="Rx8-BP-xBT"/>
+                <constraint firstAttribute="trailing" secondItem="lGN-F0-bsr" secondAttribute="trailing" constant="20" id="UwW-ie-Ctq"/>
+                <constraint firstAttribute="trailing" secondItem="GyD-hW-Jms" secondAttribute="trailing" constant="10" id="WGd-W7-YA3"/>
+                <constraint firstItem="DXK-KM-mte" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="64" id="baX-2w-10F"/>
+                <constraint firstItem="GyD-hW-Jms" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="10" id="rNK-yK-wTY"/>
+                <constraint firstItem="GyD-hW-Jms" firstAttribute="top" secondItem="DXK-KM-mte" secondAttribute="bottom" constant="10" id="tDE-fq-1uf"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+            <point key="canvasLocation" x="441.5" y="331.5"/>
+        </view>
+    </objects>
+</document>

@@ -90,15 +90,36 @@
 
 - (void)one
 {
-    PHSettingItem *ticket = [PHSettingArrowItem itemWithTitle:@"我的订单" destVcClass:[EBMyOrderController class]];
+    PHSettingItem *ticket = [PHSettingArrowItem itemWithTitle:@"我的订单" destVcClass:nil];
+    EB_WS(ws);
+    ticket.option = ^{
+        __strong typeof(self) strongSelf = ws;
+        if (![EBTool presentLoginVC:strongSelf completion:nil]) {
+            EBMyOrderController *order = [[EBMyOrderController alloc] init];
+            [strongSelf.navigationController pushViewController:order animated:YES];
+        }
+    };
     PHSettingItem *notification = [PHSettingArrowItem itemWithTitle:@"我的通知" destVcClass:nil];
-    PHSettingItem *szt = [PHSettingArrowItem itemWithTitle:@"深圳通卡" destVcClass:[EBSZTViewController class]];
+    notification.option = ^{
+        __strong typeof(self) strongSelf = ws;
+        if (![EBTool presentLoginVC:strongSelf completion:nil]) {
+            EBSZTViewController *sztVC = [[EBSZTViewController alloc] init];
+            [strongSelf.navigationController pushViewController:sztVC animated:YES];
+        }
+    };
+    PHSettingItem *szt = [PHSettingArrowItem itemWithTitle:@"深圳通卡" destVcClass:nil];
+    szt.option = ^{
+        __strong typeof(self) strongSelf = ws;
+        if (![EBTool presentLoginVC:strongSelf completion:nil]) {
+            EBSZTViewController *sztVC = [[EBSZTViewController alloc] init];
+            [strongSelf.navigationController pushViewController:sztVC animated:YES];
+        }
+    };
     PHSettingItem *freeCertificate = [PHSettingArrowItem itemWithTitle:@"免费证件" destVcClass:nil];
     PHSettingItem *advice = [PHSettingArrowItem itemWithTitle:@"投诉建议" destVcClass:[EBSuggestController class]];
     PHSettingItem *versionUpdate = [PHSettingArrowItem itemWithTitle:@"版本更新" destVcClass:nil];
     PHSettingItem *more = [PHSettingArrowItem itemWithTitle:@"更多" destVcClass:[EBMoreViewController class]];
     PHSettingItem *logout = [PHSettingArrowItem itemWithTitle:@"注销"];
-    EB_WS(ws);
     logout.option = ^{
         [ws.alertView show];
     };
@@ -135,11 +156,7 @@
         if (buttonIndex == 1) {
             [EBUserInfo sharedEBUserInfo].loginName = nil;
             [EBUserInfo sharedEBUserInfo].loginId = nil;
-            _hasLogin = NO;
-            [self.dataSource removeAllObjects];
-            [self.footerView removeFromSuperview];
-            [self initImplementation];
-            [self.tableView reloadData];
+            [self loginCenter];
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
                 [notificationCenter postNotificationName:EBLogoutSuccessNotification object:self];

@@ -66,7 +66,7 @@
  */
 - (void)buttonClick:(PHTabBarButton *)button
 {
-    EBLog(@"%ld, %ld",(unsigned long)self.selectedButton.tag, (unsigned long)button.tag);
+//    EBLog(@"%ld, %ld",(unsigned long)self.selectedButton.tag, (unsigned long)button.tag);
     // 0.通知代理
     if ([self.delegate respondsToSelector:@selector(tabBar:didSelectButtonFrom:to:)]) {
         [self.delegate tabBar:self didSelectButtonFrom:self.selectedButton.tag - 100 to:button.tag - 100];

@@ -9,6 +9,7 @@
 #import "PHTableViewController.h"
 
 @interface PHTableViewController ()
+@property (nonatomic, weak) UIImageView *backgroundImageView;
 
 @end
 
@@ -19,12 +20,23 @@
     EBLog(@"%@ --> dealloc", NSStringFromClass([self class]));
 }
 
+- (void)setBackgroundImageViewAppear:(BOOL)backgroundImageViewAppear {
+    _backgroundImageViewAppear = backgroundImageViewAppear;
+    self.backgroundImageView.hidden = backgroundImageViewAppear;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewControllerDidEnterBackground) name:UIApplicationDidEnterBackgroundNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewControllerDidBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
-//    UIImage *image = [UIImage imageNamed:@"search_delete"];
-//    self.view.layer.contents = (__bridge id _Nullable)(image.CGImage);
+    
+    UIImageView *backgroundImageView = [[UIImageView alloc] init];
+    backgroundImageView.hidden = YES;
+    backgroundImageView.contentMode = UIViewContentModeCenter;
+    UIImage *image = [UIImage imageNamed:@"main_background"];
+    backgroundImageView.image = image;
+    self.tableView.backgroundView = backgroundImageView;
+    self.backgroundImageView = backgroundImageView;
 }
 
 - (void)viewControllerDidEnterBackground{

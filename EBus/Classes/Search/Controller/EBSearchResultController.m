@@ -8,16 +8,15 @@
 
 #import "EBSearchResultController.h"
 #import <MJRefresh/MJRefresh.h>
+#import <Masonry/Masonry.h>
 #import "EBLineDetailController.h"
 #import "EBUsualLineCell.h"
 #import "EBSearchResultModel.h"
-
+#import "EBHotLabel.h"
 @interface EBSearchResultController () <EBUsualLineCellDelegate>
 
 @property (nonatomic, strong) NSMutableArray *dataSource;
 
-@property (nonatomic, weak) UIButton *programeBtn;
-@property (nonatomic, weak) NSString *filePath;
 @end
 
 @implementation EBSearchResultController
@@ -36,75 +35,71 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"搜索结果";
-#ifdef DEBUG
-    EBSearchResultModel *result = [[EBSearchResultModel alloc] init];
-    result.openType = @1;
-    result.lineId = @1;
-    result.startTime = @"0700";
-    [self.dataSource addObject:result];
-    [self.tableView reloadData];
-#else
     EB_WS(ws);
     self.tableView.header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [ws refresh];
     }];
-    
     [self.tableView.header beginRefreshing];
-#endif
-    
-    [self tableViewFooterButtonImplementation];
-    
-    NSString *documents = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
-    self.filePath = [documents stringByAppendingPathComponent:@"searchResult.arc"];
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    [self bottomViewImplementation];
+    self.backgroundImageViewAppear = NO;
 }
 
-- (void)tableViewFooterButtonImplementation {
+#pragma mark  - Implementation
+- (void)bottomViewImplementation {
+    CGFloat bottomH = 60;
+//    CGFloat bottomY = EB_HeightOfScreen - bottomH - 64;
+    UIView *bottom = [[UIView alloc] initWithFrame:CGRectMake(0, 0, EB_WidthOfScreen, bottomH)];
+    bottom.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.6];
+//    [self.view addSubview:bottom];
+    self.tableView.tableFooterView = bottom;
+    
     UIButton *programe = [UIButton buttonWithType:UIButtonTypeCustom];
-    programe.hidden = YES;
-    programe.frame = CGRectMake(0, 0, 200, 50);
     [programe setTitle:@"我来规划线路" forState:UIControlStateNormal];
+    programe.titleLabel.font = [UIFont systemFontOfSize:20];
     [programe setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [programe addTarget:self action:@selector(programeBtnClick) forControlEvents:UIControlEventTouchUpInside];
-    programe.layer.cornerRadius = 25;
     [programe setBackgroundColor:EB_RGBColor(157, 197, 236)];
-    self.tableView.tableFooterView = programe;
-    self.programeBtn = programe;
+    programe.layer.cornerRadius = 25;
+    [programe addTarget:self action:@selector(programeBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    [bottom addSubview:programe];
+    CGFloat padding = 5;
+    [programe mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(bottom).with.offset(padding);
+        make.bottom.equalTo(bottom).with.offset(-padding);
+        make.left.equalTo(bottom).with.offset(padding * 6);
+        make.right.equalTo(bottom).with.offset(- padding * 6);
+    }];
 }
 
 - (void)programeBtnClick {
-    
+    if (![EBTool presentLoginVC:self completion:nil]) {
+        
+    }
 }
 
 - (void)refresh {
-    
-#ifdef DEBUG
-    self.dataSource = [EBTool decoderObjectPath:self.filePath];
-    if (self.dataSource.count != 0) return;
-    NSString *onlnglat = [NSString stringWithFormat:@"%.6f,%.6f",self.myPositionCoord.longitude,self.myPositionCoord.latitude];
-    NSDictionary *parameters = @{static_Argument_onLngLat : onlnglat};
-#else
-    NSString *onlnglat = [NSString stringWithFormat:@"%.6f,%.6f",self.myPositionCoord.longitude,self.myPositionCoord.latitude];
-    NSString *offlnglat = [NSString stringWithFormat:@"%.6f,%.6f",self.endPositionCoord.longitude,self.endPositionCoord.latitude];
-    NSDictionary *parameters = @{static_Argument_onLngLat : onlnglat,
-                                 static_Argument_offLngLat: offlnglat};
-#endif
-    
-    
-    [EBNetworkRequest GET:static_Url_SearchBus parameters:parameters dictBlock:^(NSDictionary *dict) {
+    NSDictionary *parameters = nil;
+    if (self.hotLabel) {
+        parameters = @{static_Argument_labelId : self.hotLabel.labelId};
+        
+    } else {
+        NSString *onlnglat = [NSString stringWithFormat:@"%.6f,%.6f",self.myPositionCoord.longitude,self.myPositionCoord.latitude];
+        NSString *offlnglat = [NSString stringWithFormat:@"%.6f,%.6f",self.endPositionCoord.longitude,self.endPositionCoord.latitude];
+        parameters = @{static_Argument_onLngLat : onlnglat,
+                       static_Argument_offLngLat: offlnglat};
+    }
+    [EBNetworkRequest GET:static_Url_SearchBus_Label parameters:parameters dictBlock:^(NSDictionary *dict) {
         EBLog(@"\n %@",dict);
+        [self.tableView.header endRefreshing];
         [self.dataSource removeAllObjects];
-        NSArray *returnData = dict[@"returnData"];
+        NSArray *returnData = dict[static_Argument_returnData];
+        if (returnData.count == 0) return;
         for (NSDictionary *dict in returnData) {
             EBSearchResultModel *model = [[EBSearchResultModel alloc] initWithDict:dict];
             [self.dataSource addObject:model];
-#ifdef DEBUG
-            [EBTool encoderObjectArray:self.dataSource path:self.filePath];
-#else
-#endif
         }
-        [self.tableView.header endRefreshing];
+        self.backgroundImageViewAppear = YES;
         [self.tableView reloadData];
-        self.programeBtn.hidden = NO;
     } errorBlock:^(NSError *error) {
         [self.tableView.header endRefreshing];
     } indicatorVisible:NO];

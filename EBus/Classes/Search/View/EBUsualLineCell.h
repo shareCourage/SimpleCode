@@ -26,11 +26,8 @@ typedef  NS_ENUM(NSUInteger, EBSearchBuyType) {
 @interface EBUsualLineCell : EBBaseLineCell
 
 
-@property (nonatomic, strong) id model;
-
 @property (nonatomic, weak) IBOutlet id <EBUsualLineCellDelegate>delegate;
 
-+ (instancetype)cellWithTableView:(UITableView *)tableView;
 @property (nonatomic, assign, getter=isShowBuyView) BOOL showBuyView;
 
 @end

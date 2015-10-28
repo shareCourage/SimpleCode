@@ -7,8 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+@class EBHotView, EBHotLabel;
+
+@protocol EBHotViewDelegate <NSObject>
+
+@optional
+- (void)hotView:(EBHotView *)hotView didSelectIndex:(NSUInteger)index hotLabel:(EBHotLabel *)hotLabel;
+
+@end
 
 @interface EBHotView : UIView
+
+@property (nonatomic, weak) id <EBHotViewDelegate> delegate;
 
 + (instancetype)hotViewFromXib;
 

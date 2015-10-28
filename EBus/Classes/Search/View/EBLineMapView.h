@@ -7,7 +7,7 @@
 //
 
 #import "EBSysMapView.h"
-@class EBLineDetailModel, EBLineMapView;
+@class EBLineDetailModel, EBLineMapView, EBSearchResultModel;
 
 @protocol EBLineMapViewDelegate <NSObject>
 
@@ -19,7 +19,7 @@
 @interface EBLineMapView : EBSysMapView
 
 @property (nonatomic, strong) EBLineDetailModel *lineDetailM;
-@property (nonatomic, copy) NSString *onStationTime;
+@property (nonatomic, strong) EBSearchResultModel *resultModel;
 
 @property (nonatomic, weak) IBOutlet id <EBLineMapViewDelegate>delegate;
 

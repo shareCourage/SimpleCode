@@ -106,7 +106,6 @@
     self.strickoutPriceL.frame = CGRectMake(strickoutPriceX, strickoutPriceY, strickoutPriceW, strickoutPriceH);
 }
 
-
 - (void)setModel:(id)model {
     if (!model) return;
     _model = model;

@@ -14,7 +14,7 @@
 #import "EBSearchResultModel.h"
 #import "EBHotView.h"
 #import "EBHotLabel.h"
-@interface EBSearchViewController () <EBSearchBusViewDelegate, EBUsualLineCellDelegate>
+@interface EBSearchViewController () <EBSearchBusViewDelegate, EBUsualLineCellDelegate, EBHotViewDelegate>
 
 @property (nonatomic, strong) NSMutableArray *dataSource;
 @property (nonatomic, weak) EBSearchBusView *searchBusView;
@@ -47,7 +47,6 @@
 - (void)itemImplementation {
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationItem.backBarButtonItem = backItem;
-    
     UIButton *hotBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     hotBtn.frame = CGRectMake(0, 0, 40, 30);
     hotBtn.titleLabel.font = [UIFont systemFontOfSize:13];
@@ -61,6 +60,7 @@
 
 - (void)hotViewImplementation {
     EBHotView *hotView = [EBHotView hotViewFromXib];
+    hotView.delegate = self;
     hotView.frame = CGRectMake(0, 0, EB_WidthOfScreen, EB_HeightOfScreen);
     hotView.hidden = YES;
     AppDelegate *delegate = [UIApplication sharedApplication].delegate;
@@ -78,6 +78,12 @@
             EBHotLabel *hot = [[EBHotLabel alloc] initWithDict:obj];
             [hots addObject:hot];
         }
+#ifdef DEBUG
+        EBHotLabel *hot = [[EBHotLabel alloc] init];
+        hot.name = @"haha";
+        [hots addObject:hot];
+#else
+#endif
         ws.hotView.hots = [hots copy];
     } errorBlock:nil indicatorVisible:NO];
 }
@@ -91,6 +97,14 @@
             [self.view.window bringSubviewToFront:self.hotView];
         }
     }];  
+}
+#pragma mark - EBHotViewDelegate
+- (void)hotView:(EBHotView *)hotView didSelectIndex:(NSUInteger)index hotLabel:(EBHotLabel *)hotLabel{
+    EBLog(@"%ld, %@",(unsigned long)index, hotLabel.name);
+    hotView.hidden = YES;
+    EBSearchResultController *result = [[EBSearchResultController alloc] init];
+    result.hotLabel = hotLabel;
+    [self.navigationController pushViewController:result animated:YES];
 }
 
 #pragma mark - UITableViewDelegate
@@ -125,27 +139,21 @@
 - (void)searchBusView:(EBSearchBusView *)searchBusView clickType:(EBSearchBusClickType)type {
     switch (type) {
         case EBSearchBusClickTypeMyPosition:
-//            EBLog(@"EBSearchBusClickTypeMyPosition");
             [self selectPosition:type];
             break;
         case EBSearchBusClickTypeEndPosition:
-//            EBLog(@"EBSearchBusClickTypeEndPosition");
             [self selectPosition:type];
             break;
         case EBSearchBusClickTypeDeleteOfMyPosition:
-//            EBLog(@"EBSearchBusClickTypeDeleteOfMyPosition");
             self.myPositionCoord = kCLLocationCoordinate2DInvalid;
             break;
         case EBSearchBusClickTypeDeleteOfEndPosition:
-//            EBLog(@"EBSearchBusClickTypeDeleteOfEndPosition");
             self.endPositionCoord = kCLLocationCoordinate2DInvalid;
             break;
         case EBSearchBusClickTypeSearch:
-//            EBLog(@"EBSearchBusClickTypeSearch");
             [self searchSpecificBus];
             break;
         case EBSearchBusClickTypeExchange:
-//            EBLog(@"EBSearchBusClickTypeExchange");
         {
             CLLocationCoordinate2D coord = self.myPositionCoord;
             self.myPositionCoord = self.endPositionCoord;
@@ -175,22 +183,10 @@
 - (void)searchSpecificBus {
     BOOL my = CLLocationCoordinate2DIsValid(self.myPositionCoord);
     BOOL end = CLLocationCoordinate2DIsValid(self.endPositionCoord);
-#ifdef DEBUG
-    if (my || end) return;
-#else
-    if (!my || !end) return;
-#endif
-    
+    if (!my && !end) return;
     EBSearchResultController *result = [[EBSearchResultController alloc] init];
-    
-#ifdef DEBUG
-    result.myPositionCoord = CLLocationCoordinate2DMake(22.639963,114.012233);
-    result.endPositionCoord = kCLLocationCoordinate2DInvalid;
-#else
     result.myPositionCoord = self.myPositionCoord;
     result.endPositionCoord = self.endPositionCoord;
-#endif
-    
     [self.navigationController pushViewController:result animated:YES];
 }
 

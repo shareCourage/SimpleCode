@@ -14,4 +14,7 @@
 
 - (void)viewControllerDidBecomeActive;
 
+
+//默认为NO
+@property (nonatomic, assign) BOOL backgroundImageViewAppear;
 @end

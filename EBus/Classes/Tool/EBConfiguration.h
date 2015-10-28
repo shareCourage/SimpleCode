@@ -13,6 +13,7 @@ static NSString *static_KeyOfAMap           = @"163c0486f490bf1c8c84ed7c1a8a9507
 
 static NSString *static_Url_Host            = @"http://app.szebus.net";
 static NSString *static_Url_SearchBus       = @"http://app.szebus.net/bc/phone/data";
+static NSString *static_Url_SearchBus_Label = @"http://app.szebus.net/label/phone/bc/data";
 static NSString *static_Url_LineDetail      = @"http://app.szebus.net/line/phone/detail";
 static NSString *static_Url_LinePhoto       = @"http://app.szebus.net/line/phone/station/fj";
 static NSString *static_Url_HotLabel        = @"http://app.szebus.net/label/phone/data";
@@ -22,6 +23,7 @@ static NSString *static_Url_Login           = @"http://app.szebus.net/phone/logi
 static NSString *static_Url_Suggest         = @"http://app.szebus.net/evaluate/phone/upload/data";
 
 static NSString *static_Argument_phone          = @"phone";
+static NSString *static_Argument_labelId        = @"labelId";
 static NSString *static_Argument_onLngLat       = @"onLngLat";
 static NSString *static_Argument_offLngLat      = @"offLngLat";
 static NSString *static_Argument_lineId         = @"lineId";

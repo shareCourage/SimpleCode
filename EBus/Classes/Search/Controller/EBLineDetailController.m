@@ -30,14 +30,13 @@
     self.navigationItem.title = @"线路详情";
     EBLineMapView *lineMap = [[EBLineMapView alloc] initWithFrame:CGRectMake(0, 0, EB_WidthOfScreen, EB_HeightOfScreen - 100 - EB_HeightOfNavigationBar)];
     lineMap.delegate = self;
-    lineMap.onStationTime = self.resultModel.startTime;
+    lineMap.resultModel = self.resultModel;
     self.tableView.tableFooterView = lineMap;
     self.tableView.allowsSelection = NO;
     self.lineMapView = lineMap;
     
     NSString *documents = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
     self.filePath = [documents stringByAppendingPathComponent:[NSString stringWithFormat:@"%@lineId.arc",self.resultModel.lineId]];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginCenter) name:EBLoginSuccessNotification object:nil];
 }
 

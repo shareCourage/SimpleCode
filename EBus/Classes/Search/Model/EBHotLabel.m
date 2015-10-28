@@ -16,6 +16,9 @@ MJCodingImplementation
 - (instancetype)initWithDict:(NSDictionary *)dict {
     self = [super init];
     if (self) {
+        [EBHotLabel setupReplacedKeyFromPropertyName:^NSDictionary *{
+            return @{@"labelId": @"id"};
+        }];
         self = [EBHotLabel objectWithKeyValues:dict];
     }
     return self;

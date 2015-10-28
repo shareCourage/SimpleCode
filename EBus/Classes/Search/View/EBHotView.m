@@ -7,6 +7,7 @@
 //
 
 #import "EBHotView.h"
+#import "EBHotLabel.h"
 
 @interface EBHotView ()
 @property (weak, nonatomic) IBOutlet UIView *bottomView;
@@ -17,16 +18,13 @@
 @property (weak, nonatomic) IBOutlet UILabel *hotZoneL;
 
 @property (nonatomic, weak) UIScrollView *scrollView;
-@property (nonatomic, weak) UIButton *seletedBtn;
 
 @end
 
 @implementation EBHotView
 
-
 + (instancetype)hotViewFromXib {
     EBHotView *hotView = [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil] lastObject];
-//    hotView.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:0.5];
     return hotView;
 }
 
@@ -41,7 +39,6 @@
     
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.labelView.width, self.labelView.height)];
     scrollView.alwaysBounceHorizontal = NO;
-    scrollView.backgroundColor = [[UIColor lightGrayColor] colorWithAlphaComponent:0.6];
     [self.labelView addSubview:scrollView];
     self.scrollView = scrollView;
     
@@ -50,29 +47,44 @@
 
 - (void)setHots:(NSArray *)hots {
     _hots = hots;
-    if (hots.count > 0) {
-        CGFloat btnH = 50;
-        NSUInteger number = hots.count / 3;
-        int btnTag = 1;
-        for (NSUInteger i = 0; i < 3; i ++) {
-            for (NSUInteger j = 0; j < number; j ++) {
-                UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-                btn.backgroundColor = [UIColor whiteColor];
-                [btn setTitle:@"龙华汽车站" forState:UIControlStateNormal];
-                [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-                btn.tag = btnTag;
-                [btn setTitleColor:EB_RGBColor(104, 104, 104) forState:UIControlStateNormal];
-                CGFloat padding = 1;
-                CGFloat btnW = (self.labelView.width - padding) / 3 ;
-                CGFloat btnX = i * (btnW + padding);
-                CGFloat btnY = j * (btnH + padding) + 1;
-                btn.frame = CGRectMake(btnX, btnY, btnW, btnH);
-                [self.scrollView addSubview:btn];
-                btnTag ++;
-            }
-        }
-        self.scrollView.contentSize = CGSizeMake(self.scrollView.width, (btnH + 1)* number);
+    if (hots.count == 0) return;
+    CGFloat btnH = 50;
+    NSUInteger number = hots.count / 3;
+    NSUInteger extra = hots.count % 3;
+    if (extra != 0) {
+        number ++;
     }
+    NSUInteger btnTag = 0;
+    for (NSUInteger i = 0; i < number; i ++) {
+        for (NSUInteger j = 0; j < 3; j ++) {
+            EBHotLabel *hot = hots[btnTag];
+            CGFloat btnW = self.labelView.width / 3 ;
+            CGFloat btnX = j * btnW;
+            CGFloat btnY = i * btnH;
+            CGRect btnF = CGRectMake(btnX, btnY, btnW, btnH);
+            UIButton *hotBtn = [self hotButtonTitle:hot.name tag:btnTag frame:btnF];
+            [self.scrollView addSubview:hotBtn];
+            btnTag ++;
+            if (btnTag >= hots.count) break;
+        }
+    }
+    self.scrollView.contentSize = CGSizeMake(self.scrollView.width, btnH * number + 200);
+}
+
+
+#pragma mark - Private Method 
+- (UIButton *)hotButtonTitle:(NSString *)title tag:(NSUInteger)tag frame:(CGRect)frame{
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.layer.borderColor = EB_RGBColor(214, 214, 214).CGColor;
+    btn.layer.borderWidth = 0.5f;
+    btn.backgroundColor = [UIColor whiteColor];
+    [btn setTitle:title forState:UIControlStateNormal];
+    btn.titleLabel.font = [UIFont systemFontOfSize:15];
+    [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+    btn.tag = tag;
+    [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    btn.frame = frame;
+    return btn;
 }
 
 - (void)tapClick {
@@ -82,16 +94,9 @@
 }
 
 - (void)btnClick:(UIButton *)sender {
-    self.seletedBtn.selected = NO;
-    [self.seletedBtn setBackgroundColor:[UIColor whiteColor]];
-
-    sender.selected = !sender.selected;
-    if (sender.selected) {
-        [sender setBackgroundColor:EB_RGBColor(176, 208, 239)];
-    } else {
-        [sender setBackgroundColor:[UIColor whiteColor]];
+    if ([self.delegate respondsToSelector:@selector(hotView:didSelectIndex:hotLabel:)]) {
+        [self.delegate hotView:self didSelectIndex:sender.tag hotLabel:[self.hots objectAtIndex:sender.tag]];
     }
-    self.seletedBtn = sender;
 }
 @end
 

@@ -7,10 +7,12 @@
 //
 
 #import "PHTableViewController.h"
+@class EBHotLabel;
 
 @interface EBSearchResultController : PHTableViewController
 
 @property (nonatomic, assign) CLLocationCoordinate2D myPositionCoord;
 @property (nonatomic, assign) CLLocationCoordinate2D endPositionCoord;
 
+@property (nonatomic, strong) EBHotLabel *hotLabel;
 @end

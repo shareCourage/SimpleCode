@@ -16,7 +16,7 @@
  "sortNum": 1,
  "version": 0
  */
-
+@property (nonatomic, copy) NSString *labelId;
 @property (nonatomic, copy) NSString *isDele;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, strong) NSNumber *sortNum;

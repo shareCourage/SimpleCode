@@ -166,4 +166,19 @@
     self.endPointL.frame  = CGRectMake(endPointX, endPointY, endPointW, endPointH);
 }
 
+#pragma mark - Public Method
++ (instancetype)cellWithTableView:(UITableView *)tableView
+{
+    static NSString *ID = @"EBBaseLineCell";
+    EBBaseLineCell *cell = [tableView dequeueReusableCellWithIdentifier:ID];
+    if (cell == nil) {
+        cell = [[EBBaseLineCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:ID];
+    }
+    return cell;
+}
+
+#warning 还需重新写
+- (void)setModel:(id)model {
+    _model = model;
+}
 @end

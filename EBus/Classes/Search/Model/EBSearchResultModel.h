@@ -31,7 +31,7 @@
  "tradePrice": 2,
  "vehTime": "0700"
  */
-//@property (nonatomic, strong) NSNumber *id;
+@property (nonatomic, strong) NSNumber *ID;
 @property (nonatomic, strong) NSNumber *isEnd;
 @property (nonatomic, strong) NSNumber *isFirst;
 @property (nonatomic, strong) NSNumber *isLabel;

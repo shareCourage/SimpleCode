@@ -17,6 +17,8 @@
 #import "EBPhotoAnnotationView.h"
 #import "EBLineStationView.h"
 #import "EBLineStation.h"
+#import "EBSearchResultModel.h"
+
 @interface EBLineMapView () <MAMapViewDelegate>
 
 @property (nonatomic, weak) UIView *bottomView;
@@ -26,6 +28,15 @@
 @end
 
 @implementation EBLineMapView
+
+- (void)setResultModel:(EBSearchResultModel *)resultModel {
+    _resultModel = resultModel;
+    if ([resultModel.openType integerValue] == 1) {
+        [self.buyBtn setTitle:@"购买" forState:UIControlStateNormal];
+    } else if ([resultModel.openType integerValue] == 2) {
+        [self.buyBtn setTitle:@"报名" forState:UIControlStateNormal];
+    }
+}
 
 #pragma mark - init Method
 //保证代码实例化能创建BMKMapView
@@ -230,7 +241,7 @@
         }
         annotation.coordinate = [onLngLat coordAndLatFirst:NO];
         annotation.lineInfo.station = onStation;
-        annotation.lineInfo.time = self.onStationTime;
+        annotation.lineInfo.time = self.resultModel.startTime;
         annotation.lineInfo.jid = onJid;
         annotation.lineInfo.coordinate = annotation.coordinate;
         [self.maMapView addAnnotation:annotation];
@@ -255,7 +266,7 @@
         }
         annotation.coordinate = [offLngLat coordAndLatFirst:NO];
         annotation.lineInfo.station = offStation;
-        annotation.lineInfo.time = self.onStationTime;
+        annotation.lineInfo.time = self.resultModel.startTime;
         annotation.lineInfo.jid = offJid;
         annotation.lineInfo.coordinate = annotation.coordinate;
         [self.maMapView addAnnotation:annotation];

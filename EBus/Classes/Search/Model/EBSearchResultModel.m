@@ -16,6 +16,9 @@ MJCodingImplementation
 - (instancetype)initWithDict:(NSDictionary *)dict {
     self = [super init];
     if (self) {
+        [EBSearchResultModel setupReplacedKeyFromPropertyName:^NSDictionary *{
+            return @{@"ID" : @"id"};
+        }];
         self = [EBSearchResultModel objectWithKeyValues:dict];
     }
     return self;

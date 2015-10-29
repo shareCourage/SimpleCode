@@ -7,12 +7,17 @@
 //
 
 #import "EBSearchResultController.h"
+
 #import <MJRefresh/MJRefresh.h>
 #import <Masonry/Masonry.h>
+
 #import "EBLineDetailController.h"
 #import "EBUsualLineCell.h"
 #import "EBSearchResultModel.h"
 #import "EBHotLabel.h"
+
+#import "EBSponsorController.h"
+
 @interface EBSearchResultController () <EBUsualLineCellDelegate>
 
 @property (nonatomic, strong) NSMutableArray *dataSource;
@@ -73,27 +78,40 @@
 
 - (void)programeBtnClick {
     if (![EBTool presentLoginVC:self completion:nil]) {
-        
+        EBSponsorController *sponsor = [[EBSponsorController alloc] init];
+        [self.navigationController pushViewController:sponsor animated:YES];
     }
 }
 
 - (void)refresh {
     NSDictionary *parameters = nil;
+    NSString *url = nil;
     if (self.hotLabel) {
         parameters = @{static_Argument_labelId : self.hotLabel.labelId};
-        
+        url = static_Url_SearchBus_Label;
     } else {
-        NSString *onlnglat = [NSString stringWithFormat:@"%.6f,%.6f",self.myPositionCoord.longitude,self.myPositionCoord.latitude];
-        NSString *offlnglat = [NSString stringWithFormat:@"%.6f,%.6f",self.endPositionCoord.longitude,self.endPositionCoord.latitude];
-        parameters = @{static_Argument_onLngLat : onlnglat,
-                       static_Argument_offLngLat: offlnglat};
+        url = static_Url_SearchBus;
+        if (CLLocationCoordinate2DIsValid(self.myPositionCoord) && CLLocationCoordinate2DIsValid(self.endPositionCoord)) {//如果两个经纬度都有效
+            NSString *onlnglat = [NSString stringWithFormat:@"%.6f,%.6f",self.myPositionCoord.longitude,self.myPositionCoord.latitude];
+            NSString *offlnglat = [NSString stringWithFormat:@"%.6f,%.6f",self.endPositionCoord.longitude,self.endPositionCoord.latitude];
+            parameters = @{static_Argument_onLngLat : onlnglat,
+                           static_Argument_offLngLat: offlnglat};
+        } else if (CLLocationCoordinate2DIsValid(self.myPositionCoord)) {//我的位置经纬度有效
+            NSString *onlnglat = [NSString stringWithFormat:@"%.6f,%.6f",self.myPositionCoord.longitude,self.myPositionCoord.latitude];
+            parameters = @{static_Argument_onLngLat : onlnglat};
+        } else if (CLLocationCoordinate2DIsValid(self.endPositionCoord)) {//终点经纬度有效
+            NSString *offlnglat = [NSString stringWithFormat:@"%.6f,%.6f",self.endPositionCoord.longitude,self.endPositionCoord.latitude];
+            parameters = @{static_Argument_offLngLat: offlnglat};
+        } else {//两个经纬度均无效
+            return;
+        }
     }
-    [EBNetworkRequest GET:static_Url_SearchBus_Label parameters:parameters dictBlock:^(NSDictionary *dict) {
+    [EBNetworkRequest GET:url parameters:parameters dictBlock:^(NSDictionary *dict) {
         EBLog(@"\n %@",dict);
         [self.tableView.header endRefreshing];
-        [self.dataSource removeAllObjects];
         NSArray *returnData = dict[static_Argument_returnData];
         if (returnData.count == 0) return;
+        [self.dataSource removeAllObjects];
         for (NSDictionary *dict in returnData) {
             EBSearchResultModel *model = [[EBSearchResultModel alloc] initWithDict:dict];
             [self.dataSource addObject:model];

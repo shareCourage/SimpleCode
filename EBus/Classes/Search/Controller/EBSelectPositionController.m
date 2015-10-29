@@ -25,6 +25,7 @@
 @property (nonatomic, strong) EBSelectPositionModel *locationModel;
 
 @property (nonatomic, copy) void (^option) (NSString *title, CLLocationCoordinate2D coord);
+@property (nonatomic, copy) void (^extraOption) (NSString *title, NSString *district, CLLocationCoordinate2D coord);
 
 @end
 
@@ -34,6 +35,14 @@
     self = [super init];
     if (self) {
         self.option = option;
+    }
+    return self;
+}
+
+- (instancetype)initWithExtraOption:(void (^)(NSString *, NSString *, CLLocationCoordinate2D))option {
+    self = [super init];
+    if (self) {
+        self.extraOption = option;
     }
     return self;
 }
@@ -182,10 +191,11 @@
 }
 
 #pragma mark - EBSelectPositionCellDelegate
-- (void)selectPositionSureClick:(EBSelectPositionCell *)selectPositionCell title:(NSString *)title coord:(CLLocationCoordinate2D)coord{
+- (void)selectPositionSureClick:(EBSelectPositionCell *)selectPositionCell title:(NSString *)title coord:(CLLocationCoordinate2D)coord district:(NSString *)district{
     EBLog(@"selectPositionSureClick");
     [self.navigationController popViewControllerAnimated:YES];
     if (self.option) self.option(title, coord);
+    if (self.extraOption) self.extraOption(title, district, coord);
 }
 
 @end

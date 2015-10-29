@@ -14,7 +14,7 @@
 @protocol EBSelectPositionCellDelegate <NSObject>
 
 @optional
-- (void)selectPositionSureClick:(EBSelectPositionCell *)selectPositionCell title:(NSString *)title coord:(CLLocationCoordinate2D)coord;
+- (void)selectPositionSureClick:(EBSelectPositionCell *)selectPositionCell title:(NSString *)title coord:(CLLocationCoordinate2D)coord district:(NSString *)district;
 
 @end
 

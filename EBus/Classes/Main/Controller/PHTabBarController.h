@@ -10,4 +10,6 @@
 
 @interface PHTabBarController : UITabBarController
 
+@property (nonatomic, assign) NSUInteger mySelectedIndex;
+
 @end

@@ -130,4 +130,22 @@
     }
     return YES;
 }
+
++ (NSString *)stringConnected:(NSArray *)array connectString:(NSString *)connectStr
+{
+    NSString *string = nil;
+    int i = 1;
+    for (NSString *devID in array) {
+        if (i == 1) {
+            string = devID;
+        }
+        else{
+            NSString *aaaa = [connectStr stringByAppendingString:devID];
+            string = [string stringByAppendingString:aaaa];
+        }
+        i --;
+    }
+    return string;
+}
+
 @end

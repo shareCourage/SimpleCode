@@ -8,8 +8,10 @@
 
 #import "PHTabBarController.h"
 #import "PHTabBar.h"
+#import "PHTabBarButton.h"
+@interface PHTabBarController ()<PHTabBarDelegate, UITabBarControllerDelegate>
 
-@interface PHTabBarController ()<PHTabBarDelegate>
+@property (nonatomic, weak) PHTabBar *phTabBar;
 
 @end
 
@@ -23,6 +25,7 @@
     myTabBar.delegate = self;
     myTabBar.frame = self.tabBar.bounds;
     [self.tabBar addSubview:myTabBar];
+    self.phTabBar = myTabBar;
     NSArray *tabBar = @[@"tabBar_search_normal",@"tabBar_byBus_normal",@"tabBar_attention_normal",@"tabBar_me_normal"];
     NSArray *tabBarSel = @[@"tabBar_search_select",@"tabBar_byBus_select",@"tabBar_attention_select",@"tabBar_me_select"];
     NSArray *tabBarName = @[@"查询",@"乘车",@"关注",@"我的"];
@@ -34,9 +37,7 @@
         [myTabBar addTabButtonWithName:name selName:selName title:title];
     }
 }
-- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
-    EBLog(@"item ->  %@",item);
-}
+
 
 /**
  normal : 普通状态
@@ -51,6 +52,13 @@
     NSLog(@"%lu",(unsigned long)to);
 }
 
+
+#pragma mark - Public Method
+
+- (void)setMySelectedIndex:(NSUInteger)mySelectedIndex {
+    _mySelectedIndex = mySelectedIndex;
+    [self.phTabBar setSelectIndex:mySelectedIndex];
+}
 @end
 
 

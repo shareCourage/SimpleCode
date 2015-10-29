@@ -68,7 +68,7 @@
             if (btnTag >= hots.count) break;
         }
     }
-    self.scrollView.contentSize = CGSizeMake(self.scrollView.width, btnH * number + 200);
+    self.scrollView.contentSize = CGSizeMake(self.scrollView.width, btnH * number + 100);
 }
 
 

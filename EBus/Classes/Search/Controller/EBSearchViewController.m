@@ -183,11 +183,12 @@
 - (void)searchSpecificBus {
     BOOL my = CLLocationCoordinate2DIsValid(self.myPositionCoord);
     BOOL end = CLLocationCoordinate2DIsValid(self.endPositionCoord);
-    if (!my && !end) return;
-    EBSearchResultController *result = [[EBSearchResultController alloc] init];
-    result.myPositionCoord = self.myPositionCoord;
-    result.endPositionCoord = self.endPositionCoord;
-    [self.navigationController pushViewController:result animated:YES];
+    if (my || end) {
+        EBSearchResultController *result = [[EBSearchResultController alloc] init];
+        result.myPositionCoord = self.myPositionCoord;
+        result.endPositionCoord = self.endPositionCoord;
+        [self.navigationController pushViewController:result animated:YES];
+    }
 }
 
 @end

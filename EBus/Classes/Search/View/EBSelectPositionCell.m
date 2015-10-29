@@ -15,6 +15,7 @@
 @property (nonatomic, strong) UIButton *sureBtn;
 
 @property (nonatomic, copy) NSString *mainTitle;
+@property (nonatomic, copy) NSString *district; //!< 区域名称
 @property (nonatomic, assign) CLLocationCoordinate2D coord;
 
 @end
@@ -37,8 +38,8 @@
 }
 
 - (void)sureBtnClick {
-    if ([self.delegate respondsToSelector:@selector(selectPositionSureClick:title:coord:)]) {
-        [self.delegate selectPositionSureClick:self title:self.mainTitle coord:self.coord];
+    if ([self.delegate respondsToSelector:@selector(selectPositionSureClick:title:coord:district:)]) {
+        [self.delegate selectPositionSureClick:self title:self.mainTitle coord:self.coord district:self.district];
     }
 }
 
@@ -67,7 +68,7 @@
         
         self.coord = CLLocationCoordinate2DMake(poi.location.latitude, poi.location.longitude);
         self.mainTitle = poi.name;
-        
+        self.district = poi.district;
     } else {
         AMapPOI *poi = selectModel.poi;
         self.textLabel.text = poi.name;
@@ -75,6 +76,7 @@
         
         self.coord = CLLocationCoordinate2DMake(poi.location.latitude, poi.location.longitude);
         self.mainTitle = poi.name;
+        self.district = poi.district;
     }
 }
 

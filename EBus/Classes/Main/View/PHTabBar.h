@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-@class PHTabBar;
+@class PHTabBar, PHTabBarButton;
 
 @protocol PHTabBarDelegate <NSObject>
 
@@ -26,6 +26,6 @@
  *  @param name    按钮图片
  *  @param selName 按钮选中时的图片
  */
-- (void)addTabButtonWithName:(NSString *)name selName:(NSString *)selName title:(NSString *)title;
-
+- (PHTabBarButton *)addTabButtonWithName:(NSString *)name selName:(NSString *)selName title:(NSString *)title;
+- (void)setSelectIndex:(NSUInteger)index;
 @end

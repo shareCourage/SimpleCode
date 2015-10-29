@@ -14,11 +14,19 @@
  *  记录当前选中的按钮
  */
 @property (nonatomic, weak) PHTabBarButton *selectedButton;
+@property (nonatomic, strong) NSMutableArray *buttons;
 
 @end
 
 @implementation PHTabBar
-- (void)addTabButtonWithName:(NSString *)name selName:(NSString *)selName title:(NSString *)title
+- (NSMutableArray *)buttons {
+    if (!_buttons) {
+        _buttons = [NSMutableArray array];
+    }
+    return _buttons;
+}
+
+- (PHTabBarButton *)addTabButtonWithName:(NSString *)name selName:(NSString *)selName title:(NSString *)title
 {
     // 创建按钮
     PHTabBarButton *button = [PHTabBarButton buttonWithType:UIButtonTypeCustom];
@@ -34,6 +42,7 @@
     button.titleLabel.textAlignment = NSTextAlignmentCenter;
     // 添加
     [self addSubview:button];
+    [self.buttons addObject:button];
     // 监听
     [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchDown];
     
@@ -41,6 +50,7 @@
     if (self.subviews.count == 1) {
         [self buttonClick:button];
     }
+    return button;
 }
 
 - (void)layoutSubviews
@@ -60,7 +70,7 @@
         button.frame = CGRectMake(buttonX, buttonY, buttonW, buttonH);
     }
 }
-
+#pragma mark - Private Method
 /**
  *  监听按钮点击
  */
@@ -80,6 +90,13 @@
     
     // 3.新点击的按钮就成为了"当前选中的按钮"
     self.selectedButton = button;
+}
+
+#pragma mark - Public Method
+- (void)setSelectIndex:(NSUInteger)index {
+    if (index >= self.buttons.count) return;
+    PHTabBarButton *button = self.buttons[index];
+    [self buttonClick:button];
 }
 
 @end

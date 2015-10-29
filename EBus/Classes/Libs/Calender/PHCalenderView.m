@@ -36,6 +36,14 @@
     return self;
 }
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        [self commonInit];
+    }
+    return self;
+}
+
 #pragma mark - Common Init
 - (void)commonInit {
     self.cellHeight = 50;
@@ -87,10 +95,10 @@
 #pragma mark - Private Method
 - (void)tapGesture:(UITapGestureRecognizer *)gesture {
     PHCalenderViewCell *cell = (PHCalenderViewCell *)gesture.view;
+    cell.selected = !cell.isSelected;
     if ([self.delegate respondsToSelector:@selector(calenderView:didSelectAtRow:column:)]) {
         [self.delegate calenderView:self didSelectAtRow:cell.row column:cell.column];
     }
-    cell.selected = !cell.isSelected;
 }
 
 @end

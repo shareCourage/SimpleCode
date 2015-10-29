@@ -13,10 +13,12 @@ typedef  NS_ENUM(NSUInteger, EBSearchBusClickType) {
     EBSearchBusClickTypeNone = 100,
     EBSearchBusClickTypeMyPosition,
     EBSearchBusClickTypeEndPosition,
+    EBSearchBusClickTypeStartTime,
     EBSearchBusClickTypeDeleteOfMyPosition,
     EBSearchBusClickTypeDeleteOfEndPosition,
+    EBSearchBusClickTypeDeleteOfStartTime,
     EBSearchBusClickTypeExchange,
-    EBSearchBusClickTypeSearch
+    EBSearchBusClickTypeSearch,
 };
 @protocol EBSearchBusViewDelegate <NSObject>
 
@@ -33,5 +35,7 @@ typedef  NS_ENUM(NSUInteger, EBSearchBusClickType) {
 
 @property (nonatomic, copy) NSString *endPositionTitle;
 
+@property (nonatomic, copy) NSString *startTimeTitle;
 
+@property (nonatomic, assign) BOOL showStartTimeBtn;
 @end

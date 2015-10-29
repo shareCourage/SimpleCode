@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="185-WY-6Y6" customClass="EBPriceView">
+            <rect key="frame" x="0.0" y="0.0" width="571" height="83"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dGP-5N-VWq">
+                    <rect key="frame" x="236" y="17" width="50" height="50"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="50" id="GlW-8k-EyV"/>
+                        <constraint firstAttribute="height" constant="50" id="lIj-2K-x0q"/>
+                        <constraint firstAttribute="width" constant="50" id="lwb-BU-oUZ"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                    <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="GlW-8k-EyV"/>
+                        </mask>
+                    </variation>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xTU-Ip-iwB">
+                    <rect key="frame" x="286" y="47" width="70" height="20"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="70" id="Wry-Wr-lY1"/>
+                        <constraint firstAttribute="height" constant="20" id="aP0-Kc-EiK"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="xTU-Ip-iwB" firstAttribute="leading" secondItem="dGP-5N-VWq" secondAttribute="trailing" id="9EV-8u-H23"/>
+                <constraint firstItem="dGP-5N-VWq" firstAttribute="centerX" secondItem="185-WY-6Y6" secondAttribute="centerX" constant="-25" id="Mj0-sK-EhQ"/>
+                <constraint firstItem="dGP-5N-VWq" firstAttribute="centerX" secondItem="185-WY-6Y6" secondAttribute="centerX" id="Rif-qq-AT7"/>
+                <constraint firstItem="xTU-Ip-iwB" firstAttribute="bottom" secondItem="dGP-5N-VWq" secondAttribute="bottom" id="bgh-kf-7Fr"/>
+                <constraint firstItem="dGP-5N-VWq" firstAttribute="centerY" secondItem="185-WY-6Y6" secondAttribute="centerY" id="wX9-S6-8Eu"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="Rif-qq-AT7"/>
+                </mask>
+            </variation>
+            <connections>
+                <outlet property="dayLabel" destination="xTU-Ip-iwB" id="Gm7-VM-fGX"/>
+                <outlet property="priceLabel" destination="dGP-5N-VWq" id="JYW-iT-KEa"/>
+            </connections>
+            <point key="canvasLocation" x="575.5" y="370.5"/>
+        </view>
+    </objects>
+</document>

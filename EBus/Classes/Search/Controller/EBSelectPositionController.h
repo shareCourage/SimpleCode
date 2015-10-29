@@ -12,5 +12,6 @@
 @interface EBSelectPositionController : PHViewController
 
 - (instancetype)initWithOption:(void (^)(NSString *title, CLLocationCoordinate2D coord))option;
+- (instancetype)initWithExtraOption:(void (^)(NSString *title, NSString *district,CLLocationCoordinate2D coord))option;
 
 @end

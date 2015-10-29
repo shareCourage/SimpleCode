@@ -16,9 +16,11 @@
 
 @property (nonatomic, weak) EBSearchBusButton *myPositionBtn;
 @property (nonatomic, weak) EBSearchBusButton *endPositionBtn;
+@property (nonatomic, weak) EBSearchBusButton *startTimeBtn;
 
 @property (nonatomic, weak) UIButton *myPositionDeleteBtn;
 @property (nonatomic, weak) UIButton *endPositionDeleteBtn;
+@property (nonatomic, weak) UIButton *startTimeDeleteBtn;
 
 @property (nonatomic, weak) UIButton *exchangeBtn;
 @property (nonatomic, weak) UIButton *searchBtn;
@@ -33,6 +35,7 @@
         [self searchBusButtonImplementation];
         [self exchangeButtonImplementation];
         [self searchBtnImplementation];
+        [self startTimeButtonImplementation];
     }
     return self;
 }
@@ -43,6 +46,7 @@
         [self searchBusButtonImplementation];
         [self exchangeButtonImplementation];
         [self searchBtnImplementation];
+        [self startTimeButtonImplementation];
     }
     return self;
 }
@@ -86,15 +90,29 @@
     [search setTitle:@"查询班车" forState:UIControlStateNormal];
     [search setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [search addTarget:self action:@selector(searchBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    search.layer.cornerRadius = 25;
+    search.layer.cornerRadius = EB_HeightOfButton / 2;
     [search setBackgroundColor:EB_RGBColor(157, 197, 236)];
     [self addSubview:search];
     self.searchBtn = search;
 }
 
+- (void)startTimeButtonImplementation {
+    EBSearchBusButton *starBtn = [self searchBusButtonWithTitle:@"出发时间" normalImageName:@"search_startTime"];
+    starBtn.tag = EBSearchBusClickTypeStartTime;
+    
+    UIButton *deleteOne = [self deleteBtn];
+    deleteOne.tag = EBSearchBusClickTypeDeleteOfStartTime;
+    
+    [starBtn addSubview:deleteOne];
+    [self addSubview:starBtn];
+    self.startTimeBtn = starBtn;
+    self.startTimeDeleteBtn = deleteOne;
+}
+
+#pragma mark - Private Method
 - (EBSearchBusButton *)searchBusButtonWithTitle:(NSString *)title normalImageName:(NSString *)normalImageName {
     EBSearchBusButton *searchBtn = [EBSearchBusButton searchBusButtonWithTitle:title];
-    searchBtn.layer.cornerRadius = 25;
+    searchBtn.layer.cornerRadius = EB_HeightOfButton / 2;
     searchBtn.layer.borderWidth = 1;
     searchBtn.layer.borderColor = EB_RGBAColor(199, 204, 215, 0.7).CGColor;
     [searchBtn setImage:[UIImage imageNamed:normalImageName] forState:UIControlStateNormal];
@@ -116,6 +134,9 @@
             break;
         case EBSearchBusClickTypeDeleteOfEndPosition:
             self.endPositionTitle = nil;
+            break;
+        case EBSearchBusClickTypeDeleteOfStartTime:
+            self.startTimeTitle = nil;
             break;
         case EBSearchBusClickTypeExchange:
         {
@@ -171,6 +192,22 @@
         make.height.mas_equalTo(height);//高度
         make.width.mas_equalTo(height);//宽度
     }];
+    
+    if (self.showStartTimeBtn) {
+        [self.startTimeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.mas_equalTo(ws.mas_centerX);
+            make.top.equalTo(self.endPositionBtn.mas_bottom).with.offset(padding);
+            make.width.mas_equalTo(width);
+            make.height.mas_equalTo(height);
+        }];
+        [self.startTimeDeleteBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(ws.startTimeBtn).with.offset(0);
+            make.right.equalTo(ws.startTimeBtn).with.offset(0);
+            make.height.mas_equalTo(height);//高度
+            make.width.mas_equalTo(height);//宽度
+        }];
+        [self.searchBtn setTitle:@"发起线路" forState:UIControlStateNormal];
+    }
 }
 
 - (void)exchangeBtnAutoLayout {
@@ -191,12 +228,21 @@
     CGFloat padding = EB_PaddingOfSearchBusView;
     CGFloat width = EB_WidthOfButton;
     CGFloat height = EB_HeightOfButton;
-    [self.searchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.mas_equalTo(ws.mas_centerX);
-        make.top.equalTo(self.endPositionBtn.mas_bottom).with.offset(padding);
-        make.width.mas_equalTo(width);
-        make.height.mas_equalTo(height);
-    }];
+    if (self.showStartTimeBtn) {
+        [self.searchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.mas_equalTo(ws.mas_centerX);
+            make.top.equalTo(self.startTimeBtn.mas_bottom).with.offset(padding + 20);
+            make.width.mas_equalTo(width);
+            make.height.mas_equalTo(height);
+        }];
+    } else {
+        [self.searchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.mas_equalTo(ws.mas_centerX);
+            make.top.equalTo(self.endPositionBtn.mas_bottom).with.offset(padding);
+            make.width.mas_equalTo(width);
+            make.height.mas_equalTo(height);
+        }];
+    }
 }
 
 #pragma mark - Public Method 
@@ -223,6 +269,18 @@
     
 }
 
+
+- (void)setStartTimeTitle:(NSString *)startTimeTitle {
+    _startTimeTitle = startTimeTitle;
+    if (startTimeTitle.length != 0) {
+        [self.startTimeBtn setTitle:startTimeTitle forState:UIControlStateNormal];
+        [self.startTimeBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    } else {
+        [self.startTimeBtn setTitle:@"出发时间" forState:UIControlStateNormal];
+        [self.startTimeBtn setTitleColor:EB_RGBColor(199, 204, 215) forState:UIControlStateNormal];
+    }
+    
+}
 @end
 
 

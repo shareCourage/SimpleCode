@@ -62,6 +62,13 @@
 		A907EAA91BE0727D006E99C1 /* main_background@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A907EAA81BE0727D006E99C1 /* main_background@3x.png */; settings = {ASSET_TAGS = (); }; };
 		A907EAAB1BE0729F006E99C1 /* main_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A907EAAA1BE0729F006E99C1 /* main_background@2x.png */; settings = {ASSET_TAGS = (); }; };
 		A907EAAE1BE0A34F006E99C1 /* EBAttentionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A907EAAD1BE0A34F006E99C1 /* EBAttentionCell.m */; settings = {ASSET_TAGS = (); }; };
+		A907EAB11BE1B436006E99C1 /* EBSponsorController.m in Sources */ = {isa = PBXBuildFile; fileRef = A907EAB01BE1B436006E99C1 /* EBSponsorController.m */; settings = {ASSET_TAGS = (); }; };
+		A907EAB31BE1C189006E99C1 /* search_startTime@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A907EAB21BE1C189006E99C1 /* search_startTime@2x.png */; settings = {ASSET_TAGS = (); }; };
+		A907EAB51BE1C1A7006E99C1 /* search_startTime@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A907EAB41BE1C1A7006E99C1 /* search_startTime@3x.png */; settings = {ASSET_TAGS = (); }; };
+		A907EAB81BE21712006E99C1 /* EBColorView.m in Sources */ = {isa = PBXBuildFile; fileRef = A907EAB71BE21712006E99C1 /* EBColorView.m */; settings = {ASSET_TAGS = (); }; };
+		A907EABA1BE21938006E99C1 /* EBColorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A907EAB91BE21938006E99C1 /* EBColorView.xib */; settings = {ASSET_TAGS = (); }; };
+		A907EABD1BE22468006E99C1 /* EBPriceView.m in Sources */ = {isa = PBXBuildFile; fileRef = A907EABC1BE22468006E99C1 /* EBPriceView.m */; settings = {ASSET_TAGS = (); }; };
+		A907EABF1BE224BD006E99C1 /* EBPriceView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A907EABE1BE224BD006E99C1 /* EBPriceView.xib */; settings = {ASSET_TAGS = (); }; };
 		A91921751BDE33030005E2A3 /* EBLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A91921731BDE33030005E2A3 /* EBLoginViewController.m */; settings = {ASSET_TAGS = (); }; };
 		A91921761BDE33030005E2A3 /* EBLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A91921741BDE33030005E2A3 /* EBLoginViewController.xib */; settings = {ASSET_TAGS = (); }; };
 		A919217A1BDE37F10005E2A3 /* login_telephone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91921781BDE37F10005E2A3 /* login_telephone@2x.png */; settings = {ASSET_TAGS = (); }; };
@@ -267,6 +274,16 @@
 		A907EAAA1BE0729F006E99C1 /* main_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "main_background@2x.png"; sourceTree = "<group>"; };
 		A907EAAC1BE0A34F006E99C1 /* EBAttentionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBAttentionCell.h; sourceTree = "<group>"; };
 		A907EAAD1BE0A34F006E99C1 /* EBAttentionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBAttentionCell.m; sourceTree = "<group>"; };
+		A907EAAF1BE1B436006E99C1 /* EBSponsorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBSponsorController.h; sourceTree = "<group>"; };
+		A907EAB01BE1B436006E99C1 /* EBSponsorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBSponsorController.m; sourceTree = "<group>"; };
+		A907EAB21BE1C189006E99C1 /* search_startTime@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search_startTime@2x.png"; sourceTree = "<group>"; };
+		A907EAB41BE1C1A7006E99C1 /* search_startTime@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search_startTime@3x.png"; sourceTree = "<group>"; };
+		A907EAB61BE21712006E99C1 /* EBColorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBColorView.h; sourceTree = "<group>"; };
+		A907EAB71BE21712006E99C1 /* EBColorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBColorView.m; sourceTree = "<group>"; };
+		A907EAB91BE21938006E99C1 /* EBColorView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EBColorView.xib; sourceTree = "<group>"; };
+		A907EABB1BE22468006E99C1 /* EBPriceView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBPriceView.h; sourceTree = "<group>"; };
+		A907EABC1BE22468006E99C1 /* EBPriceView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBPriceView.m; sourceTree = "<group>"; };
+		A907EABE1BE224BD006E99C1 /* EBPriceView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EBPriceView.xib; sourceTree = "<group>"; };
 		A91921721BDE33030005E2A3 /* EBLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBLoginViewController.h; sourceTree = "<group>"; };
 		A91921731BDE33030005E2A3 /* EBLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBLoginViewController.m; sourceTree = "<group>"; };
 		A91921741BDE33030005E2A3 /* EBLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EBLoginViewController.xib; sourceTree = "<group>"; };
@@ -698,6 +715,12 @@
 			children = (
 				A99EFB691BDDE6CD0074EC55 /* EBCalenderView.h */,
 				A99EFB6A1BDDE6CD0074EC55 /* EBCalenderView.m */,
+				A907EAB61BE21712006E99C1 /* EBColorView.h */,
+				A907EAB71BE21712006E99C1 /* EBColorView.m */,
+				A907EAB91BE21938006E99C1 /* EBColorView.xib */,
+				A907EABB1BE22468006E99C1 /* EBPriceView.h */,
+				A907EABC1BE22468006E99C1 /* EBPriceView.m */,
+				A907EABE1BE224BD006E99C1 /* EBPriceView.xib */,
 			);
 			name = CalenderView;
 			sourceTree = "<group>";
@@ -1133,6 +1156,8 @@
 				A9DF68AA1BD50B0700368B27 /* EBLineDetailController.m */,
 				A9F1AB271BD8FC9200B85843 /* EBBuyTicketController.h */,
 				A9F1AB281BD8FC9200B85843 /* EBBuyTicketController.m */,
+				A907EAAF1BE1B436006E99C1 /* EBSponsorController.h */,
+				A907EAB01BE1B436006E99C1 /* EBSponsorController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1280,6 +1305,8 @@
 		A9FC05721BCE00F300870580 /* Search */ = {
 			isa = PBXGroup;
 			children = (
+				A907EAB21BE1C189006E99C1 /* search_startTime@2x.png */,
+				A907EAB41BE1C1A7006E99C1 /* search_startTime@3x.png */,
 				A9F1AB1F1BD8DAF700B85843 /* search_cell_end@2x.png */,
 				A9F1AB201BD8DAF700B85843 /* search_cell_start@2x.png */,
 				A9DF69001BD883AB00368B27 /* search_hot@2x.png */,
@@ -1442,6 +1469,7 @@
 				A907EA8F1BE0683C006E99C1 /* Attention_registerHL@2x.png in Resources */,
 				A907EA461BDF73D4006E99C1 /* tabBar_attention_normal@2x.png in Resources */,
 				A919217E1BDE46800005E2A3 /* login_telephone@3x.png in Resources */,
+				A907EABA1BE21938006E99C1 /* EBColorView.xib in Resources */,
 				A907EAAB1BE0729F006E99C1 /* main_background@2x.png in Resources */,
 				A9F1AB211BD8DAF700B85843 /* search_cell_end@2x.png in Resources */,
 				A907EA311BDF7029006E99C1 /* tabBar_me_select@3x.png in Resources */,
@@ -1464,6 +1492,7 @@
 				A9DF69011BD883AB00368B27 /* search_hot@2x.png in Resources */,
 				A907EA1E1BDF5662006E99C1 /* me_header@2x.png in Resources */,
 				A9DF68EB1BD73CAD00368B27 /* search_checkPhoto@2x.png in Resources */,
+				A907EAB51BE1C1A7006E99C1 /* search_startTime@3x.png in Resources */,
 				A9DF68AF1BD5D87200368B27 /* search_label@3x.png in Resources */,
 				A907EA4D1BDF73D4006E99C1 /* tabBar_search_select@2x.png in Resources */,
 				A9F1AB221BD8DAF700B85843 /* search_cell_start@2x.png in Resources */,
@@ -1480,6 +1509,7 @@
 				A907EA2F1BDF7029006E99C1 /* tabBar_byBus_select@3x.png in Resources */,
 				A907EA651BDF770D006E99C1 /* EBSuggestController.xib in Resources */,
 				A9DF68961BD115A100368B27 /* AMap.bundle in Resources */,
+				A907EABF1BE224BD006E99C1 /* EBPriceView.xib in Resources */,
 				A907EA2C1BDF7029006E99C1 /* tabBar_attention_normal@3x.png in Resources */,
 				A9DF68D81BD6440B00368B27 /* search_map_departPass@2x.png in Resources */,
 				A9DF68D91BD6440B00368B27 /* search_map_endPass@2x.png in Resources */,
@@ -1487,6 +1517,7 @@
 				A9DF68CF1BD6415300368B27 /* search_map_end@2x.png in Resources */,
 				A907EA4B1BDF73D4006E99C1 /* tabBar_me_select@2x.png in Resources */,
 				A9FC04E41BCCEC4000870580 /* Assets.xcassets in Resources */,
+				A907EAB31BE1C189006E99C1 /* search_startTime@2x.png in Resources */,
 				A907EA2E1BDF7029006E99C1 /* tabBar_byBus_normal@3x.png in Resources */,
 				A907EA491BDF73D4006E99C1 /* tabBar_byBus_select@2x.png in Resources */,
 				A91921761BDE33030005E2A3 /* EBLoginViewController.xib in Resources */,
@@ -1573,11 +1604,13 @@
 				A9DF68E11BD7248C00368B27 /* EBPPAnnotation.m in Sources */,
 				A9FC05501BCD0B0C00870580 /* PHTableViewController.m in Sources */,
 				A907EA5F1BDF76E0006E99C1 /* EBMyOrderController.m in Sources */,
+				A907EAB81BE21712006E99C1 /* EBColorView.m in Sources */,
 				A9F960921BCF3A780011BC73 /* EBTool.m in Sources */,
 				A907EA761BE05FA8006E99C1 /* EBAttentionController.m in Sources */,
 				A9FC054F1BCD0B0C00870580 /* PHTabBarController.m in Sources */,
 				A9FC056D1BCDF9AB00870580 /* EBSearchBusView.m in Sources */,
 				A9FC05661BCD0B7E00870580 /* PHSettingSwitchItem.m in Sources */,
+				A907EABD1BE22468006E99C1 /* EBPriceView.m in Sources */,
 				A9F960831BCF3A480011BC73 /* NSDate+PHCategory.m in Sources */,
 				A9F960821BCF3A480011BC73 /* NSArray+MySeperateString.m in Sources */,
 				A9DF68F01BD78E9900368B27 /* EBPhotoAnnotation.m in Sources */,
@@ -1627,6 +1660,7 @@
 				A9F1AB351BD9F00A00B85843 /* EBUserInfo.m in Sources */,
 				A9FC05441BCD0A9100870580 /* PHTabBar.m in Sources */,
 				A9F960851BCF3A480011BC73 /* NSNumber+PHCategory.m in Sources */,
+				A907EAB11BE1B436006E99C1 /* EBSponsorController.m in Sources */,
 				A9DF68761BD0C80100368B27 /* EBNetworkRequest.m in Sources */,
 				A99EFB621BDDD8EA0074EC55 /* NSDate+Calender.m in Sources */,
 				A9F960881BCF3A480011BC73 /* UIColor+PHCategory.m in Sources */,

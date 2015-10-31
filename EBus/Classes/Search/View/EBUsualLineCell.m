@@ -13,6 +13,7 @@
 #import "EBUsualLineCell.h"
 #import <Masonry/Masonry.h>
 #import "EBSearchResultModel.h"
+#import "EBBoughtModel.h"
 
 @interface EBUsualLineCell ()
 
@@ -133,8 +134,18 @@
         NSMutableString *mString = [NSMutableString stringWithFormat:@"%@",result.startTime];
         [mString insertString:@":" atIndex:2];
         self.departTimeL.text = [mString copy];
-    } else {
+    } else if ([model isKindOfClass:[EBBoughtModel class]]){
+        EBBoughtModel *bought = model;
+        self.priceL.text = [NSString stringWithFormat:@"￥%@元",bought.tradePrice];
+
+        self.departPointL.text = bought.onStationName;
+        self.endPointL.text = bought.offStationName;
+        self.totalTimeL.text = [NSString stringWithFormat:@"%@分钟",bought.needTime];
+        self.totalDistanceL.text = [NSString stringWithFormat:@"%.3f公里",[bought.mileage floatValue]];
         
+        NSMutableString *mString = [NSMutableString stringWithFormat:@"%@",bought.startTime];
+        [mString insertString:@":" atIndex:2];
+        self.departTimeL.text = [mString copy];
     }
 }
 
@@ -153,7 +164,7 @@
                 self.buyType = EBSearchBuyTypeOfNone;
             }
         }
-    } else {
+    } else if ([model isKindOfClass:[EBBoughtModel class]]){
         
     }
     

@@ -7,9 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface EBAttentionTableView : UIView
-
 typedef  NS_ENUM(NSUInteger, EBAttentionType) {
     EBAttentionTypePurchase = 200,
     EBAttentionTypeSign,
@@ -18,8 +15,7 @@ typedef  NS_ENUM(NSUInteger, EBAttentionType) {
     EBAttentionTypeNone
 };
 
-@property (nonatomic, strong) NSMutableArray *dataSource;
-
+@interface EBAttentionTableView : UIView
 
 - (void)beginRefresh;
 

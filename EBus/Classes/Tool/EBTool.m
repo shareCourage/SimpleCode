@@ -148,4 +148,24 @@
     return string;
 }
 
+
++ (void)openAppInitial {
+    if ([EBUserInfo sharedEBUserInfo].loginName.length != 0 && [EBUserInfo sharedEBUserInfo].loginId.length != 0) {
+        NSDictionary *paramters = @{static_Argument_customerId : [EBUserInfo sharedEBUserInfo].loginId,
+                                    static_Argument_customerName : [EBUserInfo sharedEBUserInfo].loginName};
+        [EBNetworkRequest GET:static_Url_Open parameters:paramters dictBlock:nil errorBlock:nil];
+    }
+}
+
++ (BOOL)loginEnable {
+    if ([EBUserInfo sharedEBUserInfo].loginId.length != 0 && [EBUserInfo sharedEBUserInfo].loginName.length != 0) {
+        return YES;
+    }
+    return NO;
+}
 @end
+
+
+
+
+

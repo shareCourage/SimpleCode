@@ -7,7 +7,9 @@
 //
 
 #import "EBBaseLineCell.h"
+@class EBAttentionModel;
 
 @interface EBAttentionCell : EBBaseLineCell
+
 
 @end

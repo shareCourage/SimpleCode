@@ -46,4 +46,12 @@
 
 + (NSString *)stringConnected:(NSArray *)array connectString:(NSString *)connectStr;
 
++ (void)openAppInitial;
+
+/*
+ *判断是否已经登录成功
+ * 成功返回YES， 未登录返回NO
+ */
++ (BOOL)loginEnable;
+
 @end

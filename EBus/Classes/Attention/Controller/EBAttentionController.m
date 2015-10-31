@@ -9,8 +9,7 @@
 #import "EBAttentionController.h"
 #import "EBAttentionTitleView.h"
 #import "EBAttentionTableView.h"
-
-
+#import "EBUserInfo.h"
 
 @interface EBAttentionController () <EBAttentionTitleViewDelegate, UIScrollViewDelegate>
 
@@ -28,6 +27,11 @@
     return _tableViews;
 }
 
+- (void)setTitleSelectIndex:(NSUInteger)titleSelectIndex {
+    _titleSelectIndex = titleSelectIndex;
+    [self.titleView selectIndex:titleSelectIndex];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"关注";
@@ -41,7 +45,7 @@
     CGFloat scrollH = EB_HeightOfScreen - scrollY - EB_HeightOfTabBar;
     CGRect scrollF = CGRectMake(scrollX, scrollY, scrollW, scrollH);
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:scrollF];
-    scrollView.backgroundColor = [UIColor purpleColor];
+    scrollView.backgroundColor = [UIColor whiteColor];
     scrollView.delegate = self;
     scrollView.contentSize = CGSizeMake(EB_WidthOfScreen * 4, scrollH);
     scrollView.pagingEnabled = YES;
@@ -56,9 +60,14 @@
         tableView.tag = i + EBAttentionTypePurchase;
         [scrollView addSubview:tableView];
         [self.tableViews addObject:tableView];
+        if (i == 0) {
+            [tableView beginRefresh];
+        }
     }
     [self.view addSubview:scrollView];
     self.tableScrollView = scrollView;
+    
+//    self.tableScrollView.contentOffset = CGPointMake(self.titleSelectIndex * scrollW, scrollH);
 }
 
 - (void)titleViewImplementation {
@@ -77,7 +86,10 @@
         NSString *selName = titleImagesSel[i];
         [titleView addTitleButtonWithName:name selName:selName];
     }
+    [titleView selectIndex:self.titleSelectIndex];
 }
+
+
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     NSUInteger index = (NSUInteger)scrollView.contentOffset.x / EB_WidthOfScreen;
@@ -87,6 +99,16 @@
 #pragma mark - EBAttentionTitleViewDelegate
 - (void)titleView:(EBAttentionTitleView *)titleView didSelectButtonFrom:(NSUInteger)from to:(NSUInteger)to {
     EBLog(@"from %ld , to %ld",(unsigned long)from, (unsigned long)to);
-    [self.tableScrollView setContentOffset:CGPointMake(to * EB_WidthOfScreen, 0) animated:YES];;
+    [self.tableScrollView setContentOffset:CGPointMake(to * EB_WidthOfScreen, 0) animated:YES];
+    
 }
+
+
+
 @end
+
+
+
+
+
+

@@ -22,6 +22,7 @@
     
     [MAMapServices sharedServices].apiKey = static_KeyOfAMap;//高德地图key验证
     [AMapSearchServices sharedServices].apiKey = static_KeyOfAMap;
+    [EBTool openAppInitial];
     
     return YES;
 }

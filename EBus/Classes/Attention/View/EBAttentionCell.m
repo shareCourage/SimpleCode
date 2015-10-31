@@ -19,4 +19,9 @@
     return cell;
 }
 
+- (void)setModel:(id)model {
+    [super setModel:model];
+    _model = model;
+}
+
 @end

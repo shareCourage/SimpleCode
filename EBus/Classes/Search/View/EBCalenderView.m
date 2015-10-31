@@ -70,7 +70,7 @@
 }
 - (void)buyBtnClick {
     if ([self.delegate respondsToSelector:@selector(eb_calenderView:didOrder:)]) {
-        [self.delegate eb_calenderView:self didOrder:self.selectPrices];
+        [self.delegate eb_calenderView:self didOrder:[self.selectPrices copy]];
     }
 }
 #pragma mark - Public Method
@@ -144,6 +144,15 @@
             }
             i ++;
         }
+    }
+    if (self.selectPrices.count == 0) {
+        self.priceView.dayLabel.text = @"共0天";
+        self.priceView.priceLabel.text = @"0元";
+    } else {
+        self.priceView.dayLabel.text = [NSString stringWithFormat:@"共%ld天",(unsigned long)self.selectPrices.count];
+        NSString *price = [self.prices firstObject];
+        CGFloat priceFloat = [price floatValue];
+        self.priceView.priceLabel.text = [NSString stringWithFormat:@"%.1f元",self.selectPrices.count * priceFloat];
     }
 }
 

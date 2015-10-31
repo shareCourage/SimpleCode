@@ -14,7 +14,8 @@
 #import "EBBuyTicketController.h"
 #import "EBUserInfo.h"
 #import "PHTabBarController.h"
-
+#import "EBAttentionController.h"
+#import "PHNavigationController.h"
 @interface EBLineDetailController () <EBLineMapViewDelegate>
 
 @property (nonatomic, weak) EBLineMapView *lineMapView;
@@ -99,6 +100,10 @@
             if ([code integerValue] == 500) {
                 PHTabBarController *phTBC = (PHTabBarController *)self.tabBarController;
                 phTBC.mySelectedIndex = 2;
+                NSArray *viewControlls = phTBC.viewControllers;
+                PHNavigationController *navi = [viewControlls objectAtIndex:2];
+                EBAttentionController *attentionVC = [navi.viewControllers firstObject];
+                attentionVC.titleSelectIndex = 1;
                 [self.navigationController popToRootViewControllerAnimated:NO];
             } else if ([info isEqualToString:@"已报名"]){
                 [MBProgressHUD showSuccess:@"已报名" toView:self.view];

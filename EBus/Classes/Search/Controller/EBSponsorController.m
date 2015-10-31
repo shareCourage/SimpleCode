@@ -11,6 +11,8 @@
 #import "EBSelectPositionController.h"
 #import "PHTabBarController.h"
 #import "EBUserInfo.h"
+#import "EBAttentionController.h"
+#import "PHNavigationController.h"
 @interface EBSponsorController () <EBSearchBusViewDelegate>
 
 @property (nonatomic, weak) EBSearchBusView *searchBusView;
@@ -135,6 +137,10 @@
                 PHTabBarController *phTBC = (PHTabBarController *)self.tabBarController;
                 phTBC.mySelectedIndex = 2;
                 [self.navigationController popToRootViewControllerAnimated:NO];
+                NSArray *viewControlls = phTBC.viewControllers;
+                PHNavigationController *navi = [viewControlls objectAtIndex:2];
+                EBAttentionController *attentionVC = [navi.viewControllers firstObject];
+                attentionVC.titleSelectIndex = 3;
             } else {
                 [MBProgressHUD showError:@"发起失败" toView:self.view];
             }

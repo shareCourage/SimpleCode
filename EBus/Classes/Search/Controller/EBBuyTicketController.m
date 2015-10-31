@@ -11,7 +11,8 @@
 #import "EBSearchResultModel.h"
 #import "EBCalenderView.h"
 #import "EBUserInfo.h"
-@interface EBBuyTicketController () <EBCalenderViewDelegate>
+#import "EBApplyBusController.h"
+@interface EBBuyTicketController () <EBCalenderViewDelegate, UIActionSheetDelegate>
 
 @property (nonatomic, weak)EBCalenderView *calenderView;
 
@@ -84,34 +85,47 @@
     } errorBlock:nil];
 }
 
+- (void)payCash:(NSArray *)dates payType:(NSUInteger)type{
+    NSArray *sortArray = [dates sortedArrayUsingSelector:@selector(compare:)];//升序排序
+    NSMutableArray *newDates = [NSMutableArray array];
+    PHCalenderDay *currentDay = [EBUserInfo sharedEBUserInfo].currentCalendarDay;
+    for (NSString *obj in sortArray) {
+        NSString *string = [NSString stringWithFormat:@"%ld-%2ld-%2ld",currentDay.year, currentDay.month, [obj integerValue]];
+        [newDates addObject:string];
+    }
+    NSString *newString = [EBTool stringConnected:newDates connectString:@","];
+    EBLog(@"%@",newString);
+    NSDictionary *parameters = @{static_Argument_saleDates      : newString,
+                                 static_Argument_lineId         : self.resultModel.lineId,
+                                 static_Argument_vehTime        : self.resultModel.vehTime,
+                                 static_Argument_startTime      : self.resultModel.startTime,
+                                 static_Argument_onStationId    : self.resultModel.onStationId,
+                                 static_Argument_offStationId   : self.resultModel.offStationId,
+                                 static_Argument_tradePrice     : @(self.ticketPrice * dates.count),
+                                 static_Argument_payType        : @(type),
+                                 static_Argument_userId         : [EBUserInfo sharedEBUserInfo].loginId,
+                                 static_Argument_userName       : [EBUserInfo sharedEBUserInfo].loginName};
+    [EBNetworkRequest GET:static_Url_Order parameters:parameters dictBlock:^(NSDictionary *dict) {
+        EBLog(@"order -> %@",dict);
+    } errorBlock:^(NSError *error) {
+        
+    }];
+}
 #pragma mark - EBCalenderViewDelegate
 - (void)eb_calenderView:(EBCalenderView *)calenderView didOrder:(NSArray *)dates {
     if (dates.count == 0) {
         [MBProgressHUD showError:@"请选择一个购票日期" toView:self.view];
     } else {
-#warning 这里再对dates拍一下序
-        NSMutableArray *newDates = [NSMutableArray array];
-        PHCalenderDay *currentDay = [EBUserInfo sharedEBUserInfo].currentCalendarDay;
-        for (NSString *obj in dates) {
-            NSString *string = [NSString stringWithFormat:@"%ld-%2ld-%2ld",currentDay.year, currentDay.month, [obj integerValue]];
-            [newDates addObject:string];
-        }
-        NSString *newString = [EBTool stringConnected:newDates connectString:@","];
-        EBLog(@"%@",newString);
-        NSDictionary *parameters = @{static_Argument_saleDates : newString,
-                                     static_Argument_lineId : self.resultModel.lineId,
-                                     static_Argument_vehTime : self.resultModel.vehTime,
-                                     static_Argument_startTime : self.resultModel.startTime,
-                                     static_Argument_onStationId : self.resultModel.onStationId,
-                                     static_Argument_offStationId : self.resultModel.offStationId,
-                                     static_Argument_tradePrice : @(self.ticketPrice * dates.count),
-                                     static_Argument_payType : @(1)};
-        [EBNetworkRequest GET:static_Url_Order parameters:nil dictBlock:nil errorBlock:nil];
+#warning 需要自定义一个View
+        [self payCash:dates payType:1];
+//        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"请选择支付方式" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"支付宝", @"微信",@"深圳通",@"其它(老认证、军人证)", nil];
+//        [actionSheet showInView:self.view];
     }
 }
 
 - (void)eb_calenderViewDidApply:(EBCalenderView *)calenderView {
-    
+    EBApplyBusController *apply = [[EBApplyBusController alloc] init];
+    [self.navigationController pushViewController:apply animated:YES];
 }
 
 #pragma mark - UITableView
@@ -130,5 +144,11 @@
     cell.model = self.resultModel;
     return cell;
 }
+
+#pragma mark - UIActionSheetDelegate
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+
+}
+
 
 @end

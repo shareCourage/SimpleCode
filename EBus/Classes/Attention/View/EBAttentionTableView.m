@@ -79,11 +79,12 @@
 #pragma mark - Public Method
 - (void)beginRefresh {
     [self.tableView.header beginRefreshing];
+    self.refresh = YES;
 }
 
 #pragma mark - Private Method
 - (void)tableViewRefresh {
-    [self attentionRequest];
+    [self attentionRequestAndTableViewReloadData];
 }
 
 #pragma mark - UITableViewDataSource, UITableViewDelegate
@@ -106,17 +107,17 @@
     } else if (self.tag == EBAttentionTypeSign) {
         EBAttentionCell *cell = [EBAttentionCell cellWithTableView:tableView];
         EBSignModel *sign = self.dataSource[indexPath.row];
-
+        cell.model = sign;
         return cell;
     } else if (self.tag == EBAttentionTypeGroup) {
         EBAttentionCell *cell = [EBAttentionCell cellWithTableView:tableView];
         EBGroupModel *group = self.dataSource[indexPath.row];
-        
+        cell.model = group;
         return cell;
     } else if (self.tag == EBAttentionTypeSponsor) {
         EBAttentionCell *cell = [EBAttentionCell cellWithTableView:tableView];
         EBSponsorModel *sponsor = self.dataSource[indexPath.row];
-        
+        cell.model = sponsor;
         return cell;
     }
     return nil;
@@ -125,18 +126,27 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (self.tag == EBAttentionTypePurchase) {
-        
+        EBBoughtModel *bought = self.dataSource[indexPath.row];
+        if ([self.delegate respondsToSelector:@selector(eb_tableView:didSelectOfTypePurchase:)]) {
+            [self.delegate eb_tableView:self didSelectOfTypePurchase:bought];
+        }
     } else if (self.tag == EBAttentionTypeSign) {
-        
+        EBSignModel *sign = self.dataSource[indexPath.row];
+        if ([self.delegate respondsToSelector:@selector(eb_tableView:didSelectOfTypeSign:)]) {
+            [self.delegate eb_tableView:self didSelectOfTypeSign:sign];
+        }
     } else if (self.tag == EBAttentionTypeGroup) {
-        
+        EBGroupModel *group = self.dataSource[indexPath.row];
+        if ([self.delegate respondsToSelector:@selector(eb_tableView:didSelectOfTypeGroup:)]) {
+            [self.delegate eb_tableView:self didSelectOfTypeGroup:group];
+        }
     } else if (self.tag == EBAttentionTypeSponsor) {
-        
+        [MBProgressHUD showError:@"相关路线尚未开通，详细请咨询客服" toView:self];
     }
 }
 
 #pragma mark - Network Request
-- (void)attentionRequest {
+- (void)attentionRequestAndTableViewReloadData {
     if ([EBTool loginEnable]) {
         switch (self.tag) {
             case EBAttentionTypePurchase:
@@ -154,20 +164,28 @@
             default:
                 break;
         }
+    } else {
+        [self.dataSource removeAllObjects];
+        [self.tableView reloadData];
+        self.backgroundImageView.hidden = NO;
+        [self.tableView.header endRefreshing];
     }
-    
 }
 
 - (void)boughtRequest {
     [EBNetworkRequest GET:static_Url_AttentionOfBought parameters:self.parameters dictBlock:^(NSDictionary *dict) {
         EBLog(@"%@", dict);
         [self.tableView.header endRefreshing];
-        NSArray *array = dict[static_Argument_returnData];
-        if (array.count == 0) return;
         [self.dataSource removeAllObjects];
+        NSArray *array = dict[static_Argument_returnData];
         for (NSDictionary *dict in array) {
             EBBoughtModel *bought = [[EBBoughtModel alloc] initWithDict:dict];
             [self.dataSource addObject:bought];
+        }
+        if (self.dataSource.count == 0) {
+            self.backgroundImageView.hidden = NO;
+        } else {
+            self.backgroundImageView.hidden = YES;
         }
         [self.tableView reloadData];
     } errorBlock:^(NSError *error) {
@@ -178,12 +196,16 @@
     [EBNetworkRequest GET:static_Url_AttentionOfSign parameters:self.parameters dictBlock:^(NSDictionary *dict) {
         EBLog(@"%@", dict);
         [self.tableView.header endRefreshing];
-        NSArray *array = dict[static_Argument_returnData];
-        if (array.count == 0) return;
         [self.dataSource removeAllObjects];
+        NSArray *array = dict[static_Argument_returnData];
         for (NSDictionary *dict in array) {
             EBSignModel *bought = [[EBSignModel alloc] initWithDict:dict];
             [self.dataSource addObject:bought];
+        }
+        if (self.dataSource.count == 0) {
+            self.backgroundImageView.hidden = NO;
+        } else {
+            self.backgroundImageView.hidden = YES;
         }
         [self.tableView reloadData];
     } errorBlock:^(NSError *error) {
@@ -194,12 +216,16 @@
     [EBNetworkRequest GET:static_Url_AttentionOfGroup parameters:self.parameters dictBlock:^(NSDictionary *dict) {
         EBLog(@"%@", dict);
         [self.tableView.header endRefreshing];
-        NSArray *array = dict[static_Argument_returnData];
-        if (array.count == 0) return;
         [self.dataSource removeAllObjects];
+        NSArray *array = dict[static_Argument_returnData];
         for (NSDictionary *dict in array) {
             EBGroupModel *bought = [[EBGroupModel alloc] initWithDict:dict];
             [self.dataSource addObject:bought];
+        }
+        if (self.dataSource.count == 0) {
+            self.backgroundImageView.hidden = NO;
+        } else {
+            self.backgroundImageView.hidden = YES;
         }
         [self.tableView reloadData];
     } errorBlock:^(NSError *error) {
@@ -210,12 +236,16 @@
     [EBNetworkRequest GET:static_Url_AttentionOfSponsor parameters:self.parameters dictBlock:^(NSDictionary *dict) {
         EBLog(@"%@", dict);
         [self.tableView.header endRefreshing];
-        NSArray *array = dict[static_Argument_returnData];
-        if (array.count == 0) return;
         [self.dataSource removeAllObjects];
+        NSArray *array = dict[static_Argument_returnData];
         for (NSDictionary *dict in array) {
             EBSponsorModel *bought = [[EBSponsorModel alloc] initWithDict:dict];
             [self.dataSource addObject:bought];
+        }
+        if (self.dataSource.count == 0) {
+            self.backgroundImageView.hidden = NO;
+        } else {
+            self.backgroundImageView.hidden = YES;
         }
         [self.tableView reloadData];
     } errorBlock:^(NSError *error) {

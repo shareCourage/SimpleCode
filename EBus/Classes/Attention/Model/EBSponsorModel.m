@@ -7,10 +7,8 @@
 //
 
 #import "EBSponsorModel.h"
-#import <MJExtension/MJExtension.h>
 
 @implementation EBSponsorModel
-
 
 - (instancetype)initWithDict:(NSDictionary *)dict {
     self = [super initWithDict:dict];

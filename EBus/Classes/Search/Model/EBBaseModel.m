@@ -10,4 +10,12 @@
 
 @implementation EBBaseModel
 
+- (instancetype)initWithDict:(NSDictionary *)dict {
+    self = [super init];
+    if (self) {
+        self = [EBBaseModel objectWithKeyValues:dict];
+    }
+    return self;
+}
+
 @end

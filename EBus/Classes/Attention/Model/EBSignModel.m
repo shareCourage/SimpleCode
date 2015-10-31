@@ -7,7 +7,6 @@
 //
 
 #import "EBSignModel.h"
-#import <MJExtension/MJExtension.h>
 
 @implementation EBSignModel
 

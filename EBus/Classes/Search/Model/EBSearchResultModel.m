@@ -7,11 +7,8 @@
 //
 
 #import "EBSearchResultModel.h"
-#import <MJExtension/MJExtension.h>
 
 @implementation EBSearchResultModel
-
-MJCodingImplementation
 
 - (instancetype)initWithDict:(NSDictionary *)dict {
     self = [super init];

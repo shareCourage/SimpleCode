@@ -10,8 +10,12 @@
 #import "EBAttentionTitleView.h"
 #import "EBAttentionTableView.h"
 #import "EBUserInfo.h"
-
-@interface EBAttentionController () <EBAttentionTitleViewDelegate, UIScrollViewDelegate>
+#import "EBSearchResultModel.h"
+#import "EBBoughtModel.h"
+#import "EBSignModel.h"
+#import "EBGroupModel.h"
+#import "EBLineDetailController.h"
+@interface EBAttentionController () <EBAttentionTitleViewDelegate, EBAttentionTableViewDelegate, UIScrollViewDelegate>
 
 @property (nonatomic, weak) EBAttentionTitleView *titleView;
 @property (nonatomic, weak) UIScrollView *tableScrollView;
@@ -20,6 +24,10 @@
 @end
 
 @implementation EBAttentionController
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (NSMutableArray *)tableViews {
     if (!_tableViews) {
         _tableViews = [NSMutableArray array];
@@ -37,7 +45,24 @@
     self.navigationItem.title = @"关注";
     [self titleViewImplementation];
     [self scrollViewImplementation];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutNotificationCenter) name:EBLogoutSuccessNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginNotificationCenter) name:EBLoginSuccessNotification object:nil];
 }
+
+- (void)logoutNotificationCenter {
+    for (EBAttentionTableView *tableView in self.tableViews) {
+        [tableView attentionRequestAndTableViewReloadData];
+        tableView.refresh = NO;
+    }
+}
+
+- (void)loginNotificationCenter {
+    EBAttentionTableView *tableView = [self.tableViews firstObject];
+    [tableView attentionRequestAndTableViewReloadData];
+    tableView.refresh = YES;
+}
+
 - (void)scrollViewImplementation {
     CGFloat scrollX = 0;
     CGFloat scrollY = EB_HeightOfNavigationBar + EB_HeightOfAttentionTitleView;
@@ -57,6 +82,7 @@
         CGFloat tableH = scrollH;
         CGRect tableF = CGRectMake(tableX, tableY, tableW, tableH);
         EBAttentionTableView *tableView = [[EBAttentionTableView alloc] initWithFrame:tableF];
+        tableView.delegate = self;
         tableView.tag = i + EBAttentionTypePurchase;
         [scrollView addSubview:tableView];
         [self.tableViews addObject:tableView];
@@ -89,22 +115,88 @@
     [titleView selectIndex:self.titleSelectIndex];
 }
 
+- (void)tableViewReloadData:(NSUInteger)index {
+    if (index >= self.tableViews.count) return;
+    EBAttentionTableView *tableView = self.tableViews[index];
+    if (!tableView.isRefreshed) {
+        [tableView beginRefresh];
+    }
+}
 
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     NSUInteger index = (NSUInteger)scrollView.contentOffset.x / EB_WidthOfScreen;
     [self.titleView selectIndex:index];
+    [self tableViewReloadData:index];
 }
 
 #pragma mark - EBAttentionTitleViewDelegate
 - (void)titleView:(EBAttentionTitleView *)titleView didSelectButtonFrom:(NSUInteger)from to:(NSUInteger)to {
     EBLog(@"from %ld , to %ld",(unsigned long)from, (unsigned long)to);
     [self.tableScrollView setContentOffset:CGPointMake(to * EB_WidthOfScreen, 0) animated:YES];
+    [self tableViewReloadData:to];
+}
+
+#pragma mark - EBAttentionTableViewDelegate
+- (void)eb_tableView:(EBAttentionTableView *)tableView didSelectOfTypePurchase:(EBBoughtModel *)bough {
+    [self pushToLineDetailController:[self searchResultModel:bough]];
+}
+
+- (void)eb_tableView:(EBAttentionTableView *)tableView didSelectOfTypeSign:(EBSignModel *)sign {
+    [self pushToLineDetailController:[self searchResultModel:sign]];
+
+}
+- (void)eb_tableView:(EBAttentionTableView *)tableView didSelectOfTypeGroup:(EBGroupModel *)group {
+    [self pushToLineDetailController:[self searchResultModel:group]];
+}
+
+#pragma mark - Private Method
+- (EBSearchResultModel *)searchResultModel:(EBBaseModel *)model {
+    EBSearchResultModel *resultM = [[EBSearchResultModel alloc] init];
+    if ([model isKindOfClass:[EBBoughtModel class]]) {
+        EBBoughtModel *bought = (EBBoughtModel *)model;
+        resultM.lineId = bought.lineId;
+        resultM.openType = @(1);
+        resultM.startTime = bought.startTime;
+        resultM.mileage = bought.mileage;
+        resultM.needTime = bought.needTime;
+        resultM.onStationName = bought.onStationName;
+        resultM.offStationName = bought.offStationName;
+        resultM.price = bought.price;
+        resultM.onStationId = bought.onStationId;
+        resultM.offStationId = bought.offStationId;
+        resultM.startTime = bought.startTime;
+        resultM.vehTime = bought.vehTime;
+    } else if ([model isKindOfClass:[EBSignModel class]] || [model isKindOfClass:[EBGroupModel class]]) {
+        EBAttentionModel *attention = (EBAttentionModel *)model;
+        resultM.lineId = attention.lineId;
+        resultM.startTime = attention.startTime;
+        resultM.mileage = attention.mileage;
+        resultM.needTime = attention.needTime;
+        resultM.onStationName = attention.onStationName;
+        resultM.offStationName = attention.offStationName;
+        resultM.onStationId = attention.onStationId;
+        resultM.offStationId = attention.offStationId;
+        resultM.startTime = attention.startTime;
+        resultM.vehTime = attention.vehTime;
+        if ([model isKindOfClass:[EBSignModel class]]) {
+            EBSignModel *sign = (EBSignModel *)model;
+            resultM.price = sign.price;
+            resultM.openType = @(2);
+        } else if ([model isKindOfClass:[EBGroupModel class]]) {
+            resultM.openType = @(3);
+        }
+    }
     
+    return resultM;
 }
 
 
-
+- (void)pushToLineDetailController:(EBSearchResultModel *)resultModel {
+    EBLineDetailController *lineDetail = [[EBLineDetailController alloc] init];
+    lineDetail.resultModel = resultModel;
+    [self.navigationController pushViewController:lineDetail animated:YES];
+}
 @end
 
 

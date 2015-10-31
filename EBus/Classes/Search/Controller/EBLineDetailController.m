@@ -90,11 +90,16 @@
         NSDictionary *parameters = @{static_Argument_customerId     : [EBUserInfo sharedEBUserInfo].loginId,
                                      static_Argument_customerName   : [EBUserInfo sharedEBUserInfo].loginName,
                                      static_Argument_lineId         : self.resultModel.lineId,
-                                     static_Argument_vehTime        : self.resultModel.vehTime,
                                      static_Argument_onStationId    : self.resultModel.onStationId,
-                                     static_Argument_offStationId   : self.resultModel.offStationId,
-                                     static_Argument_startTime      : self.resultModel.startTime};
-        [EBNetworkRequest POST:static_Url_Sign parameters:parameters dictBlock:^(NSDictionary *dict) {
+                                     static_Argument_offStationId   : self.resultModel.offStationId};
+        NSMutableDictionary *mParameters = [NSMutableDictionary dictionaryWithDictionary:parameters];
+        if (self.resultModel.vehTime.length != 0) {
+            [mParameters setObject:self.resultModel.vehTime forKey:static_Argument_vehTime];
+        }
+        if (self.resultModel.startTime.length != 0) {
+            [mParameters setObject:self.resultModel.startTime forKey:static_Argument_startTime];
+        }
+        [EBNetworkRequest POST:static_Url_Sign parameters:mParameters dictBlock:^(NSDictionary *dict) {
             NSString *code = dict[static_Argument_returnCode];
             NSString *info = dict[static_Argument_returnInfo];
             if ([code integerValue] == 500) {

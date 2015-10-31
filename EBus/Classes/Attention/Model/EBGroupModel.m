@@ -7,10 +7,8 @@
 //
 
 #import "EBGroupModel.h"
-#import <MJExtension/MJExtension.h>
 
 @implementation EBGroupModel
-
 
 - (instancetype)initWithDict:(NSDictionary *)dict {
     self = [super initWithDict:dict];

@@ -7,11 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+@class EBBaseModel;
 
 @interface EBBaseLineCell : UITableViewCell
-{
-    id _model;
-}
+
 @property (nonatomic, weak) UILabel *departTimeL;
 @property (nonatomic, weak) UILabel *totalDistanceL;
 @property (nonatomic, weak) UILabel *totalTimeL;
@@ -19,6 +18,6 @@
 @property (nonatomic, weak) UILabel *endPointL;
 
 + (instancetype)cellWithTableView:(UITableView *)tableView;
-@property (nonatomic, strong) id model;
+@property (nonatomic, strong) EBBaseModel *model;
 
 @end

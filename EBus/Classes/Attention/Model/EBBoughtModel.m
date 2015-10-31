@@ -7,7 +7,6 @@
 //
 
 #import "EBBoughtModel.h"
-#import <MJExtension/MJExtension.h>
 
 @implementation EBBoughtModel
 

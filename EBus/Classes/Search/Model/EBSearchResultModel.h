@@ -6,9 +6,9 @@
 //  Copyright © 2015年 Goome. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "EBBaseModel.h"
 
-@interface EBSearchResultModel : NSObject <NSCoding>
+@interface EBSearchResultModel : EBBaseModel
 /*
  "id": 2,
  "isEnd": 1,
@@ -36,8 +36,6 @@
 @property (nonatomic, strong) NSNumber *isFirst;
 @property (nonatomic, strong) NSNumber *isLabel;
 @property (nonatomic, strong) NSNumber *lineId;
-@property (nonatomic, strong) NSNumber *mileage;
-@property (nonatomic, strong) NSNumber *needTime;
 @property (nonatomic, strong) NSNumber *offGeogId;
 @property (nonatomic, strong) NSNumber *offStationId;
 @property (nonatomic, strong) NSNumber *onGeogId;
@@ -48,10 +46,12 @@
 @property (nonatomic, strong) NSNumber *status;
 @property (nonatomic, strong) NSNumber *tradePrice;
 
-@property (nonatomic, copy) NSString *offStationName;
-@property (nonatomic, copy) NSString *onStationName;
-@property (nonatomic, copy) NSString *startTime;
-@property (nonatomic, copy) NSString *vehTime;
+//@property (nonatomic, strong) NSNumber *mileage;
+//@property (nonatomic, strong) NSNumber *needTime;
+//@property (nonatomic, copy) NSString *offStationName;
+//@property (nonatomic, copy) NSString *onStationName;
+//@property (nonatomic, copy) NSString *startTime;
+//@property (nonatomic, copy) NSString *vehTime;
 
-- (instancetype)initWithDict:(NSDictionary *)dict;
+
 @end

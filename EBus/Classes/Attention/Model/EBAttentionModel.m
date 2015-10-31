@@ -13,7 +13,7 @@
 - (instancetype)initWithDict:(NSDictionary *)dict {
     self = [super init];
     if (self) {
-        
+        self =[EBAttentionModel objectWithKeyValues:dict];
     }
     return self;
 }

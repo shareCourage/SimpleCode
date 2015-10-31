@@ -8,13 +8,12 @@
 #define EB_Top 10
 #define EB_Height 30
 #import "EBBaseLineCell.h"
+#import "EBBaseModel.h"
 
 @interface EBBaseLineCell ()
 
 @property (nonatomic, weak) UIImageView *indexImageView;
-
 @property (nonatomic, weak) UIView *firstView;
-
 @property (nonatomic, weak) UIView *secondView;
 
 @end
@@ -61,8 +60,6 @@
     self.totalDistanceL = totalDistance;
     self.totalTimeL = totalTime;
     self.firstView = firstView;
-    
-//    self.firstView.backgroundColor = [[UIColor purpleColor] colorWithAlphaComponent:0.5f];
 }
 
 - (void)secondViewImplementation {
@@ -91,9 +88,6 @@
     self.endPointL = endPoint;
     self.indexImageView = index;
     self.secondView = secondView;
-    
-//    self.secondView.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0.5f];
-
 }
 - (void)baseInfoImplementation {
     [self firstViewImplementation];
@@ -177,8 +171,20 @@
     return cell;
 }
 
-#warning 还需重新写
-- (void)setModel:(id)model {
+
+- (void)setModel:(EBBaseModel *)model {
+    if (!model) return;
     _model = model;
+    self.departPointL.text = model.onStationName;
+    self.endPointL.text = model.offStationName;
+    self.totalTimeL.text = [NSString stringWithFormat:@"约%@分钟",model.needTime];
+    self.totalDistanceL.text = [NSString stringWithFormat:@"%.2f公里",[model.mileage floatValue]];
+    NSMutableString *mString = [NSMutableString stringWithFormat:@"%@",model.startTime];
+    [mString insertString:@":" atIndex:2];
+    self.departTimeL.text = [NSString stringWithFormat:@"%@始发",[mString copy]];
 }
+
 @end
+
+
+

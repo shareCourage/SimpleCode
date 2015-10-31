@@ -107,17 +107,17 @@
     self.strickoutPriceL.frame = CGRectMake(strickoutPriceX, strickoutPriceY, strickoutPriceW, strickoutPriceH);
 }
 
-- (void)setModel:(id)model {
+- (void)setModel:(EBBaseModel *)model {
+    [super setModel:model];
     if (!model) return;
-    _model = model;
     [self setUpData:model];
     [self setUpUI:model];
 }
 
-- (void)setUpData:(id)model {
+- (void)setUpData:(EBBaseModel *)model {
     if ([model isKindOfClass:[EBSearchResultModel class]]) {
-        EBSearchResultModel *result = model;
-        self.priceL.text = [NSString stringWithFormat:@"￥%@元",result.tradePrice];
+        EBSearchResultModel *result = (EBSearchResultModel *)model;
+        self.priceL.text = [NSString stringWithFormat:@"￥%@元",result.price];
 #warning 根据具体需求，具体更改
         if ([result.tradePrice floatValue] != [result.price floatValue]) {
             self.strickoutPriceL.hidden = YES;
@@ -126,32 +126,16 @@
             self.strickoutPriceL.hidden = NO;
             self.strickoutPriceL.attributedText = [self attributedString:[NSString stringWithFormat:@"￥%@元",result.price]];
         }
-        self.departPointL.text = result.onStationName;
-        self.endPointL.text = result.offStationName;
-        self.totalTimeL.text = [NSString stringWithFormat:@"%@分钟",result.needTime];
-        self.totalDistanceL.text = [NSString stringWithFormat:@"%.3f公里",[result.mileage floatValue]];
         
-        NSMutableString *mString = [NSMutableString stringWithFormat:@"%@",result.startTime];
-        [mString insertString:@":" atIndex:2];
-        self.departTimeL.text = [mString copy];
     } else if ([model isKindOfClass:[EBBoughtModel class]]){
-        EBBoughtModel *bought = model;
+        EBBoughtModel *bought = (EBBoughtModel *)model;
         self.priceL.text = [NSString stringWithFormat:@"￥%@元",bought.tradePrice];
-
-        self.departPointL.text = bought.onStationName;
-        self.endPointL.text = bought.offStationName;
-        self.totalTimeL.text = [NSString stringWithFormat:@"%@分钟",bought.needTime];
-        self.totalDistanceL.text = [NSString stringWithFormat:@"%.3f公里",[bought.mileage floatValue]];
-        
-        NSMutableString *mString = [NSMutableString stringWithFormat:@"%@",bought.startTime];
-        [mString insertString:@":" atIndex:2];
-        self.departTimeL.text = [mString copy];
     }
 }
 
-- (void)setUpUI:(id)model {
+- (void)setUpUI:(EBBaseModel *)model {
     if ([model isKindOfClass:[EBSearchResultModel class]]) {
-        EBSearchResultModel *result = model;
+        EBSearchResultModel *result = (EBSearchResultModel *)model;
         if (self.isShowBuyView) {
             NSInteger type = [result.openType integerValue];
             if (type == 1) {

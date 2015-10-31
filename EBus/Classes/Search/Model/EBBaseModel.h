@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <MJExtension/MJExtension.h>
 
 @interface EBBaseModel : NSObject
 
@@ -16,5 +17,7 @@
 @property (nonatomic, copy) NSString *vehTime;
 @property (nonatomic, strong) NSNumber *mileage;
 @property (nonatomic, strong) NSNumber *needTime;
+
+- (instancetype)initWithDict:(NSDictionary *)dict;
 
 @end

@@ -10,30 +10,31 @@
 
 @interface EBSignModel : EBAttentionModel
 /*
- "addTime": "2015-08-18 18:19",
- "customerId": 7,
- "customerName": "18244973821",
- "id": 11,
- "lineId": 45,
- "mileage": 0,
- "needTime": 0,
- "offGeogId": 5,
- "offLat": "22.541121",
- "offLng": "113.256421",
- "offStationId": 12025,
- "offStationName": "南山区教育局",
- "onGeogId": 4,
- "onLat": "22.6545",
- "onLng": "114.542124",
- "onStationId": 12024,
- "onStationName": "罗胡区教育局",
- "perNum": 0,
- "status": 0,
- "timeKey": 20150818,
- "type": 2,
- "vehTime": "0740",
- "price": 2,
- "changeStatus": 4
+ addTime = "2015-10-28 18:47";
+ changeStatus = 1;
+ customerId = 956;
+ customerName = 15818572527;
+ id = 1376;
+ lineId = 31;
+ mileage = "37.99";
+ needTime = 30;
+ offGeogId = 3;
+ offLat = "22.558198";
+ offLng = "114.027699";
+ offStationId = 6159;
+ offStationName = "\U5317\U73af\U9999\U6885\U7acb\U4ea4";
+ onGeogId = 7;
+ onLat = "22.632152";
+ onLng = "114.012";
+ onStationId = 12179;
+ onStationName = "\U7b80\U4e0a\U6751";
+ perNum = 11;
+ price = 2;
+ startTime = 0700;
+ status = 0;
+ timeKey = 20151028;
+ type = 2;
+ vehTime = 0700;
  */
 
 

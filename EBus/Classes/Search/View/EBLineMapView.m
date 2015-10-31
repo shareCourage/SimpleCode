@@ -6,6 +6,7 @@
 //  Copyright © 2015年 Goome. All rights reserved.
 //
 #define EB_LineColor EB_RGBColor(90, 138, 251)
+#define EB_MaxWidthOfLineStation (EB_WidthOfScreen / 2 + 50) //左边滑动的view的最大宽度值
 #import "EBLineMapView.h"
 #import "EBLineDetailModel.h"
 #import "EBAnnotation.h"
@@ -174,7 +175,30 @@
 - (void)panGestureRecognized:(UIPanGestureRecognizer *)pan {
 //    CGFloat panX = [pan translationInView:self].x;
     CGPoint location = [pan locationInView:self];
-    if (location.x <= EB_WidthOfScreen / 2 + 50) {
+    EBLog(@"%@",NSStringFromCGPoint(location));
+    switch (pan.state) {
+        case UIGestureRecognizerStateBegan:
+            EBLog(@"UIGestureRecognizerStateBegan");
+            break;
+        case UIGestureRecognizerStateChanged:
+            EBLog(@"UIGestureRecognizerStateChanged");
+            
+            break;
+        case UIGestureRecognizerStateEnded:
+            EBLog(@"UIGestureRecognizerStateEnded");
+            if (location.x > EB_MaxWidthOfLineStation / 2) {
+                [UIView animateWithDuration:0.3f animations:^{
+                    self.stationView.width = EB_MaxWidthOfLineStation - 10;
+                } completion:^(BOOL finished) {
+                    self.stationView.width = EB_MaxWidthOfLineStation - 10;
+                    self.leftDragView.image = [UIImage imageNamed:@"search_drag_left"];
+                }];
+            }
+            break;
+        default:
+            break;
+    }
+    if (location.x <= EB_MaxWidthOfLineStation) {
         self.leftDragView.image = [UIImage imageNamed:@"search_drag_right"];
         self.leftDragView.centerX = location.x;
         if (self.leftDragView.x < 0) self.leftDragView.x = 0;
@@ -186,8 +210,6 @@
     } else {
         self.leftDragView.image = [UIImage imageNamed:@"search_drag_left"];
     }
-    
-    
 }
 
 - (void)tapGestureRecognized:(UITapGestureRecognizer *)tap {

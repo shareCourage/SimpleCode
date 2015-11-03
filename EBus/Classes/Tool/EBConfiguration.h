@@ -14,6 +14,14 @@ static NSString * const EBLogoutSuccessNotification = @"eb.logout.success";
 
 static NSString *static_KeyOfAMap           = @"163c0486f490bf1c8c84ed7c1a8a9507";
 
+static NSString *static_Alipay_Appid        = @"2015082700236900";
+static NSString *static_Alipay_Partner      = @"2088021510586444";
+static NSString *static_Alipay_Seller       = @"2088021510586444";
+static NSString *static_Alipay_Telephone    = @"13316996080";
+static NSString *static_Alipay_Email        = @"270007107@qq.com";
+
+static NSString *static_Schemes             = @"eBus";
+
 static NSString *static_Url_Open            = @"http://app.szebus.net/phone/open";
 static NSString *static_Url_SearchBus_Label = @"http://app.szebus.net/label/phone/bc/data";
 static NSString *static_Url_HotLabel        = @"http://app.szebus.net/label/phone/data";
@@ -72,5 +80,6 @@ static NSString *static_Argument_tradePrice     = @"tradePrice";
 static NSString *static_Argument_payType        = @"payType";
 static NSString *static_Argument_sztNo          = @"sztNo";
 static NSString *static_Argument_id             = @"id";
+
 
 #endif /* EBConfiguration_h */

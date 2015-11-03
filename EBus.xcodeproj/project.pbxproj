@@ -210,6 +210,8 @@
 		A9FC05751BCE00F300870580 /* search_endPosition@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9FC05731BCE00F300870580 /* search_endPosition@3x.png */; settings = {ASSET_TAGS = (); }; };
 		A9FC05761BCE00F300870580 /* search_myPosition@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A9FC05741BCE00F300870580 /* search_myPosition@3x.png */; settings = {ASSET_TAGS = (); }; };
 		A9FC05791BCE057F00870580 /* EBSearchBusButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A9FC05781BCE057F00870580 /* EBSearchBusButton.m */; settings = {ASSET_TAGS = (); }; };
+		A9FE487B1BE8C29F00708F62 /* AlipaySDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A9FE48791BE8C29F00708F62 /* AlipaySDK.bundle */; settings = {ASSET_TAGS = (); }; };
+		A9FE487C1BE8C29F00708F62 /* AlipaySDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9FE487A1BE8C29F00708F62 /* AlipaySDK.framework */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -539,6 +541,8 @@
 		A9FC05741BCE00F300870580 /* search_myPosition@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search_myPosition@3x.png"; sourceTree = "<group>"; };
 		A9FC05771BCE057F00870580 /* EBSearchBusButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBSearchBusButton.h; sourceTree = "<group>"; };
 		A9FC05781BCE057F00870580 /* EBSearchBusButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBSearchBusButton.m; sourceTree = "<group>"; };
+		A9FE48791BE8C29F00708F62 /* AlipaySDK.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AlipaySDK.bundle; sourceTree = "<group>"; };
+		A9FE487A1BE8C29F00708F62 /* AlipaySDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AlipaySDK.framework; sourceTree = "<group>"; };
 		BE12B51EAC6C0DA4A084AAC9 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		E9D84390009D9B213650D31C /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -549,6 +553,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A9DF68941BD1110100368B27 /* Foundation.framework in Frameworks */,
+				A9FE487C1BE8C29F00708F62 /* AlipaySDK.framework in Frameworks */,
 				A9DF68921BD110F900368B27 /* UIKit.framework in Frameworks */,
 				A9DF68901BD110E700368B27 /* libc++.tbd in Frameworks */,
 				A9DF688E1BD110D600368B27 /* libz.tbd in Frameworks */,
@@ -1128,6 +1133,7 @@
 		A9FC050F1BCD02B500870580 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				A9FE48721BE8BAA800708F62 /*  Alipay */,
 				A99EFB561BDDD8DF0074EC55 /* Calender */,
 				A9DF68951BD115A100368B27 /* AMap.bundle */,
 				A9DF68781BD106D400368B27 /* AMap */,
@@ -1440,6 +1446,15 @@
 			path = Search;
 			sourceTree = "<group>";
 		};
+		A9FE48721BE8BAA800708F62 /*  Alipay */ = {
+			isa = PBXGroup;
+			children = (
+				A9FE48791BE8C29F00708F62 /* AlipaySDK.bundle */,
+				A9FE487A1BE8C29F00708F62 /* AlipaySDK.framework */,
+			);
+			path = " Alipay";
+			sourceTree = "<group>";
+		};
 		BE8BE0F5FEBC6586F065DD5B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1566,6 +1581,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9FE487B1BE8C29F00708F62 /* AlipaySDK.bundle in Resources */,
 				A907EA9A1BE06968006E99C1 /* Attention_buy@3x.png in Resources */,
 				A907EA221BDF5D4C006E99C1 /* me_accessoryView@3x.png in Resources */,
 				A907EA301BDF7029006E99C1 /* tabBar_me_normal@3x.png in Resources */,
@@ -1954,12 +1970,43 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/EBus/Classes/Libs/AMap",
+					"$(PROJECT_DIR)/EBus/Classes/Libs/",
+					Alipay,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/EBus/EBus.pch";
 				INFOPLIST_FILE = EBus/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/EBus/Classes/Libs/",
+					Alipay,
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-l\"Pods-AFNetworking\"",
+					"-l\"Pods-MBProgressHUD\"",
+					"-l\"Pods-MJExtension\"",
+					"-l\"Pods-MJRefresh\"",
+					"-l\"Pods-Masonry\"",
+					"-l\"Pods-SDWebImage\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"UIKit\"",
+					"-all_load",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = net.goome.EBus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1977,12 +2024,43 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/EBus/Classes/Libs/AMap",
+					"$(PROJECT_DIR)/EBus/Classes/Libs/",
+					Alipay,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/EBus/EBus.pch";
 				INFOPLIST_FILE = EBus/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/EBus/Classes/Libs/",
+					Alipay,
+				);
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-l\"Pods-AFNetworking\"",
+					"-l\"Pods-MBProgressHUD\"",
+					"-l\"Pods-MJExtension\"",
+					"-l\"Pods-MJRefresh\"",
+					"-l\"Pods-Masonry\"",
+					"-l\"Pods-SDWebImage\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"Foundation\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"UIKit\"",
+					"-all_load",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = net.goome.EBus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";

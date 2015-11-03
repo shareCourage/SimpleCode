@@ -20,7 +20,7 @@
 - (void)setStation:(EBLineStation *)station {
     _station = station;
     self.textLabel.text = station.station;
-    self.detailTextLabel.text = @"07:00出发";
+    
     NSString *imageString = nil;
     if (station.isOn) {
         if (station.isFirstOrEnd) {
@@ -28,6 +28,7 @@
         } else {
             imageString = @"search_map_departPass";
         }
+        self.detailTextLabel.text = [NSString stringWithFormat:@"约%@",[station.time insertSymbolString:@":" atIndex:2]];
     } else {
         if (station.isFirstOrEnd) {
             imageString = @"search_cell_end";
@@ -51,7 +52,8 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        self.contentView.backgroundColor = EB_RGBColor(250, 254, 246);
+        self.backgroundColor = [UIColor clearColor];
+        self.contentView.backgroundColor = [EB_RGBColor(250, 254, 246) colorWithAlphaComponent:0.7f];
         self.textLabel.font = [UIFont systemFontOfSize:14];
         self.detailTextLabel.font = [UIFont systemFontOfSize:12];
         self.imageView.contentMode = UIViewContentModeScaleAspectFit;

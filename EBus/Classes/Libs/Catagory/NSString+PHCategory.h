@@ -48,6 +48,8 @@
  */
 - (CLLocationCoordinate2D)coordAndLatFirst:(BOOL)latFirst;
 
+- (NSString *)insertSymbolString:(NSString *)symbol atIndex:(NSUInteger)index;
+
 @end
 
 

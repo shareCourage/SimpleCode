@@ -11,12 +11,12 @@
             <rect key="frame" x="0.0" y="0.0" width="571" height="83"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dGP-5N-VWq">
-                    <rect key="frame" x="236" y="17" width="50" height="50"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dGP-5N-VWq">
+                    <rect key="frame" x="186" y="17" width="100" height="50"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="50" id="GlW-8k-EyV"/>
                         <constraint firstAttribute="height" constant="50" id="lIj-2K-x0q"/>
-                        <constraint firstAttribute="width" constant="50" id="lwb-BU-oUZ"/>
+                        <constraint firstAttribute="width" constant="100" id="lwb-BU-oUZ"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -41,7 +41,7 @@
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="xTU-Ip-iwB" firstAttribute="leading" secondItem="dGP-5N-VWq" secondAttribute="trailing" id="9EV-8u-H23"/>
-                <constraint firstItem="dGP-5N-VWq" firstAttribute="centerX" secondItem="185-WY-6Y6" secondAttribute="centerX" constant="-25" id="Mj0-sK-EhQ"/>
+                <constraint firstItem="dGP-5N-VWq" firstAttribute="centerX" secondItem="185-WY-6Y6" secondAttribute="centerX" constant="-50" id="Mj0-sK-EhQ"/>
                 <constraint firstItem="dGP-5N-VWq" firstAttribute="centerX" secondItem="185-WY-6Y6" secondAttribute="centerX" id="Rif-qq-AT7"/>
                 <constraint firstItem="xTU-Ip-iwB" firstAttribute="bottom" secondItem="dGP-5N-VWq" secondAttribute="bottom" id="bgh-kf-7Fr"/>
                 <constraint firstItem="dGP-5N-VWq" firstAttribute="centerY" secondItem="185-WY-6Y6" secondAttribute="centerY" id="wX9-S6-8Eu"/>

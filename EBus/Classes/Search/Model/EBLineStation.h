@@ -14,4 +14,6 @@
 @property (nonatomic, assign, getter = isFirstOrEnd) BOOL firstOrEnd;
 @property (nonatomic, copy) NSString *station;
 
+@property (nonatomic, copy) NSString *lnglat;
+@property (nonatomic, copy) NSString *time;
 @end

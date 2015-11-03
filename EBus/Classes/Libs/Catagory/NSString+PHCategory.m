@@ -245,6 +245,12 @@ static NSString *token = @"Itisgoomesimplifiedappprivatekeyandcouldnotbegetbysom
     return coord;
 }
 
+- (NSString *)insertSymbolString:(NSString *)symbol atIndex:(NSUInteger)index {
+    if (index > self.length) return nil;
+    NSMutableString *mString = [NSMutableString stringWithFormat:@"%@",self];
+    [mString insertString:symbol atIndex:index];
+    return [mString copy];
+}
 @end
 
 

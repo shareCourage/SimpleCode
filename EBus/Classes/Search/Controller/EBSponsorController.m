@@ -132,7 +132,7 @@
                                      static_Argument_offLat         : @(self.endPositionCoord.latitude),
                                      static_Argument_vehTime        : self.startTime};
         [EBNetworkRequest POST:static_Url_Sponsor parameters:parameters dictBlock:^(NSDictionary *dict) {
-            NSString *code = dict[@"returnCode"];
+            NSString *code = dict[static_Argument_returnCode];
             if ([code integerValue] == 500) {
                 PHTabBarController *phTBC = (PHTabBarController *)self.tabBarController;
                 phTBC.mySelectedIndex = 2;

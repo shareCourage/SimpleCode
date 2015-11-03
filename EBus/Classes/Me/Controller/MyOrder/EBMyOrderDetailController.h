@@ -8,6 +8,6 @@
 
 #import "PHTableViewController.h"
 
-@interface EBOrderDetailController : PHTableViewController
+@interface EBMyOrderDetailController : PHTableViewController
 
 @end

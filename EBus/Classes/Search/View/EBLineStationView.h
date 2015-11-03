@@ -7,9 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+@class EBLineStationView, EBLineStation;
+
+@protocol EBLineStationViewDelegate <NSObject>
+
+@optional
+- (void)lineStationView:(EBLineStationView *)lineStationView didSelectMode:(EBLineStation *)lineStation;
+
+@end
+
 
 @interface EBLineStationView : UIView
 
 @property (nonatomic, strong) NSMutableArray *dataSource;
+
+@property (nonatomic, assign) id <EBLineStationViewDelegate>delegate;
 
 @end

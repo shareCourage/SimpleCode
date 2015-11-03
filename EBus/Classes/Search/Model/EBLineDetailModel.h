@@ -17,8 +17,9 @@
 @property (nonatomic, copy) NSString *onFjIds;
 @property (nonatomic, copy) NSString *onLngLat;
 @property (nonatomic, copy) NSString *onStations;
+@property (nonatomic, copy) NSString *offTimes;
+@property (nonatomic, copy) NSString *onTimes;
 @property (nonatomic, strong) NSNumber *openType;
-
 - (instancetype)initWithDict:(NSDictionary *)dict;
 
 @end

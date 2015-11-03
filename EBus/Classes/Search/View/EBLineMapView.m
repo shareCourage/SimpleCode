@@ -20,12 +20,17 @@
 #import "EBLineStation.h"
 #import "EBSearchResultModel.h"
 
-@interface EBLineMapView () <MAMapViewDelegate>
-
+@interface EBLineMapView () <MAMapViewDelegate, EBLineStationViewDelegate>
+{
+    BOOL value;//YES 表示leftDragView在右边，NO在左边
+}
 @property (nonatomic, weak) UIView *bottomView;
 @property (nonatomic, weak) UIButton *buyBtn;
+
 @property (nonatomic, weak) UIImageView *leftDragView;
 @property (nonatomic, weak) EBLineStationView *stationView;
+@property (nonatomic, weak) UIView *leftView;
+
 @end
 
 @implementation EBLineMapView
@@ -33,7 +38,7 @@
 - (void)setResultModel:(EBSearchResultModel *)resultModel {
     _resultModel = resultModel;
     if ([resultModel.openType integerValue] == 1) {
-        [self.buyBtn setTitle:@"购买" forState:UIControlStateNormal];
+        [self.buyBtn setTitle:@"购票" forState:UIControlStateNormal];
     } else if ([resultModel.openType integerValue] == 2) {
         [self.buyBtn setTitle:@"报名" forState:UIControlStateNormal];
     }
@@ -47,8 +52,7 @@
     if (self) {
         self.maMapView.delegate = self;
         [self bottomViewImplementation];
-        [self leftDragViewImplementation];
-        [self lineStationViewImplementation];
+        [self leftViewImplementation];
     }
     return self;
 }
@@ -59,8 +63,7 @@
     if (self) {
         self.maMapView.delegate = self;
         [self bottomViewImplementation];
-        [self leftDragViewImplementation];
-        [self lineStationViewImplementation];
+        [self leftViewImplementation];
     }
     return self;
 }
@@ -80,44 +83,68 @@
     self.bottomView = bottom;
     self.buyBtn = buy;
 }
-- (void)leftDragViewImplementation {
+- (void)leftViewImplementation {
+    UIView *left = [[UIView alloc] init];
+    left.backgroundColor = [UIColor clearColor];
+    
+    EBLineStationView *stationView = [[EBLineStationView alloc] init];
+    stationView.delegate = self;
+    [left addSubview:stationView];
+    self.stationView = stationView;
+    
     UIImageView *leftDrag = [[UIImageView alloc] init];
-    leftDrag.contentMode = UIViewContentModeScaleAspectFill;
+    leftDrag.contentMode = UIViewContentModeScaleAspectFit;
     leftDrag.userInteractionEnabled = YES;
     leftDrag.image = [UIImage imageNamed:@"search_drag_right"];
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureRecognized:)];
+    tap.numberOfTapsRequired = 1;
     [leftDrag addGestureRecognizer:pan];
     [leftDrag addGestureRecognizer:tap];
-    [self addSubview:leftDrag];
+    [left addSubview:leftDrag];
     self.leftDragView = leftDrag;
+    
+    [self insertSubview:left belowSubview:self.bottomView];
+    self.leftView = left;
 }
-- (void)lineStationViewImplementation {
-    EBLineStationView *stationView = [[EBLineStationView alloc] init];
-    stationView.backgroundColor = EB_RGBColor(250, 254, 246);
-    [self insertSubview:stationView belowSubview:self.bottomView];
-    self.stationView = stationView;
-}
+
 #pragma mark - autoLayout
-- (void)lineStationViewAutoLayout {
+- (void)leftViewAutoLayout {
     EB_WS(ws);
-    [self.stationView mas_makeConstraints:^(MASConstraintMaker *make) {
+    CGFloat stationW = EB_MaxWidthOfLineStation;
+    CGFloat leftDragW = 20;
+    CGFloat leftViewW = stationW + leftDragW;
+    
+    [self.leftView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.mas_equalTo(ws.mas_centerY);
-        make.left.equalTo(ws).with.offset(0);
         make.top.equalTo(ws).with.offset(0);
         make.bottom.equalTo(ws).with.offset(0);
-        make.width.mas_equalTo(0);
+        make.right.equalTo(ws.mas_left).with.offset(leftDragW);
+        make.width.mas_equalTo(leftViewW);
+    }];
+    
+    [self lineStationViewAutoLayout:stationW];
+    [self leftDragViewAutoLayout:leftDragW];
+}
+
+- (void)lineStationViewAutoLayout:(CGFloat)stationW {
+    EB_WS(ws);
+    [self.stationView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.mas_equalTo(ws.leftView.mas_centerY);
+        make.left.equalTo(ws.leftView).with.offset(0);
+        make.top.equalTo(ws.leftView).with.offset(0);
+        make.bottom.equalTo(ws.leftView).with.offset(0);
+        make.width.mas_equalTo(stationW);
     }];
 }
-- (void)leftDragViewAutoLayout {
+- (void)leftDragViewAutoLayout:(CGFloat)leftDragW {
     EB_WS(ws);
-    CGFloat width = 20;
-    CGFloat height = 50;
     [self.leftDragView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.mas_equalTo(ws.mas_centerY);
-        make.left.equalTo(ws).with.offset(0);
-        make.height.mas_equalTo(height);
-        make.width.mas_equalTo(width);
+        make.centerY.mas_equalTo(ws.leftView.mas_centerY);
+        make.right.equalTo(ws.leftView).with.offset(0);
+        make.top.equalTo(ws.leftView).with.offset(0);
+        make.bottom.equalTo(ws.leftView).with.offset(0);
+        make.width.mas_equalTo(leftDragW);
     }];
 }
 
@@ -147,8 +174,7 @@
     self.bottomDistance = 60;
     [super didMoveToSuperview];
     [self bottomViewAutoLayout];
-    [self leftDragViewAutoLayout];
-    [self lineStationViewAutoLayout];
+    [self leftViewAutoLayout];
 }
 
 - (void)mapViewDidAppear {
@@ -165,7 +191,7 @@
     if (lineDetailM.lineContent.length == 0) return;
     [self addAnnotationOnLngLat:lineDetailM.onLngLat onStations:lineDetailM.onStations onFjIds:lineDetailM.onFjIds];
     [self addAnnotationOffLngLat:lineDetailM.offLngLat offStations:lineDetailM.offStations offFjIds:lineDetailM.offFjIds];
-    [self addOnStations:lineDetailM.onStations offStations:lineDetailM.offStations];
+    [self addOnStations:lineDetailM.onStations offStations:lineDetailM.offStations onLngLat:lineDetailM.onLngLat offLngLat:lineDetailM.offLngLat onTime:lineDetailM.onTimes offTime:lineDetailM.offTimes];
     NSArray *coords = [NSArray seprateString:lineDetailM.lineContent characterSet:@";"];
     [self addPolylineWithCoords:coords];
     [self.maMapView setCenterCoordinate:[self averageCoord:coords] animated:NO];
@@ -173,47 +199,63 @@
 
 #pragma mark - Private Method
 - (void)panGestureRecognized:(UIPanGestureRecognizer *)pan {
-//    CGFloat panX = [pan translationInView:self].x;
     CGPoint location = [pan locationInView:self];
-    EBLog(@"%@",NSStringFromCGPoint(location));
     switch (pan.state) {
         case UIGestureRecognizerStateBegan:
-            EBLog(@"UIGestureRecognizerStateBegan");
+            if (location.x > EB_MaxWidthOfLineStation / 2) {
+                value = YES;
+            } else {
+                value = NO;
+            }
             break;
         case UIGestureRecognizerStateChanged:
-            EBLog(@"UIGestureRecognizerStateChanged");
-            
+            if (location.x <= EB_MaxWidthOfLineStation) {
+                self.leftView.x = - EB_MaxWidthOfLineStation + location.x;
+            }
             break;
         case UIGestureRecognizerStateEnded:
-            EBLog(@"UIGestureRecognizerStateEnded");
-            if (location.x > EB_MaxWidthOfLineStation / 2) {
-                [UIView animateWithDuration:0.3f animations:^{
-                    self.stationView.width = EB_MaxWidthOfLineStation - 10;
-                } completion:^(BOOL finished) {
-                    self.stationView.width = EB_MaxWidthOfLineStation - 10;
-                    self.leftDragView.image = [UIImage imageNamed:@"search_drag_left"];
-                }];
+            if (value) {
+                if (location.x <= 2 * EB_MaxWidthOfLineStation / 3) {
+                    [self leftViewXMax];
+                } else {
+                    [self leftViewXZero];
+                }
+            } else {
+                if (location.x >= EB_MaxWidthOfLineStation / 3) {
+                    [self leftViewXZero];
+                } else {
+                    [self leftViewXMax];
+                }
             }
+            
             break;
         default:
             break;
     }
-    if (location.x <= EB_MaxWidthOfLineStation) {
-        self.leftDragView.image = [UIImage imageNamed:@"search_drag_right"];
-        self.leftDragView.centerX = location.x;
-        if (self.leftDragView.x < 0) self.leftDragView.x = 0;
-        if (location.x >= 10) {
-            self.stationView.width = location.x - 10;
-        } else {
-            self.stationView.width = 0;
-        }
-    } else {
-        self.leftDragView.image = [UIImage imageNamed:@"search_drag_left"];
-    }
+    
 }
 
 - (void)tapGestureRecognized:(UITapGestureRecognizer *)tap {
-    
+    CGPoint location = [tap locationInView:self];
+    if (location.x < EB_MaxWidthOfLineStation / 2) {
+        [self leftViewXZero];
+    } else {
+        [self leftViewXMax];
+    }
+}
+- (void)leftViewXZero {
+    [UIView animateWithDuration:0.5f animations:^{
+        self.leftView.x = 0;
+    } completion:^(BOOL finished) {
+        self.leftDragView.image = [UIImage imageNamed:@"search_drag_left"];
+    }];
+}
+- (void)leftViewXMax {
+    [UIView animateWithDuration:0.3f animations:^{
+        self.leftView.x = - EB_MaxWidthOfLineStation;
+    } completion:^(BOOL finished) {
+        self.leftDragView.image = [UIImage imageNamed:@"search_drag_right"];
+    }];
 }
 
 - (void)buyBtnClick {
@@ -222,13 +264,24 @@
     }
 }
 
-- (void)addOnStations:(NSString *)onStations offStations:(NSString *)offStations {
+- (void)addOnStations:(NSString *)onStations
+          offStations:(NSString *)offStations
+             onLngLat:(NSString *)onLngLat
+            offLngLat:(NSString *)offLngLat
+              onTime:(NSString *)onTime
+             offTime:(NSString *)offTime {
     NSMutableArray *dataSource = [NSMutableArray array];
     NSArray *onStationsArray = [onStations componentsSeparatedByString:@";"];
+    NSArray *onLngLats = [onLngLat componentsSeparatedByString:@";"];
+    NSArray *onTimes = [onTime componentsSeparatedByString:@";"];
+    if (onStationsArray.count != onLngLats.count) return;
+    if (onStationsArray.count != onTimes.count) return;
     int i = 0;
     for (NSString *onStation in onStationsArray) {
         EBLineStation *station = [[EBLineStation alloc] init];
         station.station = onStation;
+        station.lnglat = onLngLats[i];
+        station.time = onTimes[i];
         station.on = YES;
         if (i == 0) station.firstOrEnd = YES;
         i ++;
@@ -236,9 +289,15 @@
     }
     i = 0;
     NSArray *offStationsArray = [offStations componentsSeparatedByString:@";"];
+    NSArray *offLngLats = [offLngLat componentsSeparatedByString:@";"];
+    NSArray *offTimes = [offTime componentsSeparatedByString:@";"];
+    if (offStationsArray.count != offLngLats.count) return;
+    if (offStationsArray.count != offTimes.count) return;
     for (NSString *offStation in offStationsArray) {
         EBLineStation *station = [[EBLineStation alloc] init];
         station.station = offStation;
+        station.lnglat = offLngLats[i];
+        station.time = offTimes[i];
         station.on = NO;
         if (i == offStationsArray.count - 1) station.firstOrEnd = YES;
         i ++;
@@ -372,7 +431,7 @@
     if ([view isKindOfClass:[EBAnnotationView class]]) {
         EBLog(@"didSelect -> EBAnnotationView");
 
-        EBAnnotation *anno = view.annotation;
+        EBAnnotation *anno = (EBAnnotation *)view.annotation;
         if (anno.isShow) return;
         
         // 1.删除以前的EBPPAnnotation
@@ -399,7 +458,7 @@
                 originalAnno.show = NO;
             }
         }
-        EBPPAnnotation *anno = view.annotation;
+        EBPPAnnotation *anno = (EBPPAnnotation *)view.annotation;
         EBPhotoAnnotation *photoAnno = [[EBPhotoAnnotation alloc] init];
         photoAnno.lineInfo = anno.lineInfo;
         [mapView removeAnnotation:anno];
@@ -423,7 +482,19 @@
     }
 
 }
-
+#pragma mark - EBLineStationViewDelegate
+- (void)lineStationView:(EBLineStationView *)lineStationView didSelectMode:(EBLineStation *)lineStation {
+    NSArray *lnglats = [lineStation.lnglat componentsSeparatedByString:@","];
+    NSString *lng = [lnglats firstObject];
+    NSString *lat = [lnglats lastObject];
+    CLLocationCoordinate2D coord = CLLocationCoordinate2DMake([lat doubleValue], [lng doubleValue]);
+    [self.maMapView setCenterCoordinate:coord animated:YES];
+    if (self.leftView.x > EB_MaxWidthOfLineStation / 2) {
+        [self leftViewXZero];
+    } else {
+        [self leftViewXMax];
+    }
+}
 
 @end
 

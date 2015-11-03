@@ -179,9 +179,7 @@
     self.endPointL.text = model.offStationName;
     self.totalTimeL.text = [NSString stringWithFormat:@"约%@分钟",model.needTime];
     self.totalDistanceL.text = [NSString stringWithFormat:@"%.2f公里",[model.mileage floatValue]];
-    NSMutableString *mString = [NSMutableString stringWithFormat:@"%@",model.startTime];
-    [mString insertString:@":" atIndex:2];
-    self.departTimeL.text = [NSString stringWithFormat:@"%@始发",[mString copy]];
+    self.departTimeL.text = [model.startTime insertSymbolString:@":" atIndex:2];
 }
 
 @end

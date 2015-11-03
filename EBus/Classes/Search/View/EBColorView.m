@@ -13,6 +13,7 @@
 @property (nonatomic, strong) IBOutletCollection(UIView) NSArray *backColorViews;
 @property (weak, nonatomic) IBOutlet UIView *unableView;
 @property (weak, nonatomic) IBOutlet UIView *boughtView;
+@property (weak, nonatomic) IBOutlet UIView *whiteColorView;
 
 @end
 
@@ -24,8 +25,10 @@
 
 - (void)awakeFromNib {
     for (UIView *view in self.backColorViews) {
-        view.backgroundColor = EB_RGBColor(241, 241, 241);
+        view.backgroundColor = [UIColor whiteColor];
     }
+    self.whiteColorView.layer.borderColor = EB_RGBColor(241, 241, 241).CGColor;
+    self.whiteColorView.layer.borderWidth = 1.f;
     self.unableView.backgroundColor = EB_RGBColor(241, 241, 241);
     self.boughtView.backgroundColor = EB_RGBColor(230, 146, 35);
     self.backgroundColor = [UIColor whiteColor];

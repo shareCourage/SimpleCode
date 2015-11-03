@@ -116,7 +116,14 @@
         }
     };
     PHSettingItem *freeCertificate = [PHSettingArrowItem itemWithTitle:@"免费证件" destVcClass:nil];
-    PHSettingItem *advice = [PHSettingArrowItem itemWithTitle:@"投诉建议" destVcClass:[EBSuggestController class]];
+    PHSettingItem *advice = [PHSettingArrowItem itemWithTitle:@"投诉建议"];
+    advice.option = ^{
+        __strong typeof(self) strongSelf = ws;
+        if (![EBTool presentLoginVC:strongSelf completion:nil]) {
+            EBSuggestController *suggest = [[EBSuggestController alloc] init];
+            [strongSelf.navigationController pushViewController:suggest animated:YES];
+        }
+    };
     PHSettingItem *versionUpdate = [PHSettingArrowItem itemWithTitle:@"版本更新" destVcClass:nil];
     PHSettingItem *more = [PHSettingArrowItem itemWithTitle:@"更多" destVcClass:[EBMoreViewController class]];
     PHSettingItem *logout = [PHSettingArrowItem itemWithTitle:@"注销"];

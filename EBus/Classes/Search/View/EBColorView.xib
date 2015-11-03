@@ -198,6 +198,7 @@
             <connections>
                 <outlet property="boughtView" destination="JhD-HW-Dfp" id="Gav-W5-Th4"/>
                 <outlet property="unableView" destination="JBo-Mu-WrF" id="ywU-EC-dU7"/>
+                <outlet property="whiteColorView" destination="Mfg-5A-rah" id="uRZ-AD-NI5"/>
                 <outletCollection property="backColorViews" destination="0vd-l9-6Ij" id="asg-zL-DwS"/>
                 <outletCollection property="backColorViews" destination="Ld9-TT-WwR" id="FSk-H4-qTm"/>
                 <outletCollection property="backColorViews" destination="19q-Ju-N6o" id="nKG-mH-wFF"/>

@@ -29,7 +29,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         UITableView *tableView = [[UITableView alloc] init];
-        tableView.backgroundColor = EB_RGBColor(250, 254, 246);
+        tableView.backgroundColor = [EB_RGBColor(250, 254, 246) colorWithAlphaComponent:0.5f];
         tableView.tableFooterView = [[UIView alloc] init];
         tableView.delegate = self;
         tableView.dataSource = self;
@@ -59,6 +59,14 @@
     EBLineStation *station = self.dataSource[indexPath.row];
     cell.station = station;
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    EBLineStation *station = self.dataSource[indexPath.row];
+    if ([self.delegate respondsToSelector:@selector(lineStationView:didSelectMode:)]) {
+        [self.delegate lineStationView:self didSelectMode:station];
+    }
 }
 
 @end

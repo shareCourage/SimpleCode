@@ -88,14 +88,24 @@
     self.contentView.backgroundColor = [UIColor clearColor];
 }
 - (void)leftRightLayout {
-    self.textLabel.frame = CGRectMake(0, 0, self.bounds.size.width / 2, self.bounds.size.height);
-    self.detailLabel.frame = CGRectMake(self.bounds.size.width / 2, 0, self.bounds.size.width / 2, self.bounds.size.height);
-    self.contentView.backgroundColor = [UIColor clearColor];
+    if (self.detailLabel.text.length != 0) {
+        self.textLabel.frame = CGRectMake(0, 0, self.bounds.size.width / 2, self.bounds.size.height);
+        self.detailLabel.frame = CGRectMake(self.bounds.size.width / 2, 0, self.bounds.size.width / 2, self.bounds.size.height);
+        self.contentView.backgroundColor = [UIColor clearColor];
+    } else {
+        self.textLabel.frame = self.bounds;
+        self.contentView.backgroundColor = [UIColor clearColor];
+    }
 }
 - (void)upDownLayout {
-    self.textLabel.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height / 2);
-    self.detailLabel.frame = CGRectMake(0, self.bounds.size.height / 2, self.bounds.size.width, self.bounds.size.height / 2);
-     self.contentView.backgroundColor = [UIColor clearColor];
+    if (self.detailLabel.text.length != 0) {
+        self.textLabel.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height / 2);
+        self.detailLabel.frame = CGRectMake(0, self.bounds.size.height / 2, self.bounds.size.width, self.bounds.size.height / 2);
+        self.contentView.backgroundColor = [UIColor clearColor];
+    } else {
+        self.textLabel.frame = self.bounds;
+        self.contentView.backgroundColor = [UIColor clearColor];
+    }
 }
 
 #pragma mark - Public

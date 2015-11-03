@@ -63,7 +63,7 @@
     hotView.delegate = self;
     hotView.frame = CGRectMake(0, 0, EB_WidthOfScreen, EB_HeightOfScreen);
     hotView.hidden = YES;
-    AppDelegate *delegate = [UIApplication sharedApplication].delegate;
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [delegate.window addSubview:hotView];
     self.hotView = hotView;
     [self hotLabelRequest];

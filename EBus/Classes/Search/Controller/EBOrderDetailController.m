@@ -231,7 +231,10 @@
                     dictBlock:^(NSDictionary *dict) {
                         NSString *code = dict[static_Argument_returnCode];
                         if ([code integerValue] == 500) {
-                            [self.navigationController popViewControllerAnimated:YES];
+                            [MBProgressHUD showSuccess:@"取消订单成功" toView:self.view];
+                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                [self.navigationController popViewControllerAnimated:YES];
+                            });
                         } else {
                             [MBProgressHUD showError:@"取消失败"];
                         }

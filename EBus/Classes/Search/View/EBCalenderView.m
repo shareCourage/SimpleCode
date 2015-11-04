@@ -26,6 +26,8 @@
 @property (nonatomic, strong) NSArray *tickets;
 
 @property (nonatomic, strong) NSMutableArray *selectPrices;
+
+@property (nonatomic, assign) CGFloat totalPrice;
 @end
 
 @implementation EBCalenderView
@@ -63,20 +65,25 @@
 }
 
 
+
 - (void)addBusClick {
     if ([self.delegate respondsToSelector:@selector(eb_calenderViewDidApply:)]) {
         [self.delegate eb_calenderViewDidApply:self];
     }
 }
 - (void)buyBtnClick {
-    if ([self.delegate respondsToSelector:@selector(eb_calenderView:didOrder:)]) {
-        [self.delegate eb_calenderView:self didOrder:[self.selectPrices copy]];
+    if ([self.delegate respondsToSelector:@selector(eb_calenderView:didOrder:totalPrice:)]) {
+        [self.delegate eb_calenderView:self didOrder:[self.selectPrices copy] totalPrice:self.totalPrice];
     }
 }
 #pragma mark - Public Method
 
 - (void)reloadData {
     [self.calenderView reloadData];
+    [self.selectPrices removeAllObjects];
+    self.totalPrice = 0.f;
+    self.priceView.dayLabel.text = @"共0天";
+    self.priceView.priceLabel.text = @"0元";
 }
 
 #pragma mark - PHCalenderViewDataSource
@@ -132,9 +139,15 @@
 
 - (void)calenderView:(PHCalenderView *)calenderView didSelectAtRow:(NSUInteger)row column:(NSUInteger)column {
     PHCalenderViewCell *cell = [calenderView cellForRow:row column:column];
+    NSString *selectDay = cell.textLabel.text;
+    NSInteger index = [selectDay integerValue] - [EBUserInfo sharedEBUserInfo].currentCalendarDay.day;
+    if (index < 0 || index >= self.prices.count) return;
+    NSString *price = [self.prices objectAtIndex:index];
+    CGFloat priceFloat = [price floatValue];
     if (cell.isSelected) {
-        NSLog(@"row -> %ld,column -> %ld, %@", (unsigned long)row, (unsigned long)column, cell.textLabel.text);
+        EBLog(@"row -> %ld,column -> %ld, %@", (unsigned long)row, (unsigned long)column, cell.textLabel.text);
         [self.selectPrices addObject:cell.textLabel.text];
+        self.totalPrice = self.totalPrice + priceFloat;
     } else {
         NSUInteger i = 0;
         for (NSString *obj in self.selectPrices) {
@@ -144,15 +157,14 @@
             }
             i ++;
         }
+        self.totalPrice = self.totalPrice - priceFloat;
     }
     if (self.selectPrices.count == 0) {
         self.priceView.dayLabel.text = @"共0天";
         self.priceView.priceLabel.text = @"0元";
     } else {
         self.priceView.dayLabel.text = [NSString stringWithFormat:@"共%ld天",(unsigned long)self.selectPrices.count];
-        NSString *price = [self.prices firstObject];
-        CGFloat priceFloat = [price floatValue];
-        self.priceView.priceLabel.text = [NSString stringWithFormat:@"%.1f元",self.selectPrices.count * priceFloat];
+        self.priceView.priceLabel.text = [NSString stringWithFormat:@"%.1f元",self.totalPrice];
     }
 }
 

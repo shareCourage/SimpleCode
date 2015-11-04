@@ -19,8 +19,14 @@ static NSString *static_Alipay_Partner      = @"2088021510586444";
 static NSString *static_Alipay_Seller       = @"2088021510586444";
 static NSString *static_Alipay_Telephone    = @"13316996080";
 static NSString *static_Alipay_Email        = @"270007107@qq.com";
+static NSString *static_Alipay_PrivateKey   = @"MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALLyS3oGvXD9m3i3FajXWvFncJBCeqZ/KsuBtiiL13SlooS5rcndETNEdG9ggrWC9AD4QOJRIHvIixOiHoVuh4/OfEAnz0guhkGvIzDyFRK0vRrrnNSskyrITqJvdhQbbyHZUJreZkhx0lsTbgsav6uQbDIMUIVkqLehi7gLoUvNAgMBAAECgYADgumkPVmeS/uvBLiyFXe9YPA+hG9vsPMgBy2R4hyaN13XCOW2HlZmESPPw68M7MLo+fYb+seOZkMEYZwDtkWGrnBvcSG88ncNZXz+VzXvHVx91oDoi6bmcm3CYK4oof690cWSxx7M5Zd4V5E31PquJuY8tbMtpKicojDWki4nKQJBAOtyQyEAUPtCGFtuMbkQvSVybgFR5orIZ4cviZhXB3RfvZw9gB/eOrTgUMElxHYrPoUGL35YTrKZYNFYPoeVOIMCQQDCkWClbc4m7Jl+Os3QQMkops3DIITpw/mIvpaQJY5p30EZwvhd3nH9Xr54MU3FH/Ia2SYAQZndAfGHDLQ8oxlvAkEAzcdk8m/zV1ayMR8DaEs/9X2otZCeXUfAbD/ZE4Nk6YpQD0EVPUUerD2tdtKKfflXwC3izpth1OkG3JEyvY9m/wJAQWf7lEEAbydURhHghCRzOv4v52t0It1lcimXlad6Y27QhKd9NJkFusXxw5fXa+/cRFhBJQ7oeVog5mRH5qZxcwJBAIY2FfDw8Xst/sodxiDsrF9X2dP8dg1UUHy8DxYlP6SRBVe750XPz//izRUOCOACN9I2obHd3OBtYGdG4rG8OIg=";
+static NSString *static_Alipay_notifyUrl    = @"http://app.szebus.net/alipay/phone/notify/url";
+static NSString *static_Alipay_Scheme       = @"mobile.securitypay.pay";
 
-static NSString *static_Schemes             = @"eBus";
+static NSString *static_WeChat_Scheme       = @"";
+
+
+static NSString *static_App_Schemes         = @"eBus";
 
 static NSString *static_Url_Open            = @"http://app.szebus.net/phone/open";
 static NSString *static_Url_SearchBus_Label = @"http://app.szebus.net/label/phone/bc/data";

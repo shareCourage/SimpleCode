@@ -50,11 +50,11 @@
 }
 
 - (void)awakeFromNib {
-    self.originalPrice.textColor = EB_RGBColor(246, 246, 246);
-    self.payPrice.textColor = EB_RGBColor(246, 246, 246);
-    self.payWay.textColor = EB_RGBColor(246, 246, 246);
-    self.orderNumber.textColor = EB_RGBColor(246, 246, 246);
-    self.orderTime.textColor = EB_RGBColor(246, 246, 246);
+//    self.originalPrice.textColor = EB_RGBColor(246, 246, 246);
+//    self.payPrice.textColor = EB_RGBColor(246, 246, 246);
+//    self.payWay.textColor = EB_RGBColor(246, 246, 246);
+//    self.orderNumber.textColor = EB_RGBColor(246, 246, 246);
+//    self.orderTime.textColor = EB_RGBColor(246, 246, 246);
 }
 
 @end

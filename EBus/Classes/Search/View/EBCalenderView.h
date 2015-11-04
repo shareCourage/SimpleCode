@@ -14,7 +14,7 @@
 @protocol EBCalenderViewDelegate <NSObject>
 
 @optional
-- (void)eb_calenderView:(EBCalenderView *)calenderView didOrder:(NSArray *)dates;
+- (void)eb_calenderView:(EBCalenderView *)calenderView didOrder:(NSArray *)dates totalPrice:(CGFloat)price;
 - (void)eb_calenderViewDidApply:(EBCalenderView *)calenderView;
 
 @end
@@ -26,5 +26,6 @@
 
 @property (nonatomic, strong) NSDictionary *priceAndTicket;
 - (void)reloadData;
+
 
 @end

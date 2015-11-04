@@ -78,12 +78,6 @@
             EBHotLabel *hot = [[EBHotLabel alloc] initWithDict:obj];
             [hots addObject:hot];
         }
-#ifdef DEBUG
-        EBHotLabel *hot = [[EBHotLabel alloc] init];
-        hot.name = @"haha";
-        [hots addObject:hot];
-#else
-#endif
         ws.hotView.hots = [hots copy];
     } errorBlock:nil indicatorVisible:NO];
 }
@@ -96,7 +90,12 @@
         if (!self.hotView.hidden) {
             [self.view.window bringSubviewToFront:self.hotView];
         }
-    }];  
+    }];
+    if (!self.hotView.hidden) {
+        if (self.hotView.hots.count == 0) {
+            [self hotLabelRequest];
+        }
+    }
 }
 #pragma mark - EBHotViewDelegate
 - (void)hotView:(EBHotView *)hotView didSelectIndex:(NSUInteger)index hotLabel:(EBHotLabel *)hotLabel{

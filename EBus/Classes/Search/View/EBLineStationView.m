@@ -39,9 +39,6 @@
     return self;
 }
 
-- (void)didMoveToSuperview {
-    [super didMoveToSuperview];
-}
 
 - (void)layoutSubviews {
     [super layoutSubviews];

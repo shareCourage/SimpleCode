@@ -7,9 +7,12 @@
 //
 #define PHArchiver_memberArray @"memberArray"
 #import "EBTool.h"
+#import "EBUserInfo.h"
+
 #import "EBLoginViewController.h"
 #import "PHNavigationController.h"
-#import "EBUserInfo.h"
+#import "PHTabBarController.h"
+#import "EBAttentionController.h"
 
 @implementation EBTool
 
@@ -162,6 +165,21 @@
         return YES;
     }
     return NO;
+}
+
++ (BOOL)canOpenApplication:(NSString *)string {
+    NSURL *url = [NSURL URLWithString:string];
+    return [[UIApplication sharedApplication] canOpenURL:url];
+}
+
++ (void)popToAttentionControllWithIndex:(NSUInteger)index controller:(UIViewController *)vc {
+    PHTabBarController *phTBC = (PHTabBarController *)vc.tabBarController;
+    phTBC.mySelectedIndex = 2;
+    NSArray *viewControlls = phTBC.viewControllers;
+    PHNavigationController *navi = [viewControlls objectAtIndex:2];
+    EBAttentionController *attentionVC = [navi.viewControllers firstObject];
+    attentionVC.titleSelectIndex = index;
+    [vc.navigationController popToRootViewControllerAnimated:NO];
 }
 @end
 

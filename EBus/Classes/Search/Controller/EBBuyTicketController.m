@@ -16,18 +16,28 @@
 #import "AppDelegate.h"
 #import "EBOrderDetailModel.h"
 #import "EBOrderDetailController.h"
+#import "EBPayTool.h"
+
+
 @interface EBBuyTicketController () <EBCalenderViewDelegate, EBPayTypeViewDelegate>
 
 @property (nonatomic, weak)EBCalenderView *calenderView;
 
-@property (nonatomic, assign) CGFloat ticketPrice;
+@property (nonatomic, assign) CGFloat totalPrice;
 
 @property (nonatomic, weak) EBPayTypeView *payTypeView;
 
 @property (nonatomic, strong) NSArray *dates;
+
+@property (nonatomic, assign) EBPayType payType;
 @end
 
 @implementation EBBuyTicketController
+
+- (void)setPayType:(EBPayType)payType {
+    _payType = payType;
+    [self payCash:self.dates payType:payType];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -39,9 +49,8 @@
     self.calenderView = calenderView;
     [calenderView reloadData];
     
-    [self networkRequest];
     [self payTypeViewImplementation];
-
+    [MBProgressHUD showMessage:nil toView:self.view];
 }
 - (void)payTypeViewImplementation {
     AppDelegate *delegate = EB_AppDelegate;
@@ -60,10 +69,13 @@
 }
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    [self calenderNetworkRequest];
+    self.dates = nil;
+    self.totalPrice = 0.f;
     self.navigationController.interactivePopGestureRecognizer.enabled = YES;;
 }
 #pragma mark - Request
-- (void)networkRequest {
+- (void)calenderNetworkRequest {
     NSString *beginStr = [NSString stringWithFormat:@"%ld%02ld%02ld",
                           (unsigned long)[EBUserInfo sharedEBUserInfo].currentCalendarDay.year,
                           (unsigned long)[EBUserInfo sharedEBUserInfo].currentCalendarDay.month,
@@ -100,18 +112,37 @@
     }
     
     [EBNetworkRequest GET:static_Url_SurplusTicket parameters:parameters dictBlock:^(NSDictionary *dict) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         NSDictionary *returnData = dict[static_Argument_returnData];
-        NSString *price = returnData[@"prices"];
-        self.ticketPrice = [price floatValue];
         NSMutableDictionary *mutD = [NSMutableDictionary dictionaryWithDictionary:returnData];
         [mutD setObject:dayString forKey:@"dayString"];
         self.calenderView.priceAndTicket = mutD;
         [self.calenderView reloadData];
-    } errorBlock:nil];
+    } errorBlock:^(NSError *error) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+    }];
 }
 
-- (void)payCash:(NSArray *)dates payType:(NSUInteger)type{
+- (void)payCash:(NSArray *)dates payType:(EBPayType)type{
+    if (dates.count == 0) return;
     [MBProgressHUD showMessage:nil toView:self.view];
+    NSUInteger payNumber = 0;
+    switch (type) {
+        case EBPayTypeOfAlipay:
+            payNumber = 1;
+            break;
+        case EBPayTypeOfWeChat:
+            payNumber = 2;
+            break;
+        case EBPayTypeOfSZT:
+            payNumber = 3;
+            break;
+        case EBPayTypeOfOther:
+            payNumber = 4;
+            break;
+        default:
+            break;
+    }
     NSArray *sortArray = [dates sortedArrayUsingSelector:@selector(compare:)];//升序排序
     NSMutableArray *newDates = [NSMutableArray array];
     PHCalenderDay *currentDay = [EBUserInfo sharedEBUserInfo].currentCalendarDay;
@@ -128,8 +159,8 @@
                                      static_Argument_startTime      : self.resultModel.startTime,
                                      static_Argument_onStationId    : self.resultModel.onStationId,
                                      static_Argument_offStationId   : self.resultModel.offStationId,
-                                     static_Argument_tradePrice     : @(self.ticketPrice * dates.count),
-                                     static_Argument_payType        : @(type),
+                                     static_Argument_tradePrice     : @(self.totalPrice),
+                                     static_Argument_payType        : @(payNumber),
                                      static_Argument_userId         : [EBUserInfo sharedEBUserInfo].loginId,
                                      static_Argument_userName       : [EBUserInfo sharedEBUserInfo].loginName};
         [EBNetworkRequest GET:static_Url_Order parameters:parameters dictBlock:^(NSDictionary *dict) {
@@ -138,7 +169,7 @@
             NSString *returCode = dict[static_Argument_returnCode];
             if ([returCode integerValue] != 500) {
                 if ([string isEqualToString:@"深圳通卡号不可为空"]) {
-                    [MBProgressHUD showError:@"还没绑定深圳通哦~" toView:self.view];
+                    [MBProgressHUD showError:@"还没绑定深圳通哦" toView:self.view];
                 } else if ([string isEqualToString:@"您没有免费证件支付的权限"]) {
                     [MBProgressHUD showError:@"您没有免费证件支付的权限" toView:self.view];
                 } else {
@@ -149,9 +180,11 @@
                 NSDictionary *main = returnData[@"main"];
                 if (main.count == 0) return;
                 EBOrderDetailModel *orderModel = [[EBOrderDetailModel alloc] initWithDict:main];
-                EBOrderDetailController *orderVC = [[EBOrderDetailController alloc] init];
-                orderVC.orderModel = orderModel;
-                [self.navigationController pushViewController:orderVC animated:YES];
+                if (type == EBPayTypeOfAlipay || type == EBPayTypeOfWeChat) {
+                    [self alipayOrWechatPay:type orderModel:orderModel];
+                } else {
+#warning 深圳通支付 或者 其它免费证件支付
+                }
             }
         } errorBlock:^(NSError *error) {
             [MBProgressHUD hideHUDForView:self.view];
@@ -160,8 +193,53 @@
     }
     
 }
+
+- (void)alipayOrWechatPay:(EBPayType)type orderModel:(EBOrderDetailModel *)orderModel {
+    EB_WS(ws);
+    NSString *title = nil;
+    EBPayTool *payTool = [EBPayTool payTool];
+    if (type == EBPayTypeOfAlipay) {
+        if (![EBTool canOpenApplication:static_Alipay_Scheme]) {
+            title = @"手机未安装支付宝";
+        }
+    } else if (type == EBPayTypeOfWeChat) {
+        if (![EBTool canOpenApplication:static_WeChat_Scheme]) {
+            title = @"手机未安装微信";
+        }
+    } else {
+        return;
+    }
+    if (title.length == 0) {
+        [payTool payType:type orderModel:orderModel completion:^(NSDictionary *dict) {//支付回调这个，不管是否成功
+            EBLog(@"%@->%@", NSStringFromSelector(_cmd),dict);
+            __strong typeof(self) strontSelf = ws;
+            NSNumber *status = dict[@"resultStatus"];
+            if ([status integerValue] == 9000) {//支付成功
+                [MBProgressHUD showSuccess:@"支付成功" toView:strontSelf.view];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [EBTool popToAttentionControllWithIndex:0 controller:strontSelf];
+                });
+            } else {
+                [MBProgressHUD showError:@"支付失败" toView:strontSelf.view];
+                [self pushToOrderDetailVCWithMode:orderModel];
+            }
+        }];
+    } else {
+        [MBProgressHUD showError:title toView:self.view];
+        [self pushToOrderDetailVCWithMode:orderModel];
+    }
+}
+
+- (void)pushToOrderDetailVCWithMode:(EBOrderDetailModel *)orderModel {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        EBOrderDetailController *orderVC = [[EBOrderDetailController alloc] init];
+        orderVC.orderModel = orderModel;
+        [self.navigationController pushViewController:orderVC animated:YES];
+    });
+}
 #pragma mark - EBCalenderViewDelegate
-- (void)eb_calenderView:(EBCalenderView *)calenderView didOrder:(NSArray *)dates {
+- (void)eb_calenderView:(EBCalenderView *)calenderView didOrder:(NSArray *)dates totalPrice:(CGFloat)price{
+    self.totalPrice = price;
     if (dates.count == 0) {
         [MBProgressHUD showError:@"请选择一个购票日期" toView:self.view];
     } else {
@@ -195,13 +273,13 @@
 #pragma mark - EBPayTypeViewDelegate
 - (void)payTypeView:(EBPayTypeView *)titleView didSelectIndex:(NSUInteger)index {
     if (index == 0) {
-        [self payCash:self.dates payType:1];//支付宝支付
+        self.payType = EBPayTypeOfAlipay;
     } else if (index == 1) {
-        [self payCash:self.dates payType:2];//微信支付
+        self.payType = EBPayTypeOfWeChat;
     } else if (index == 2) {
-        [self payCash:self.dates payType:3];//深圳通支付
+        self.payType = EBPayTypeOfSZT;
     } else if (index == 3) {
-        [self payCash:self.dates payType:4];
+        self.payType = EBPayTypeOfOther;
     }
 }
 

@@ -92,6 +92,7 @@
 - (void)didMoveToSuperview
 {
     //    PHLog(@"didMoveToSuperview");
+    [super didMoveToSuperview];
     [self setBmkMapViewFrameUsingAutoLayout];
     [self setMinusAndPlusFrameUsingAutoLayout];
 }

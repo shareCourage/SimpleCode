@@ -54,4 +54,7 @@
  */
 + (BOOL)loginEnable;
 
++ (BOOL)canOpenApplication:(NSString *)string;
+
++ (void)popToAttentionControllWithIndex:(NSUInteger)index controller:(UIViewController *)vc;
 @end

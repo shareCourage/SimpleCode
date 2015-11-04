@@ -22,7 +22,7 @@
 
 @interface EBLineMapView () <MAMapViewDelegate, EBLineStationViewDelegate>
 {
-    BOOL value;//YES 表示leftDragView在右边，NO在左边
+    BOOL _value;//YES 表示leftDragView在右边，NO在左边
 }
 @property (nonatomic, weak) UIView *bottomView;
 @property (nonatomic, weak) UIButton *buyBtn;
@@ -203,9 +203,11 @@
     switch (pan.state) {
         case UIGestureRecognizerStateBegan:
             if (location.x > EB_MaxWidthOfLineStation / 2) {
-                value = YES;
+                _value = YES;
+                EBLog(@"YES");
             } else {
-                value = NO;
+                _value = NO;
+                EBLog(@"NO");
             }
             break;
         case UIGestureRecognizerStateChanged:
@@ -214,17 +216,21 @@
             }
             break;
         case UIGestureRecognizerStateEnded:
-            if (value) {
+            if (_value) {
                 if (location.x <= 2 * EB_MaxWidthOfLineStation / 3) {
-                    [self leftViewXMax];
+                    [self leftViewXMax];//消失
+                    EBLog(@"消失 leftViewXMax");
                 } else {
-                    [self leftViewXZero];
+                    [self leftViewXZero];//出现
+                    EBLog(@"出现 leftViewXZero");
                 }
             } else {
                 if (location.x >= EB_MaxWidthOfLineStation / 3) {
-                    [self leftViewXZero];
+                    [self leftViewXZero];//出现
+                     EBLog(@"出现 leftViewXZero");
                 } else {
-                    [self leftViewXMax];
+                    [self leftViewXMax];//消失
+                    EBLog(@"消失 leftViewXMax");
                 }
             }
             
@@ -247,13 +253,17 @@
     [UIView animateWithDuration:0.5f animations:^{
         self.leftView.x = 0;
     } completion:^(BOOL finished) {
+        self.leftView.x = 0;
+        EBLog(@"leftViewXZero finished");
         self.leftDragView.image = [UIImage imageNamed:@"search_drag_left"];
     }];
 }
 - (void)leftViewXMax {
-    [UIView animateWithDuration:0.3f animations:^{
+    [UIView animateWithDuration:0.5f animations:^{
         self.leftView.x = - EB_MaxWidthOfLineStation;
     } completion:^(BOOL finished) {
+        self.leftView.x = - EB_MaxWidthOfLineStation;
+        EBLog(@"leftViewXMax finished");
         self.leftDragView.image = [UIImage imageNamed:@"search_drag_right"];
     }];
 }

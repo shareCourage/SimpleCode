@@ -103,13 +103,7 @@
             NSString *code = dict[static_Argument_returnCode];
             NSString *info = dict[static_Argument_returnInfo];
             if ([code integerValue] == 500) {
-                PHTabBarController *phTBC = (PHTabBarController *)self.tabBarController;
-                phTBC.mySelectedIndex = 2;
-                NSArray *viewControlls = phTBC.viewControllers;
-                PHNavigationController *navi = [viewControlls objectAtIndex:2];
-                EBAttentionController *attentionVC = [navi.viewControllers firstObject];
-                attentionVC.titleSelectIndex = 1;
-                [self.navigationController popToRootViewControllerAnimated:NO];
+                [EBTool popToAttentionControllWithIndex:1 controller:self];
             } else if ([info isEqualToString:@"已报名"]){
                 [MBProgressHUD showSuccess:@"已报名" toView:self.view];
             } else {

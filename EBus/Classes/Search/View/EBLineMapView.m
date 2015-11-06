@@ -42,6 +42,11 @@
     } else if ([resultModel.openType integerValue] == 2) {
         [self.buyBtn setTitle:@"报名" forState:UIControlStateNormal];
     }
+    if (!resultModel) {
+        self.bottomView.hidden = YES;
+    } else {
+        self.bottomView.hidden = NO;
+    }
 }
 
 #pragma mark - init Method
@@ -70,6 +75,7 @@
 #pragma mark  - Implementation
 - (void)bottomViewImplementation {
     UIView *bottom = [[UIView alloc] init];
+    bottom.hidden = YES;
     bottom.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.8];
     UIButton *buy = [UIButton buttonWithType:UIButtonTypeCustom];
     [buy setTitle:@"购买" forState:UIControlStateNormal];
@@ -171,7 +177,7 @@
 #pragma mark - superMethod
 - (void)didMoveToSuperview
 {
-    self.bottomDistance = 60;
+    if(!self.bottomView.hidden) self.bottomDistance = 60;
     [super didMoveToSuperview];
     [self bottomViewAutoLayout];
     [self leftViewAutoLayout];

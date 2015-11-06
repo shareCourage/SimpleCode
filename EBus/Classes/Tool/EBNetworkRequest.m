@@ -69,4 +69,32 @@
     return operation;
 }
 
++ (AFHTTPRequestOperation *)POST:(NSString *)url
+                      parameters:(id)parameters
+                         success:(EBOptionData)optionData
+                           error:(EBOptionError)optionError {
+    return [self POST:url parameters:parameters success:optionData error:optionError indicatorVisible:YES];
+}
+
++ (AFHTTPRequestOperation *)POST:(NSString *)url
+                      parameters:(id)parameters
+                         success:(EBOptionData)optionData
+                           error:(EBOptionError)optionError
+                indicatorVisible:(BOOL)visible
+{
+    if (visible) [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];//将数据转化为NSData
+    AFHTTPRequestOperation *operation = [manager POST:url parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        if (optionData) optionData(responseObject);
+        if (visible) [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        if (optionError) optionError(error);
+        if (visible) [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        
+    }];
+    return operation;
+}
+
 @end

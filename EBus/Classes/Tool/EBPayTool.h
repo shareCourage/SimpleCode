@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Singleton.h"
 @class EBOrderDetailModel;
 
 typedef void (^EBOptionDict)(NSDictionary *dict);
@@ -20,8 +21,11 @@ typedef  NS_ENUM(NSUInteger, EBPayType) {
 
 @interface EBPayTool : NSObject
 
-+ (instancetype)payTool;
+singleton_interface(EBPayTool)
++ (BOOL)canPayByWeXin;
 
-- (BOOL)payType:(EBPayType)type orderModel:(EBOrderDetailModel *)orderModel completion:(EBOptionDict)completion;
+- (void)payType:(EBPayType)type orderModel:(EBOrderDetailModel *)orderModel completion:(EBOptionDict)completion;
+- (void)wxPayWithModel:(EBOrderDetailModel *)orderModel completion:(EBOptionDict)completion;
+- (void)aliPayWithModel:(EBOrderDetailModel *)orderModel completion:(EBOptionDict)completion;
 
 @end

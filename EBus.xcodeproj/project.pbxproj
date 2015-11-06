@@ -77,6 +77,14 @@
 		A919217E1BDE46800005E2A3 /* login_telephone@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A919217C1BDE46800005E2A3 /* login_telephone@3x.png */; settings = {ASSET_TAGS = (); }; };
 		A919217F1BDE46800005E2A3 /* login_verificationCode@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A919217D1BDE46800005E2A3 /* login_verificationCode@3x.png */; settings = {ASSET_TAGS = (); }; };
 		A91921821BDE4C560005E2A3 /* EBTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = A91921811BDE4C560005E2A3 /* EBTextField.m */; settings = {ASSET_TAGS = (); }; };
+		A91A4AB61BEAE85300AD7E1F /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A91A4AB51BEAE85300AD7E1F /* libsqlite3.0.tbd */; };
+		A91A4ABB1BEAF45500AD7E1F /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A91A4AB81BEAF45500AD7E1F /* libWeChatSDK.a */; settings = {ASSET_TAGS = (); }; };
+		A91A4ABE1BEB3FB200AD7E1F /* WechatPayUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = A91A4ABD1BEB3FB200AD7E1F /* WechatPayUtil.m */; settings = {ASSET_TAGS = (); }; };
+		A91A4AC11BEB7AFA00AD7E1F /* ApiXml.mm in Sources */ = {isa = PBXBuildFile; fileRef = A91A4AC01BEB7AFA00AD7E1F /* ApiXml.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		A91A4AC61BEB7CF400AD7E1F /* payRequsestHandler.mm in Sources */ = {isa = PBXBuildFile; fileRef = A91A4AC31BEB7CF400AD7E1F /* payRequsestHandler.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		A91A4AC71BEB7CF400AD7E1F /* WXUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = A91A4AC51BEB7CF400AD7E1F /* WXUtil.mm */; settings = {ASSET_TAGS = (); }; };
+		A91A4ACA1BECAFF400AD7E1F /* EBTransferController.m in Sources */ = {isa = PBXBuildFile; fileRef = A91A4AC91BECAFF400AD7E1F /* EBTransferController.m */; settings = {ASSET_TAGS = (); }; };
+		A91A4ACD1BECB84000AD7E1F /* EBTransferModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A91A4ACC1BECB84000AD7E1F /* EBTransferModel.m */; settings = {ASSET_TAGS = (); }; };
 		A99EFB5F1BDDD8EA0074EC55 /* PHCalenderView.m in Sources */ = {isa = PBXBuildFile; fileRef = A99EFB581BDDD8EA0074EC55 /* PHCalenderView.m */; settings = {ASSET_TAGS = (); }; };
 		A99EFB601BDDD8EA0074EC55 /* PHCalenderViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A99EFB5A1BDDD8EA0074EC55 /* PHCalenderViewCell.m */; settings = {ASSET_TAGS = (); }; };
 		A99EFB611BDDD8EA0074EC55 /* PHCalenderDay.m in Sources */ = {isa = PBXBuildFile; fileRef = A99EFB5C1BDDD8EA0074EC55 /* PHCalenderDay.m */; settings = {ASSET_TAGS = (); }; };
@@ -333,6 +341,22 @@
 		A919217D1BDE46800005E2A3 /* login_verificationCode@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_verificationCode@3x.png"; sourceTree = "<group>"; };
 		A91921801BDE4C560005E2A3 /* EBTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBTextField.h; sourceTree = "<group>"; };
 		A91921811BDE4C560005E2A3 /* EBTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBTextField.m; sourceTree = "<group>"; };
+		A91A4AB51BEAE85300AD7E1F /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
+		A91A4AB81BEAF45500AD7E1F /* libWeChatSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libWeChatSDK.a; sourceTree = "<group>"; };
+		A91A4AB91BEAF45500AD7E1F /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
+		A91A4ABA1BEAF45500AD7E1F /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
+		A91A4ABC1BEB3FB200AD7E1F /* WechatPayUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WechatPayUtil.h; sourceTree = "<group>"; };
+		A91A4ABD1BEB3FB200AD7E1F /* WechatPayUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WechatPayUtil.m; sourceTree = "<group>"; };
+		A91A4ABF1BEB7AFA00AD7E1F /* ApiXml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApiXml.h; sourceTree = "<group>"; };
+		A91A4AC01BEB7AFA00AD7E1F /* ApiXml.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ApiXml.mm; sourceTree = "<group>"; };
+		A91A4AC21BEB7CF400AD7E1F /* payRequsestHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = payRequsestHandler.h; sourceTree = "<group>"; };
+		A91A4AC31BEB7CF400AD7E1F /* payRequsestHandler.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = payRequsestHandler.mm; sourceTree = "<group>"; };
+		A91A4AC41BEB7CF400AD7E1F /* WXUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXUtil.h; sourceTree = "<group>"; };
+		A91A4AC51BEB7CF400AD7E1F /* WXUtil.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WXUtil.mm; sourceTree = "<group>"; };
+		A91A4AC81BECAFF400AD7E1F /* EBTransferController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBTransferController.h; sourceTree = "<group>"; };
+		A91A4AC91BECAFF400AD7E1F /* EBTransferController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBTransferController.m; sourceTree = "<group>"; };
+		A91A4ACB1BECB84000AD7E1F /* EBTransferModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBTransferModel.h; sourceTree = "<group>"; };
+		A91A4ACC1BECB84000AD7E1F /* EBTransferModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBTransferModel.m; sourceTree = "<group>"; };
 		A99EFB571BDDD8EA0074EC55 /* PHCalenderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHCalenderView.h; sourceTree = "<group>"; };
 		A99EFB581BDDD8EA0074EC55 /* PHCalenderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHCalenderView.m; sourceTree = "<group>"; };
 		A99EFB591BDDD8EA0074EC55 /* PHCalenderViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHCalenderViewCell.h; sourceTree = "<group>"; };
@@ -664,6 +688,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A91A4AB61BEAE85300AD7E1F /* libsqlite3.0.tbd in Frameworks */,
 				A9FE49C31BE9E10800708F62 /* CoreText.framework in Frameworks */,
 				A9DF68941BD1110100368B27 /* Foundation.framework in Frameworks */,
 				A9FE49B81BE9C1C900708F62 /* AlipaySDK.framework in Frameworks */,
@@ -677,6 +702,7 @@
 				A9DF68861BD1106000368B27 /* CoreTelephony.framework in Frameworks */,
 				A9DF68841BD1105600368B27 /* CoreLocation.framework in Frameworks */,
 				A9DF68821BD1104C00368B27 /* OpenGLES.framework in Frameworks */,
+				A91A4ABB1BEAF45500AD7E1F /* libWeChatSDK.a in Frameworks */,
 				A9DF68801BD1104000368B27 /* QuartzCore.framework in Frameworks */,
 				A9DF687E1BD1103000368B27 /* CoreGraphics.framework in Frameworks */,
 				A9DF687C1BD106D500368B27 /* MAMapKit.framework in Frameworks */,
@@ -870,6 +896,24 @@
 				A91921791BDE37F10005E2A3 /* login_verificationCode@2x.png */,
 			);
 			path = Login;
+			sourceTree = "<group>";
+		};
+		A91A4AB71BEAF45500AD7E1F /* WeChat */ = {
+			isa = PBXGroup;
+			children = (
+				A91A4AB81BEAF45500AD7E1F /* libWeChatSDK.a */,
+				A91A4AB91BEAF45500AD7E1F /* WXApi.h */,
+				A91A4ABA1BEAF45500AD7E1F /* WXApiObject.h */,
+				A91A4ABC1BEB3FB200AD7E1F /* WechatPayUtil.h */,
+				A91A4ABD1BEB3FB200AD7E1F /* WechatPayUtil.m */,
+				A91A4ABF1BEB7AFA00AD7E1F /* ApiXml.h */,
+				A91A4AC01BEB7AFA00AD7E1F /* ApiXml.mm */,
+				A91A4AC21BEB7CF400AD7E1F /* payRequsestHandler.h */,
+				A91A4AC31BEB7CF400AD7E1F /* payRequsestHandler.mm */,
+				A91A4AC41BEB7CF400AD7E1F /* WXUtil.h */,
+				A91A4AC51BEB7CF400AD7E1F /* WXUtil.mm */,
+			);
+			path = WeChat;
 			sourceTree = "<group>";
 		};
 		A99EFB561BDDD8DF0074EC55 /* Calender */ = {
@@ -1248,6 +1292,7 @@
 		A9FC050F1BCD02B500870580 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				A91A4AB71BEAF45500AD7E1F /* WeChat */,
 				A9FE49541BE9C1C900708F62 /* Alipay */,
 				A99EFB561BDDD8DF0074EC55 /* Calender */,
 				A9DF68951BD115A100368B27 /* AMap.bundle */,
@@ -1445,6 +1490,8 @@
 		A9FC051E1BCD02B500870580 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				A91A4AC81BECAFF400AD7E1F /* EBTransferController.h */,
+				A91A4AC91BECAFF400AD7E1F /* EBTransferController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1452,6 +1499,8 @@
 		A9FC051F1BCD02B500870580 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				A91A4ACB1BECB84000AD7E1F /* EBTransferModel.h */,
+				A91A4ACC1BECB84000AD7E1F /* EBTransferModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1687,6 +1736,7 @@
 		BE8BE0F5FEBC6586F065DD5B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A91A4AB51BEAE85300AD7E1F /* libsqlite3.0.tbd */,
 				A9FE49C21BE9E10800708F62 /* CoreText.framework */,
 				A9DF68931BD1110100368B27 /* Foundation.framework */,
 				A9DF68911BD110F900368B27 /* UIKit.framework */,
@@ -1967,6 +2017,7 @@
 				A9DF69041BD8B15E00368B27 /* EBHotLabel.m in Sources */,
 				A907EA7C1BE061CA006E99C1 /* EBAttentionButton.m in Sources */,
 				A9F9608F1BCF3A480011BC73 /* UIViewController+PHCategory.m in Sources */,
+				A91A4AC61BEB7CF400AD7E1F /* payRequsestHandler.mm in Sources */,
 				A9FE49BC1BE9C1C900708F62 /* DataVerifier.m in Sources */,
 				A9FE49B91BE9C1C900708F62 /* Order.m in Sources */,
 				A9FE49BF1BE9C1C900708F62 /* openssl_wrapper.m in Sources */,
@@ -1996,6 +2047,7 @@
 				A9DF68B21BD5DE9500368B27 /* EBLineMapView.m in Sources */,
 				A9F960301BCF38850011BC73 /* EBUsualLineCell.m in Sources */,
 				A9FC05621BCD0B7E00870580 /* PHSettingGroup.m in Sources */,
+				A91A4ABE1BEB3FB200AD7E1F /* WechatPayUtil.m in Sources */,
 				A9DDC5571BE3776F006395E3 /* EBGroupModel.m in Sources */,
 				A9F1AB2E1BD9E6D100B85843 /* EBMeSettingController.m in Sources */,
 				A9FC05511BCD0B0C00870580 /* PHViewController.m in Sources */,
@@ -2005,8 +2057,10 @@
 				A9F1AB1B1BD8C83A00B85843 /* EBLineStationView.m in Sources */,
 				A9DDC5691BE7587F006395E3 /* EBPayTypeButton.m in Sources */,
 				A9DF68AB1BD50B0700368B27 /* EBLineDetailController.m in Sources */,
+				A91A4ACA1BECAFF400AD7E1F /* EBTransferController.m in Sources */,
 				A9F9608E1BCF3A480011BC73 /* UIView+PHLayout.m in Sources */,
 				A907EA6D1BDF77BE006E99C1 /* EBMyOrderListController.m in Sources */,
+				A91A4ACD1BECB84000AD7E1F /* EBTransferModel.m in Sources */,
 				A9DF68A81BD4D24C00368B27 /* EBSearchResultModel.m in Sources */,
 				A9DF68E71BD735A700368B27 /* EBLineDetailPPView.m in Sources */,
 				A9FC05451BCD0A9100870580 /* PHTabBarButton.m in Sources */,
@@ -2050,7 +2104,9 @@
 				A99EFB621BDDD8EA0074EC55 /* NSDate+Calender.m in Sources */,
 				A9FE49C11BE9C1C900708F62 /* RSADataVerifier.m in Sources */,
 				A9F960881BCF3A480011BC73 /* UIColor+PHCategory.m in Sources */,
+				A91A4AC11BEB7AFA00AD7E1F /* ApiXml.mm in Sources */,
 				A99EFB601BDDD8EA0074EC55 /* PHCalenderViewCell.m in Sources */,
+				A91A4AC71BEB7CF400AD7E1F /* WXUtil.mm in Sources */,
 				A9F9608D1BCF3A480011BC73 /* UITextField+PHCategory.m in Sources */,
 				A9F960801BCF3A480011BC73 /* MBProgressHUD+MJ.m in Sources */,
 				A9DDC5851BE85CB4006395E3 /* EBOrderDetailModel.m in Sources */,
@@ -2233,6 +2289,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/EBus/Classes/Libs/Alipay",
+					"$(PROJECT_DIR)/EBus/Classes/Libs/WeChat",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -2298,6 +2355,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/EBus/Classes/Libs/Alipay",
+					"$(PROJECT_DIR)/EBus/Classes/Libs/WeChat",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",

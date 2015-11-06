@@ -77,7 +77,7 @@
         <!--Root View Controller-->
         <scene sceneID="WSa-E2-ocr">
             <objects>
-                <tableViewController id="xHN-xc-vZ5" sceneMemberID="viewController">
+                <tableViewController id="xHN-xc-vZ5" customClass="EBTransferController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="H8y-Ow-14G">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

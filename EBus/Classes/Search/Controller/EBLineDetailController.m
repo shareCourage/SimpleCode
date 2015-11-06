@@ -25,6 +25,7 @@
 
 @implementation EBLineDetailController
 - (void)dealloc {
+    EBLog(@"%@ -> dealloc", NSStringFromClass([self class]));
 }
 
 - (void)viewDidLoad {

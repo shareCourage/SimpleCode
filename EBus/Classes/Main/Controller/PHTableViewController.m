@@ -20,9 +20,9 @@
     EBLog(@"%@ --> dealloc", NSStringFromClass([self class]));
 }
 
-- (void)setBackgroundImageViewAppear:(BOOL)backgroundImageViewAppear {
-    _backgroundImageViewAppear = backgroundImageViewAppear;
-    self.backgroundImageView.hidden = backgroundImageViewAppear;
+- (void)setBackgroundImageViewDisappear:(BOOL)backgroundImageViewDisappear {
+    _backgroundImageViewDisappear = backgroundImageViewDisappear;
+    self.backgroundImageView.hidden = backgroundImageViewDisappear;
 }
 
 - (void)viewDidLoad {

@@ -194,44 +194,59 @@
     
 }
 
+
 - (void)alipayOrWechatPay:(EBPayType)type orderModel:(EBOrderDetailModel *)orderModel {
     EB_WS(ws);
-    NSString *title = nil;
-    EBPayTool *payTool = [EBPayTool payTool];
-    if (type == EBPayTypeOfAlipay) {
-        if (![EBTool canOpenApplication:static_Alipay_Scheme]) {
-            title = @"手机未安装支付宝";
-        }
-    } else if (type == EBPayTypeOfWeChat) {
-        if (![EBTool canOpenApplication:static_WeChat_Scheme]) {
-            title = @"手机未安装微信";
-        }
-    } else {
-        return;
-    }
-    if (title.length == 0) {
-        [payTool payType:type orderModel:orderModel completion:^(NSDictionary *dict) {//支付回调这个，不管是否成功
-            EBLog(@"%@->%@", NSStringFromSelector(_cmd),dict);
-            __strong typeof(self) strontSelf = ws;
-            NSNumber *status = dict[@"resultStatus"];
-            if ([status integerValue] == 9000) {//支付成功
-                [MBProgressHUD showSuccess:@"支付成功" toView:strontSelf.view];
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [EBTool popToAttentionControllWithIndex:0 controller:strontSelf];
-                });
+    EBPayTool *payTool = [EBPayTool sharedEBPayTool];
+    switch (type) {
+        case EBPayTypeOfAlipay:
+            if ([EBTool canOpenApplication:@"alipayShare://"]) {//判断是否安装了支付宝
+                [payTool aliPayWithModel:orderModel completion:^(NSDictionary *dict) {
+                    EBLog(@"%@->%@", NSStringFromSelector(_cmd),dict);
+                    __strong typeof(self) strontSelf = ws;
+                    NSNumber *status = dict[@"resultStatus"];
+                    if ([status integerValue] == 9000) {//9000、支付成功 //6001、用户中途取消
+                        [MBProgressHUD showSuccess:@"支付成功" toView:strontSelf.view];
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [EBTool popToAttentionControllWithIndex:0 controller:strontSelf];
+                        });
+                    } else {
+                        [MBProgressHUD showError:@"支付失败" toView:strontSelf.view];
+                        [self pushToOrderDetailVCWithMode:orderModel];
+                    }
+                }];
             } else {
-                [MBProgressHUD showError:@"支付失败" toView:strontSelf.view];
+                [MBProgressHUD showError:@"手机未安装支付宝" toView:self.view];
                 [self pushToOrderDetailVCWithMode:orderModel];
             }
-        }];
-    } else {
-        [MBProgressHUD showError:title toView:self.view];
-        [self pushToOrderDetailVCWithMode:orderModel];
+            break;
+        case EBPayTypeOfWeChat:
+            if ([EBPayTool canPayByWeXin]) {
+                [payTool wxPayWithModel:orderModel completion:^(NSDictionary *dict) {
+                    NSString *string = dict[@"payResult"];
+                    __strong typeof(self) strontSelf = ws;
+                    if ([string isEqualToString:@"success"]) {
+                        [MBProgressHUD showSuccess:@"支付成功" toView:strontSelf.view];
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [EBTool popToAttentionControllWithIndex:0 controller:strontSelf];
+                        });
+                    } else if ([string isEqualToString:@"failure"]) {
+                        [MBProgressHUD showError:@"支付失败" toView:strontSelf.view];
+                        [self pushToOrderDetailVCWithMode:orderModel];
+                    }
+                }];
+            } else {
+                [MBProgressHUD showError:@"手机未安装微信" toView:self.view];
+                [self pushToOrderDetailVCWithMode:orderModel];
+            }
+            break;
+        default:
+            break;
     }
 }
 
 - (void)pushToOrderDetailVCWithMode:(EBOrderDetailModel *)orderModel {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         EBOrderDetailController *orderVC = [[EBOrderDetailController alloc] init];
         orderVC.orderModel = orderModel;
         [self.navigationController pushViewController:orderVC animated:YES];

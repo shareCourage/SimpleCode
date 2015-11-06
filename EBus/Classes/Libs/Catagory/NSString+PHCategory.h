@@ -35,6 +35,11 @@
  */
 + (NSString *)digitUppercaseWithMoney:(NSString *)money;
 
+/**
+ *  返回多少位的随机字符串
+ *
+ */
++ (NSString *)returnBitString:(NSUInteger)number;
 
 /**
  1、如果有设置传入参数:(时间格式)，则使用传入的格式

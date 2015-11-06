@@ -11,6 +11,8 @@
 static NSString * const EBPresentLoginVCDidFinishNotification = @"eb.present.login.present.finish";
 static NSString * const EBLoginSuccessNotification = @"eb.login.success";
 static NSString * const EBLogoutSuccessNotification = @"eb.logout.success";
+static NSString * const EBWXPaySuccessNotification = @"eb.wxpay.success";
+static NSString * const EBWXPayFailureNotification = @"eb.wxpay.failure";
 
 static NSString *static_KeyOfAMap           = @"163c0486f490bf1c8c84ed7c1a8a9507";
 
@@ -23,8 +25,12 @@ static NSString *static_Alipay_PrivateKey   = @"MIICdwIBADANBgkqhkiG9w0BAQEFAASC
 static NSString *static_Alipay_notifyUrl    = @"http://app.szebus.net/alipay/phone/notify/url";
 static NSString *static_Alipay_Scheme       = @"mobile.securitypay.pay";
 
-static NSString *static_WeChat_Scheme       = @"";
-
+static NSString *static_WeChat_Scheme       = @"weixin";
+static NSString *static_WeChat_AppID        = @"wx009a523c3077f55e";
+static NSString *static_WeChat_PayUrl       = @"https://api.mch.weixin.qq.com/pay/unifiedorder";
+static NSString *static_WeChat_MchId        = @"1269105601";
+static NSString *static_WeChat_Key          = @"sdfASD65468ASs48sv4a66wqwe99POMM";
+static NSString *static_WeChat_notifyUrl    = @"http://app.szebus.net/weixin/phone/notify/url";
 
 static NSString *static_App_Schemes         = @"eBus";
 

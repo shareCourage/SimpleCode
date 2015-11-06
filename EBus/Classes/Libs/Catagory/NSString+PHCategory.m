@@ -251,6 +251,13 @@ static NSString *token = @"Itisgoomesimplifiedappprivatekeyandcouldnotbegetbysom
     [mString insertString:symbol atIndex:index];
     return [mString copy];
 }
+
++ (NSString *)returnBitString:(NSUInteger)number {
+    char data[number];
+    for (int x = 0; x < number; data[x++] = (char)('A' + (arc4random_uniform(26))));
+    return [[NSString alloc] initWithBytes:data length:number encoding:NSUTF8StringEncoding];
+}
+
 @end
 
 

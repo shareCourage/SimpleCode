@@ -47,7 +47,7 @@
     [self.tableView.header beginRefreshing];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self bottomViewImplementation];
-    self.backgroundImageViewAppear = NO;
+    self.backgroundImageViewDisappear = NO;
 }
 
 #pragma mark  - Implementation
@@ -116,7 +116,7 @@
             EBSearchResultModel *model = [[EBSearchResultModel alloc] initWithDict:dict];
             [self.dataSource addObject:model];
         }
-        self.backgroundImageViewAppear = YES;
+        self.backgroundImageViewDisappear = YES;
         [self.tableView reloadData];
     } errorBlock:^(NSError *error) {
         [self.tableView.header endRefreshing];

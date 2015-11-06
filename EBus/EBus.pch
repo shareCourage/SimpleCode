@@ -26,6 +26,7 @@
 #define EB_AppDelegate  (AppDelegate *)[UIApplication sharedApplication].delegate
 #define EB_UserDefaults [NSUserDefaults standardUserDefaults]
 #define EB_BoolForKey(LocationModelKey) [[NSUserDefaults standardUserDefaults] boolForKey:LocationModelKey]
+#define EB_Version [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
 
 #define EB_WS(weakSelf) __weak __typeof(&*self)weakSelf = self;
 

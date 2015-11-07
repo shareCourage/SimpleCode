@@ -7,10 +7,13 @@
 //
 
 #import "EBTransferController.h"
+#import <MJRefresh/MJRefresh.h>
 #import "EBLineMapView.h"
 #import "EBSearchResultModel.h"
 #import "EBUsualLineCell.h"
 #import "EBLineDetailModel.h"
+#import "EBUserInfo.h"
+#import "EBTransferModel.h"
 
 @interface EBTransferController () <EBLineMapViewDelegate>
 @property (nonatomic, weak) EBLineMapView *lineMapView;
@@ -34,6 +37,12 @@
     self.tableView.allowsSelection = NO;
     self.lineMapView = lineMap;
     
+    EB_WS(ws);
+    self.tableView.header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [ws refresh];
+    }];
+    [self.tableView.header beginRefreshing];
+    
     NSString *documents = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
     self.filePath = [documents stringByAppendingPathComponent:[NSString stringWithFormat:@"%@lineId.arc",self.resultModel.lineId]];
     
@@ -42,14 +51,22 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self.lineMapView mapViewDidAppear];
-    [self lineDetailRequest];
-    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
 }
 
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    [self.lineMapView mapViewDidDisappear];
-    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+- (void)refresh {
+    if ([EBUserInfo sharedEBUserInfo].loginId.length == 0 || [EBUserInfo sharedEBUserInfo].loginName.length == 0) return;
+    EB_WS(ws);
+    NSDictionary *parameters = @{static_Argument_userName   : [EBUserInfo sharedEBUserInfo].loginName,
+                                 static_Argument_userId     : [EBUserInfo sharedEBUserInfo].loginId};
+    [EBNetworkRequest GET:static_Url_TransferOfRecentLine parameters:parameters dictBlock:^(NSDictionary *dict) {
+        [ws.tableView.header endRefreshing];
+        NSDictionary *returnData = dict[static_Argument_returnData];
+        if (returnData.count == 0) return;
+        EBTransferModel *tModel = [[EBTransferModel alloc] initWithDict:returnData];
+        EBSearchResultModel *resultModel = [[EBSearchResultModel alloc] init];
+    } errorBlock:^(NSError *error) {
+        [ws.tableView.header endRefreshing];
+    }];
 }
 
 - (void)lineDetailRequest {

@@ -56,6 +56,8 @@ static NSString *static_Url_AttentionOfSponsor  = @"http://app.szebus.net/demand
 
 static NSString *static_Url_CancelOrder         = @"http://app.szebus.net/order/phone/cancel";
 
+static NSString *static_Url_TransferOfRecentLine    = @"http://app.szebus.net/order/phone/second/now/data";
+
 static NSString *static_Argument_returnData     = @"returnData";
 static NSString *static_Argument_returnCode     = @"returnCode";
 static NSString *static_Argument_returnInfo     = @"returnInfo";

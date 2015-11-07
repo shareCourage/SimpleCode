@@ -6,13 +6,13 @@
 //  Copyright © 2015年 Goome. All rights reserved.
 //
 
-#import "PHTableViewController.h"
+#import "PHViewController.h"
 @class EBHotLabel;
 
-@interface EBSearchResultController : PHTableViewController
+@interface EBSearchResultController : PHViewController
 
-@property (nonatomic, assign) CLLocationCoordinate2D myPositionCoord;
+@property (nonatomic, assign) CLLocationCoordinate2D myPositionCoord;//正常查询传递的经纬度
 @property (nonatomic, assign) CLLocationCoordinate2D endPositionCoord;
 
-@property (nonatomic, strong) EBHotLabel *hotLabel;
+@property (nonatomic, strong) EBHotLabel *hotLabel;//从热门标签传递过来的模型
 @end

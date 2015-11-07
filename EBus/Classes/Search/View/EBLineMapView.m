@@ -6,7 +6,7 @@
 //  Copyright © 2015年 Goome. All rights reserved.
 //
 #define EB_LineColor EB_RGBColor(90, 138, 251)
-#define EB_MaxWidthOfLineStation (EB_WidthOfScreen / 2 + 50) //左边滑动的view的最大宽度值
+#define EB_MaxWidthOfLineStation (EB_WidthOfScreen / 2 + 80) //左边滑动的view的最大宽度值
 #import "EBLineMapView.h"
 #import "EBLineDetailModel.h"
 #import "EBAnnotation.h"
@@ -31,18 +31,36 @@
 @property (nonatomic, weak) EBLineStationView *stationView;
 @property (nonatomic, weak) UIView *leftView;
 
+@property (nonatomic, strong) UIImage *leftDragImage;
+@property (nonatomic, strong) UIImage *rightDragImage;
+
 @end
 
 @implementation EBLineMapView
+- (UIImage *)leftDragImage {
+    if (!_leftDragImage) {
+        _leftDragImage = [UIImage imageNamed:@"search_drag_left"];
+    }
+    return _leftDragImage;
+}
+- (UIImage *)rightDragImage {
+    if (!_rightDragImage) {
+        _rightDragImage = [UIImage imageNamed:@"search_drag_right"];
+    }
+    return _rightDragImage;
+}
 
 - (void)setResultModel:(EBSearchResultModel *)resultModel {
+    
     _resultModel = resultModel;
     if ([resultModel.openType integerValue] == 1) {
         [self.buyBtn setTitle:@"购票" forState:UIControlStateNormal];
     } else if ([resultModel.openType integerValue] == 2) {
         [self.buyBtn setTitle:@"报名" forState:UIControlStateNormal];
+    } else if ([resultModel.openType integerValue] == 3) {
+        [self.buyBtn setTitle:@"跟团" forState:UIControlStateNormal];
     }
-    if (!resultModel) {
+    if (!resultModel.openType) {
         self.bottomView.hidden = YES;
     } else {
         self.bottomView.hidden = NO;
@@ -77,12 +95,7 @@
     UIView *bottom = [[UIView alloc] init];
     bottom.hidden = YES;
     bottom.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.8];
-    UIButton *buy = [UIButton buttonWithType:UIButtonTypeCustom];
-    [buy setTitle:@"购买" forState:UIControlStateNormal];
-    buy.titleLabel.font = [UIFont systemFontOfSize:20];
-    [buy setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [buy setBackgroundColor:EB_RGBColor(157, 197, 236)];
-    buy.layer.cornerRadius = 25;
+    UIButton *buy = [UIButton eb_buttonWithTitle:@"购买"];
     [buy addTarget:self action:@selector(buyBtnClick) forControlEvents:UIControlEventTouchUpInside];
     [bottom addSubview:buy];
     [self addSubview:bottom];
@@ -101,7 +114,7 @@
     UIImageView *leftDrag = [[UIImageView alloc] init];
     leftDrag.contentMode = UIViewContentModeScaleAspectFit;
     leftDrag.userInteractionEnabled = YES;
-    leftDrag.image = [UIImage imageNamed:@"search_drag_right"];
+    leftDrag.image = self.rightDragImage;
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureRecognized:)];
     tap.numberOfTapsRequired = 1;
@@ -195,6 +208,7 @@
 - (void)setLineDetailM:(EBLineDetailModel *)lineDetailM {
     _lineDetailM = lineDetailM;
     if (lineDetailM.lineContent.length == 0) return;
+#warning message - 跟团的逻辑还没有实现，具体不清楚如何交互的，这里先放一下
     [self addAnnotationOnLngLat:lineDetailM.onLngLat onStations:lineDetailM.onStations onFjIds:lineDetailM.onFjIds];
     [self addAnnotationOffLngLat:lineDetailM.offLngLat offStations:lineDetailM.offStations offFjIds:lineDetailM.offFjIds];
     [self addOnStations:lineDetailM.onStations offStations:lineDetailM.offStations onLngLat:lineDetailM.onLngLat offLngLat:lineDetailM.offLngLat onTime:lineDetailM.onTimes offTime:lineDetailM.offTimes];
@@ -259,18 +273,18 @@
     [UIView animateWithDuration:0.5f animations:^{
         self.leftView.x = 0;
     } completion:^(BOOL finished) {
-        self.leftView.x = 0;
         EBLog(@"leftViewXZero finished");
-        self.leftDragView.image = [UIImage imageNamed:@"search_drag_left"];
+//        self.leftDragView.image = self.leftDragImage;
+        self.leftView.x = 0;
     }];
 }
 - (void)leftViewXMax {
     [UIView animateWithDuration:0.5f animations:^{
         self.leftView.x = - EB_MaxWidthOfLineStation;
     } completion:^(BOOL finished) {
-        self.leftView.x = - EB_MaxWidthOfLineStation;
         EBLog(@"leftViewXMax finished");
-        self.leftDragView.image = [UIImage imageNamed:@"search_drag_right"];
+//        self.leftDragView.image = self.rightDragImage;
+        self.leftView.x = - EB_MaxWidthOfLineStation;
     }];
 }
 

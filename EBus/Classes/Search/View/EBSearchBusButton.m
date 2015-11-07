@@ -23,6 +23,8 @@
         self.adjustsImageWhenHighlighted = NO;
         [self setTitle:title forState:UIControlStateNormal];
         [self setTitleColor:EB_RGBColor(199, 204, 215) forState:UIControlStateNormal];
+//        [self setShowsTouchWhenHighlighted:YES];
+        [self setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];
         [self.titleLabel setFont:[UIFont systemFontOfSize:16]];
         self.titleLabel.textAlignment = NSTextAlignmentLeft;
         self.imageView.contentMode = UIViewContentModeCenter;
@@ -57,7 +59,7 @@
     CGFloat padding = 10;
     CGFloat titleY = 0;
     CGFloat titleX = contentRect.size.height / 2 + EB_imageWithOfSearchBusButton / 2 + padding;
-    CGFloat titleW = contentRect.size.width - 10;
+    CGFloat titleW = contentRect.size.width - 50;
     CGFloat titleH = contentRect.size.height;
     return CGRectMake(titleX, titleY, titleW, titleH);
 }

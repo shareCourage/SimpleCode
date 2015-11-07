@@ -258,6 +258,23 @@ static NSString *token = @"Itisgoomesimplifiedappprivatekeyandcouldnotbegetbysom
     return [[NSString alloc] initWithBytes:data length:number encoding:NSUTF8StringEncoding];
 }
 
+
+
+- (CGSize)stringSizeWithFont:(UIFont *)font height:(CGFloat)height {
+    CGSize size;
+    NSAttributedString *atrString = [[NSAttributedString alloc] initWithString:self];
+    NSRange range = NSMakeRange(0, atrString.length);
+    NSDictionary *dic = [atrString attributesAtIndex:0 effectiveRange:&range];
+    size = [self boundingRectWithSize:CGSizeMake(MAXFLOAT, height) options:NSStringDrawingUsesLineFragmentOrigin attributes:dic context:nil].size;
+    return  size;
+}
+
+- (CGSize)boundingRectWithSize:(CGSize)size font:(UIFont *)font {
+    NSDictionary *attribute = @{NSFontAttributeName : font};
+    CGSize returnSize = [self boundingRectWithSize:size options:NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attribute context:nil].size;
+    return returnSize;
+}
+
 @end
 
 

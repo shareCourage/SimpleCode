@@ -19,6 +19,7 @@
 - (IBAction)getVerificationClick:(id)sender;
 - (IBAction)loginClick:(id)sender;
 @property (nonatomic, strong) NSTimer *myTimer;
+
 @end
 
 @implementation EBLoginViewController

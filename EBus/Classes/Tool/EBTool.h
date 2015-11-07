@@ -11,6 +11,7 @@
 #import "NSArray+MySeperateString.h"
 #import "NSDictionary+PHCategory.h"
 #import "UIButton+PHCategory.h"
+#import "UIButton+EBButton.h"
 #import "UILabel+PHCategory.h"
 #import "NSDate+PHCategory.h"
 #import "UIProgressView+PHCategory.h"

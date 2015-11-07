@@ -81,7 +81,7 @@
         [self.navigationController pushViewController:buyT animated:YES];
     } else if (openType == 2) {//报名
         [self signApply];
-    } else if (openType == 3) { //团购
+    } else if (openType == 3) { //跟团
         [self signApply];
     }
 }
@@ -104,6 +104,7 @@
             NSString *code = dict[static_Argument_returnCode];
             NSString *info = dict[static_Argument_returnInfo];
             if ([code integerValue] == 500) {
+                [MBProgressHUD showSuccess:@"报名成功" toView:self.view];
                 [EBTool popToAttentionControllWithIndex:1 controller:self];
             } else if ([info isEqualToString:@"已报名"]){
                 [MBProgressHUD showSuccess:@"已报名" toView:self.view];

@@ -85,13 +85,9 @@
 }
 
 - (void)searchBtnImplementation {
-    UIButton *search = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIButton *search = [UIButton eb_buttonWithTitle:@"查询班车"];
     search.tag = EBSearchBusClickTypeSearch;
-    [search setTitle:@"查询班车" forState:UIControlStateNormal];
-    [search setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [search addTarget:self action:@selector(searchBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    search.layer.cornerRadius = EB_HeightOfButton / 2;
-    [search setBackgroundColor:EB_RGBColor(157, 197, 236)];
     [self addSubview:search];
     self.searchBtn = search;
 }
@@ -217,7 +213,7 @@
     CGFloat padding = EB_PaddingOfSearchBusView;
     [self.exchangeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(ws).with.offset(padding / 2 + EB_HeightOfButton + padding * 2 - height / 2);
-        make.left.equalTo(ws.myPositionBtn.mas_right).with.offset(0);
+        make.left.equalTo(ws.myPositionBtn.mas_right).with.offset(-8);
         make.height.mas_equalTo(height);//高度
         make.width.mas_equalTo(width);//宽度
     }];

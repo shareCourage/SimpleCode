@@ -147,7 +147,7 @@
     NSMutableArray *newDates = [NSMutableArray array];
     PHCalenderDay *currentDay = [EBUserInfo sharedEBUserInfo].currentCalendarDay;
     for (NSString *obj in sortArray) {
-        NSString *string = [NSString stringWithFormat:@"%ld-%02ld-%02ld",currentDay.year, currentDay.month, [obj integerValue]];
+        NSString *string = [NSString stringWithFormat:@"%ld-%02ld-%02ld",(unsigned long)currentDay.year, (unsigned long)currentDay.month, (long)[obj integerValue]];
         [newDates addObject:string];
     }
     NSString *newString = [EBTool stringConnected:newDates connectString:@","];

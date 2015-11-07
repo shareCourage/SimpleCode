@@ -55,6 +55,9 @@
 
 - (NSString *)insertSymbolString:(NSString *)symbol atIndex:(NSUInteger)index;
 
+
+- (CGSize)boundingRectWithSize:(CGSize)size font:(UIFont *)font;
+- (CGSize)stringSizeWithFont:(UIFont *)font height:(CGFloat)height;
 @end
 
 

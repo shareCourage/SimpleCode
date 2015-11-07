@@ -113,26 +113,26 @@
     
     CGFloat departTimeX = 20;
     CGFloat departTimeY = 0;
-    CGFloat departTimeW = 60;
     CGFloat departTimeH = height;
+    CGFloat departTimeW = [self.departTimeL boundingRectWithSize:CGSizeMake(MAXFLOAT, height)].width;
     self.departTimeL.frame = CGRectMake(departTimeX, departTimeY, departTimeW, departTimeH);
     
-    CGFloat totalDistanceX = CGRectGetMaxX(self.departTimeL.frame);
+    CGFloat totalDistanceX = CGRectGetMaxX(self.departTimeL.frame)  + padding;
     CGFloat totalDistanceY = 0;
-    CGFloat totalDistanceW = 80;
+    CGFloat totalDistanceW = [self.totalDistanceL boundingRectWithSize:CGSizeMake(MAXFLOAT, height)].width;
     CGFloat totalDistanceH = height;
     self.totalDistanceL.frame  = CGRectMake(totalDistanceX, totalDistanceY, totalDistanceW, totalDistanceH);
     
     CGFloat totalTimeX = CGRectGetMaxX(self.totalDistanceL.frame) + padding;
     CGFloat totalTimeY = 0;
-    CGFloat totalTimeW = 60;
+    CGFloat totalTimeW = [self.totalTimeL boundingRectWithSize:CGSizeMake(MAXFLOAT, height)].width;
     CGFloat totalTimeH = height;
     self.totalTimeL.frame  = CGRectMake(totalTimeX, totalTimeY, totalTimeW, totalTimeH);
 }
 
 - (void)secondViewLayout {
     CGFloat top = EB_Top;
-    CGFloat height = EB_Height;
+    CGFloat height = EB_Height - 3;
     CGFloat padding = 10;
 
     CGFloat secondViewX = 0;

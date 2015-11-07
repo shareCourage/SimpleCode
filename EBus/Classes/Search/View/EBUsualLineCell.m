@@ -69,8 +69,10 @@
     UIView *priceView = [[UIView alloc] init];
     UILabel *price = [[UILabel alloc] init];
     UILabel *strickOut = [[UILabel alloc] init];
+    strickOut.textColor = EB_RGBColor(114, 114, 114);
     strickOut.font = [UIFont systemFontOfSize:11];
-    
+    price.textAlignment = NSTextAlignmentRight;
+    strickOut.textAlignment = NSTextAlignmentRight;
     price.text = @"price";
     strickOut.text = @"strick";
     
@@ -94,10 +96,11 @@
         make.right.equalTo(ws.mas_right).with.offset(-right);//离父控件右边
     }];
     
+    
     CGFloat priceW = 60;
     CGFloat priceH = 30;
     CGFloat priceX = 0;
-    CGFloat priceY = 0;
+    CGFloat priceY = self.strickoutPriceL.hidden ? 10 : 0;
     self.priceL.frame = CGRectMake(priceX, priceY, priceW, priceH);
     
     CGFloat strickoutPriceW = 60;
@@ -117,14 +120,29 @@
 - (void)setUpData:(EBBaseModel *)model {
     if ([model isKindOfClass:[EBSearchResultModel class]]) {
         EBSearchResultModel *result = (EBSearchResultModel *)model;
-        self.priceL.text = [NSString stringWithFormat:@"￥%@元",result.price];
-#warning 根据具体需求，具体更改
-        if ([result.tradePrice floatValue] != [result.price floatValue]) {
-            self.strickoutPriceL.hidden = YES;
-            self.strickoutPriceL.attributedText = nil;
+        if ([result.openType integerValue] == 3) {//跟团
+            self.priceL.text = nil;
         } else {
+            self.priceL.text = [NSString stringWithFormat:@"￥%@元",result.price];
+        }
+        if ([result.openType integerValue] == 1) {//购买
+            self.strickoutPriceL.hidden = YES;
+            self.strickoutPriceL.text = nil;
+        } else {//报名 、 跟团
             self.strickoutPriceL.hidden = NO;
-            self.strickoutPriceL.attributedText = [self attributedString:[NSString stringWithFormat:@"￥%@元",result.price]];
+            if (self.isShowBuyView) {//判断右边的accessoryView出现的时候,用灰色的颜色，同时文字的颜色
+                self.strickoutPriceL.text = [NSString stringWithFormat:@"已有%@人",result.perNum];
+                self.strickoutPriceL.textColor = EB_RGBColor(114, 114, 114);
+            } else {
+                if ([result.openType integerValue] == 2) {//报名
+                    self.strickoutPriceL.text = [NSString stringWithFormat:@"%@人报名",result.perNum];
+                    self.strickoutPriceL.textColor = EB_RGBColor(228, 155, 67);
+                } else if ([result.openType integerValue] == 3) {//跟团
+                    self.strickoutPriceL.text = [NSString stringWithFormat:@"%@人跟团",result.perNum];
+                    self.strickoutPriceL.textColor = EB_GroupColor;
+                }
+                [self.strickoutPriceL setSystemFontOf14];
+            }
         }
         
     } else if ([model isKindOfClass:[EBBoughtModel class]]){
@@ -183,7 +201,7 @@
     self.accessoryView = self.buyBtn;
 }
 
-#pragma mark - method
+#pragma mark - method ...11.07 useless
 - (NSAttributedString *)attributedString:(NSString *)price {
     NSAttributedString *attrStr =
     [[NSAttributedString alloc]initWithString:price

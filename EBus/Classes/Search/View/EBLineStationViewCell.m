@@ -19,7 +19,20 @@
 
 - (void)setStation:(EBLineStation *)station {
     _station = station;
-    self.textLabel.text = station.station;
+    NSString *titleText = nil;
+    NSUInteger lengthAA = 8;
+    if (self.width > 320) {
+        lengthAA = 11;
+    } else {
+        lengthAA = 8;
+    };
+    if (station.station.length > lengthAA) {//大于8个字符的，就进行拼接
+        titleText = [station.station substringWithRange:NSMakeRange(0, lengthAA)];
+        titleText = [titleText stringByAppendingString:@".."];
+    } else {
+        titleText = station.station;
+    }
+    self.textLabel.text = titleText;
     
     NSString *imageString = nil;
     if (station.isOn) {

@@ -18,8 +18,10 @@
 
 #import "EBSponsorController.h"
 
-@interface EBSearchResultController () <EBUsualLineCellDelegate>
+@interface EBSearchResultController () <EBUsualLineCellDelegate, UITableViewDataSource, UITableViewDelegate>
 
+@property (nonatomic, weak) UITableView *tableView;
+@property (nonatomic, weak) UIImageView *backgroundImageView;
 @property (nonatomic, strong) NSMutableArray *dataSource;
 
 @end
@@ -40,6 +42,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"搜索结果";
+    [self tableViewImplementation];
     EB_WS(ws);
     self.tableView.header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [ws refresh];
@@ -47,24 +50,35 @@
     [self.tableView.header beginRefreshing];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self bottomViewImplementation];
-    self.backgroundImageViewDisappear = NO;
+}
+
+- (void)tableViewImplementation {
+    CGFloat tvX = 0;
+    CGFloat tvY = 0;
+    CGFloat tvW = EB_WidthOfScreen;
+    CGFloat tvH = EB_HeightOfScreen - 60;
+    CGRect tvF = CGRectMake(tvX, tvY, tvW, tvH);
+    UITableView *tableView = [[UITableView alloc] initWithFrame:tvF style:UITableViewStylePlain];
+    tableView.dataSource = self;
+    tableView.delegate = self;
+    UIImageView *backgroundImageView = [[UIImageView alloc] init];
+    backgroundImageView.contentMode = UIViewContentModeCenter;
+    UIImage *image = [UIImage imageNamed:@"main_background"];
+    backgroundImageView.image = image;
+    tableView.backgroundView = backgroundImageView;
+    self.backgroundImageView = backgroundImageView;
+    [self.view addSubview:tableView];
+    self.tableView = tableView;
 }
 
 #pragma mark  - Implementation
 - (void)bottomViewImplementation {
     CGFloat bottomH = 60;
-//    CGFloat bottomY = EB_HeightOfScreen - bottomH - 64;
-    UIView *bottom = [[UIView alloc] initWithFrame:CGRectMake(0, 0, EB_WidthOfScreen, bottomH)];
-    bottom.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.6];
-//    [self.view addSubview:bottom];
-    self.tableView.tableFooterView = bottom;
-    
-    UIButton *programe = [UIButton buttonWithType:UIButtonTypeCustom];
-    [programe setTitle:@"我来规划线路" forState:UIControlStateNormal];
-    programe.titleLabel.font = [UIFont systemFontOfSize:20];
-    [programe setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [programe setBackgroundColor:EB_RGBColor(157, 197, 236)];
-    programe.layer.cornerRadius = 25;
+    CGFloat bottomY = EB_HeightOfScreen - bottomH;
+    UIView *bottom = [[UIView alloc] initWithFrame:CGRectMake(0, bottomY, EB_WidthOfScreen, bottomH)];
+    bottom.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:bottom];
+    UIButton *programe = [UIButton eb_buttonWithTitle:@"我来规划线路"];
     [programe addTarget:self action:@selector(programeBtnClick) forControlEvents:UIControlEventTouchUpInside];
     [bottom addSubview:programe];
     CGFloat padding = 5;
@@ -116,7 +130,11 @@
             EBSearchResultModel *model = [[EBSearchResultModel alloc] initWithDict:dict];
             [self.dataSource addObject:model];
         }
-        self.backgroundImageViewDisappear = YES;
+        if (self.dataSource.count == 0) {
+            self.backgroundImageView.hidden = NO;
+        } else {
+            self.backgroundImageView.hidden = YES;
+        }
         [self.tableView reloadData];
     } errorBlock:^(NSError *error) {
         [self.tableView.header endRefreshing];

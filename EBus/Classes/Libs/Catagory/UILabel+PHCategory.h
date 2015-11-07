@@ -28,4 +28,6 @@
 - (void)setSystemFontOf22;
 - (void)setSystemFontOf23;
 
+- (CGSize)boundingRectWithSize:(CGSize)size;
+
 @end

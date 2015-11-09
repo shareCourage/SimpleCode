@@ -14,6 +14,7 @@
 #import "EBSearchResultModel.h"
 #import "EBHotView.h"
 #import "EBHotLabel.h"
+
 @interface EBSearchViewController () <EBSearchBusViewDelegate, EBUsualLineCellDelegate, EBHotViewDelegate>
 
 @property (nonatomic, strong) NSMutableArray *dataSource;

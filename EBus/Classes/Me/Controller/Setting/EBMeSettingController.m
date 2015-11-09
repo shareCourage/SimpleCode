@@ -14,7 +14,7 @@
 #import "EBUserInfo.h"
 
 #import "EBMoreViewController.h"
-#import "EBMyOrderController.h"
+#import "EBMyOrderListController.h"
 #import "EBSuggestController.h"
 #import "EBSZTViewController.h"
 
@@ -95,8 +95,8 @@
     ticket.option = ^{
         __strong typeof(self) strongSelf = ws;
         if (![EBTool presentLoginVC:strongSelf completion:nil]) {
-            EBMyOrderController *order = [[EBMyOrderController alloc] init];
-            [strongSelf.navigationController pushViewController:order animated:YES];
+            EBMyOrderListController *orderList = [[EBMyOrderListController alloc] init];
+            [strongSelf.navigationController pushViewController:orderList animated:YES];
         }
     };
     PHSettingItem *notification = [PHSettingArrowItem itemWithTitle:@"我的通知" destVcClass:nil];

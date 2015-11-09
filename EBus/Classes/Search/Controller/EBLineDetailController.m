@@ -80,13 +80,16 @@
         buyT.resultModel = self.resultModel;
         [self.navigationController pushViewController:buyT animated:YES];
     } else if (openType == 2) {//报名
-        [self signApply];
+        [self signApply:@"报名"];
     } else if (openType == 3) { //跟团
-        [self signApply];
+        [self signApply:@"跟团"];
     }
 }
 
-- (void)signApply {
+- (void)signApply:(NSString *)title {
+    NSString *success = [NSString stringWithFormat:@"%@成功",title];
+    NSString *beenSuccess = [NSString stringWithFormat:@"已%@",title];
+    NSString *failure = [NSString stringWithFormat:@"%@失败",title];
     if (self.resultModel.lineId && self.resultModel.onStationId && self.resultModel.offStationId ) {
         NSDictionary *parameters = @{static_Argument_customerId     : [EBUserInfo sharedEBUserInfo].loginId,
                                      static_Argument_customerName   : [EBUserInfo sharedEBUserInfo].loginName,
@@ -104,15 +107,15 @@
             NSString *code = dict[static_Argument_returnCode];
             NSString *info = dict[static_Argument_returnInfo];
             if ([code integerValue] == 500) {
-                [MBProgressHUD showSuccess:@"报名成功" toView:self.view];
+                [MBProgressHUD showSuccess:success toView:self.view];
                 [EBTool popToAttentionControllWithIndex:1 controller:self];
-            } else if ([info isEqualToString:@"已报名"]){
-                [MBProgressHUD showSuccess:@"已报名" toView:self.view];
+            } else if ([info isEqualToString:beenSuccess]){
+                [MBProgressHUD showSuccess:beenSuccess toView:self.view];
             } else {
-                [MBProgressHUD showError:@"报名失败" toView:self.view];
+                [MBProgressHUD showError:failure toView:self.view];
             }
         } errorBlock:^(NSError *error) {
-            [MBProgressHUD showError:@"报名失败" toView:self.view];
+            [MBProgressHUD showError:failure toView:self.view];
         }];
     }
 }

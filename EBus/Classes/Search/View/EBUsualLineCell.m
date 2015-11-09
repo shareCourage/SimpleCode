@@ -148,6 +148,7 @@
     } else if ([model isKindOfClass:[EBBoughtModel class]]){
         EBBoughtModel *bought = (EBBoughtModel *)model;
         self.priceL.text = [NSString stringWithFormat:@"￥%@元",bought.tradePrice];
+        self.strickoutPriceL.hidden = YES;
     }
 }
 

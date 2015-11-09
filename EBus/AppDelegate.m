@@ -12,8 +12,6 @@
 #import <AlipaySDK/AlipaySDK.h>
 #import "WXApi.h"
 
-#import "WechatPayUtil.h"
-
 @interface AppDelegate () <WXApiDelegate>
 
 @end

@@ -11,5 +11,6 @@
 @interface UIButton (EBButton)
 
 + (instancetype)eb_buttonWithTitle:(NSString *)title;
++ (instancetype)eb_buttonWithFrame:(CGRect)frame target:(id)target action:(SEL)action Title:(NSString *)title;
 
 @end

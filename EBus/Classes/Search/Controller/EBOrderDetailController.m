@@ -14,18 +14,21 @@
 #import "EBOrderStatusView.h"
 #import "EBPayTypeView.h"
 #import "EBUserInfo.h"
+#import "EBPayTool.h"
+
 @interface EBOrderDetailController () <UITableViewDataSource, UITableViewDelegate, EBPayTypeViewDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, weak) UITableView *tableView;
+@property (nonatomic, weak) EBOrderStatusView *orderStatusView;
 @property (nonatomic, strong) NSMutableArray *dataSource;
 @property (nonatomic, weak) EBPayTypeView *payTypeView;
-
-
 @property(nonatomic, strong)UIAlertView *alertView;
 
 @end
 
 @implementation EBOrderDetailController
+
+
 - (UIAlertView *)alertView {
     if (!_alertView) {
         _alertView = [[UIAlertView alloc] initWithTitle:@"取消订单" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
@@ -146,6 +149,7 @@
         make.left.equalTo(infoV).with.offset(0);
         make.right.equalTo(infoV).with.offset(0);
     }];
+    self.orderStatusView = orderV;
 }
 
 - (void)payClick:(UIButton *)sender {
@@ -202,10 +206,48 @@
 
 #pragma mark - EBPayTypeViewDelegate
 - (void)payTypeView:(EBPayTypeView *)titleView didSelectIndex:(NSUInteger)index {
-    if (index == 0) {
-        
-    } else if (index == 1) {
-        
+    if (index == 0) {//点击了支付宝支付
+        if ([self.orderModel.payType integerValue] == 1) {//如果之前的支付方式是支付宝，那么不需要更改支付方式
+            //这里直接进行支付宝支付
+            [self alipayOrWechatPay:EBPayTypeOfAlipay orderModel:self.orderModel];
+        } else if ([self.orderModel.payType integerValue] == 2) {//之前是微信支付，先更改为支付宝支付
+            //更改支付方式为支付宝支付
+            [MBProgressHUD showMessage:nil toView:self.view];
+            [self changePayTypeTo:EBPayTypeOfAlipay success:^(NSDictionary *dict) {
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                NSString *code = dict[static_Argument_returnCode];
+                EBLog(@"returnInfo -> %@  %@", dict[static_Argument_returnInfo], code);
+                if ([code integerValue] == 500) {
+                    self.orderModel.payType = @(1);//将原始数据model的支付方式也进行更改为支付宝支付
+                    self.orderStatusView.orderModel = self.orderModel;
+                    [self alipayOrWechatPay:EBPayTypeOfAlipay orderModel:self.orderModel];
+                }
+            } failure:^(NSError *error) {
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                [MBProgressHUD showError:@"更改支付方式失败" toView:self.view];
+            }];
+        }
+    } else if (index == 1) {//点击了微信支付
+        if ([self.orderModel.payType integerValue] == 1) {//判断之前的支付方式是不是微信支付
+            //更改支付方式为微信支付
+            [MBProgressHUD showMessage:nil toView:self.view];
+            [self changePayTypeTo:EBPayTypeOfWeChat success:^(NSDictionary *dict) {
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                NSString *code = dict[static_Argument_returnCode];
+                EBLog(@"returnInfo -> %@  %@", dict[static_Argument_returnInfo], code);
+                if ([code integerValue] == 500) {
+                    self.orderModel.payType = @(2);//将原始数据model的支付方式也进行更改为微信支付
+                    self.orderStatusView.orderModel = self.orderModel;
+                    [self alipayOrWechatPay:EBPayTypeOfWeChat orderModel:self.orderModel];
+                }
+            } failure:^(NSError *error) {
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                [MBProgressHUD showError:@"更改支付方式失败" toView:self.view];
+            }];
+        } else if ([self.orderModel.payType integerValue] == 2) {
+            //这里直接进行微信支付
+            [self alipayOrWechatPay:EBPayTypeOfWeChat orderModel:self.orderModel];
+        }
     } else if (index == 2) {
         
     }
@@ -242,5 +284,71 @@
                         [MBProgressHUD showError:@"取消失败"];
                     }];
     }
+}
+
+#pragma mark - pay
+- (void)alipayOrWechatPay:(EBPayType)type orderModel:(EBOrderDetailModel *)orderModel {
+    EB_WS(ws);
+    EBPayTool *payTool = [EBPayTool sharedEBPayTool];
+    switch (type) {
+        case EBPayTypeOfAlipay:
+            if ([EBTool canOpenApplication:@"alipayShare://"]) {//判断是否安装了支付宝
+                [payTool aliPayWithModel:orderModel completion:^(NSDictionary *dict) {
+                    EBLog(@"%@->%@", NSStringFromSelector(_cmd),dict);
+                    __strong typeof(self) strontSelf = ws;
+                    NSNumber *status = dict[static_Argument_resultStatus];
+                    if ([status integerValue] == 9000) {//9000、支付成功 //6001、用户中途取消
+                        [MBProgressHUD showSuccess:@"支付成功" toView:strontSelf.view];
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [EBTool popToAttentionControllWithIndex:0 controller:strontSelf];
+                        });
+                    } else {
+                        [MBProgressHUD showError:@"支付失败" toView:strontSelf.view];
+                    }
+                }];
+            } else {
+                [MBProgressHUD showError:@"手机未安装支付宝" toView:self.view];
+            }
+            break;
+        case EBPayTypeOfWeChat:
+            if ([EBPayTool canPayByWeXin]) {
+                [payTool wxPayWithModel:orderModel completion:^(NSDictionary *dict) {
+                    NSString *string = dict[static_Argument_payResult];
+                    __strong typeof(self) strontSelf = ws;
+                    if ([string isEqualToString:@"success"]) {
+                        [MBProgressHUD showSuccess:@"支付成功" toView:strontSelf.view];
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [EBTool popToAttentionControllWithIndex:0 controller:strontSelf];
+                        });
+                    } else if ([string isEqualToString:@"failure"]) {
+                        [MBProgressHUD showError:@"支付失败" toView:strontSelf.view];
+                    }
+                }];
+            } else {
+                [MBProgressHUD showError:@"手机未安装微信" toView:self.view];
+            }
+            break;
+        default:
+            break;
+    }
+}
+#pragma mark - Change Pay Type
+- (void)changePayTypeTo:(EBPayType)to success:(EBOptionDict)dictB failure:(EBOptionError)errorB {
+    if (!self.orderModel.ID) return;//如果没有支付单号，结束操作
+    NSNumber *payType = nil;
+    if (to == EBPayTypeOfAlipay) {
+        payType = @(1);
+    } else if (to == EBPayTypeOfWeChat) {
+        payType = @(2);
+    } else if (to == EBPayTypeOfSZT) {
+        payType = @(3);
+    } else {
+        return;
+    }
+    NSDictionary *parameters = @{static_Argument_userName : [EBUserInfo sharedEBUserInfo].loginName,
+                                 static_Argument_userId : [EBUserInfo sharedEBUserInfo].loginId,
+                                 static_Argument_payType : payType,
+                                 static_Argument_id : self.orderModel.ID};
+    [EBNetworkRequest POST:static_Url_ChangePayType parameters:parameters dictBlock:dictB errorBlock:errorB];
 }
 @end

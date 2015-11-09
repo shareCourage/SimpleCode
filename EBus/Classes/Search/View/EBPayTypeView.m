@@ -53,10 +53,11 @@
         titleL.layer.borderWidth = 1.f;
         titleL.text = @"支付方式";
         titleL.textAlignment = NSTextAlignmentCenter;
+        [titleL setSystemFontOf22];
         [self addSubview:titleL];
         self.titleLabel = titleL;
         
-        [self addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapClick)]];
+//        [self addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapClick)]];
         self.backgroundColor = [UIColor clearColor];
         
         UIView *backView = [[UIView alloc] init];
@@ -82,7 +83,6 @@
     button.backgroundColor = [UIColor whiteColor];
     button.layer.borderColor = [UIColor lightGrayColor].CGColor;
     button.layer.borderWidth = 1.f;
-    
     // 设置图片
     if (name.length != 0) {
         button.imageView.contentMode = UIViewContentModeCenter;
@@ -93,13 +93,15 @@
     }
     
     [button setTitle:title forState:UIControlStateNormal];
-    [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     button.titleLabel.font = [UIFont systemFontOfSize:15];
     button.titleLabel.textAlignment = NSTextAlignmentLeft;
+    UIColor *titleColor = [UIColor blackColor];
+    [button setTitleColor:titleColor forState:UIControlStateNormal];
+    [button setTitleColor:[titleColor colorWithAlphaComponent:0.5f] forState:UIControlStateHighlighted];
     [self addSubview:button];
     [self.buttons addObject:button];
     // 监听
-    [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchDown];
+    [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
 
 }
 
@@ -148,7 +150,9 @@
 }
 
 - (void)tapClick {
-    self.hidden = YES;
+    [UIView animateWithDuration:1.f animations:^{
+        self.hidden = YES;
+    }];
 }
 
 

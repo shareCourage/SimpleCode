@@ -17,7 +17,7 @@
 #import "payRequsestHandler.h"
 #import "WXUtil.h"
 
-@interface EBPayTool () <UIAlertViewDelegate>
+@interface EBPayTool ()
 
 @property (nonatomic, copy) EBOptionDict completion;
 

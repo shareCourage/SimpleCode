@@ -180,6 +180,7 @@
     CGRect yearF = CGRectMake(yearX, yearY, yearW, yearH);
     UILabel *yearMonth = [[UILabel alloc] initWithFrame:yearF];
     yearMonth.textAlignment = NSTextAlignmentCenter;
+    [yearMonth setSystemFontOf20];
     yearMonth.text = [NSString stringWithFormat:@"%@年%@月",@([EBUserInfo sharedEBUserInfo].currentCalendarDay.year),@([EBUserInfo sharedEBUserInfo].currentCalendarDay.month)];
     [self addSubview:yearMonth];
     
@@ -260,11 +261,9 @@
     CGFloat addBW = width / 3 - 20;
     CGFloat addBH = btnViewH;
     CGRect addBF = CGRectMake(addBX, addBY, addBW, addBH);
-    UIButton *addB = [UIButton buttonWithFrame:addBF target:self action:@selector(addBusClick) normalImage:nil title:@"我要加车"];
-    [addB setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    UIButton *addB = [UIButton eb_buttonWithFrame:addBF target:self action:@selector(addBusClick) Title:@"我要加车"];
     addB.backgroundColor = EB_RGBColor(156, 193, 85);
     [btnView addSubview:addB];
-    addB.layer.cornerRadius = addBH / 2;
     self.addBusBtn = addB;
     
     CGFloat buyBX = CGRectGetMaxX(addB.frame) + 20;
@@ -272,11 +271,8 @@
     CGFloat buyBW = width * 2 / 3 -  40;
     CGFloat buyBH = btnViewH;
     CGRect buyBF = CGRectMake(buyBX, buyBY, buyBW, buyBH);
-    UIButton *buyB = [UIButton buttonWithFrame:buyBF target:self action:@selector(buyBtnClick) normalImage:nil title:@"购买"];
-    buyB.backgroundColor = EB_RGBColor(156, 196, 236);
-    [buyB setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    UIButton *buyB = [UIButton eb_buttonWithFrame:buyBF target:self action:@selector(buyBtnClick) Title:@"购买"];
     [btnView addSubview:buyB];
-    buyB.layer.cornerRadius = buyBH / 2;
     self.buyBtn = buyB;
 }
 @end

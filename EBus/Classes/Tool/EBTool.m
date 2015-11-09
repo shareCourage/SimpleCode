@@ -66,7 +66,6 @@
     }
     NSString *loginName = [EBUserInfo sharedEBUserInfo].loginName;
     NSString *loginId = [EBUserInfo sharedEBUserInfo].loginId;
-#warning 为了测试，现在这里设为==
     if (loginName.length != 0 && loginId.length != 0) {
         if (completion) completion();
         return NO;

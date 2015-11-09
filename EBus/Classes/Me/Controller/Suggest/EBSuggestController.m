@@ -38,6 +38,7 @@
     self.commitBtn.layer.cornerRadius = self.commitBtn.frame.size.height / 2;
     [self.commitBtn setBackgroundColor:EB_DefaultColor];
     [self.commitBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.commitBtn setTitleColor:[UIColor lightGrayColor] forState:UIControlStateHighlighted];
     int i = 1000;
     for (UIButton *btn in self.suggestBtns) {
         btn.tag = i;

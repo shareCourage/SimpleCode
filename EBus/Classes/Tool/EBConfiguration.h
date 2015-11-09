@@ -58,6 +58,10 @@ static NSString *static_Url_CancelOrder         = @"http://app.szebus.net/order/
 
 static NSString *static_Url_TransferOfRecentLine    = @"http://app.szebus.net/order/phone/second/now/data";
 
+static NSString *static_Url_SetSZTNo                = @"http://app.szebus.net/szt/phone/set/info";
+static NSString *static_Url_ChangePayType           = @"http://app.szebus.net/order/phone/change/pay/type";
+static NSString *static_Url_MyOrder                 = @"http://app.szebus.net/order/phone/main/data";
+
 static NSString *static_Argument_returnData     = @"returnData";
 static NSString *static_Argument_returnCode     = @"returnCode";
 static NSString *static_Argument_returnInfo     = @"returnInfo";
@@ -94,6 +98,8 @@ static NSString *static_Argument_tradePrice     = @"tradePrice";
 static NSString *static_Argument_payType        = @"payType";
 static NSString *static_Argument_sztNo          = @"sztNo";
 static NSString *static_Argument_id             = @"id";
-
+static NSString *static_Argument_resultStatus   = @"resultStatus";
+static NSString *static_Argument_payResult      = @"payResult";
+static NSString *static_Argument_payStatus      = @"payStatus";
 
 #endif /* EBConfiguration_h */

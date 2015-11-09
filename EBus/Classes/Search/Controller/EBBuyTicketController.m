@@ -17,7 +17,7 @@
 #import "EBOrderDetailModel.h"
 #import "EBOrderDetailController.h"
 #import "EBPayTool.h"
-
+#import "EBSZTBookController.h"
 
 @interface EBBuyTicketController () <EBCalenderViewDelegate, EBPayTypeViewDelegate>
 
@@ -292,7 +292,12 @@
     } else if (index == 1) {
         self.payType = EBPayTypeOfWeChat;
     } else if (index == 2) {
-        self.payType = EBPayTypeOfSZT;
+        EBSZTBookController *book = [[EBSZTBookController alloc] init];
+        book.dates = [self.dates copy];
+        book.resultModel = self.resultModel;
+        book.totalPrice = self.totalPrice;
+        [self.navigationController pushViewController:book animated:YES];
+//        self.payType = EBPayTypeOfSZT;
     } else if (index == 3) {
         self.payType = EBPayTypeOfOther;
     }

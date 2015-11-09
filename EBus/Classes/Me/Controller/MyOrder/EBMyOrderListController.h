@@ -6,8 +6,8 @@
 //  Copyright © 2015年 Goome. All rights reserved.
 //
 
-#import "PHTableViewController.h"
+#import "PHViewController.h"
 
-@interface EBMyOrderListController : PHTableViewController
+@interface EBMyOrderListController : PHViewController
 
 @end

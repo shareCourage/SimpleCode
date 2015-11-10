@@ -34,7 +34,6 @@
 		A907EA691BDF7737006E99C1 /* EBSZTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A907EA671BDF7737006E99C1 /* EBSZTViewController.m */; settings = {ASSET_TAGS = (); }; };
 		A907EA6A1BDF7737006E99C1 /* EBSZTViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A907EA681BDF7737006E99C1 /* EBSZTViewController.xib */; settings = {ASSET_TAGS = (); }; };
 		A907EA6D1BDF77BE006E99C1 /* EBMyOrderListController.m in Sources */ = {isa = PBXBuildFile; fileRef = A907EA6C1BDF77BE006E99C1 /* EBMyOrderListController.m */; settings = {ASSET_TAGS = (); }; };
-		A907EA701BDF77E2006E99C1 /* EBMyOrderDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = A907EA6F1BDF77E2006E99C1 /* EBMyOrderDetailController.m */; settings = {ASSET_TAGS = (); }; };
 		A907EA761BE05FA8006E99C1 /* EBAttentionController.m in Sources */ = {isa = PBXBuildFile; fileRef = A907EA751BE05FA8006E99C1 /* EBAttentionController.m */; settings = {ASSET_TAGS = (); }; };
 		A907EA791BE060AC006E99C1 /* EBAttentionTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = A907EA781BE060AC006E99C1 /* EBAttentionTitleView.m */; settings = {ASSET_TAGS = (); }; };
 		A907EA7C1BE061CA006E99C1 /* EBAttentionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A907EA7B1BE061CA006E99C1 /* EBAttentionButton.m */; settings = {ASSET_TAGS = (); }; };
@@ -105,6 +104,9 @@
 		A91A4B061BF0AB9A00AD7E1F /* EBMyOrderCompletedModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A91A4B051BF0AB9A00AD7E1F /* EBMyOrderCompletedModel.m */; settings = {ASSET_TAGS = (); }; };
 		A91A4B091BF0ABAD00AD7E1F /* EBMyOrderUncompletedModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A91A4B081BF0ABAD00AD7E1F /* EBMyOrderUncompletedModel.m */; settings = {ASSET_TAGS = (); }; };
 		A91A4B0C1BF0AD9200AD7E1F /* EBMyOrderModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A91A4B0B1BF0AD9200AD7E1F /* EBMyOrderModel.m */; settings = {ASSET_TAGS = (); }; };
+		A91A4B0F1BF18B1D00AD7E1F /* EBMyOrderTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = A91A4B0E1BF18B1D00AD7E1F /* EBMyOrderTableView.m */; settings = {ASSET_TAGS = (); }; };
+		A91A4B111BF1981000AD7E1F /* me_myOrder_title@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91A4B101BF1981000AD7E1F /* me_myOrder_title@2x.png */; settings = {ASSET_TAGS = (); }; };
+		A91A4B131BF1982400AD7E1F /* me_myOrder_title@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91A4B121BF1982400AD7E1F /* me_myOrder_title@3x.png */; settings = {ASSET_TAGS = (); }; };
 		A99EFB5F1BDDD8EA0074EC55 /* PHCalenderView.m in Sources */ = {isa = PBXBuildFile; fileRef = A99EFB581BDDD8EA0074EC55 /* PHCalenderView.m */; settings = {ASSET_TAGS = (); }; };
 		A99EFB601BDDD8EA0074EC55 /* PHCalenderViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A99EFB5A1BDDD8EA0074EC55 /* PHCalenderViewCell.m */; settings = {ASSET_TAGS = (); }; };
 		A99EFB611BDDD8EA0074EC55 /* PHCalenderDay.m in Sources */ = {isa = PBXBuildFile; fileRef = A99EFB5C1BDDD8EA0074EC55 /* PHCalenderDay.m */; settings = {ASSET_TAGS = (); }; };
@@ -304,8 +306,6 @@
 		A907EA681BDF7737006E99C1 /* EBSZTViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EBSZTViewController.xib; sourceTree = "<group>"; };
 		A907EA6B1BDF77BE006E99C1 /* EBMyOrderListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBMyOrderListController.h; sourceTree = "<group>"; };
 		A907EA6C1BDF77BE006E99C1 /* EBMyOrderListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBMyOrderListController.m; sourceTree = "<group>"; };
-		A907EA6E1BDF77E2006E99C1 /* EBMyOrderDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBMyOrderDetailController.h; sourceTree = "<group>"; };
-		A907EA6F1BDF77E2006E99C1 /* EBMyOrderDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBMyOrderDetailController.m; sourceTree = "<group>"; };
 		A907EA741BE05FA8006E99C1 /* EBAttentionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBAttentionController.h; sourceTree = "<group>"; };
 		A907EA751BE05FA8006E99C1 /* EBAttentionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBAttentionController.m; sourceTree = "<group>"; };
 		A907EA771BE060AC006E99C1 /* EBAttentionTitleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBAttentionTitleView.h; sourceTree = "<group>"; };
@@ -403,6 +403,10 @@
 		A91A4B081BF0ABAD00AD7E1F /* EBMyOrderUncompletedModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBMyOrderUncompletedModel.m; sourceTree = "<group>"; };
 		A91A4B0A1BF0AD9200AD7E1F /* EBMyOrderModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBMyOrderModel.h; sourceTree = "<group>"; };
 		A91A4B0B1BF0AD9200AD7E1F /* EBMyOrderModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBMyOrderModel.m; sourceTree = "<group>"; };
+		A91A4B0D1BF18B1D00AD7E1F /* EBMyOrderTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBMyOrderTableView.h; sourceTree = "<group>"; };
+		A91A4B0E1BF18B1D00AD7E1F /* EBMyOrderTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBMyOrderTableView.m; sourceTree = "<group>"; };
+		A91A4B101BF1981000AD7E1F /* me_myOrder_title@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "me_myOrder_title@2x.png"; sourceTree = "<group>"; };
+		A91A4B121BF1982400AD7E1F /* me_myOrder_title@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "me_myOrder_title@3x.png"; sourceTree = "<group>"; };
 		A99EFB571BDDD8EA0074EC55 /* PHCalenderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHCalenderView.h; sourceTree = "<group>"; };
 		A99EFB581BDDD8EA0074EC55 /* PHCalenderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHCalenderView.m; sourceTree = "<group>"; };
 		A99EFB591BDDD8EA0074EC55 /* PHCalenderViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHCalenderViewCell.h; sourceTree = "<group>"; };
@@ -791,6 +795,8 @@
 				A907EA1F1BDF5D34006E99C1 /* me_accessoryView@2x.png */,
 				A907EA1D1BDF5662006E99C1 /* me_header@2x.png */,
 				A907EA1B1BDF564A006E99C1 /* me_header@3x.png */,
+				A91A4B101BF1981000AD7E1F /* me_myOrder_title@2x.png */,
+				A91A4B121BF1982400AD7E1F /* me_myOrder_title@3x.png */,
 			);
 			path = Me;
 			sourceTree = "<group>";
@@ -855,8 +861,6 @@
 			children = (
 				A907EA6B1BDF77BE006E99C1 /* EBMyOrderListController.h */,
 				A907EA6C1BDF77BE006E99C1 /* EBMyOrderListController.m */,
-				A907EA6E1BDF77E2006E99C1 /* EBMyOrderDetailController.h */,
-				A907EA6F1BDF77E2006E99C1 /* EBMyOrderDetailController.m */,
 			);
 			path = MyOrder;
 			sourceTree = "<group>";
@@ -986,6 +990,8 @@
 				A91A4AFE1BF09F3000AD7E1F /* EBMyOrderCell.m */,
 				A91A4B001BF09F6200AD7E1F /* EBMyOrderHeaderView.h */,
 				A91A4B011BF09F6200AD7E1F /* EBMyOrderHeaderView.m */,
+				A91A4B0D1BF18B1D00AD7E1F /* EBMyOrderTableView.h */,
+				A91A4B0E1BF18B1D00AD7E1F /* EBMyOrderTableView.m */,
 			);
 			path = MyOrder;
 			sourceTree = "<group>";
@@ -1987,8 +1993,10 @@
 				A907EA9C1BE06968006E99C1 /* Attention_group@3x.png in Resources */,
 				A9F960811BCF3A480011BC73 /* MBProgressHUD.bundle in Resources */,
 				A919217A1BDE37F10005E2A3 /* login_telephone@2x.png in Resources */,
+				A91A4B111BF1981000AD7E1F /* me_myOrder_title@2x.png in Resources */,
 				A9DDC57F1BE84DF1006395E3 /* search_drag_left@3x.png in Resources */,
 				A907EAA01BE06968006E99C1 /* Attention_sponsor@3x.png in Resources */,
+				A91A4B131BF1982400AD7E1F /* me_myOrder_title@3x.png in Resources */,
 				A907EA8B1BE0683C006E99C1 /* Attention_group@2x.png in Resources */,
 				A91A4AE31BEDC53400AD7E1F /* search_map_departPass@2x.png in Resources */,
 				A907EA6A1BDF7737006E99C1 /* EBSZTViewController.xib in Resources */,
@@ -2145,6 +2153,7 @@
 				A9FC05661BCD0B7E00870580 /* PHSettingSwitchItem.m in Sources */,
 				A907EABD1BE22468006E99C1 /* EBPriceView.m in Sources */,
 				A9F960831BCF3A480011BC73 /* NSDate+PHCategory.m in Sources */,
+				A91A4B0F1BF18B1D00AD7E1F /* EBMyOrderTableView.m in Sources */,
 				A9F960821BCF3A480011BC73 /* NSArray+MySeperateString.m in Sources */,
 				A9DF68F01BD78E9900368B27 /* EBPhotoAnnotation.m in Sources */,
 				A9F9608B1BCF3A480011BC73 /* UIProgressView+PHCategory.m in Sources */,
@@ -2164,7 +2173,6 @@
 				A9FC05511BCD0B0C00870580 /* PHViewController.m in Sources */,
 				A91A4B061BF0AB9A00AD7E1F /* EBMyOrderCompletedModel.m in Sources */,
 				A907EA691BDF7737006E99C1 /* EBSZTViewController.m in Sources */,
-				A907EA701BDF77E2006E99C1 /* EBMyOrderDetailController.m in Sources */,
 				A91921751BDE33030005E2A3 /* EBLoginViewController.m in Sources */,
 				A9F1AB1B1BD8C83A00B85843 /* EBLineStationView.m in Sources */,
 				A9DDC5691BE7587F006395E3 /* EBPayTypeButton.m in Sources */,

@@ -13,4 +13,6 @@
 
 @property (nonatomic, strong) EBOrderDetailModel *orderModel;
 
+@property (nonatomic, assign) BOOL canFromMyOrder;
+
 @end

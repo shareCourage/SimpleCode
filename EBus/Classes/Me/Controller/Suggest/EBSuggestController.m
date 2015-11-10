@@ -46,6 +46,7 @@
         btn.layer.borderWidth = 0.5f;
         [btn setTitle:self.btnTitles[i - 1000] forState:UIControlStateNormal];
         i ++;
+        [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     self.suggestTextView.layer.cornerRadius = 5;

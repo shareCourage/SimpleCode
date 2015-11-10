@@ -16,6 +16,35 @@
 
 @implementation EBTool
 
++ (NSString *)stringFromStatus:(NSInteger)status {
+    NSString *string = nil;
+    if (status == 0) {
+        string = @"未支付";
+    } else if (status == 1) {
+        string = @"已取消";
+    } else if (status == 2) {
+        string = @"已支付";
+    } else if (status == 3) {
+        string = @"已退票";
+    } else if (status == 4) {
+        string = @"退款中";
+    }
+    return string;
+}
++ (NSString *)stringFromPayType:(NSInteger)payType {
+    NSString *payStr = nil;
+    if (payType == 1) {
+        payStr = @"支付宝";
+    } else if (payType == 2) {
+        payStr = @"微信";
+    } else if (payType == 3) {
+        payStr = @"深圳通";
+    } else if (payType == 4) {
+        payStr = @"免费证件";
+    }
+    return payStr;
+}
+
 + (CLLocationManager *)locationManagerImplementation {
     // 1. 实例化定位管理器
     CLLocationManager *locationManager = [[CLLocationManager alloc] init];

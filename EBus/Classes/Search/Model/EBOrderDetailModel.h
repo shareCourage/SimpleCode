@@ -32,7 +32,6 @@
  timeKey = 20151103;
  userId = 956;
  userName = 15818572527;
- 
  lineName = "\U673a\U573a-\U5357\U5934";
  orderTime = "2015-11-03 11:04";
  originalPrice = "1.5";
@@ -64,3 +63,15 @@
 
 
 @end
+
+
+#import "EBSearchResultModel.h"
+@class EBOrderDetailModel;
+
+@interface EBSearchResultModel (OrderDetailModel)
+
++ (instancetype)resultModelFromOrderDetailModel:(EBOrderDetailModel *)orderModel;
+
+@end
+
+

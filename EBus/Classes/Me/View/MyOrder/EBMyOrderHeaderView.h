@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+@class EBMyOrderModel;
 
 @interface EBMyOrderHeaderView : UITableViewHeaderFooterView
+
++ (EBMyOrderHeaderView *)headerViewWithTableView:(UITableView *)tableView;
+
+@property (nonatomic, strong) EBMyOrderModel *orderModel;
 
 @end

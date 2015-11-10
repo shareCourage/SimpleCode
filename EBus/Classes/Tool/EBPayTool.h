@@ -28,4 +28,5 @@ singleton_interface(EBPayTool)
 - (void)wxPayWithModel:(EBOrderDetailModel *)orderModel completion:(EBOptionDict)completion;
 - (void)aliPayWithModel:(EBOrderDetailModel *)orderModel completion:(EBOptionDict)completion;
 
+
 @end

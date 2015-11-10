@@ -58,4 +58,7 @@
 + (BOOL)canOpenApplication:(NSString *)string;
 
 + (void)popToAttentionControllWithIndex:(NSUInteger)index controller:(UIViewController *)vc;
+
++ (NSString *)stringFromStatus:(NSInteger)status;
++ (NSString *)stringFromPayType:(NSInteger)payType;
 @end

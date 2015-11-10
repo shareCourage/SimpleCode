@@ -15,6 +15,8 @@
 #import "EBPayTypeView.h"
 #import "EBUserInfo.h"
 #import "EBPayTool.h"
+#import "EBMyOrderModel.h"
+#import "EBBuyTicketController.h"
 
 @interface EBOrderDetailController () <UITableViewDataSource, UITableViewDelegate, EBPayTypeViewDelegate, UIAlertViewDelegate>
 
@@ -24,6 +26,7 @@
 @property (nonatomic, weak) EBPayTypeView *payTypeView;
 @property(nonatomic, strong)UIAlertView *alertView;
 
+@property (nonatomic, weak) UIView *bottomView;
 @end
 
 @implementation EBOrderDetailController
@@ -107,8 +110,9 @@
         make.left.equalTo(ws.view).with.offset(0);
         make.right.equalTo(ws.view).with.offset(0);
     }];
-    
+    self.bottomView = infoV;
 
+    
     CGFloat bvH = 50;
     UIView *btnView = [[UIView alloc] init];
     [infoV addSubview:btnView];
@@ -118,6 +122,41 @@
         make.right.equalTo(infoV).with.offset(0);
         make.height.mas_equalTo(bvH);
     }];
+    if (self.canFromMyOrder && [self.orderModel.status integerValue] == 0) {
+        [self bottomHaveTwoButtonImplentation:btnView height:bvH];
+    } else if (self.canFromMyOrder) {
+        [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
+    } else {
+        [self bottomHaveTwoButtonImplentation:btnView height:bvH];
+    }
+    
+    EBOrderStatusView *orderV = [EBOrderStatusView orderStatusViewFromXib];
+    orderV.orderModel = self.orderModel;
+    [infoV addSubview:orderV];
+    [orderV mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(infoV).with.offset(0);
+        make.bottom.equalTo(btnView.mas_top).with.offset(0);
+        make.left.equalTo(infoV).with.offset(0);
+        make.right.equalTo(infoV).with.offset(0);
+    }];
+    self.orderStatusView = orderV;
+    
+    
+}
+- (void)bottomHaveOneButtonImplentation:(UIView *)btnView height:(CGFloat)height{
+    CGFloat padding = 20;
+    UIButton *orderAgainBtn = [UIButton eb_buttonWithFrame:CGRectZero target:self action:@selector(orderAgainClick) Title:@"续订"];
+    orderAgainBtn.layer.cornerRadius = height / 2;
+    [btnView addSubview:orderAgainBtn];
+    [orderAgainBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(btnView).with.offset(0);
+        make.bottom.equalTo(btnView).with.offset(0);
+        make.left.equalTo(btnView).with.offset(padding);
+        make.right.equalTo(btnView).with.offset(-padding);
+    }];
+}
+
+- (void)bottomHaveTwoButtonImplentation:(UIView *)btnView height:(CGFloat)bvH{
     NSArray *btnTitles = @[@"支付",@"取消订单"];
     NSUInteger count = btnTitles.count;
     for (NSUInteger i = 0; i < count; i ++) {
@@ -139,17 +178,13 @@
         btn.frame = btnF;
         [btnView addSubview:btn];
     }
-    
-    EBOrderStatusView *orderV = [EBOrderStatusView orderStatusViewFromXib];
-    orderV.orderModel = self.orderModel;
-    [infoV addSubview:orderV];
-    [orderV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(infoV).with.offset(0);
-        make.bottom.equalTo(btnView.mas_top).with.offset(0);
-        make.left.equalTo(infoV).with.offset(0);
-        make.right.equalTo(infoV).with.offset(0);
-    }];
-    self.orderStatusView = orderV;
+}
+
+#pragma mark - Target Method
+- (void)orderAgainClick {
+    EBBuyTicketController *buy = [[EBBuyTicketController alloc] init];
+    buy.resultModel = [EBSearchResultModel resultModelFromOrderDetailModel:self.orderModel];
+    [self.navigationController pushViewController:buy animated:YES];
 }
 
 - (void)payClick:(UIButton *)sender {
@@ -195,11 +230,8 @@
         cell.detailTextLabel.text = @"状态";
     } else {
         cell.textLabel.text = self.dataSource[indexPath.row - 1];
-        if ([self.orderModel.status integerValue] == 0) {
-            cell.detailTextLabel.text = @"未支付";
-        } else {
-            cell.detailTextLabel.text = @"已支付";
-        }
+        NSInteger status = [self.orderModel.status integerValue];
+        cell.detailTextLabel.text = [EBTool stringFromStatus:status];//将数字转化为为文字
     }
     return cell;
 }

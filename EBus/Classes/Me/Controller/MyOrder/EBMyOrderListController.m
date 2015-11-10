@@ -7,48 +7,23 @@
 //
 
 #import "EBMyOrderListController.h"
-#import <MJRefresh/MJRefresh.h>
-#import "EBUserInfo.h"
-#import "EBMyOrderCompletedModel.h"
-#import "EBMyOrderUncompletedModel.h"
-#import "EBMyOrderCell.h"
-
-typedef  NS_ENUM(NSUInteger, EBMyOrderType) {
-    EBMyOrderTypeOfCompleted = 1000,
-    EBMyOrderTypeOfUncompleted,
-};
-
-@interface EBMyOrderListController () <UITableViewDataSource, UITableViewDelegate>
-
-@property (nonatomic, strong) NSMutableArray *dataSourceCompleted;
-@property (nonatomic, strong) NSMutableArray *dataSourceUnCompleted;
-@property (nonatomic, assign) EBMyOrderType orderType;
+#import "EBMyOrderTableView.h"
+#import "EBMyOrderModel.h"
+#import "EBOrderDetailController.h"
+@interface EBMyOrderListController () <UIScrollViewDelegate, EBMyOrderTableViewDelegate>
 
 @property (nonatomic, weak) UISegmentedControl *segControl;
 @property (nonatomic, weak) UIScrollView *tableScrollView;
-@property (nonatomic, weak) UITableView *tableViewCompleted;
-@property (nonatomic, weak) UITableView *tableViewUnCompleted;
-@property (nonatomic, weak) UIImageView *backgroundImageView;
+@property (nonatomic, strong) NSMutableArray *tableViews;
 
 @end
 
 @implementation EBMyOrderListController
-- (NSMutableArray *)dataSourceCompleted {
-    if (!_dataSourceCompleted) {
-        _dataSourceCompleted = [NSMutableArray array];
+- (NSMutableArray *)tableViews {
+    if (!_tableViews) {
+        _tableViews = [NSMutableArray array];
     }
-    return _dataSourceCompleted;
-}
-
-- (NSMutableArray *)dataSourceUnCompleted {
-    if (!_dataSourceUnCompleted) {
-        _dataSourceUnCompleted = [NSMutableArray array];
-    }
-    return _dataSourceUnCompleted;
-}
-
-- (void)setOrderType:(EBMyOrderType)orderType {
-    _orderType = orderType;
+    return _tableViews;
 }
 
 - (void)viewDidLoad {
@@ -58,94 +33,6 @@ typedef  NS_ENUM(NSUInteger, EBMyOrderType) {
     [self segmentImplementation];
     [self scrollViewImplementation];
 }
-
-
-
-
-
-- (void)tableViewRefresh {
-    NSNumber *payStatus = nil;
-    if (self.orderType == EBMyOrderTypeOfCompleted) {
-        payStatus = @(2);
-    } else if (self.orderType == EBMyOrderTypeOfUncompleted) {
-        payStatus = @(1);
-    }
-    NSDictionary *parameters = @{static_Argument_userName : [EBUserInfo sharedEBUserInfo].loginName,
-                                 static_Argument_userId : [EBUserInfo sharedEBUserInfo].loginId,
-                                 static_Argument_payStatus : payStatus};
-    if (self.orderType == EBMyOrderTypeOfCompleted) {
-        [self myOrderRequest:parameters success:^(NSDictionary *dict) {
-            [self.tableViewCompleted.header endRefreshing];
-            NSArray *data = dict[static_Argument_returnData];
-            if (data.count == 0) return;
-            [self.dataSourceCompleted removeAllObjects];
-            for (NSDictionary *obj in data) {
-                EBMyOrderModel *myOrderModel = [[EBMyOrderCompletedModel alloc] initWithDict:obj];
-                [self.dataSourceCompleted addObject:myOrderModel];;
-            }
-            [self.tableViewCompleted reloadData];
-            
-        } failure:^(NSError *error) {
-            [self.tableViewCompleted.header endRefreshing];
-        }];
-    } else if (self.orderType == EBMyOrderTypeOfUncompleted) {
-        [self myOrderRequest:parameters success:^(NSDictionary *dict) {
-            [self.tableViewUnCompleted.header endRefreshing];
-            NSArray *data = dict[static_Argument_returnData];
-            if (data.count == 0) return;
-            [self.dataSourceUnCompleted removeAllObjects];
-            for (NSDictionary *obj in data) {
-                EBMyOrderModel *myOrderModel = [[EBMyOrderUncompletedModel alloc] initWithDict:obj];
-                [self.dataSourceUnCompleted addObject:myOrderModel];;
-            }
-            [self.tableViewUnCompleted reloadData];
-            
-        } failure:^(NSError *error) {
-            [self.tableViewUnCompleted.header endRefreshing];
-        }];
-    }
-}
-
-#pragma mark - UITableViewDataSource, UITableViewDelegate
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (tableView == self.tableViewCompleted) {
-        return self.dataSourceCompleted.count;
-    } else if (tableView == self.tableViewUnCompleted) {
-        return self.dataSourceUnCompleted.count;
-    }
-    return 0;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 100.f;
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    return nil;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [EBMyOrderCell cellWithTableView:tableView];
-}
-
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-}
-
-#pragma mark - UIScrollViewDelegate
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    NSUInteger index = (NSUInteger)scrollView.contentOffset.x / EB_WidthOfScreen;
-    self.segControl.selectedSegmentIndex = index;
-}
-
-#pragma mark - Request
-- (void)myOrderRequest:(id)parameters success:(EBOptionDict)dictBlock failure:(EBOptionError)errorBlock{
-    if (!parameters) return;
-    [EBNetworkRequest GET:static_Url_MyOrder parameters:parameters dictBlock:dictBlock errorBlock:errorBlock];
-}
-
 
 #pragma mark - Implementation
 - (void)segmentImplementation {
@@ -182,43 +69,52 @@ typedef  NS_ENUM(NSUInteger, EBMyOrderType) {
         CGFloat tableW = EB_WidthOfScreen;
         CGFloat tableH = scrollH;
         CGRect tableF = CGRectMake(tableX, tableY, tableW, tableH);
-        UITableView *tableView = [self tableViewImplementation];
-        tableView.frame = tableF;
-        tableView.delegate = self;
-        [scrollView addSubview:tableView];
-        if (i == 0) self.tableViewCompleted = tableView;
-        if (i == 1) self.tableViewUnCompleted = tableView;
+        EBMyOrderTableView *myTableView = [[EBMyOrderTableView alloc] initWithFrame:tableF];
+        myTableView.delegate = self;
+        myTableView.tag = EBMyOrderTypeOfCompleted + i;
+        [scrollView addSubview:myTableView];
+        [self.tableViews addObject:myTableView];
+        if (i == 0) {
+            [myTableView beginRefresh];
+        }
     }
     [self.view addSubview:scrollView];
     self.tableScrollView = scrollView;
 }
 
-- (UITableView *)tableViewImplementation {
-    UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
-    tableView.backgroundColor = [UIColor whiteColor];
-    EB_WS(ws);
-    tableView.header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        [ws tableViewRefresh];
-    }];
-    tableView.delegate = self;
-    tableView.dataSource = self;
-    UIImageView *backgroundImageView = [[UIImageView alloc] init];
-    backgroundImageView.contentMode = UIViewContentModeCenter;
-    UIImage *image = [UIImage imageNamed:@"main_background"];
-    backgroundImageView.image = image;
-    tableView.backgroundView = backgroundImageView;
-    self.backgroundImageView = backgroundImageView;
-    [self.view addSubview:tableView];
-    return tableView;
-}
 #pragma mark - Target
 - (void)segClick:(UISegmentedControl *)sender {
     CGPoint offset = CGPointMake(sender.selectedSegmentIndex * EB_WidthOfScreen, 0);
     [self.tableScrollView setContentOffset:offset animated:YES];
-    if (sender.selectedSegmentIndex == 0) {
-        self.orderType = EBMyOrderTypeOfCompleted;
-    } else if (sender.selectedSegmentIndex == 1) {
-        self.orderType = EBMyOrderTypeOfUncompleted;
+    [self tableViewReloadData:sender.selectedSegmentIndex];
+}
+
+#pragma mark - UIScrollViewDelegate
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    NSUInteger index = (NSUInteger)scrollView.contentOffset.x / EB_WidthOfScreen;
+    self.segControl.selectedSegmentIndex = index;
+    [self tableViewReloadData:index];
+}
+
+- (void)tableViewReloadData:(NSUInteger)index {
+    if (index >= self.tableViews.count) return;
+    EBMyOrderTableView *tableView = self.tableViews[index];
+    if (!tableView.isRefreshed) {
+        [tableView beginRefresh];
     }
 }
+#pragma mark - EBMyOrderTableViewDelegate
+- (void)mo_tableView:(EBMyOrderTableView *)tableView didSelect:(EBMyOrderModel *)orderModel {
+    EBLog(@"%@",orderModel.mainNo);
+    EBOrderDetailController *orderDetailVC = [[EBOrderDetailController alloc] init];
+    orderDetailVC.orderModel = orderModel;
+    orderDetailVC.canFromMyOrder = YES;
+    [self.navigationController pushViewController:orderDetailVC animated:YES];
+}
 @end
+
+
+
+
+
+

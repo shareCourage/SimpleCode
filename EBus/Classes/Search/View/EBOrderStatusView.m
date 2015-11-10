@@ -33,16 +33,7 @@
     if (orderModel) {
         self.originalPrice.text = [NSString stringWithFormat:@"原价：%@元",orderModel.originalPrice];
         self.payPrice.text = [NSString stringWithFormat:@"实付款：%@元",orderModel.tradePrice];
-        NSString *payTypeStr = nil;
-        if ([orderModel.payType integerValue] == 1) {
-            payTypeStr = @"支付宝";
-        } else if ([orderModel.payType integerValue] == 2) {
-            payTypeStr = @"微信";
-        } else if ([orderModel.payType integerValue] == 3) {
-            payTypeStr = @"深圳通";
-        } else if ([orderModel.payType integerValue] == 4) {
-            payTypeStr = @"其它";
-        }
+        NSString *payTypeStr = [EBTool stringFromPayType:[orderModel.payType integerValue]];
         self.payWay.text = [NSString stringWithFormat:@"支付方式：%@",payTypeStr];
         self.orderNumber.text = [NSString stringWithFormat:@"订单编号：%@",orderModel.mainNo];
         self.orderTime.text = [NSString stringWithFormat:@"下单时间：%@",orderModel.orderTime];

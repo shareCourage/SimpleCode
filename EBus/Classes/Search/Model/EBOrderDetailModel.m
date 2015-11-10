@@ -22,3 +22,27 @@
 }
 
 @end
+
+
+#import "EBOrderDetailModel.h"
+
+@implementation EBSearchResultModel (OrderDetailModel)
+
++ (instancetype)resultModelFromOrderDetailModel:(EBOrderDetailModel *)orderModel {
+    EBSearchResultModel *resultModel = [[EBSearchResultModel alloc] init];
+    resultModel.lineId = orderModel.lineId;
+    resultModel.offStationId = orderModel.offStationId;
+    resultModel.onStationId = orderModel.onStationId;
+    resultModel.startTime = orderModel.startTime;
+    resultModel.vehTime = orderModel.vehTime;
+    resultModel.onStationName = orderModel.onStationName;
+    resultModel.offStationName = orderModel.offStationName;
+    resultModel.mileage = orderModel.mileage;
+    resultModel.needTime = orderModel.needTime;
+    resultModel.ID = orderModel.ID;
+    resultModel.price = @([orderModel.tradePrice floatValue]);
+    resultModel.openType = @(1);
+    return resultModel;
+}
+
+@end

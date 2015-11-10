@@ -10,4 +10,5 @@
 
 @interface EBMyOrderCell : EBBaseLineCell
 
+
 @end

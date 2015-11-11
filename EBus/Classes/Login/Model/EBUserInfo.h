@@ -16,7 +16,7 @@ singleton_interface(EBUserInfo)
 
 @property (nonatomic, copy) NSString *loginName;
 @property (nonatomic, copy) NSString *loginId;
-
+@property (nonatomic, copy) NSString *sztNo;
 /* 用户日历上的当天 */
 @property (nonatomic, strong) NSDate *currentDate;
 @property (nonatomic, strong) PHCalenderDay *currentCalendarDay;

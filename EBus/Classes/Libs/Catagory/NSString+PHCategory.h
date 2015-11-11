@@ -10,11 +10,6 @@
 
 @interface NSString (PHCategory)
 
-/*
- *MD%加密
- */
-+ (NSString*)getSignForMD5:(NSString*)info;
-
 - (NSString *)MD5;
 - (NSString *)myMD5;
 - (NSString *)SHA1;//SHA1加密

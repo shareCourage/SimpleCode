@@ -20,6 +20,7 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *bookBtn;
 - (IBAction)bookClick:(id)sender;
+@property (weak, nonatomic) IBOutlet UILabel *sztNoL;
 
 @end
 
@@ -29,16 +30,30 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.title = @"深圳通卡预订";
+    if (self.myTitle.length != 0) {
+        self.navigationItem.title = self.myTitle;
+    } else {
+        self.navigationItem.title = @"深圳通卡预订";
+    }
     self.modifyBtn.layer.cornerRadius = self.modifyBtn.height / 2;
     self.bookBtn.layer.cornerRadius = self.bookBtn.height / 2;
+    self.sztNoL.layer.cornerRadius = self.sztNoL.height / 2;
+    self.sztNoL.layer.borderColor = [[UIColor lightGrayColor] colorWithAlphaComponent:0.7f].CGColor;
+    self.sztNoL.layer.borderWidth = 1.f;
     self.modifyBtn.backgroundColor = EB_DefaultColor;
     self.bookBtn.backgroundColor = EB_DefaultColor;
-
+    if (self.hidenBookBtn) {
+        self.bookBtn.hidden = YES;
+    }
+    if ([EBUserInfo sharedEBUserInfo].sztNo.length != 0) {
+        self.sztNoL.text = [NSString stringWithFormat:@"  卡号:%@",[EBUserInfo sharedEBUserInfo].sztNo];
+    } else {
+        self.sztNoL.text = @"请绑定深圳通";
+    }
 }
 
 - (IBAction)modifyClick:(id)sender {
-    if (EB_iOS(8)) {
+    if (EB_iOS(8.0)) {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"请输入深圳通卡号" message:nil preferredStyle:UIAlertControllerStyleAlert];
         [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
             textField.placeholder = @"请输入9位深圳通卡号";

@@ -12,7 +12,7 @@
 @implementation EBUserInfo
 @synthesize loginName = _loginName;
 @synthesize loginId = _loginId;
-
+@synthesize sztNo = _sztNo;
 singleton_implementation(EBUserInfo)
 
 - (instancetype)init {
@@ -110,6 +110,18 @@ singleton_implementation(EBUserInfo)
     [[NSUserDefaults standardUserDefaults] setObject:loginId forKey:@"loginIdForKey"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 
+}
+
+- (NSString *)sztNo {
+    if (_sztNo == nil) {
+        _sztNo = [[NSUserDefaults standardUserDefaults] objectForKey:@"sztNoForKey"];
+    }
+    return _sztNo;
+}
+- (void)setSztNo:(NSString *)sztNo {
+    _sztNo = sztNo;
+    [[NSUserDefaults standardUserDefaults] setObject:sztNo forKey:@"sztNoForKey"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 @end

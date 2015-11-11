@@ -13,6 +13,7 @@
 #import "PHNavigationController.h"
 #import "PHTabBarController.h"
 #import "EBAttentionController.h"
+#import "PHCalenderDay.h"
 
 @implementation EBTool
 
@@ -184,7 +185,20 @@
     if ([EBUserInfo sharedEBUserInfo].loginName.length != 0 && [EBUserInfo sharedEBUserInfo].loginId.length != 0) {
         NSDictionary *paramters = @{static_Argument_customerId : [EBUserInfo sharedEBUserInfo].loginId,
                                     static_Argument_customerName : [EBUserInfo sharedEBUserInfo].loginName};
-        [EBNetworkRequest GET:static_Url_Open parameters:paramters dictBlock:nil errorBlock:nil];
+        [EBNetworkRequest GET:static_Url_Open parameters:paramters dictBlock:^(NSDictionary *dict) {
+        } errorBlock:^(NSError *error) {
+        }];
+        PHCalenderDay *currentDay = [EBUserInfo sharedEBUserInfo].currentCalendarDay;
+        NSString *today = [NSString stringWithFormat:@"%ld%02ld%02ld",(unsigned long)currentDay.year, (unsigned long)currentDay.month, (unsigned long)currentDay.day];
+        NSDictionary *parametersCustomer = @{static_Argument_id : [EBUserInfo sharedEBUserInfo].loginId,
+                                             static_Argument_loginName : [EBUserInfo sharedEBUserInfo].loginName,
+                                             static_Argument_loginCode : [today MD5]};
+        [EBNetworkRequest GET:static_Url_CustomerDetail parameters:parametersCustomer dictBlock:^(NSDictionary *dict) {
+            NSDictionary *returnData = dict[static_Argument_returnData];
+            NSString *sztNo = returnData[static_Argument_sztNo];
+            [EBUserInfo sharedEBUserInfo].sztNo = sztNo;
+        } errorBlock:^(NSError *error) {
+        }];
     }
 }
 

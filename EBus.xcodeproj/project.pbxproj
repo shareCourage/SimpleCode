@@ -31,8 +31,6 @@
 		A907EA551BDF764F006E99C1 /* EBMoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A907EA541BDF764F006E99C1 /* EBMoreViewController.m */; settings = {ASSET_TAGS = (); }; };
 		A907EA641BDF770D006E99C1 /* EBSuggestController.m in Sources */ = {isa = PBXBuildFile; fileRef = A907EA621BDF770D006E99C1 /* EBSuggestController.m */; settings = {ASSET_TAGS = (); }; };
 		A907EA651BDF770D006E99C1 /* EBSuggestController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A907EA631BDF770D006E99C1 /* EBSuggestController.xib */; settings = {ASSET_TAGS = (); }; };
-		A907EA691BDF7737006E99C1 /* EBSZTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A907EA671BDF7737006E99C1 /* EBSZTViewController.m */; settings = {ASSET_TAGS = (); }; };
-		A907EA6A1BDF7737006E99C1 /* EBSZTViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A907EA681BDF7737006E99C1 /* EBSZTViewController.xib */; settings = {ASSET_TAGS = (); }; };
 		A907EA6D1BDF77BE006E99C1 /* EBMyOrderListController.m in Sources */ = {isa = PBXBuildFile; fileRef = A907EA6C1BDF77BE006E99C1 /* EBMyOrderListController.m */; settings = {ASSET_TAGS = (); }; };
 		A907EA761BE05FA8006E99C1 /* EBAttentionController.m in Sources */ = {isa = PBXBuildFile; fileRef = A907EA751BE05FA8006E99C1 /* EBAttentionController.m */; settings = {ASSET_TAGS = (); }; };
 		A907EA791BE060AC006E99C1 /* EBAttentionTitleView.m in Sources */ = {isa = PBXBuildFile; fileRef = A907EA781BE060AC006E99C1 /* EBAttentionTitleView.m */; settings = {ASSET_TAGS = (); }; };
@@ -107,6 +105,16 @@
 		A91A4B0F1BF18B1D00AD7E1F /* EBMyOrderTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = A91A4B0E1BF18B1D00AD7E1F /* EBMyOrderTableView.m */; settings = {ASSET_TAGS = (); }; };
 		A91A4B111BF1981000AD7E1F /* me_myOrder_title@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91A4B101BF1981000AD7E1F /* me_myOrder_title@2x.png */; settings = {ASSET_TAGS = (); }; };
 		A91A4B131BF1982400AD7E1F /* me_myOrder_title@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91A4B121BF1982400AD7E1F /* me_myOrder_title@3x.png */; settings = {ASSET_TAGS = (); }; };
+		A91A4B1E1BF3244400AD7E1F /* EBFreeCertificateController.m in Sources */ = {isa = PBXBuildFile; fileRef = A91A4B1C1BF3244400AD7E1F /* EBFreeCertificateController.m */; settings = {ASSET_TAGS = (); }; };
+		A91A4B1F1BF3244400AD7E1F /* EBFreeCertificateController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A91A4B1D1BF3244400AD7E1F /* EBFreeCertificateController.xib */; settings = {ASSET_TAGS = (); }; };
+		A91A4B231BF348DA00AD7E1F /* EBUploadZJView.m in Sources */ = {isa = PBXBuildFile; fileRef = A91A4B221BF348DA00AD7E1F /* EBUploadZJView.m */; settings = {ASSET_TAGS = (); }; };
+		A91A4B261BF348EE00AD7E1F /* EBUploadSFZView.m in Sources */ = {isa = PBXBuildFile; fileRef = A91A4B251BF348EE00AD7E1F /* EBUploadSFZView.m */; settings = {ASSET_TAGS = (); }; };
+		A91A4B291BF3490100AD7E1F /* EBValidatingView.m in Sources */ = {isa = PBXBuildFile; fileRef = A91A4B281BF3490100AD7E1F /* EBValidatingView.m */; settings = {ASSET_TAGS = (); }; };
+		A91A4B2C1BF3492600AD7E1F /* EBValidatResultView.m in Sources */ = {isa = PBXBuildFile; fileRef = A91A4B2B1BF3492600AD7E1F /* EBValidatResultView.m */; settings = {ASSET_TAGS = (); }; };
+		A91A4B2E1BF3493D00AD7E1F /* EBUploadZJView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A91A4B2D1BF3493D00AD7E1F /* EBUploadZJView.xib */; settings = {ASSET_TAGS = (); }; };
+		A91A4B301BF3495100AD7E1F /* EBUploadSFZView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A91A4B2F1BF3495100AD7E1F /* EBUploadSFZView.xib */; settings = {ASSET_TAGS = (); }; };
+		A91A4B321BF3496D00AD7E1F /* EBValidatingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A91A4B311BF3496D00AD7E1F /* EBValidatingView.xib */; settings = {ASSET_TAGS = (); }; };
+		A91A4B341BF3498400AD7E1F /* EBValidatResultView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A91A4B331BF3498400AD7E1F /* EBValidatResultView.xib */; settings = {ASSET_TAGS = (); }; };
 		A99EFB5F1BDDD8EA0074EC55 /* PHCalenderView.m in Sources */ = {isa = PBXBuildFile; fileRef = A99EFB581BDDD8EA0074EC55 /* PHCalenderView.m */; settings = {ASSET_TAGS = (); }; };
 		A99EFB601BDDD8EA0074EC55 /* PHCalenderViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A99EFB5A1BDDD8EA0074EC55 /* PHCalenderViewCell.m */; settings = {ASSET_TAGS = (); }; };
 		A99EFB611BDDD8EA0074EC55 /* PHCalenderDay.m in Sources */ = {isa = PBXBuildFile; fileRef = A99EFB5C1BDDD8EA0074EC55 /* PHCalenderDay.m */; settings = {ASSET_TAGS = (); }; };
@@ -301,9 +309,6 @@
 		A907EA611BDF770D006E99C1 /* EBSuggestController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBSuggestController.h; sourceTree = "<group>"; };
 		A907EA621BDF770D006E99C1 /* EBSuggestController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBSuggestController.m; sourceTree = "<group>"; };
 		A907EA631BDF770D006E99C1 /* EBSuggestController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EBSuggestController.xib; sourceTree = "<group>"; };
-		A907EA661BDF7737006E99C1 /* EBSZTViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBSZTViewController.h; sourceTree = "<group>"; };
-		A907EA671BDF7737006E99C1 /* EBSZTViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBSZTViewController.m; sourceTree = "<group>"; };
-		A907EA681BDF7737006E99C1 /* EBSZTViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EBSZTViewController.xib; sourceTree = "<group>"; };
 		A907EA6B1BDF77BE006E99C1 /* EBMyOrderListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBMyOrderListController.h; sourceTree = "<group>"; };
 		A907EA6C1BDF77BE006E99C1 /* EBMyOrderListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBMyOrderListController.m; sourceTree = "<group>"; };
 		A907EA741BE05FA8006E99C1 /* EBAttentionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBAttentionController.h; sourceTree = "<group>"; };
@@ -407,6 +412,21 @@
 		A91A4B0E1BF18B1D00AD7E1F /* EBMyOrderTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBMyOrderTableView.m; sourceTree = "<group>"; };
 		A91A4B101BF1981000AD7E1F /* me_myOrder_title@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "me_myOrder_title@2x.png"; sourceTree = "<group>"; };
 		A91A4B121BF1982400AD7E1F /* me_myOrder_title@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "me_myOrder_title@3x.png"; sourceTree = "<group>"; };
+		A91A4B1B1BF3244400AD7E1F /* EBFreeCertificateController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBFreeCertificateController.h; sourceTree = "<group>"; };
+		A91A4B1C1BF3244400AD7E1F /* EBFreeCertificateController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBFreeCertificateController.m; sourceTree = "<group>"; };
+		A91A4B1D1BF3244400AD7E1F /* EBFreeCertificateController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EBFreeCertificateController.xib; sourceTree = "<group>"; };
+		A91A4B211BF348DA00AD7E1F /* EBUploadZJView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBUploadZJView.h; sourceTree = "<group>"; };
+		A91A4B221BF348DA00AD7E1F /* EBUploadZJView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBUploadZJView.m; sourceTree = "<group>"; };
+		A91A4B241BF348EE00AD7E1F /* EBUploadSFZView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBUploadSFZView.h; sourceTree = "<group>"; };
+		A91A4B251BF348EE00AD7E1F /* EBUploadSFZView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBUploadSFZView.m; sourceTree = "<group>"; };
+		A91A4B271BF3490100AD7E1F /* EBValidatingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBValidatingView.h; sourceTree = "<group>"; };
+		A91A4B281BF3490100AD7E1F /* EBValidatingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBValidatingView.m; sourceTree = "<group>"; };
+		A91A4B2A1BF3492600AD7E1F /* EBValidatResultView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBValidatResultView.h; sourceTree = "<group>"; };
+		A91A4B2B1BF3492600AD7E1F /* EBValidatResultView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBValidatResultView.m; sourceTree = "<group>"; };
+		A91A4B2D1BF3493D00AD7E1F /* EBUploadZJView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EBUploadZJView.xib; sourceTree = "<group>"; };
+		A91A4B2F1BF3495100AD7E1F /* EBUploadSFZView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EBUploadSFZView.xib; sourceTree = "<group>"; };
+		A91A4B311BF3496D00AD7E1F /* EBValidatingView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EBValidatingView.xib; sourceTree = "<group>"; };
+		A91A4B331BF3498400AD7E1F /* EBValidatResultView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EBValidatResultView.xib; sourceTree = "<group>"; };
 		A99EFB571BDDD8EA0074EC55 /* PHCalenderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHCalenderView.h; sourceTree = "<group>"; };
 		A99EFB581BDDD8EA0074EC55 /* PHCalenderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHCalenderView.m; sourceTree = "<group>"; };
 		A99EFB591BDDD8EA0074EC55 /* PHCalenderViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHCalenderViewCell.h; sourceTree = "<group>"; };
@@ -878,9 +898,6 @@
 		A907EA521BDF7629006E99C1 /* SZT */ = {
 			isa = PBXGroup;
 			children = (
-				A907EA661BDF7737006E99C1 /* EBSZTViewController.h */,
-				A907EA671BDF7737006E99C1 /* EBSZTViewController.m */,
-				A907EA681BDF7737006E99C1 /* EBSZTViewController.xib */,
 			);
 			path = SZT;
 			sourceTree = "<group>";
@@ -1007,6 +1024,35 @@
 				A91A4B0B1BF0AD9200AD7E1F /* EBMyOrderModel.m */,
 			);
 			path = MyOrder;
+			sourceTree = "<group>";
+		};
+		A91A4B1A1BF323FF00AD7E1F /* FreeCertificate */ = {
+			isa = PBXGroup;
+			children = (
+				A91A4B1B1BF3244400AD7E1F /* EBFreeCertificateController.h */,
+				A91A4B1C1BF3244400AD7E1F /* EBFreeCertificateController.m */,
+				A91A4B1D1BF3244400AD7E1F /* EBFreeCertificateController.xib */,
+			);
+			path = FreeCertificate;
+			sourceTree = "<group>";
+		};
+		A91A4B201BF3264000AD7E1F /* FreeCertificate */ = {
+			isa = PBXGroup;
+			children = (
+				A91A4B211BF348DA00AD7E1F /* EBUploadZJView.h */,
+				A91A4B221BF348DA00AD7E1F /* EBUploadZJView.m */,
+				A91A4B2D1BF3493D00AD7E1F /* EBUploadZJView.xib */,
+				A91A4B241BF348EE00AD7E1F /* EBUploadSFZView.h */,
+				A91A4B251BF348EE00AD7E1F /* EBUploadSFZView.m */,
+				A91A4B2F1BF3495100AD7E1F /* EBUploadSFZView.xib */,
+				A91A4B271BF3490100AD7E1F /* EBValidatingView.h */,
+				A91A4B281BF3490100AD7E1F /* EBValidatingView.m */,
+				A91A4B311BF3496D00AD7E1F /* EBValidatingView.xib */,
+				A91A4B2A1BF3492600AD7E1F /* EBValidatResultView.h */,
+				A91A4B2B1BF3492600AD7E1F /* EBValidatResultView.m */,
+				A91A4B331BF3498400AD7E1F /* EBValidatResultView.xib */,
+			);
+			path = FreeCertificate;
 			sourceTree = "<group>";
 		};
 		A99EFB561BDDD8DF0074EC55 /* Calender */ = {
@@ -1453,6 +1499,7 @@
 		A9FC05151BCD02B500870580 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				A91A4B1A1BF323FF00AD7E1F /* FreeCertificate */,
 				A907EA4E1BDF7629006E99C1 /* More */,
 				A907EA4F1BDF7629006E99C1 /* MyNotification */,
 				A907EA501BDF7629006E99C1 /* MyOrder */,
@@ -1477,6 +1524,7 @@
 		A9FC05171BCD02B500870580 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				A91A4B201BF3264000AD7E1F /* FreeCertificate */,
 				A91A4AFC1BF09F1C00AD7E1F /* MyOrder */,
 				A9FC05671BCD0B8900870580 /* Setting */,
 			);
@@ -1963,11 +2011,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A91A4B2E1BF3493D00AD7E1F /* EBUploadZJView.xib in Resources */,
 				A9FE49B71BE9C1C900708F62 /* AlipaySDK.bundle in Resources */,
 				A907EA9A1BE06968006E99C1 /* Attention_buy@3x.png in Resources */,
 				A91A4ADF1BEDC4EB00AD7E1F /* search_map_depart@2x.png in Resources */,
 				A907EA221BDF5D4C006E99C1 /* me_accessoryView@3x.png in Resources */,
 				A907EA301BDF7029006E99C1 /* tabBar_me_normal@3x.png in Resources */,
+				A91A4B301BF3495100AD7E1F /* EBUploadSFZView.xib in Resources */,
 				A9DF68ED1BD75CF400368B27 /* search_lineDetailPP_background@3x.png in Resources */,
 				A919217B1BDE37F10005E2A3 /* login_verificationCode@2x.png in Resources */,
 				A907EA321BDF7029006E99C1 /* tabBar_search_normal@3x.png in Resources */,
@@ -1999,7 +2049,6 @@
 				A91A4B131BF1982400AD7E1F /* me_myOrder_title@3x.png in Resources */,
 				A907EA8B1BE0683C006E99C1 /* Attention_group@2x.png in Resources */,
 				A91A4AE31BEDC53400AD7E1F /* search_map_departPass@2x.png in Resources */,
-				A907EA6A1BDF7737006E99C1 /* EBSZTViewController.xib in Resources */,
 				A907EA481BDF73D4006E99C1 /* tabBar_byBus_normal@2x.png in Resources */,
 				A9DDC5701BE780FE006395E3 /* search_pay_wechat@3x.png in Resources */,
 				A9FC05751BCE00F300870580 /* search_endPosition@3x.png in Resources */,
@@ -2038,6 +2087,7 @@
 				A907EABF1BE224BD006E99C1 /* EBPriceView.xib in Resources */,
 				A907EA2C1BDF7029006E99C1 /* tabBar_attention_normal@3x.png in Resources */,
 				A9DF68D81BD6440B00368B27 /* search_map_departPass@3x.png in Resources */,
+				A91A4B321BF3496D00AD7E1F /* EBValidatingView.xib in Resources */,
 				A9DF68D91BD6440B00368B27 /* search_map_endPass@3x.png in Resources */,
 				A907EA201BDF5D34006E99C1 /* me_accessoryView@2x.png in Resources */,
 				A9DF68CF1BD6415300368B27 /* search_map_end@3x.png in Resources */,
@@ -2049,6 +2099,7 @@
 				A91A4AD91BEDC35500AD7E1F /* search_exchange@2x.png in Resources */,
 				A907EA2E1BDF7029006E99C1 /* tabBar_byBus_normal@3x.png in Resources */,
 				A907EA491BDF73D4006E99C1 /* tabBar_byBus_select@2x.png in Resources */,
+				A91A4B341BF3498400AD7E1F /* EBValidatResultView.xib in Resources */,
 				A91921761BDE33030005E2A3 /* EBLoginViewController.xib in Resources */,
 				A907EA911BE0683C006E99C1 /* Attention_sponsorHL@2x.png in Resources */,
 				A9DF68661BCF961500368B27 /* icon_line_begin@2x.png in Resources */,
@@ -2064,6 +2115,7 @@
 				A9DDC5761BE84B51006395E3 /* search_pay_other@2x.png in Resources */,
 				A91A4AE71BEDC57C00AD7E1F /* search_checkPhoto@2x.png in Resources */,
 				A9DF68F71BD79E4B00368B27 /* search_drag_right@3x.png in Resources */,
+				A91A4B1F1BF3244400AD7E1F /* EBFreeCertificateController.xib in Resources */,
 				A9FC04E21BCCEC4000870580 /* Main.storyboard in Resources */,
 				A907EAA11BE06968006E99C1 /* Attention_sponsorHL@3x.png in Resources */,
 				A91A4AD51BEDC30200AD7E1F /* search_cell_start@2x.png in Resources */,
@@ -2151,6 +2203,7 @@
 				A9FC054F1BCD0B0C00870580 /* PHTabBarController.m in Sources */,
 				A9FC056D1BCDF9AB00870580 /* EBSearchBusView.m in Sources */,
 				A9FC05661BCD0B7E00870580 /* PHSettingSwitchItem.m in Sources */,
+				A91A4B1E1BF3244400AD7E1F /* EBFreeCertificateController.m in Sources */,
 				A907EABD1BE22468006E99C1 /* EBPriceView.m in Sources */,
 				A9F960831BCF3A480011BC73 /* NSDate+PHCategory.m in Sources */,
 				A91A4B0F1BF18B1D00AD7E1F /* EBMyOrderTableView.m in Sources */,
@@ -2159,6 +2212,7 @@
 				A9F9608B1BCF3A480011BC73 /* UIProgressView+PHCategory.m in Sources */,
 				A9DF68E41BD72D0B00368B27 /* EBLineDetail.m in Sources */,
 				A9DF68A21BD4C18A00368B27 /* EBSearchResultController.m in Sources */,
+				A91A4B261BF348EE00AD7E1F /* EBUploadSFZView.m in Sources */,
 				A9DDC54E1BE37731006395E3 /* EBAttentionModel.m in Sources */,
 				A9F960861BCF3A480011BC73 /* NSString+PHCategory.m in Sources */,
 				A9DF68FA1BD880CC00368B27 /* EBHotView.m in Sources */,
@@ -2172,12 +2226,12 @@
 				A9F1AB2E1BD9E6D100B85843 /* EBMeSettingController.m in Sources */,
 				A9FC05511BCD0B0C00870580 /* PHViewController.m in Sources */,
 				A91A4B061BF0AB9A00AD7E1F /* EBMyOrderCompletedModel.m in Sources */,
-				A907EA691BDF7737006E99C1 /* EBSZTViewController.m in Sources */,
 				A91921751BDE33030005E2A3 /* EBLoginViewController.m in Sources */,
 				A9F1AB1B1BD8C83A00B85843 /* EBLineStationView.m in Sources */,
 				A9DDC5691BE7587F006395E3 /* EBPayTypeButton.m in Sources */,
 				A9DF68AB1BD50B0700368B27 /* EBLineDetailController.m in Sources */,
 				A91A4ACA1BECAFF400AD7E1F /* EBTransferController.m in Sources */,
+				A91A4B2C1BF3492600AD7E1F /* EBValidatResultView.m in Sources */,
 				A9F9608E1BCF3A480011BC73 /* UIView+PHLayout.m in Sources */,
 				A907EA6D1BDF77BE006E99C1 /* EBMyOrderListController.m in Sources */,
 				A91A4AFF1BF09F3000AD7E1F /* EBMyOrderCell.m in Sources */,
@@ -2196,6 +2250,7 @@
 				A9DF68721BD090CC00368B27 /* EBSelectPositionCell.m in Sources */,
 				A907EAAE1BE0A34F006E99C1 /* EBAttentionCell.m in Sources */,
 				A99EFB611BDDD8EA0074EC55 /* PHCalenderDay.m in Sources */,
+				A91A4B231BF348DA00AD7E1F /* EBUploadZJView.m in Sources */,
 				A9DF68691BCF9DF700368B27 /* EBSelectPositionController.m in Sources */,
 				A9DF685E1BCF948800368B27 /* EBSysMapView.m in Sources */,
 				A9F960841BCF3A480011BC73 /* NSDictionary+PHCategory.m in Sources */,
@@ -2230,6 +2285,7 @@
 				A9F960881BCF3A480011BC73 /* UIColor+PHCategory.m in Sources */,
 				A91A4AC11BEB7AFA00AD7E1F /* ApiXml.mm in Sources */,
 				A99EFB601BDDD8EA0074EC55 /* PHCalenderViewCell.m in Sources */,
+				A91A4B291BF3490100AD7E1F /* EBValidatingView.m in Sources */,
 				A91A4AC71BEB7CF400AD7E1F /* WXUtil.mm in Sources */,
 				A9F9608D1BCF3A480011BC73 /* UITextField+PHCategory.m in Sources */,
 				A9F960801BCF3A480011BC73 /* MBProgressHUD+MJ.m in Sources */,

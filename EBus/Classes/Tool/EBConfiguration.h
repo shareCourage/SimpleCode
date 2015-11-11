@@ -31,36 +31,37 @@ static NSString *static_WeChat_PayUrl       = @"https://api.mch.weixin.qq.com/pa
 static NSString *static_WeChat_MchId        = @"1269105601";
 static NSString *static_WeChat_Key          = @"sdfASD65468ASs48sv4a66wqwe99POMM";
 static NSString *static_WeChat_notifyUrl    = @"http://app.szebus.net/weixin/phone/notify/url";
-
 static NSString *static_App_Schemes         = @"eBus";
 
-static NSString *static_Url_Open            = @"http://app.szebus.net/phone/open";
-static NSString *static_Url_SearchBus_Label = @"http://app.szebus.net/label/phone/bc/data";
-static NSString *static_Url_HotLabel        = @"http://app.szebus.net/label/phone/data";
 static NSString *static_Url_Host            = @"http://app.szebus.net";
-static NSString *static_Url_SearchBus       = @"http://app.szebus.net/bc/phone/data";
-static NSString *static_Url_LineDetail      = @"http://app.szebus.net/line/phone/detail";
-static NSString *static_Url_LinePhoto       = @"http://app.szebus.net/line/phone/station/fj";
-static NSString *static_Url_SurplusTicket   = @"http://app.szebus.net/bc/phone/surplus/ticket";
-static NSString *static_Url_GetCode         = @"http://app.szebus.net/code/phone/login";
-static NSString *static_Url_Login           = @"http://app.szebus.net/phone/login";
-static NSString *static_Url_Suggest         = @"http://app.szebus.net/evaluate/phone/upload/data";
-static NSString *static_Url_Order           = @"http://app.szebus.net/order/phone/create";
-static NSString *static_Url_Sign            = @"http://app.szebus.net/demand/phone/apply/save";
-static NSString *static_Url_Sponsor         = @"http://app.szebus.net/demand/phone/line/create";
+#define static_Url_Open                 [static_Url_Host stringByAppendingPathComponent:@"phone/open"]
+#define static_Url_SearchBus_Label      [static_Url_Host stringByAppendingPathComponent:@"label/phone/bc/data"]
+#define static_Url_HotLabel             [static_Url_Host stringByAppendingPathComponent:@"label/phone/data"]
+#define static_Url_SearchBus            [static_Url_Host stringByAppendingPathComponent:@"bc/phone/data"]
+#define static_Url_LineDetail           [static_Url_Host stringByAppendingPathComponent:@"line/phone/detail"]
+#define static_Url_LinePhoto            [static_Url_Host stringByAppendingPathComponent:@"line/phone/station/fj"]
+#define static_Url_SurplusTicket        [static_Url_Host stringByAppendingPathComponent:@"bc/phone/surplus/ticket"]
+#define static_Url_GetCode              [static_Url_Host stringByAppendingPathComponent:@"code/phone/login"]
+#define static_Url_Login                [static_Url_Host stringByAppendingPathComponent:@"phone/login"]
+#define static_Url_Suggest              [static_Url_Host stringByAppendingPathComponent:@"evaluate/phone/upload/data"]
+#define static_Url_Order                [static_Url_Host stringByAppendingPathComponent:@"order/phone/create"]
+#define static_Url_Sign                 [static_Url_Host stringByAppendingPathComponent:@"demand/phone/apply/save"]
+#define static_Url_Sponsor              [static_Url_Host stringByAppendingPathComponent:@"demand/phone/line/create"]
+#define static_Url_AttentionOfBought    [static_Url_Host stringByAppendingPathComponent:@"customer/phone/buy/data"]
+#define static_Url_AttentionOfSign      [static_Url_Host stringByAppendingPathComponent:@"demand/phone/system/apply/data"]
+#define static_Url_AttentionOfGroup     [static_Url_Host stringByAppendingPathComponent:@"demand/phone/customer/apply/data"]
+#define static_Url_AttentionOfSponsor   [static_Url_Host stringByAppendingPathComponent:@"demand/phone/customer/create/data"]
+#define static_Url_CancelOrder          [static_Url_Host stringByAppendingPathComponent:@"order/phone/cancel"]
+#define static_Url_TransferOfRecentLine [static_Url_Host stringByAppendingPathComponent:@"order/phone/second/now/data"]
+#define static_Url_SetSZTNo             [static_Url_Host stringByAppendingPathComponent:@"szt/phone/set/info"]
+#define static_Url_ChangePayType        [static_Url_Host stringByAppendingPathComponent:@"order/phone/change/pay/type"]
+#define static_Url_MyOrder              [static_Url_Host stringByAppendingPathComponent:@"order/phone/main/data"]
+#define static_Url_Refund               [static_Url_Host stringByAppendingPathComponent:@"order/phone/refund"]
+#define static_Url_CustomerDetail       [static_Url_Host stringByAppendingPathComponent:@"customer/phone/detail"]//用户信息
+#define static_Url_CustomerCertificate  [static_Url_Host stringByAppendingPathComponent:@"customer/phone/certificate/detail"]//用户免费证件认证状态信息
+#define static_Url_UploadCertificate    [static_Url_Host stringByAppendingPathComponent:@"phone/upload/customer/certificate"]//用户免费证件上传
 
-static NSString *static_Url_AttentionOfBought   = @"http://app.szebus.net/customer/phone/buy/data";
-static NSString *static_Url_AttentionOfSign     = @"http://app.szebus.net/demand/phone/system/apply/data";
-static NSString *static_Url_AttentionOfGroup    = @"http://app.szebus.net/demand/phone/customer/apply/data";
-static NSString *static_Url_AttentionOfSponsor  = @"http://app.szebus.net/demand/phone/customer/create/data";
 
-static NSString *static_Url_CancelOrder         = @"http://app.szebus.net/order/phone/cancel";
-
-static NSString *static_Url_TransferOfRecentLine    = @"http://app.szebus.net/order/phone/second/now/data";
-
-static NSString *static_Url_SetSZTNo                = @"http://app.szebus.net/szt/phone/set/info";
-static NSString *static_Url_ChangePayType           = @"http://app.szebus.net/order/phone/change/pay/type";
-static NSString *static_Url_MyOrder                 = @"http://app.szebus.net/order/phone/main/data";
 
 static NSString *static_Argument_returnData     = @"returnData";
 static NSString *static_Argument_returnCode     = @"returnCode";
@@ -101,5 +102,35 @@ static NSString *static_Argument_id             = @"id";
 static NSString *static_Argument_resultStatus   = @"resultStatus";
 static NSString *static_Argument_payResult      = @"payResult";
 static NSString *static_Argument_payStatus      = @"payStatus";
-
+static NSString *static_Argument_runDate        = @"runDate";
+static NSString *static_Argument_status         = @"status";
 #endif /* EBConfiguration_h */
+
+
+
+
+
+
+//static NSString *static_Url_Open            = @"http://app.szebus.net/phone/open";
+//static NSString *static_Url_SearchBus_Label = @"http://app.szebus.net/label/phone/bc/data";
+//static NSString *static_Url_HotLabel        = @"http://app.szebus.net/label/phone/data";
+//static NSString *static_Url_SearchBus       = @"http://app.szebus.net/bc/phone/data";
+//static NSString *static_Url_LineDetail      = @"http://app.szebus.net/line/phone/detail";
+//static NSString *static_Url_LinePhoto       = @"http://app.szebus.net/line/phone/station/fj";
+//static NSString *static_Url_SurplusTicket   = @"http://app.szebus.net/bc/phone/surplus/ticket";
+//static NSString *static_Url_GetCode         = @"http://app.szebus.net/code/phone/login";
+//static NSString *static_Url_Login           = @"http://app.szebus.net/phone/login";
+//static NSString *static_Url_Suggest         = @"http://app.szebus.net/evaluate/phone/upload/data";
+//static NSString *static_Url_Order           = @"http://app.szebus.net/order/phone/create";
+//static NSString *static_Url_Sign            = @"http://app.szebus.net/demand/phone/apply/save";
+//static NSString *static_Url_Sponsor         = @"http://app.szebus.net/demand/phone/line/create";
+//static NSString *static_Url_AttentionOfBought   = @"http://app.szebus.net/customer/phone/buy/data";
+//static NSString *static_Url_AttentionOfSign     = @"http://app.szebus.net/demand/phone/system/apply/data";
+//static NSString *static_Url_AttentionOfGroup    = @"http://app.szebus.net/demand/phone/customer/apply/data";
+//static NSString *static_Url_AttentionOfSponsor  = @"http://app.szebus.net/demand/phone/customer/create/data";
+//static NSString *static_Url_CancelOrder         = @"http://app.szebus.net/order/phone/cancel";
+//static NSString *static_Url_TransferOfRecentLine    = @"http://app.szebus.net/order/phone/second/now/data";
+//static NSString *static_Url_SetSZTNo                = @"http://app.szebus.net/szt/phone/set/info";
+//static NSString *static_Url_ChangePayType           = @"http://app.szebus.net/order/phone/change/pay/type";
+//static NSString *static_Url_MyOrder                 = @"http://app.szebus.net/order/phone/main/data";
+//static NSString *static_Url_Refund                  = @"http://app.szebus.net/order/phone/refund";//退票退款操作

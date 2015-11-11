@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="bookBtn" destination="Z92-tJ-Ecv" id="vHN-NK-FrQ"/>
                 <outlet property="modifyBtn" destination="IwW-y4-S8R" id="h1m-Gz-ugs"/>
+                <outlet property="sztNoL" destination="YuE-K1-g74" id="iQ0-zJ-RxM"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -17,7 +18,7 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="深圳通卡号" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="04S-64-we5">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="深圳通卡号" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="04S-64-we5">
                     <rect key="frame" x="5" y="80" width="370" height="50"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="50" id="gHO-KU-bms"/>
@@ -35,14 +36,16 @@
                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IwW-y4-S8R">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IwW-y4-S8R">
                     <rect key="frame" x="270" y="135" width="100" height="40"/>
                     <color key="backgroundColor" red="0.1294117719" green="0.50196081400000003" blue="0.96862751250000001" alpha="1" colorSpace="deviceRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="JN5-XU-NzP"/>
                         <constraint firstAttribute="width" constant="100" id="b6m-WW-qUz"/>
                     </constraints>
-                    <state key="normal" title="修改/绑定"/>
+                    <state key="normal" title="修改/绑定">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
                     <connections>
                         <action selector="modifyClick:" destination="-1" eventType="touchUpInside" id="fQz-dB-jze"/>
                     </connections>

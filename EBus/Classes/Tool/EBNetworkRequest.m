@@ -75,7 +75,6 @@
                            error:(EBOptionError)optionError {
     return [self POST:url parameters:parameters success:optionData error:optionError indicatorVisible:YES];
 }
-
 + (AFHTTPRequestOperation *)POST:(NSString *)url
                       parameters:(id)parameters
                          success:(EBOptionData)optionData

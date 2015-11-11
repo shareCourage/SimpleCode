@@ -14,5 +14,6 @@
 @property (nonatomic, strong) NSArray *dates;
 @property (nonatomic, assign) CGFloat totalPrice;
 @property (nonatomic, strong) EBSearchResultModel *resultModel;
-
+@property (nonatomic, copy) NSString *myTitle;
+@property (nonatomic, assign) BOOL hidenBookBtn;
 @end

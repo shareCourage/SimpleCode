@@ -16,7 +16,8 @@
 #import "EBMoreViewController.h"
 #import "EBMyOrderListController.h"
 #import "EBSuggestController.h"
-#import "EBSZTViewController.h"
+#import "EBSZTBookController.h"
+#import "EBFreeCertificateController.h"
 
 @interface EBMeSettingController () <UIAlertViewDelegate>
 {
@@ -101,21 +102,31 @@
     };
     PHSettingItem *notification = [PHSettingArrowItem itemWithTitle:@"我的通知" destVcClass:nil];
     notification.option = ^{
-        __strong typeof(self) strongSelf = ws;
-        if (![EBTool presentLoginVC:strongSelf completion:nil]) {
-            EBSZTViewController *sztVC = [[EBSZTViewController alloc] init];
-            [strongSelf.navigationController pushViewController:sztVC animated:YES];
-        }
+//        __strong typeof(self) strongSelf = ws;
+//        if (![EBTool presentLoginVC:strongSelf completion:nil]) {
+//            EBSZTViewController *sztVC = [[EBSZTViewController alloc] init];
+//            [strongSelf.navigationController pushViewController:sztVC animated:YES];
+//        }
     };
     PHSettingItem *szt = [PHSettingArrowItem itemWithTitle:@"深圳通卡" destVcClass:nil];
     szt.option = ^{
         __strong typeof(self) strongSelf = ws;
         if (![EBTool presentLoginVC:strongSelf completion:nil]) {
-            EBSZTViewController *sztVC = [[EBSZTViewController alloc] init];
+            EBSZTBookController *sztVC = [[EBSZTBookController alloc] init];
+            sztVC.myTitle = @"深圳通";
+            sztVC.hidenBookBtn = YES;
             [strongSelf.navigationController pushViewController:sztVC animated:YES];
         }
     };
     PHSettingItem *freeCertificate = [PHSettingArrowItem itemWithTitle:@"免费证件" destVcClass:nil];
+    freeCertificate.option = ^{
+        __strong typeof(self) strongSelf = ws;
+        if (![EBTool presentLoginVC:strongSelf completion:nil]) {
+            EBFreeCertificateController *freeCert = [[EBFreeCertificateController alloc] init];
+            [strongSelf.navigationController pushViewController:freeCert animated:YES];
+        }
+    };
+    
     PHSettingItem *advice = [PHSettingArrowItem itemWithTitle:@"投诉建议"];
     advice.option = ^{
         __strong typeof(self) strongSelf = ws;

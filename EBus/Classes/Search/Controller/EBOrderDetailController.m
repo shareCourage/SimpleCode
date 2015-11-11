@@ -24,7 +24,9 @@
 @property (nonatomic, weak) EBOrderStatusView *orderStatusView;
 @property (nonatomic, strong) NSMutableArray *dataSource;
 @property (nonatomic, weak) EBPayTypeView *payTypeView;
+
 @property(nonatomic, strong)UIAlertView *alertView;
+@property(nonatomic, strong)UIAlertView *alertViewCanFromMyOrder;
 
 @property (nonatomic, weak) UIView *bottomView;
 @end
@@ -38,7 +40,12 @@
     }
     return _alertView;
 }
-
+- (UIAlertView *)alertViewCanFromMyOrder {
+    if (!_alertViewCanFromMyOrder) {
+        _alertViewCanFromMyOrder = [[UIAlertView alloc] initWithTitle:@"确定退款？" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    }
+    return _alertViewCanFromMyOrder;
+}
 
 - (NSMutableArray *)dataSource {
     if (!_dataSource) {
@@ -64,6 +71,7 @@
     [self tableViewImplementation];
     [self bottomViewImplementation];
 }
+
 - (void)payTypeViewImplementation {
     AppDelegate *delegate = EB_AppDelegate;
     EBPayTypeView *payView = [[EBPayTypeView alloc] initWithFrame:delegate.window.bounds];
@@ -122,8 +130,12 @@
         make.right.equalTo(infoV).with.offset(0);
         make.height.mas_equalTo(bvH);
     }];
-    if (self.canFromMyOrder && [self.orderModel.status integerValue] == 0) {
+    if (self.canFromMyOrder && [self.orderModel.status integerValue] == 0) {//未支付状态
         [self bottomHaveTwoButtonImplentation:btnView height:bvH];
+    } else if (self.canFromMyOrder && [self.orderModel.status integerValue] == 2) {//已支付状态
+//        [self bottomHaveTwoButtonImplentation:btnView height:bvH];
+        NSArray *titles = @[@"退票", @"续订"];
+        [self bottomViewTwoButton:titles selector:@selector(orderAgainClick:) btnView:btnView height:bvH];//生成续订button + 退款按钮
     } else if (self.canFromMyOrder) {
         [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
     } else {
@@ -145,7 +157,8 @@
 }
 - (void)bottomHaveOneButtonImplentation:(UIView *)btnView height:(CGFloat)height{
     CGFloat padding = 20;
-    UIButton *orderAgainBtn = [UIButton eb_buttonWithFrame:CGRectZero target:self action:@selector(orderAgainClick) Title:@"续订"];
+    UIButton *orderAgainBtn = [UIButton eb_buttonWithFrame:CGRectZero target:self action:@selector(orderAgainClick:) Title:@"续订"];
+    orderAgainBtn.tag = 1;//这个tag一定要设置
     orderAgainBtn.layer.cornerRadius = height / 2;
     [btnView addSubview:orderAgainBtn];
     [orderAgainBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -158,10 +171,13 @@
 
 - (void)bottomHaveTwoButtonImplentation:(UIView *)btnView height:(CGFloat)bvH{
     NSArray *btnTitles = @[@"支付",@"取消订单"];
+    [self bottomViewTwoButton:btnTitles selector:@selector(payClick:) btnView:btnView height:bvH];
+}
+- (void)bottomViewTwoButton:(NSArray *)btnTitles selector:(SEL)selector btnView:(UIView *)btnView height:(CGFloat)bvH {
     NSUInteger count = btnTitles.count;
     for (NSUInteger i = 0; i < count; i ++) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
-        [btn addTarget:self action:@selector(payClick:) forControlEvents:UIControlEventTouchUpInside];
+        [btn addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
         btn.tag = i;
         btn.layer.cornerRadius = bvH / 2;
         btn.titleLabel.font = [UIFont systemFontOfSize:20];
@@ -180,11 +196,26 @@
     }
 }
 
+
+
 #pragma mark - Target Method
-- (void)orderAgainClick {
-    EBBuyTicketController *buy = [[EBBuyTicketController alloc] init];
-    buy.resultModel = [EBSearchResultModel resultModelFromOrderDetailModel:self.orderModel];
-    [self.navigationController pushViewController:buy animated:YES];
+- (void)orderAgainClick:(UIButton *)sender {
+    if (sender.tag == 0) {//退款
+        if (EB_iOS(8.0)) {
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"确定退款？" message:nil preferredStyle:UIAlertControllerStyleAlert];
+            [alertController addAction:[self actionWithTitle:@"取消" actionStyle:UIAlertActionStyleCancel handler:nil]];
+            [alertController addAction:[self actionWithTitle:@"确定" actionStyle:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [self refundRequest];
+            }]];
+            [self presentViewController:alertController animated:YES completion:nil];
+        } else if (EB_iOS(5.0)) {
+            [self.alertViewCanFromMyOrder show];
+        }
+    } else if (sender.tag == 1) {//续订
+        EBBuyTicketController *buy = [[EBBuyTicketController alloc] init];
+        buy.resultModel = [EBSearchResultModel resultModelFromOrderDetailModel:self.orderModel];
+        [self.navigationController pushViewController:buy animated:YES];
+    }
 }
 
 - (void)payClick:(UIButton *)sender {
@@ -198,7 +229,7 @@
                 [self cancelOrder];
             }]];
             [self presentViewController:alertController animated:YES completion:nil];
-        } else if (EB_iOS(6.0)) {
+        } else if (EB_iOS(5.0)) {
             [self.alertView show];
         }
     }
@@ -253,6 +284,8 @@
                     self.orderModel.payType = @(1);//将原始数据model的支付方式也进行更改为支付宝支付
                     self.orderStatusView.orderModel = self.orderModel;
                     [self alipayOrWechatPay:EBPayTypeOfAlipay orderModel:self.orderModel];
+                } else {
+                    [MBProgressHUD showError:@"更改支付方式失败" toView:self.view];
                 }
             } failure:^(NSError *error) {
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -271,6 +304,8 @@
                     self.orderModel.payType = @(2);//将原始数据model的支付方式也进行更改为微信支付
                     self.orderStatusView.orderModel = self.orderModel;
                     [self alipayOrWechatPay:EBPayTypeOfWeChat orderModel:self.orderModel];
+                } else {
+                    [MBProgressHUD showError:@"更改支付方式失败" toView:self.view];
                 }
             } failure:^(NSError *error) {
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -291,6 +326,10 @@
     if (alertView == self.alertView) {
         if (buttonIndex == 1) {
             [self cancelOrder];
+        }
+    } else if (alertView == self.alertViewCanFromMyOrder) {
+        if (buttonIndex == 1) {
+            [self refundRequest];
         }
     }
 }
@@ -317,6 +356,40 @@
                     }];
     }
 }
+
+- (void)refundRequest {
+    NSDictionary *parameters = @{static_Argument_userName : [EBUserInfo sharedEBUserInfo].loginName,
+                                 static_Argument_userId : [EBUserInfo sharedEBUserInfo].loginId};
+    NSMutableDictionary *mParameters = [NSMutableDictionary dictionaryWithDictionary:parameters];
+    if (self.orderModel.vehTime.length != 0 ) {
+        [mParameters setObject:self.orderModel.vehTime forKey:static_Argument_vehTime];
+    }
+    if (self.orderModel.startTime != 0) {
+        [mParameters setObject:self.orderModel.startTime forKey:static_Argument_startTime];
+    }
+    if (self.orderModel.saleDates != 0) {
+        [mParameters setObject:self.orderModel.saleDates forKey:static_Argument_runDate];
+    }
+    if (self.orderModel.lineId) {
+        [mParameters setObject:self.orderModel.lineId forKey:static_Argument_lineId];
+    }
+    [EBNetworkRequest GET:static_Url_Refund parameters:mParameters dictBlock:^(NSDictionary *dict) {
+        EBLog(@"%@",dict);
+        NSString *code = dict[static_Argument_returnCode];
+        NSString *info = dict[static_Argument_returnInfo];
+        if ([code integerValue] == 500) {
+            [MBProgressHUD showSuccess:@"退票成功" toView:self.view];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.navigationController popViewControllerAnimated:YES];
+            });
+        } else {
+            [MBProgressHUD showError:info toView:self.view];
+        }
+    } errorBlock:^(NSError *error) {
+        [MBProgressHUD showError:@"退款失败" toView:self.view];
+    }];
+}
+
 
 #pragma mark - pay
 - (void)alipayOrWechatPay:(EBPayType)type orderModel:(EBOrderDetailModel *)orderModel {

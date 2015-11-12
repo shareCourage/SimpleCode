@@ -9,13 +9,18 @@
 #import <UIKit/UIKit.h>
 @class EBUploadZJView;
 
+typedef  NS_ENUM(NSUInteger, EBUploadZJViewClickType) {
+    EBUploadZJViewClickTypeOfZJType = 100000,
+    EBUploadZJViewClickTypeOfZJPhoto,
+    EBUploadZJViewClickTypeOfNext,
+    EBUploadZJViewClickTypeOfDeletePhoto,
+    EBUploadZJViewClicTypeOfkNone
+};
+
 @protocol EBUploadZJViewDelegate <NSObject>
 
 @optional
-- (void)uploadZJViewDidClickZJTypeBtn:(EBUploadZJView *)zjView;
-- (void)uploadZJViewDidClickZJPhotoBtn:(EBUploadZJView *)zjView;
-- (void)uploadZJViewDidClickNextBtn:(EBUploadZJView *)zjView;
-- (void)uploadZJViewDidClickDeletePhotoBtn:(EBUploadZJView *)zjView;
+- (void)uploadZJViewDidClick:(EBUploadZJView *)zjView type:(EBUploadZJViewClickType)type;
 
 @end
 
@@ -26,21 +31,13 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *zjTypeL;
 @property (weak, nonatomic) IBOutlet UIButton *zjTypeBtn;
-- (IBAction)zjTypeBtnClick:(id)sender;
-
 @property (weak, nonatomic) IBOutlet UIButton *zjPhotoBtn;
-- (IBAction)zjPhotoBtnClick:(id)sender;
-
 @property (weak, nonatomic) IBOutlet UIView *imageBackView;
 @property (weak, nonatomic) IBOutlet UIImageView *zjImageView;
 @property (weak, nonatomic) IBOutlet UIButton *deleteZJBtn;
-- (IBAction)deleteZJBtnClick:(id)sender;
-
 @property (weak, nonatomic) IBOutlet UIButton *nextBtn;
-- (IBAction)nextBtnClick:(id)sender;
 
 + (instancetype)EBUploadZJViewFromXib;
-
 - (void)setZJImage:(UIImage *)image;
 
 @end

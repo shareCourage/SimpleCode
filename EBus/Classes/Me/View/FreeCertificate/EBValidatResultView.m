@@ -10,8 +10,13 @@
 
 @implementation EBValidatResultView
 
+- (IBAction)backBtnClick:(UIButton *)sender {
+}
+
 + (instancetype)EBValidatResultViewFromXib {
-    return [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:self options:nil] firstObject];
+    EBValidatResultView *result = [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:self options:nil] firstObject];
+    
+    return result;
 }
 
 @end

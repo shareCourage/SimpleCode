@@ -59,7 +59,7 @@ static NSString *static_Url_Host            = @"http://app.szebus.net";
 #define static_Url_Refund               [static_Url_Host stringByAppendingPathComponent:@"order/phone/refund"]
 #define static_Url_CustomerDetail       [static_Url_Host stringByAppendingPathComponent:@"customer/phone/detail"]//用户信息
 #define static_Url_CustomerCertificate  [static_Url_Host stringByAppendingPathComponent:@"customer/phone/certificate/detail"]//用户免费证件认证状态信息
-#define static_Url_UploadCertificate    [static_Url_Host stringByAppendingPathComponent:@"phone/upload/customer/certificate"]//用户免费证件上传
+#define static_Url_UploadCertificate    @"http://pz.szebus.net/phone/upload/customer/certificate"//用户免费证件上传
 
 
 

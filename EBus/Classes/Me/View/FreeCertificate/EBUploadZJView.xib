@@ -12,47 +12,35 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="    证件类型：" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uCe-tb-lJ2">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="50" id="OcP-Ub-Jdw"/>
+                        <constraint firstAttribute="height" constant="40" id="OcP-Ub-Jdw"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="19"/>
-                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rfe-JA-K3H">
-                    <rect key="frame" x="38" y="50" width="300" height="50"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="50" id="1qQ-Cl-Mu0"/>
-                        <constraint firstAttribute="width" constant="300" id="lZx-fS-7iY"/>
-                    </constraints>
-                    <state key="normal" title="《深圳市敬老优待证》">
-                        <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="zjTypeBtnClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="4FM-jz-ROs"/>
-                    </connections>
-                </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zjf-sq-ORo" userLabel="backView">
-                    <rect key="frame" x="37" y="100" width="300" height="230"/>
+                    <rect key="frame" x="37" y="80" width="300" height="250"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zGE-4C-kWR">
-                            <rect key="frame" x="50" y="5" width="200" height="220"/>
+                            <rect key="frame" x="50" y="5" width="200" height="240"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="200" id="TFw-Ld-eKc"/>
                             </constraints>
                         </imageView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9GE-iJ-zTx">
-                            <rect key="frame" x="260" y="195" width="40" height="30"/>
+                            <rect key="frame" x="260" y="215" width="40" height="30"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="30" id="r2d-j6-Bp3"/>
                                 <constraint firstAttribute="width" constant="40" id="wTr-NO-oI2"/>
                             </constraints>
                             <state key="normal" title="删除">
                                 <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleShadowColor" red="0.93725490199999995" green="0.96862745100000003" blue="0.96862745100000003" alpha="1" colorSpace="deviceRGB"/>
                             </state>
                             <connections>
-                                <action selector="deleteZJBtnClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="wdA-31-1LR"/>
+                                <action selector="btnClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="MV0-ti-fn4"/>
                             </connections>
                         </button>
                     </subviews>
@@ -68,7 +56,7 @@
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gnt-mW-jAm">
-                    <rect key="frame" x="37" y="100" width="300" height="50"/>
+                    <rect key="frame" x="37" y="85" width="300" height="50"/>
                     <color key="backgroundColor" red="0.75995907569999999" green="0.76215055170000001" blue="0.050025538299999998" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="50" id="GKO-Ox-eU4"/>
@@ -78,7 +66,7 @@
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="zjPhotoBtnClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="efU-33-77a"/>
+                        <action selector="btnClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="ike-Uk-06B"/>
                     </connections>
                 </button>
                 <button opaque="NO" alpha="0.65000000000000002" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZHw-Za-Iha">
@@ -93,13 +81,27 @@
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="nextBtnClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="qFk-8i-wXq"/>
+                        <action selector="btnClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="yhh-Fz-hkC"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rfe-JA-K3H" customClass="EBZJTypeButton">
+                    <rect key="frame" x="37" y="40" width="300" height="40"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="1qQ-Cl-Mu0"/>
+                        <constraint firstAttribute="width" constant="300" id="lZx-fS-7iY"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                    <state key="normal" title="《深圳市敬老优待证》">
+                        <color key="titleColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="btnClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="jH2-G3-DTC"/>
                     </connections>
                 </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="gnt-mW-jAm" firstAttribute="top" secondItem="rfe-JA-K3H" secondAttribute="bottom" id="2v4-bO-HXS"/>
+                <constraint firstItem="gnt-mW-jAm" firstAttribute="top" secondItem="rfe-JA-K3H" secondAttribute="bottom" constant="5" id="2v4-bO-HXS"/>
                 <constraint firstItem="rfe-JA-K3H" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="AKd-0O-CQn"/>
                 <constraint firstAttribute="trailing" secondItem="uCe-tb-lJ2" secondAttribute="trailing" id="Abt-ki-12A"/>
                 <constraint firstItem="zjf-sq-ORo" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="BgQ-H2-QsJ"/>

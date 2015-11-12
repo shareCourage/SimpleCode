@@ -7,23 +7,33 @@
 //
 
 #import <UIKit/UIKit.h>
+@class EBUploadSFZView;
+typedef  NS_ENUM(NSUInteger, EBUploadSFZViewClickType) {
+    EBUploadSFZViewClickTypeOfSFZPhoto = 100000,
+    EBUploadSFZViewClickTypeOfForward,
+    EBUploadSFZViewClickTypeOfCommit,
+    EBUploadSFZViewClickTypeOfDelete,
+    EBUploadSFZViewClickTypeOfNone
+};
+
+@protocol EBUploadSFZViewDelegate <NSObject>
+
+@optional
+- (void)uploadSFZViewDidClick:(EBUploadSFZView *)sfzView type:(EBUploadSFZViewClickType)type;
+
+@end
 
 @interface EBUploadSFZView : UIView
 
-+ (instancetype)EBUploadSFZViewFromXib;
 @property (weak, nonatomic) IBOutlet UITextField *nameTF;
 @property (weak, nonatomic) IBOutlet UITextField *sfzTF;
 @property (weak, nonatomic) IBOutlet UIButton *zjBtn;
-- (IBAction)zjBtnClick:(id)sender;
-
 @property (weak, nonatomic) IBOutlet UIView *imageBackView;
 @property (weak, nonatomic) IBOutlet UIImageView *sfzImageView;
 @property (weak, nonatomic) IBOutlet UIButton *deleteBtn;
-- (IBAction)deleteBtnClick:(id)sender;
-
-
 @property (weak, nonatomic) IBOutlet UIButton *forwardBtn;
 @property (weak, nonatomic) IBOutlet UIButton *commitBtn;
-- (IBAction)forwardBtnClick:(id)sender;
-- (IBAction)commitBtnClick:(id)sender;
+@property (weak, nonatomic) id <EBUploadSFZViewDelegate> delegate;
++ (instancetype)EBUploadSFZViewFromXib;
+- (void)setSFZImage:(UIImage *)image;
 @end

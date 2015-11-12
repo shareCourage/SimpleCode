@@ -48,7 +48,7 @@
                                 <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
-                                <action selector="deleteBtnClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="nhn-b9-0Xf"/>
+                                <action selector="btnClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="mNV-63-gCs"/>
                             </connections>
                         </button>
                     </subviews>
@@ -74,7 +74,7 @@
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="zjBtnClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="pnG-pM-6zS"/>
+                        <action selector="btnClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="9hp-Ia-cab"/>
                     </connections>
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bgr-Kg-G5F" userLabel="bottomView">
@@ -91,7 +91,7 @@
                                 <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             </state>
                             <connections>
-                                <action selector="forwardBtnClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="snR-BU-ava"/>
+                                <action selector="btnClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="7QL-EG-CVy"/>
                             </connections>
                         </button>
                         <button opaque="NO" alpha="0.85000002384185791" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DSW-LJ-q8I">
@@ -105,11 +105,10 @@
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
-                                <action selector="commitBtnClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="aT5-sQ-kQr"/>
+                                <action selector="btnClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="aSL-Tz-b42"/>
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" red="0.84349387880000004" green="0.46029397859999999" blue="0.70248723000000002" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstItem="QLU-JR-lgL" firstAttribute="centerY" secondItem="bgr-Kg-G5F" secondAttribute="centerY" id="Dqv-qP-9yL"/>
                         <constraint firstItem="DSW-LJ-q8I" firstAttribute="centerY" secondItem="bgr-Kg-G5F" secondAttribute="centerY" id="Edd-9k-TBq"/>

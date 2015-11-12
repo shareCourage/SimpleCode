@@ -10,6 +10,12 @@
 
 @interface EBValidatResultView : UIView
 
+@property (weak, nonatomic) IBOutlet UILabel *successL;
+@property (weak, nonatomic) IBOutlet UIView *failureView;
+@property (weak, nonatomic) IBOutlet UILabel *failureL;
+@property (weak, nonatomic) IBOutlet UIButton *backBtn;
+- (IBAction)backBtnClick:(UIButton *)sender;
+
 + (instancetype)EBValidatResultViewFromXib;
 
 @end

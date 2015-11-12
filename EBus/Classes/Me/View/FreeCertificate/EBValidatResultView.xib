@@ -7,10 +7,72 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB">
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="EBValidatResultView">
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="恭喜您！审核通过啦~~" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TxM-oZ-ydH">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bcz-NN-ZRd" userLabel="failure">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="抱歉！审核未通过..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sgA-aV-X1S">
+                            <rect key="frame" x="200" y="250" width="200" height="40"/>
+                            <color key="backgroundColor" red="0.6795598129" green="0.67966628070000001" blue="0.51789185770000001" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="200" id="PLb-f8-GLu"/>
+                                <constraint firstAttribute="height" constant="40" id="wVa-zm-hpd"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" alpha="0.80000000000000004" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Oj6-XH-uPn">
+                            <rect key="frame" x="200" y="310" width="200" height="40"/>
+                            <color key="backgroundColor" red="0.22745099660000001" green="0.62352943419999995" blue="0.87450987099999999" alpha="1" colorSpace="deviceRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="200" id="TTC-67-0Gw"/>
+                                <constraint firstAttribute="height" constant="40" id="pwM-fu-oOd"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <state key="normal" title="返回">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="backBtnClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="xJY-e1-JY1"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="sgA-aV-X1S" firstAttribute="centerX" secondItem="Bcz-NN-ZRd" secondAttribute="centerX" id="B9V-kc-827"/>
+                        <constraint firstItem="sgA-aV-X1S" firstAttribute="centerY" secondItem="Bcz-NN-ZRd" secondAttribute="centerY" constant="-30" id="Blf-Wn-cAM"/>
+                        <constraint firstItem="Oj6-XH-uPn" firstAttribute="centerX" secondItem="Bcz-NN-ZRd" secondAttribute="centerX" id="tMt-pi-7DX"/>
+                        <constraint firstItem="Oj6-XH-uPn" firstAttribute="centerY" secondItem="Bcz-NN-ZRd" secondAttribute="centerY" constant="30" id="wV6-0d-6tZ"/>
+                    </constraints>
+                </view>
+            </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="TxM-oZ-ydH" secondAttribute="bottom" id="0bp-Ti-S03"/>
+                <constraint firstAttribute="trailing" secondItem="TxM-oZ-ydH" secondAttribute="trailing" id="51a-J2-Lha"/>
+                <constraint firstItem="TxM-oZ-ydH" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="RIr-Dj-vCU"/>
+                <constraint firstAttribute="bottom" secondItem="Bcz-NN-ZRd" secondAttribute="bottom" id="TA9-id-wNm"/>
+                <constraint firstAttribute="trailing" secondItem="Bcz-NN-ZRd" secondAttribute="trailing" id="X0r-JX-9pF"/>
+                <constraint firstItem="Bcz-NN-ZRd" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="cpO-dM-GH8"/>
+                <constraint firstItem="Bcz-NN-ZRd" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="p1K-o4-wqk"/>
+                <constraint firstItem="TxM-oZ-ydH" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="pTt-89-ANq"/>
+            </constraints>
+            <connections>
+                <outlet property="backBtn" destination="Oj6-XH-uPn" id="kN9-3j-kKY"/>
+                <outlet property="failureL" destination="sgA-aV-X1S" id="9IR-gD-q3A"/>
+                <outlet property="failureView" destination="Bcz-NN-ZRd" id="ndS-7R-TeB"/>
+                <outlet property="successL" destination="TxM-oZ-ydH" id="uRA-r9-0tO"/>
+            </connections>
         </view>
     </objects>
 </document>

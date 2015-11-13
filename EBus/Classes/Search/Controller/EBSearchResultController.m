@@ -163,6 +163,8 @@
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     EBSearchResultModel *result = self.dataSource[indexPath.row];
     [self pushToLineDetailController:result];
+    
+    [EBTool saveResultModelToLocal:result];
 }
 
 #pragma mark - EBUsualLineCellDelegate

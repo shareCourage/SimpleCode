@@ -70,6 +70,13 @@
 		A910A3C51BF43DBF00EE6336 /* me_freeCert_zjTypeDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A910A3C31BF43DBF00EE6336 /* me_freeCert_zjTypeDown@2x.png */; settings = {ASSET_TAGS = (); }; };
 		A910A3C61BF43DBF00EE6336 /* me_freeCert_zjTypeUp@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A910A3C41BF43DBF00EE6336 /* me_freeCert_zjTypeUp@2x.png */; settings = {ASSET_TAGS = (); }; };
 		A910A3C91BF4464E00EE6336 /* EBZJTypePickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = A910A3C81BF4464E00EE6336 /* EBZJTypePickerView.m */; settings = {ASSET_TAGS = (); }; };
+		A910A3CF1BF5CF4400EE6336 /* EBMoreModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A910A3CE1BF5CF4400EE6336 /* EBMoreModel.m */; settings = {ASSET_TAGS = (); }; };
+		A910A3D31BF5D37900EE6336 /* EBMoreDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = A910A3D11BF5D37900EE6336 /* EBMoreDetailController.m */; settings = {ASSET_TAGS = (); }; };
+		A910A3D41BF5D37900EE6336 /* EBMoreDetailController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A910A3D21BF5D37900EE6336 /* EBMoreDetailController.xib */; settings = {ASSET_TAGS = (); }; };
+		A910A3D91BF5DEF000EE6336 /* login_select@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A910A3D51BF5DEF000EE6336 /* login_select@2x.png */; settings = {ASSET_TAGS = (); }; };
+		A910A3DA1BF5DEF000EE6336 /* login_select@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A910A3D61BF5DEF000EE6336 /* login_select@3x.png */; settings = {ASSET_TAGS = (); }; };
+		A910A3DB1BF5DEF000EE6336 /* login_selectHL@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A910A3D71BF5DEF000EE6336 /* login_selectHL@2x.png */; settings = {ASSET_TAGS = (); }; };
+		A910A3DC1BF5DEF000EE6336 /* login_selectHL@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A910A3D81BF5DEF000EE6336 /* login_selectHL@3x.png */; settings = {ASSET_TAGS = (); }; };
 		A91921751BDE33030005E2A3 /* EBLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A91921731BDE33030005E2A3 /* EBLoginViewController.m */; settings = {ASSET_TAGS = (); }; };
 		A91921761BDE33030005E2A3 /* EBLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A91921741BDE33030005E2A3 /* EBLoginViewController.xib */; settings = {ASSET_TAGS = (); }; };
 		A919217A1BDE37F10005E2A3 /* login_telephone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91921781BDE37F10005E2A3 /* login_telephone@2x.png */; settings = {ASSET_TAGS = (); }; };
@@ -366,6 +373,15 @@
 		A910A3C41BF43DBF00EE6336 /* me_freeCert_zjTypeUp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "me_freeCert_zjTypeUp@2x.png"; sourceTree = "<group>"; };
 		A910A3C71BF4464E00EE6336 /* EBZJTypePickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBZJTypePickerView.h; sourceTree = "<group>"; };
 		A910A3C81BF4464E00EE6336 /* EBZJTypePickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBZJTypePickerView.m; sourceTree = "<group>"; };
+		A910A3CD1BF5CF4400EE6336 /* EBMoreModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBMoreModel.h; sourceTree = "<group>"; };
+		A910A3CE1BF5CF4400EE6336 /* EBMoreModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBMoreModel.m; sourceTree = "<group>"; };
+		A910A3D01BF5D37900EE6336 /* EBMoreDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBMoreDetailController.h; sourceTree = "<group>"; };
+		A910A3D11BF5D37900EE6336 /* EBMoreDetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBMoreDetailController.m; sourceTree = "<group>"; };
+		A910A3D21BF5D37900EE6336 /* EBMoreDetailController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EBMoreDetailController.xib; sourceTree = "<group>"; };
+		A910A3D51BF5DEF000EE6336 /* login_select@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_select@2x.png"; sourceTree = "<group>"; };
+		A910A3D61BF5DEF000EE6336 /* login_select@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_select@3x.png"; sourceTree = "<group>"; };
+		A910A3D71BF5DEF000EE6336 /* login_selectHL@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_selectHL@2x.png"; sourceTree = "<group>"; };
+		A910A3D81BF5DEF000EE6336 /* login_selectHL@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_selectHL@3x.png"; sourceTree = "<group>"; };
 		A91921721BDE33030005E2A3 /* EBLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBLoginViewController.h; sourceTree = "<group>"; };
 		A91921731BDE33030005E2A3 /* EBLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBLoginViewController.m; sourceTree = "<group>"; };
 		A91921741BDE33030005E2A3 /* EBLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EBLoginViewController.xib; sourceTree = "<group>"; };
@@ -883,6 +899,9 @@
 			children = (
 				A907EA531BDF764F006E99C1 /* EBMoreViewController.h */,
 				A907EA541BDF764F006E99C1 /* EBMoreViewController.m */,
+				A910A3D01BF5D37900EE6336 /* EBMoreDetailController.h */,
+				A910A3D11BF5D37900EE6336 /* EBMoreDetailController.m */,
+				A910A3D21BF5D37900EE6336 /* EBMoreDetailController.xib */,
 			);
 			path = More;
 			sourceTree = "<group>";
@@ -993,6 +1012,15 @@
 			name = SFZView;
 			sourceTree = "<group>";
 		};
+		A910A3CC1BF5CE6A00EE6336 /* More */ = {
+			isa = PBXGroup;
+			children = (
+				A910A3CD1BF5CF4400EE6336 /* EBMoreModel.h */,
+				A910A3CE1BF5CF4400EE6336 /* EBMoreModel.m */,
+			);
+			path = More;
+			sourceTree = "<group>";
+		};
 		A91921771BDE37D50005E2A3 /* Login */ = {
 			isa = PBXGroup;
 			children = (
@@ -1000,6 +1028,10 @@
 				A919217D1BDE46800005E2A3 /* login_verificationCode@3x.png */,
 				A91921781BDE37F10005E2A3 /* login_telephone@2x.png */,
 				A91921791BDE37F10005E2A3 /* login_verificationCode@2x.png */,
+				A910A3D51BF5DEF000EE6336 /* login_select@2x.png */,
+				A910A3D61BF5DEF000EE6336 /* login_select@3x.png */,
+				A910A3D71BF5DEF000EE6336 /* login_selectHL@2x.png */,
+				A910A3D81BF5DEF000EE6336 /* login_selectHL@3x.png */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -1552,6 +1584,7 @@
 		A9FC05161BCD02B500870580 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				A910A3CC1BF5CE6A00EE6336 /* More */,
 				A91A4B031BF0AB7100AD7E1F /* MyOrder */,
 				A9FC05561BCD0B7E00870580 /* Group */,
 				A9FC05591BCD0B7E00870580 /* Item */,
@@ -2063,6 +2096,7 @@
 				A907EA9B1BE06968006E99C1 /* Attention_buyHL@3x.png in Resources */,
 				A9FC05761BCE00F300870580 /* search_myPosition@3x.png in Resources */,
 				A910A3C61BF43DBF00EE6336 /* me_freeCert_zjTypeUp@2x.png in Resources */,
+				A910A3DC1BF5DEF000EE6336 /* login_selectHL@3x.png in Resources */,
 				A9DF68FF1BD8810B00368B27 /* EBHotView.xib in Resources */,
 				A907EA8F1BE0683C006E99C1 /* Attention_registerHL@2x.png in Resources */,
 				A9DDC5711BE780FE006395E3 /* search_pay_zfb@3x.png in Resources */,
@@ -2083,6 +2117,7 @@
 				A907EA8C1BE0683C006E99C1 /* Attention_groupHL@2x.png in Resources */,
 				A907EA9C1BE06968006E99C1 /* Attention_group@3x.png in Resources */,
 				A9F960811BCF3A480011BC73 /* MBProgressHUD.bundle in Resources */,
+				A910A3DA1BF5DEF000EE6336 /* login_select@3x.png in Resources */,
 				A919217A1BDE37F10005E2A3 /* login_telephone@2x.png in Resources */,
 				A91A4B111BF1981000AD7E1F /* me_myOrder_title@2x.png in Resources */,
 				A9DDC57F1BE84DF1006395E3 /* search_drag_left@3x.png in Resources */,
@@ -2092,11 +2127,13 @@
 				A91A4AE31BEDC53400AD7E1F /* search_map_departPass@2x.png in Resources */,
 				A907EA481BDF73D4006E99C1 /* tabBar_byBus_normal@2x.png in Resources */,
 				A9DDC5701BE780FE006395E3 /* search_pay_wechat@3x.png in Resources */,
+				A910A3DB1BF5DEF000EE6336 /* login_selectHL@2x.png in Resources */,
 				A9FC05751BCE00F300870580 /* search_endPosition@3x.png in Resources */,
 				A907EA9F1BE06968006E99C1 /* Attention_registerHL@3x.png in Resources */,
 				A907EA8A1BE0683C006E99C1 /* Attention_buyHL@2x.png in Resources */,
 				A91A4ADB1BEDC37600AD7E1F /* search_endPosition@2x.png in Resources */,
 				A907EA1C1BDF564A006E99C1 /* me_header@3x.png in Resources */,
+				A910A3D41BF5D37900EE6336 /* EBMoreDetailController.xib in Resources */,
 				A91A4ADD1BEDC38900AD7E1F /* search_myPosition@2x.png in Resources */,
 				A9DDC57D1BE84D8E006395E3 /* search_drag_right@2x.png in Resources */,
 				A9DDC5791BE84B51006395E3 /* search_pay_zfb@2x.png in Resources */,
@@ -2120,6 +2157,7 @@
 				A9DF68E91BD735C800368B27 /* EBLineDetailPPView.xib in Resources */,
 				A907EA8D1BE0683C006E99C1 /* Attention_pad@2x.png in Resources */,
 				A91A4AE11BEDC51500AD7E1F /* search_map_end@2x.png in Resources */,
+				A910A3D91BF5DEF000EE6336 /* login_select@2x.png in Resources */,
 				A907EA4C1BDF73D4006E99C1 /* tabBar_search_normal@2x.png in Resources */,
 				A907EA8E1BE0683C006E99C1 /* Attention_register@2x.png in Resources */,
 				A907EA2F1BDF7029006E99C1 /* tabBar_byBus_select@3x.png in Resources */,
@@ -2237,6 +2275,7 @@
 				A91A4B0C1BF0AD9200AD7E1F /* EBMyOrderModel.m in Sources */,
 				A9DF68DE1BD723E200368B27 /* EBLineDetailPPAnnotationView.m in Sources */,
 				A9DF68E11BD7248C00368B27 /* EBPPAnnotation.m in Sources */,
+				A910A3CF1BF5CF4400EE6336 /* EBMoreModel.m in Sources */,
 				A9FC05501BCD0B0C00870580 /* PHTableViewController.m in Sources */,
 				A9FE487F1BE9A37800708F62 /* EBPayTool.m in Sources */,
 				A907EAB81BE21712006E99C1 /* EBColorView.m in Sources */,
@@ -2328,6 +2367,7 @@
 				A9FE49C11BE9C1C900708F62 /* RSADataVerifier.m in Sources */,
 				A9F960881BCF3A480011BC73 /* UIColor+PHCategory.m in Sources */,
 				A91A4AC11BEB7AFA00AD7E1F /* ApiXml.mm in Sources */,
+				A910A3D31BF5D37900EE6336 /* EBMoreDetailController.m in Sources */,
 				A99EFB601BDDD8EA0074EC55 /* PHCalenderViewCell.m in Sources */,
 				A91A4B291BF3490100AD7E1F /* EBValidatingView.m in Sources */,
 				A91A4AC71BEB7CF400AD7E1F /* WXUtil.mm in Sources */,

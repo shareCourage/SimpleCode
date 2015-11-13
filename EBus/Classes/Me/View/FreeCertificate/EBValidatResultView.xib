@@ -22,7 +22,6 @@
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="抱歉！审核未通过..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sgA-aV-X1S">
                             <rect key="frame" x="200" y="250" width="200" height="40"/>
-                            <color key="backgroundColor" red="0.6795598129" green="0.67966628070000001" blue="0.51789185770000001" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="200" id="PLb-f8-GLu"/>
                                 <constraint firstAttribute="height" constant="40" id="wVa-zm-hpd"/>

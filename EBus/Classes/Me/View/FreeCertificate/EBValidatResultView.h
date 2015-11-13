@@ -7,6 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+@class EBValidatResultView;
+
+@protocol EBValidatResultViewDelegate <NSObject>
+
+@optional
+- (void)validatResultViewDidClickBack:(EBValidatResultView *)resultView;
+
+@end
 
 @interface EBValidatResultView : UIView
 
@@ -16,6 +24,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *backBtn;
 - (IBAction)backBtnClick:(UIButton *)sender;
 
+@property (weak, nonatomic) id <EBValidatResultViewDelegate>delegate;
 + (instancetype)EBValidatResultViewFromXib;
 
+@property (nonatomic, assign) BOOL authenticationPass;
 @end

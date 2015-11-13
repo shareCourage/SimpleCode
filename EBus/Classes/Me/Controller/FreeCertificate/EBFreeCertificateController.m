@@ -16,7 +16,7 @@
 #import "EBValidatingView.h"
 #import "EBValidatResultView.h"
 #import "EBZJTypePickerView.h"
-@interface EBFreeCertificateController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate, EBUploadZJViewDelegate, EBUploadSFZViewDelegate, EBZJTypePickerViewDelegate>
+@interface EBFreeCertificateController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate, EBUploadZJViewDelegate, EBUploadSFZViewDelegate, EBValidatResultViewDelegate, EBZJTypePickerViewDelegate>
 {
     BOOL pikerViewUpOrDown;//用来控制pickerView的up down
 }
@@ -121,8 +121,12 @@
 
 
 - (void)settingTopAndBottomView:(NSUInteger)index {
+    [self settingTopAndBottomView:index animation:YES];
+}
+
+- (void)settingTopAndBottomView:(NSUInteger)index animation:(BOOL)animation{
     [self setFirAndSecBackColor:index];
-    [self setScrollViewContentOffset:index];
+    [self setScrollViewContentOffset:index animation:animation];
 }
 
 - (void)setFirAndSecBackColor:(NSUInteger)index {
@@ -138,11 +142,16 @@
     fir.backgroundColor = EB_RGBColor(104, 142, 237);
     sec.textColor = EB_RGBColor(104, 142, 237);
 }
-- (void)setScrollViewContentOffset:(NSUInteger)index {
-    [self.bottomScrollView setContentOffset:CGPointMake(EB_WidthOfScreen * index, 0) animated:YES];
+- (void)setScrollViewContentOffset:(NSUInteger)index animation:(BOOL)animation{
+    [self.bottomScrollView setContentOffset:CGPointMake(EB_WidthOfScreen * index, 0) animated:animation];
 }
 
 #pragma mark - Delegate
+#pragma mark - EBValidatResultViewDelegate
+- (void)validatResultViewDidClickBack:(EBValidatResultView *)resultView {
+    [self settingTopAndBottomView:0];
+}
+
 #pragma mark - EBUploadSFZViewDelegate
 - (void)uploadSFZViewDidClick:(EBUploadSFZView *)sfzView type:(EBUploadSFZViewClickType)type {
     switch (type) {
@@ -198,7 +207,7 @@
         [self pikerViewDown];
         pikerViewUpOrDown = NO;
     } else if (type == EBZJTypePickerViewClickTypeOfSure) {
-        [self.zjView.zjTypeBtn setTitle:string forState:UIControlStateNormal];
+        [self.zjView setZJTypeTitle:string];
         [self pikerViewDown];
         pikerViewUpOrDown = NO;
     }
@@ -223,13 +232,23 @@
     [EBNetworkRequest GET:static_Url_CustomerCertificate parameters:parameters dictBlock:^(NSDictionary *dict) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         NSDictionary *returnData = dict[static_Argument_returnData];
-        NSNumber *status = returnData[static_Argument_status];
+        NSNumber *status = returnData[static_Argument_certificateStatus];
         NSInteger statusIn = [status integerValue];
-        [self settingTopAndBottomView:statusIn];
-
-//        NSNumber *certType = returnData[@"certType"];
-//        NSInteger certTypeIn = [certType integerValue];
-
+        if (statusIn == 0) {//未认证
+            [self settingTopAndBottomView:statusIn animation:NO];
+        } else if (statusIn == 1) {//认证中
+            [self settingTopAndBottomView:2 animation:NO];
+        } else if (statusIn == 2 || statusIn == 3) {//2认证不通过， 3认证成功
+            [self settingTopAndBottomView:3 animation:NO];
+            if (statusIn == 2) {
+                self.resultView.authenticationPass = NO;
+            } else if (statusIn == 3) {
+                self.resultView.authenticationPass = YES;
+            }
+        }
+        NSNumber *certType = returnData[static_Argument_certificateType];
+        NSInteger certTypeIn = [certType integerValue];
+        [self.zjView setZJTypeTitle:[EBTool stringFromZJType:certTypeIn]];
     } errorBlock:^(NSError *error) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
     }];
@@ -242,9 +261,9 @@
         NSData *sfzData = UIImageJPEGRepresentation(self.sfzImage, 1.f);
         NSDictionary *parameters = @{static_Argument_customerId   : [EBUserInfo sharedEBUserInfo].loginId,
                                      static_Argument_customerName : [EBUserInfo sharedEBUserInfo].loginName,
-                                     @"perName"         : self.sfzView.nameTF.text,
-                                     @"identityNo"      : self.sfzView.sfzTF.text,
-                                     @"certType"        : @(self.zjType)};
+                                     static_Argument_perName      : self.sfzView.nameTF.text,
+                                     static_Argument_identityNo   : self.sfzView.sfzTF.text,
+                                     static_Argument_certType     : @(self.zjType)};
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         manager.responseSerializer = [AFHTTPResponseSerializer serializer];
         [manager POST:static_Url_UploadCertificate parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
@@ -255,8 +274,19 @@
             [MBProgressHUD hideHUDForView:self.view animated:YES];
             NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
             EBLog(@"%@",dict);
+            NSNumber *code = dict[static_Argument_returnCode];//
+            if ([code integerValue] == 500) {
+                [MBProgressHUD showSuccess:@"上传成功" toView:self.view];
+                NSNumber *data = dict[static_Argument_returnData];
+                if ([data integerValue] == 1) {//status：认证状态, 0未认证、1认证中、2认证不通过、3认证完成
+                    [self settingTopAndBottomView:2];
+                }
+            } else {
+                [MBProgressHUD showError:@"上传失败" toView:self.view];
+            }
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             [MBProgressHUD hideHUDForView:self.view animated:YES];
+            [MBProgressHUD showError:@"上传失败" toView:self.view];
             EBLog(@"%@",error);
         }];
         
@@ -345,6 +375,7 @@
 }
 - (void)four {
     EBValidatResultView *resultView = [EBValidatResultView EBValidatResultViewFromXib];
+    resultView.delegate = self;
     resultView.frame = CGRectMake(EB_WidthOfScreen * 3, 0, EB_WidthOfScreen, self.bottomScrollView.height);
     [self.bottomScrollView addSubview:resultView];
     self.resultView = resultView;

@@ -41,8 +41,8 @@
     sfzView.nameTF.leftViewMode = UITextFieldViewModeAlways;
     sfzView.sfzTF.leftViewMode = UITextFieldViewModeAlways;
 
-    sfzView.nameTF.text = @"aaa";
-    sfzView.sfzTF.text = @"362502199009062244";
+//    sfzView.nameTF.text = @"aaa";
+//    sfzView.sfzTF.text = @"362502199009062244";
     return sfzView;
 }
 

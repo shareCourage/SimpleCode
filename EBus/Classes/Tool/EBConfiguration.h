@@ -13,6 +13,7 @@ static NSString * const EBLoginSuccessNotification = @"eb.login.success";
 static NSString * const EBLogoutSuccessNotification = @"eb.logout.success";
 static NSString * const EBWXPaySuccessNotification = @"eb.wxpay.success";
 static NSString * const EBWXPayFailureNotification = @"eb.wxpay.failure";
+static NSString * const EBDidSaveUsualLineNotification = @"eb.saveUsualLine.notification";
 
 static NSString *static_KeyOfAMap           = @"163c0486f490bf1c8c84ed7c1a8a9507";
 
@@ -54,13 +55,19 @@ static NSString *static_Url_Host            = @"http://app.szebus.net";
 #define static_Url_CancelOrder          [static_Url_Host stringByAppendingPathComponent:@"order/phone/cancel"]
 #define static_Url_TransferOfRecentLine [static_Url_Host stringByAppendingPathComponent:@"order/phone/second/now/data"]
 #define static_Url_SetSZTNo             [static_Url_Host stringByAppendingPathComponent:@"szt/phone/set/info"]
+#define static_Url_SZTNotice            [static_Url_Host stringByAppendingPathComponent:@"szt/phone/notice"]
 #define static_Url_ChangePayType        [static_Url_Host stringByAppendingPathComponent:@"order/phone/change/pay/type"]
 #define static_Url_MyOrder              [static_Url_Host stringByAppendingPathComponent:@"order/phone/main/data"]
 #define static_Url_Refund               [static_Url_Host stringByAppendingPathComponent:@"order/phone/refund"]
 #define static_Url_CustomerDetail       [static_Url_Host stringByAppendingPathComponent:@"customer/phone/detail"]//用户信息
 #define static_Url_CustomerCertificate  [static_Url_Host stringByAppendingPathComponent:@"customer/phone/certificate/detail"]//用户免费证件认证状态信息
+#define static_Url_UserShouldKnow       [static_Url_Host stringByAppendingPathComponent:@"customer/phone/notice"]//用户须知
+
+
 #define static_Url_UploadCertificate    @"http://pz.szebus.net/phone/upload/customer/certificate"//用户免费证件上传
 
+#define static_Url_MoreList             [static_Url_Host stringByAppendingPathComponent:@"more/phone/data"]//更多
+#define static_Url_MoreDetail           [static_Url_Host stringByAppendingPathComponent:@"more/phone/record/detail"]//更多
 
 
 static NSString *static_Argument_returnData     = @"returnData";
@@ -104,6 +111,12 @@ static NSString *static_Argument_payResult      = @"payResult";
 static NSString *static_Argument_payStatus      = @"payStatus";
 static NSString *static_Argument_runDate        = @"runDate";
 static NSString *static_Argument_status         = @"status";
+static NSString *static_Argument_perName        = @"perName";
+static NSString *static_Argument_identityNo     = @"identityNo";
+static NSString *static_Argument_certType       = @"certType";
+
+static NSString *static_Argument_certificateStatus  = @"certificateStatus";
+static NSString *static_Argument_certificateType    = @"certificateType";
 #endif /* EBConfiguration_h */
 
 

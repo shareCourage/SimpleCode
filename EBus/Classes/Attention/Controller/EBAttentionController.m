@@ -87,7 +87,9 @@
         [scrollView addSubview:tableView];
         [self.tableViews addObject:tableView];
         if (i == 0) {
-            [tableView beginRefresh];
+            if ([EBTool loginEnable]) {
+                [tableView beginRefresh];
+            }
         }
     }
     [self.view addSubview:scrollView];
@@ -119,7 +121,9 @@
     if (index >= self.tableViews.count) return;
     EBAttentionTableView *tableView = self.tableViews[index];
     if (!tableView.isRefreshed) {
-        [tableView beginRefresh];
+        if ([EBTool loginEnable]) {
+            [tableView beginRefresh];
+        }
     }
 }
 

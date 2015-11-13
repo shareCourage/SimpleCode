@@ -26,8 +26,7 @@
 #import "MBProgressHUD+MJ.h"
 #import "UIColor+PHCategory.h"
 #import "PHKeyValueObserver.h"
-
-
+@class EBSearchResultModel;
 
 @interface EBTool : NSObject
 
@@ -40,6 +39,22 @@
 + (BOOL)encoderObjectArray:(NSMutableArray *)memberArray path:(NSString *)filePath;
 + (NSMutableArray *)decoderObjectPath:(NSString *)filePath;
 
+/*
+ 常用路线保存的路径
+ */
++ (NSString *)usualLineFilePath;
+/*
+ *保存常用路线路线到本地
+ */
++ (BOOL)saveUsualLineToLocalWithArray:(NSMutableArray *)lines;
+/*
+ *从本地获取常用路线
+ */
++ (NSMutableArray *)usualLineArrayFromLocal;
+/*
+ *保存该模型到本地
+ */
++ (void)saveResultModelToLocal:(EBSearchResultModel *)result;
 /*
  *正则表达式判断是否是电话号码
  */
@@ -61,4 +76,5 @@
 
 + (NSString *)stringFromStatus:(NSInteger)status;
 + (NSString *)stringFromPayType:(NSInteger)payType;
++ (NSString *)stringFromZJType:(NSUInteger)certype;
 @end

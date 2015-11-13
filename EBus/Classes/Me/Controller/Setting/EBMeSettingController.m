@@ -102,11 +102,10 @@
     };
     PHSettingItem *notification = [PHSettingArrowItem itemWithTitle:@"我的通知" destVcClass:nil];
     notification.option = ^{
-//        __strong typeof(self) strongSelf = ws;
-//        if (![EBTool presentLoginVC:strongSelf completion:nil]) {
-//            EBSZTViewController *sztVC = [[EBSZTViewController alloc] init];
-//            [strongSelf.navigationController pushViewController:sztVC animated:YES];
-//        }
+        __strong typeof(self) strongSelf = ws;
+        if (![EBTool presentLoginVC:strongSelf completion:nil]) {
+            EBLog(@"我的通知");
+        }
     };
     PHSettingItem *szt = [PHSettingArrowItem itemWithTitle:@"深圳通卡" destVcClass:nil];
     szt.option = ^{
@@ -135,7 +134,7 @@
             [strongSelf.navigationController pushViewController:suggest animated:YES];
         }
     };
-    PHSettingItem *versionUpdate = [PHSettingArrowItem itemWithTitle:@"版本更新" destVcClass:nil];
+//    PHSettingItem *versionUpdate = [PHSettingArrowItem itemWithTitle:@"版本更新" destVcClass:nil];
     PHSettingItem *more = [PHSettingArrowItem itemWithTitle:@"更多" destVcClass:[EBMoreViewController class]];
     PHSettingItem *logout = [PHSettingArrowItem itemWithTitle:@"注销"];
     logout.option = ^{
@@ -143,9 +142,11 @@
     };
     PHSettingGroup *group = [[PHSettingGroup alloc] init];
     if (_hasLogin) {
-        group.items = @[ticket,notification,szt,freeCertificate,advice,versionUpdate,more,logout];
+//        group.items = @[ticket,notification,szt,freeCertificate,advice,versionUpdate,more,logout];
+        group.items = @[ticket,notification,szt,freeCertificate,advice,more,logout];
     } else {
-        group.items = @[ticket,notification,szt,freeCertificate,advice,versionUpdate,more];
+//        group.items = @[ticket,notification,szt,freeCertificate,advice,versionUpdate,more];
+        group.items = @[ticket,notification,szt,freeCertificate,advice,more];
     }
     [self.dataSource addObject:group];
 }

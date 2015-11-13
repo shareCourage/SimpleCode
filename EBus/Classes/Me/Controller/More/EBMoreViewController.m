@@ -11,6 +11,8 @@
 #import "PHSettingItem.h"
 #import "PHSettingArrowItem.h"
 #import "PHSettingSwitchItem.h"
+#import "EBMoreModel.h"
+#import "EBMoreDetailController.h"
 
 @interface EBMoreViewController ()
 
@@ -20,18 +22,40 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self one];
+    [self moreRequest];
 }
 
+- (void)moreRequest {
+    [EBNetworkRequest GET:static_Url_MoreList parameters:nil dictBlock:^(NSDictionary *dict) {
+        NSArray *datas = dict[static_Argument_returnData];
+        if (datas.count == 0) return;
+        NSMutableArray *mArray = [NSMutableArray array];
+        for (NSDictionary *obj in datas) {
+            EBMoreModel *more = [[EBMoreModel alloc] initWithDict:obj];
+            [mArray addObject:more];
+        }
+        [self one:[mArray copy]];
+    } errorBlock:^(NSError *error) {
+        
+    }];
+}
 
-- (void)one {
-    PHSettingItem *problem = [PHSettingArrowItem itemWithTitle:@"常见问题" destVcClass:nil];
-    PHSettingItem *guide = [PHSettingArrowItem itemWithTitle:@"用户指南" destVcClass:nil];
-    PHSettingItem *protocol = [PHSettingArrowItem itemWithTitle:@"使用协议" destVcClass:nil];
-    PHSettingItem *aboutUs = [PHSettingArrowItem itemWithTitle:@"关于我们" destVcClass:nil];
+- (void)one:(NSArray *)source {
+    EB_WS(ws);
+    NSMutableArray *items = [NSMutableArray array];
+    for (EBMoreModel *more in source) {
+        PHSettingItem *one = [PHSettingArrowItem itemWithTitle:more.title destVcClass:nil];
+        one.option = ^{
+            EBMoreDetailController *detail = [[EBMoreDetailController alloc] init];
+            detail.moreModel = more;
+            [ws.navigationController pushViewController:detail animated:YES];
+        };
+        [items addObject:one];
+    }
     PHSettingGroup *group = [[PHSettingGroup alloc] init];
-    group.items = @[problem,guide,protocol,aboutUs];
+    group.items = [items copy];
     [self.dataSource addObject:group];
+    [self.tableView reloadData];
 }
 
 @end

@@ -8,6 +8,7 @@
 
 #import "EBLoginViewController.h"
 #import "EBUserInfo.h"
+#import "EBMoreDetailController.h"
 @interface EBLoginViewController ()
 {
     NSUInteger timer;
@@ -20,6 +21,9 @@
 - (IBAction)loginClick:(id)sender;
 @property (nonatomic, strong) NSTimer *myTimer;
 
+@property (weak, nonatomic) IBOutlet UIButton *selectedBtn;
+- (IBAction)seletedBtnClick:(UIButton *)sender;
+- (IBAction)serviceProtocolClick:(id)sender;
 @end
 
 @implementation EBLoginViewController
@@ -36,6 +40,10 @@
     [super viewDidLoad];
     timer = 60;
     self.navigationItem.title = @"登录";
+    [self.selectedBtn setBackgroundImage:[UIImage imageNamed:@"login_select"] forState:UIControlStateNormal];
+    [self.selectedBtn setBackgroundImage:[UIImage imageNamed:@"login_selectHL"] forState:UIControlStateSelected];
+    self.selectedBtn.selected = YES;
+
     UIBarButtonItem *left = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(leftItemClick)];
     self.navigationItem.leftBarButtonItem = left;
     
@@ -117,6 +125,9 @@
 }
 
 - (IBAction)loginClick:(id)sender {
+    if (!self.selectedBtn.selected) {
+        [MBProgressHUD showError:@"请阅读服务协议" toView:self.view];
+    }
     NSString *code = self.verificationTF.text;
     NSString *tele = self.telephoneTF.text;
     if (code.length != 0 && [EBTool isPureTelephoneNumber:tele]) {
@@ -142,6 +153,14 @@
 }
 
 
+- (IBAction)seletedBtnClick:(UIButton *)sender {
+    sender.selected = !sender.selected;
+}
+
+- (IBAction)serviceProtocolClick:(id)sender {
+    EBMoreDetailController *detail = [[EBMoreDetailController alloc] init];
+    [self.navigationController pushViewController:detail animated:YES];
+}
 @end
 
 

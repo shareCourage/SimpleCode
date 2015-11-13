@@ -8,7 +8,7 @@
 
 #import "EBBaseModel.h"
 
-@interface EBSearchResultModel : EBBaseModel
+@interface EBSearchResultModel : EBBaseModel <NSCoding>
 /*
  "id": 2,
  "isEnd": 1,

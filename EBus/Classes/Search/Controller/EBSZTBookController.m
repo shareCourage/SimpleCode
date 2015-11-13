@@ -21,6 +21,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *bookBtn;
 - (IBAction)bookClick:(id)sender;
 @property (weak, nonatomic) IBOutlet UILabel *sztNoL;
+@property (weak, nonatomic) IBOutlet UIWebView *myWebView;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *myActivityIndicator;
 
 @end
 
@@ -50,8 +52,23 @@
     } else {
         self.sztNoL.text = @"请绑定深圳通";
     }
+    [self webViewLoading];
 }
-
+- (void)webViewLoading {
+    self.myActivityIndicator.hidden = NO;
+    [self.myActivityIndicator startAnimating];
+    [EBNetworkRequest GET:static_Url_SZTNotice parameters:nil dictBlock:^(NSDictionary *dict) {
+        NSString *string = dict[static_Argument_returnData];
+        [self.myWebView loadHTMLString:string baseURL:nil];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.4f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.myActivityIndicator.hidden = YES;
+            [self.myActivityIndicator stopAnimating];
+        });
+    } errorBlock:^(NSError *error) {
+        self.myActivityIndicator.hidden = YES;
+        [self.myActivityIndicator stopAnimating];
+    }];
+}
 - (IBAction)modifyClick:(id)sender {
     if (EB_iOS(8.0)) {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"请输入深圳通卡号" message:nil preferredStyle:UIAlertControllerStyleAlert];

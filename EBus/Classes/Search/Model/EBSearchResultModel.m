@@ -10,6 +10,8 @@
 
 @implementation EBSearchResultModel
 
+MJCodingImplementation
+
 - (instancetype)initWithDict:(NSDictionary *)dict {
     self = [super init];
     if (self) {

@@ -39,5 +39,5 @@ typedef  NS_ENUM(NSUInteger, EBUploadZJViewClickType) {
 
 + (instancetype)EBUploadZJViewFromXib;
 - (void)setZJImage:(UIImage *)image;
-
+- (void)setZJTypeTitle:(NSString *)title;
 @end

@@ -52,4 +52,7 @@
     self.zjImageView.image = image;
     self.zjPhotoBtn.hidden = YES;
 }
+- (void)setZJTypeTitle:(NSString *)title {
+    [self.zjTypeBtn setTitle:title forState:UIControlStateNormal];
+}
 @end

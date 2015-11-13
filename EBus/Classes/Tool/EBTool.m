@@ -14,6 +14,7 @@
 #import "PHTabBarController.h"
 #import "EBAttentionController.h"
 #import "PHCalenderDay.h"
+#import "EBSearchResultModel.h"
 
 @implementation EBTool
 
@@ -45,7 +46,21 @@
     }
     return payStr;
 }
-
++ (NSString *)stringFromZJType:(NSUInteger)certype {
+    NSArray *array = @[@"《深圳市敬老优待证》",
+                       @"《深圳暂住老年人免费乘车证》",
+                       @"《残疾人证》",
+                       @"《残疾人证》- 盲人",
+                       @"《中国人民共和国残疾军人证》",
+                       @"《中国人民共和国伤残人民警察证》",
+                       @"《中国人民共和国伤残国家机关工作人员证》",
+                       @"《中国人民共和国伤残民兵民工工作证》",
+                       @"《中国人民共和国老干部离休荣誉证》",
+                       @"《军官证》、《警官证》、《士兵证》",
+                       @"实名制免费'深圳通'",];
+    if (certype > array.count) return nil;
+    return array[certype - 1];
+}
 + (CLLocationManager *)locationManagerImplementation {
     // 1. 实例化定位管理器
     CLLocationManager *locationManager = [[CLLocationManager alloc] init];
@@ -107,7 +122,7 @@
         if (completion) completion();
         dispatch_async(dispatch_get_main_queue(), ^{
             NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-            [notificationCenter postNotificationName:EBPresentLoginVCDidFinishNotification object:self];
+            [notificationCenter postNotificationName:EBPresentLoginVCDidFinishNotification object:nil];
         });
     }];
     return YES;
@@ -146,6 +161,37 @@
     return mutableArray;
 }
 
++ (NSString *)usualLineFilePath {
+    NSString *documents = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+    return [documents stringByAppendingPathComponent:@"usualLine.arc"];
+}
+
++ (NSMutableArray *)usualLineArrayFromLocal {
+    return [EBTool decoderObjectPath:[EBTool usualLineFilePath]];
+}
++ (BOOL)saveUsualLineToLocalWithArray:(NSMutableArray *)lines {
+    return [EBTool encoderObjectArray:lines path:[EBTool usualLineFilePath]];
+}
++ (void)saveResultModelToLocal:(EBSearchResultModel *)result {
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[EBTool usualLineFilePath]]) {//如果存在这个路径
+        NSMutableArray *usualLineArray = [EBTool usualLineArrayFromLocal];
+        for (EBSearchResultModel *model in usualLineArray) {
+            NSInteger modelLineId = [model.lineId integerValue];
+            NSInteger resultLineId = [result.lineId integerValue];
+            if (modelLineId == resultLineId) return;//如果已经有，那么就直接结束
+        }
+        [usualLineArray addObject:result];//能执行到这，说明没有该线路
+        [EBTool saveUsualLineToLocalWithArray:usualLineArray];//保存该路线
+    } else {
+        NSMutableArray *array = [NSMutableArray array];
+        [array addObject:result];
+        [EBTool saveUsualLineToLocalWithArray:array];//保存该路线
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+        [notificationCenter postNotificationName:EBDidSaveUsualLineNotification object:nil];
+    });
+}
 // 验证手机号
 #pragma mark ValidateCorrelation
 //正则表达式判断是否是电话号码

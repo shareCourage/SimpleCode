@@ -11,7 +11,15 @@
 @implementation EBValidatingView
 
 + (instancetype)EBValidatingViewFromXib {
-    return [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:self options:nil] firstObject];
+    EBValidatingView *validating = [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:self options:nil] firstObject];
+    if (EB_WidthOfScreen > 375) {
+        [validating.validatingL setSystemFontOf20];
+    } else if (EB_WidthOfScreen > 320) {
+        [validating.validatingL setSystemFontOf18];
+    } else {
+        [validating.validatingL setSystemFontOf17];
+    }
+    return validating;
 }
 
 @end

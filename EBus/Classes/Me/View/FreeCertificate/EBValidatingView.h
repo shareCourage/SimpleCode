@@ -11,5 +11,6 @@
 @interface EBValidatingView : UIView
 
 + (instancetype)EBValidatingViewFromXib;
+@property (weak, nonatomic) IBOutlet UILabel *validatingL;
 
 @end

@@ -14,6 +14,7 @@
 #import "EBSearchResultModel.h"
 #import "EBHotView.h"
 #import "EBHotLabel.h"
+#import "EBLineDetailController.h"
 
 @interface EBSearchViewController () <EBSearchBusViewDelegate, EBUsualLineCellDelegate, EBHotViewDelegate>
 
@@ -27,17 +28,34 @@
 @end
 
 @implementation EBSearchViewController
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (NSMutableArray *)dataSource {
+    if (!_dataSource) {
+        _dataSource = [EBTool usualLineArrayFromLocal];
+        _dataSource.count == 0 ? (self.backgroundImageViewDisappear = NO) : (self.backgroundImageViewDisappear = YES);
+    }
+    return _dataSource;
+}
+- (void)usualLineSavedNotification {
+    self.dataSource = [EBTool usualLineArrayFromLocal];
+    self.dataSource.count == 0 ? (self.backgroundImageViewDisappear = NO) : (self.backgroundImageViewDisappear = YES);
+    [self.tableView reloadData];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"查询";
-    self.tableView.allowsSelection = NO;
     self.myPositionCoord = kCLLocationCoordinate2DInvalid;
     self.endPositionCoord = kCLLocationCoordinate2DInvalid;
     [self searchBusViewImplementation];
     [self itemImplementation];
     [self hotViewImplementation];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(usualLineSavedNotification) name:EBDidSaveUsualLineNotification object:nil];
 }
+
 - (void)searchBusViewImplementation {
     EBSearchBusView *searchBusView = [[EBSearchBusView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 200)];
     searchBusView.delegate = self;
@@ -109,7 +127,7 @@
 
 #pragma mark - UITableViewDelegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 5;
+    return self.dataSource.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -122,13 +140,46 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     EBUsualLineCell *cell = [EBUsualLineCell cellWithTableView:tableView];
+    cell.model = self.dataSource[indexPath.row];
     cell.delegate = self;
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    EBSearchResultModel *result = self.dataSource[indexPath.row];
+    [self pushToLineDetailController:result];
 }
+- (void)pushToLineDetailController:(EBSearchResultModel *)model {
+    EBLineDetailController *detail = [[EBLineDetailController alloc] init];
+    detail.resultModel = model;
+    [self.navigationController pushViewController:detail animated:YES];
+}
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return @"删除";
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewCellEditingStyleDelete;
+}
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        /**
+         *1、删除数据源
+         *2、tableView的删除
+         *3、删除服务器上的数据
+         *4、如果做了本地数据库保存，同样需要删除
+         */
+        [self.dataSource removeObjectAtIndex:indexPath.row];//1 删除数据源
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];//2 tableView的删除
+        [EBTool saveUsualLineToLocalWithArray:self.dataSource];//4、对数据的重新归档，就相当于删除
+        self.dataSource.count == 0 ? (self.backgroundImageViewDisappear = NO) : (self.backgroundImageViewDisappear = YES);
+    }
+}
+
 
 #pragma mark - EBUsualLineCellDelegate
 - (void)usualLineDidClick:(EBUsualLineCell *)usualLine type:(EBSearchBuyType)type{

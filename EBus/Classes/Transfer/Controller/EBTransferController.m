@@ -16,6 +16,7 @@
 #import "EBTransferModel.h"
 
 @interface EBTransferController () <EBLineMapViewDelegate>
+
 @property (nonatomic, weak) EBLineMapView *lineMapView;
 @property(nonatomic, strong) NSString *filePath;//文件路径
 
@@ -112,4 +113,5 @@
     cell.model = self.resultModel;
     return cell;
 }
+
 @end

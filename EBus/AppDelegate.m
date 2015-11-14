@@ -7,10 +7,21 @@
 //
 
 #import "AppDelegate.h"
+//高德地图
 #import <MAMapKit/MAMapKit.h>
 #import <AMapSearchKit/AMapSearchKit.h>
+
+//支付宝
 #import <AlipaySDK/AlipaySDK.h>
+
+//微信
 #import "WXApi.h"
+//JPush
+#import "APService.h"
+
+//UMeng
+#import "MobClick.h"
+#import "MobClickSocialAnalytics.h"
 
 @interface AppDelegate () <WXApiDelegate>
 
@@ -27,8 +38,52 @@
     [EBTool openAppInitial];//该app的启动验证
     NSString *version_eBus = EB_Version;
     [WXApi registerApp:static_WeChat_AppID withDescription:[NSString stringWithFormat:@"eBus%@",version_eBus]];//向微信注册
+    [self umengSetUp];
+#pragma mark - 注册推送
+    // Required
+    if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
+        //可以添加自定义categories
+        [APService registerForRemoteNotificationTypes:(UIUserNotificationTypeBadge |
+                                                       UIUserNotificationTypeSound |
+                                                       UIUserNotificationTypeAlert)
+                                           categories:nil];
+    } else {
+        //categories 必须为nil
+        [APService registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
+                                                       UIRemoteNotificationTypeSound |
+                                                       UIRemoteNotificationTypeAlert)
+                                           categories:nil];
+    }
+    // Required
+    [APService setupWithOption:launchOptions];
     
     return YES;
+}
+
+- (void)umengSetUp {
+    [MobClick startWithAppkey:static_KeyOfUMeng reportPolicy:BATCH channelId:nil];
+    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    [MobClick setAppVersion:version];
+    [MobClick setEncryptEnabled:YES];
+    [MobClick setBackgroundTaskEnabled:YES];
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    
+    // Required
+    EBLog(@"deviceToken ->%@ %@",NSStringFromSelector(_cmd),deviceToken);
+    [APService registerDeviceToken:deviceToken];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    // Required
+    [APService handleRemoteNotification:userInfo];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    // IOS 7 Support Required
+    [APService handleRemoteNotification:userInfo];
+    completionHandler(UIBackgroundFetchResultNewData);
 }
 
 

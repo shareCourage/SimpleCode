@@ -18,6 +18,7 @@
 #import "EBOrderDetailController.h"
 #import "EBPayTool.h"
 #import "EBSZTBookController.h"
+#import "MobClick.h"
 
 @interface EBBuyTicketController () <EBCalenderViewDelegate, EBPayTypeViewDelegate>
 
@@ -125,6 +126,7 @@
 
 - (void)payCash:(NSArray *)dates payType:(EBPayType)type{
     if (dates.count == 0) return;
+    [MobClick event:[NSString stringWithFormat:@"购票%@",NSStringFromSelector(_cmd)]];//友盟统计购票次数
     [MBProgressHUD showMessage:nil toView:self.view];
     NSUInteger payNumber = 0;
     switch (type) {

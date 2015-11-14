@@ -7,7 +7,6 @@
 //
 
 #import "PHViewController.h"
-@class EBSelectedAnnotation;
 
 @interface EBSelectPositionController : PHViewController
 

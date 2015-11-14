@@ -12,6 +12,8 @@
 #import "EBSelectPositionCell.h"
 #import "EBSelectPositionModel.h"
 #import "EBAnnotation.h"
+#import "EBSPButton.h"
+#import "EBSearchAddressController.h"
 
 @interface EBSelectPositionController () <UITableViewDataSource, UITableViewDelegate, EBSearchMapViewDelegate, EBSelectPositionCellDelegate>
 
@@ -84,8 +86,20 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     self.selectedIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    [self titleViewImplementation];
     [self searchMapViewImplementation];
     [self tableViewImplementation];
+}
+- (void)titleViewImplementation {
+    EBSPButton *searchBtn = [EBSPButton buttonWithType:UIButtonTypeCustom];
+    searchBtn.frame = CGRectMake(0, 0, EB_WidthOfScreen - 70, 35);
+    [searchBtn setTitle:@"地址查询" forState:UIControlStateNormal];
+    [searchBtn setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [searchBtn addTarget:self action:@selector(searchAddressClick) forControlEvents:UIControlEventTouchUpInside];
+    searchBtn.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    searchBtn.layer.borderWidth = .5f;
+    searchBtn.layer.cornerRadius = searchBtn.height / 2;
+    self.navigationItem.titleView = searchBtn;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -96,6 +110,11 @@
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     [self.searchMapView mapViewDidDisappear];
+}
+
+- (void)searchAddressClick {
+    EBSearchAddressController *address = [[EBSearchAddressController alloc] init];
+    [self.navigationController pushViewController:address animated:YES];
 }
 
 #pragma mark - Instance

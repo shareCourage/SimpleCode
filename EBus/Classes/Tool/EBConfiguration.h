@@ -16,6 +16,7 @@ static NSString * const EBWXPayFailureNotification = @"eb.wxpay.failure";
 static NSString * const EBDidSaveUsualLineNotification = @"eb.saveUsualLine.notification";
 
 static NSString *static_KeyOfAMap           = @"163c0486f490bf1c8c84ed7c1a8a9507";
+static NSString *static_KeyOfUMeng          = @"";
 
 static NSString *static_Alipay_Appid        = @"2015082700236900";
 static NSString *static_Alipay_Partner      = @"2088021510586444";

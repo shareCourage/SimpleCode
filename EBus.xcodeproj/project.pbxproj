@@ -77,6 +77,14 @@
 		A910A3DA1BF5DEF000EE6336 /* login_select@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A910A3D61BF5DEF000EE6336 /* login_select@3x.png */; settings = {ASSET_TAGS = (); }; };
 		A910A3DB1BF5DEF000EE6336 /* login_selectHL@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A910A3D71BF5DEF000EE6336 /* login_selectHL@2x.png */; settings = {ASSET_TAGS = (); }; };
 		A910A3DC1BF5DEF000EE6336 /* login_selectHL@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A910A3D81BF5DEF000EE6336 /* login_selectHL@3x.png */; settings = {ASSET_TAGS = (); }; };
+		A910A3E01BF71D2B00EE6336 /* libPushSDK-1.8.8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A910A3DF1BF71D2B00EE6336 /* libPushSDK-1.8.8.a */; settings = {ASSET_TAGS = (); }; };
+		A910A3E21BF71D4100EE6336 /* PushConfig.plist in Resources */ = {isa = PBXBuildFile; fileRef = A910A3E11BF71D4100EE6336 /* PushConfig.plist */; settings = {ASSET_TAGS = (); }; };
+		A910A3E41BF71D9500EE6336 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A910A3E31BF71D9500EE6336 /* CFNetwork.framework */; };
+		A910A3E61BF71DA300EE6336 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A910A3E51BF71DA300EE6336 /* CoreFoundation.framework */; };
+		A910A3EB1BF72CF600EE6336 /* libMobClickLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A910A3E81BF72CF600EE6336 /* libMobClickLibrary.a */; settings = {ASSET_TAGS = (); }; };
+		A910A3EE1BF7389800EE6336 /* EBSPButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A910A3ED1BF7389800EE6336 /* EBSPButton.m */; settings = {ASSET_TAGS = (); }; };
+		A910A3F21BF740B600EE6336 /* EBSearchAddressController.m in Sources */ = {isa = PBXBuildFile; fileRef = A910A3F01BF740B600EE6336 /* EBSearchAddressController.m */; settings = {ASSET_TAGS = (); }; };
+		A910A3F31BF740B600EE6336 /* EBSearchAddressController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A910A3F11BF740B600EE6336 /* EBSearchAddressController.xib */; settings = {ASSET_TAGS = (); }; };
 		A91921751BDE33030005E2A3 /* EBLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A91921731BDE33030005E2A3 /* EBLoginViewController.m */; settings = {ASSET_TAGS = (); }; };
 		A91921761BDE33030005E2A3 /* EBLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A91921741BDE33030005E2A3 /* EBLoginViewController.xib */; settings = {ASSET_TAGS = (); }; };
 		A919217A1BDE37F10005E2A3 /* login_telephone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91921781BDE37F10005E2A3 /* login_telephone@2x.png */; settings = {ASSET_TAGS = (); }; };
@@ -382,6 +390,19 @@
 		A910A3D61BF5DEF000EE6336 /* login_select@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_select@3x.png"; sourceTree = "<group>"; };
 		A910A3D71BF5DEF000EE6336 /* login_selectHL@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_selectHL@2x.png"; sourceTree = "<group>"; };
 		A910A3D81BF5DEF000EE6336 /* login_selectHL@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_selectHL@3x.png"; sourceTree = "<group>"; };
+		A910A3DE1BF71D2B00EE6336 /* APService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APService.h; sourceTree = "<group>"; };
+		A910A3DF1BF71D2B00EE6336 /* libPushSDK-1.8.8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libPushSDK-1.8.8.a"; sourceTree = "<group>"; };
+		A910A3E11BF71D4100EE6336 /* PushConfig.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PushConfig.plist; sourceTree = "<group>"; };
+		A910A3E31BF71D9500EE6336 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		A910A3E51BF71DA300EE6336 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		A910A3E81BF72CF600EE6336 /* libMobClickLibrary.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libMobClickLibrary.a; sourceTree = "<group>"; };
+		A910A3E91BF72CF600EE6336 /* MobClick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClick.h; sourceTree = "<group>"; };
+		A910A3EA1BF72CF600EE6336 /* MobClickSocialAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MobClickSocialAnalytics.h; sourceTree = "<group>"; };
+		A910A3EC1BF7389800EE6336 /* EBSPButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBSPButton.h; sourceTree = "<group>"; };
+		A910A3ED1BF7389800EE6336 /* EBSPButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBSPButton.m; sourceTree = "<group>"; };
+		A910A3EF1BF740B600EE6336 /* EBSearchAddressController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBSearchAddressController.h; sourceTree = "<group>"; };
+		A910A3F01BF740B600EE6336 /* EBSearchAddressController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBSearchAddressController.m; sourceTree = "<group>"; };
+		A910A3F11BF740B600EE6336 /* EBSearchAddressController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EBSearchAddressController.xib; sourceTree = "<group>"; };
 		A91921721BDE33030005E2A3 /* EBLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBLoginViewController.h; sourceTree = "<group>"; };
 		A91921731BDE33030005E2A3 /* EBLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBLoginViewController.m; sourceTree = "<group>"; };
 		A91921741BDE33030005E2A3 /* EBLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EBLoginViewController.xib; sourceTree = "<group>"; };
@@ -788,14 +809,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9DF688C1BD110A800368B27 /* Security.framework in Frameworks */,
+				A910A3E61BF71DA300EE6336 /* CoreFoundation.framework in Frameworks */,
+				A910A3E41BF71D9500EE6336 /* CFNetwork.framework in Frameworks */,
 				A91A4AB61BEAE85300AD7E1F /* libsqlite3.0.tbd in Frameworks */,
 				A9FE49C31BE9E10800708F62 /* CoreText.framework in Frameworks */,
 				A9DF68941BD1110100368B27 /* Foundation.framework in Frameworks */,
 				A9FE49B81BE9C1C900708F62 /* AlipaySDK.framework in Frameworks */,
+				A910A3E01BF71D2B00EE6336 /* libPushSDK-1.8.8.a in Frameworks */,
 				A9DF68921BD110F900368B27 /* UIKit.framework in Frameworks */,
+				A910A3EB1BF72CF600EE6336 /* libMobClickLibrary.a in Frameworks */,
 				A9DF68901BD110E700368B27 /* libc++.tbd in Frameworks */,
 				A9DF688E1BD110D600368B27 /* libz.tbd in Frameworks */,
-				A9DF688C1BD110A800368B27 /* Security.framework in Frameworks */,
 				A9DF688A1BD1108B00368B27 /* libstdc++.6.0.9.tbd in Frameworks */,
 				A9FE49C51BE9E27800708F62 /* libcrypto.a in Frameworks */,
 				A9DF68881BD1106E00368B27 /* SystemConfiguration.framework in Frameworks */,
@@ -1021,6 +1046,25 @@
 			path = More;
 			sourceTree = "<group>";
 		};
+		A910A3DD1BF71D2B00EE6336 /* JPush */ = {
+			isa = PBXGroup;
+			children = (
+				A910A3DE1BF71D2B00EE6336 /* APService.h */,
+				A910A3DF1BF71D2B00EE6336 /* libPushSDK-1.8.8.a */,
+			);
+			path = JPush;
+			sourceTree = "<group>";
+		};
+		A910A3E71BF72CF600EE6336 /* UMeng_No_IDFA */ = {
+			isa = PBXGroup;
+			children = (
+				A910A3E81BF72CF600EE6336 /* libMobClickLibrary.a */,
+				A910A3E91BF72CF600EE6336 /* MobClick.h */,
+				A910A3EA1BF72CF600EE6336 /* MobClickSocialAnalytics.h */,
+			);
+			path = UMeng_No_IDFA;
+			sourceTree = "<group>";
+		};
 		A91921771BDE37D50005E2A3 /* Login */ = {
 			isa = PBXGroup;
 			children = (
@@ -1212,13 +1256,15 @@
 			name = MapView;
 			sourceTree = "<group>";
 		};
-		A9DF68731BD090D100368B27 /* SelectPositionCell */ = {
+		A9DF68731BD090D100368B27 /* SelectPosition */ = {
 			isa = PBXGroup;
 			children = (
 				A9DF68701BD090CC00368B27 /* EBSelectPositionCell.h */,
 				A9DF68711BD090CC00368B27 /* EBSelectPositionCell.m */,
+				A910A3EC1BF7389800EE6336 /* EBSPButton.h */,
+				A910A3ED1BF7389800EE6336 /* EBSPButton.m */,
 			);
-			name = SelectPositionCell;
+			name = SelectPosition;
 			sourceTree = "<group>";
 		};
 		A9DF68781BD106D400368B27 /* AMap */ = {
@@ -1410,6 +1456,7 @@
 				A9FC04E01BCCEC4000870580 /* Main.storyboard */,
 				A9FC04E51BCCEC4000870580 /* LaunchScreen.storyboard */,
 				A9FC04E81BCCEC4000870580 /* Info.plist */,
+				A910A3E11BF71D4100EE6336 /* PushConfig.plist */,
 				A9FC04D81BCCEC4000870580 /* main.m */,
 				A9FC05331BCD045700870580 /* EBus.pch */,
 			);
@@ -1503,6 +1550,8 @@
 		A9FC050F1BCD02B500870580 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				A910A3E71BF72CF600EE6336 /* UMeng_No_IDFA */,
+				A910A3DD1BF71D2B00EE6336 /* JPush */,
 				A91A4AB71BEAF45500AD7E1F /* WeChat */,
 				A9FE49541BE9C1C900708F62 /* Alipay */,
 				A99EFB561BDDD8DF0074EC55 /* Calender */,
@@ -1619,6 +1668,9 @@
 				A9F960291BCE48520011BC73 /* EBSearchViewController.m */,
 				A9DF68671BCF9DF700368B27 /* EBSelectPositionController.h */,
 				A9DF68681BCF9DF700368B27 /* EBSelectPositionController.m */,
+				A910A3EF1BF740B600EE6336 /* EBSearchAddressController.h */,
+				A910A3F01BF740B600EE6336 /* EBSearchAddressController.m */,
+				A910A3F11BF740B600EE6336 /* EBSearchAddressController.xib */,
 				A9DF68A01BD4C18A00368B27 /* EBSearchResultController.h */,
 				A9DF68A11BD4C18A00368B27 /* EBSearchResultController.m */,
 				A9DF68A91BD50B0700368B27 /* EBLineDetailController.h */,
@@ -1656,7 +1708,7 @@
 				A9DF686D1BCFA55300368B27 /* SearchBusView */,
 				A9DF686E1BCFA56400368B27 /* UsualLineCell */,
 				A9DF686F1BCFA57200368B27 /* MapView */,
-				A9DF68731BD090D100368B27 /* SelectPositionCell */,
+				A9DF68731BD090D100368B27 /* SelectPosition */,
 				A9DF68C91BD6351900368B27 /* AnnotationView */,
 				A9DF68FB1BD880D100368B27 /* HotView */,
 				A9F1AB261BD8DEC900B85843 /* LineStation */,
@@ -1957,6 +2009,8 @@
 		BE8BE0F5FEBC6586F065DD5B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A910A3E51BF71DA300EE6336 /* CoreFoundation.framework */,
+				A910A3E31BF71D9500EE6336 /* CFNetwork.framework */,
 				A91A4AB51BEAE85300AD7E1F /* libsqlite3.0.tbd */,
 				A9FE49C21BE9E10800708F62 /* CoreText.framework */,
 				A9DF68931BD1110100368B27 /* Foundation.framework */,
@@ -2088,6 +2142,7 @@
 				A91A4ADF1BEDC4EB00AD7E1F /* search_map_depart@2x.png in Resources */,
 				A907EA221BDF5D4C006E99C1 /* me_accessoryView@3x.png in Resources */,
 				A910A3C51BF43DBF00EE6336 /* me_freeCert_zjTypeDown@2x.png in Resources */,
+				A910A3F31BF740B600EE6336 /* EBSearchAddressController.xib in Resources */,
 				A907EA301BDF7029006E99C1 /* tabBar_me_normal@3x.png in Resources */,
 				A91A4B301BF3495100AD7E1F /* EBUploadSFZView.xib in Resources */,
 				A9DF68ED1BD75CF400368B27 /* search_lineDetailPP_background@3x.png in Resources */,
@@ -2146,6 +2201,7 @@
 				A907EAB51BE1C1A7006E99C1 /* search_startTime@3x.png in Resources */,
 				A9DF68AF1BD5D87200368B27 /* search_label@3x.png in Resources */,
 				A9DDC5781BE84B51006395E3 /* search_pay_wechat@2x.png in Resources */,
+				A910A3E21BF71D4100EE6336 /* PushConfig.plist in Resources */,
 				A907EA4D1BDF73D4006E99C1 /* tabBar_search_select@2x.png in Resources */,
 				A9F1AB221BD8DAF700B85843 /* search_cell_start@3x.png in Resources */,
 				A907EA9E1BE06968006E99C1 /* Attention_pad@3x.png in Resources */,
@@ -2335,10 +2391,12 @@
 				A91A4B231BF348DA00AD7E1F /* EBUploadZJView.m in Sources */,
 				A9DF68691BCF9DF700368B27 /* EBSelectPositionController.m in Sources */,
 				A9DF685E1BCF948800368B27 /* EBSysMapView.m in Sources */,
+				A910A3EE1BF7389800EE6336 /* EBSPButton.m in Sources */,
 				A9F960841BCF3A480011BC73 /* NSDictionary+PHCategory.m in Sources */,
 				A9F9602D1BCF32E40011BC73 /* EBBaseLineCell.m in Sources */,
 				A9F960891BCF3A480011BC73 /* UIImage+PHCategory.m in Sources */,
 				A9DF68B51BD5E56900368B27 /* EBLineDetailModel.m in Sources */,
+				A910A3F21BF740B600EE6336 /* EBSearchAddressController.m in Sources */,
 				A9FC054E1BCD0B0C00870580 /* PHNavigationController.m in Sources */,
 				A9F1AB291BD8FC9200B85843 /* EBBuyTicketController.m in Sources */,
 				A9FE49BE1BE9C1C900708F62 /* NSDataEx.m in Sources */,
@@ -2554,6 +2612,8 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/EBus/Classes/Libs/Alipay",
 					"$(PROJECT_DIR)/EBus/Classes/Libs/WeChat",
+					"$(PROJECT_DIR)/EBus/Classes/Libs/JPush",
+					"$(PROJECT_DIR)/EBus/Classes/Libs/UMeng_No_IDFA",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -2620,6 +2680,8 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/EBus/Classes/Libs/Alipay",
 					"$(PROJECT_DIR)/EBus/Classes/Libs/WeChat",
+					"$(PROJECT_DIR)/EBus/Classes/Libs/JPush",
+					"$(PROJECT_DIR)/EBus/Classes/Libs/UMeng_No_IDFA",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",

@@ -7,6 +7,7 @@
 //
 
 #import "PHTableViewController.h"
+#import "MobClick.h"
 
 @interface PHTableViewController ()
 @property (nonatomic, weak) UIImageView *backgroundImageView;
@@ -37,6 +38,17 @@
     backgroundImageView.image = image;
     self.tableView.backgroundView = backgroundImageView;
     self.backgroundImageView = backgroundImageView;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [MobClick beginLogPageView:[NSString stringWithFormat:@"%@",NSStringFromClass([self class])]];
+}
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [MobClick endLogPageView:[NSString stringWithFormat:@"%@",NSStringFromClass([self class])]];
 }
 
 - (void)viewControllerDidEnterBackground{

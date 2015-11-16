@@ -9,44 +9,85 @@
 #import "EBTransferController.h"
 #import <MJRefresh/MJRefresh.h>
 #import "EBLineMapView.h"
+#import "EBTransferLineCell.h"
 #import "EBSearchResultModel.h"
-#import "EBUsualLineCell.h"
 #import "EBLineDetailModel.h"
-#import "EBUserInfo.h"
 #import "EBTransferModel.h"
+#import "EBUserInfo.h"
+#import "EBTransferTipView.h"
+@interface EBTransferController () <EBLineMapViewDelegate, EBTransferLineCellDelegate>
 
-@interface EBTransferController () <EBLineMapViewDelegate>
-
-@property (nonatomic, weak) EBLineMapView *lineMapView;
 @property(nonatomic, strong) NSString *filePath;//文件路径
-
 @property (nonatomic, strong) EBSearchResultModel *resultModel;
+@property (nonatomic, strong) EBTransferModel *transferModel;
 
+@property (nonatomic, assign) BOOL tableViewAppear;
+@property (nonatomic, weak) UIView *footerView;
+@property (nonatomic, weak) EBLineMapView *lineMapView;
+@property (nonatomic, weak) EBTransferTipView *tipView;
 @end
 
 @implementation EBTransferController
 
+- (void)setTableViewAppear:(BOOL)tableViewAppear {
+    _tableViewAppear = tableViewAppear;
+    if (tableViewAppear) {
+        self.footerView.hidden = NO;
+        self.lineMapView.hidden = NO;
+        self.backgroundImageViewDisappear = YES;
+    } else {
+        self.footerView.hidden = YES;
+        self.lineMapView.hidden = YES;
+        self.backgroundImageViewDisappear = NO;
+    }
+}
+
+- (void)setResultModel:(EBSearchResultModel *)resultModel {
+    _resultModel = resultModel;
+    self.lineMapView.resultModel = resultModel;
+    [self lineDetailRequest];
+}
+
+- (NSString *)filePath {
+    if (!_filePath) {
+        if (!self.resultModel.lineId) return nil;
+        NSString *documents = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+        _filePath = [documents stringByAppendingPathComponent:[NSString stringWithFormat:@"%@lineId.arc",self.resultModel.lineId]];
+    }
+    return _filePath;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.backgroundImageViewDisappear = NO;
     self.navigationItem.title = @"乘车";
-    
-    EBLineMapView *lineMap = [[EBLineMapView alloc] initWithFrame:CGRectMake(0, 0, EB_WidthOfScreen, EB_HeightOfScreen - 100 - EB_HeightOfNavigationBar - EB_HeightOfTabBar - 30)];
-    lineMap.delegate = self;
-    lineMap.resultModel = self.resultModel;
-    self.tableView.tableFooterView = lineMap;
-    self.tableView.allowsSelection = NO;
-    self.lineMapView = lineMap;
-    
+    self.tableViewAppear = NO;
+    [self footerViewImplementation];
     EB_WS(ws);
     self.tableView.header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        [ws refresh];
+        [ws refreshWithLoading:NO];
     }];
-    [self.tableView.header beginRefreshing];
+    self.tableView.allowsSelection = NO;
+    [self refreshWithLoading:YES];
+}
+- (void)footerViewImplementation {
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, EB_WidthOfScreen, EB_HeightOfScreen - 100 - EB_HeightOfNavigationBar - EB_HeightOfTabBar - 30)];
+    footerView.backgroundColor = [UIColor clearColor];
+    self.tableView.tableFooterView = footerView;
+    self.footerView = footerView;
+    EBLineMapView *lineMap = [[EBLineMapView alloc] init];
+    lineMap.hidden = YES;
+    [footerView addSubview:lineMap];
+    lineMap.frame = footerView.bounds;
+    lineMap.delegate = self;
+    lineMap.resultModel = self.resultModel;
+    self.lineMapView = lineMap;
     
-    NSString *documents = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
-    self.filePath = [documents stringByAppendingPathComponent:[NSString stringWithFormat:@"%@lineId.arc",self.resultModel.lineId]];
-    
+    EBTransferTipView *tipView = [[EBTransferTipView alloc] init];
+    tipView.frame = footerView.bounds;
+    tipView.hidden = YES;
+    tipView.backgroundColor = [UIColor purpleColor];
+    [footerView addSubview:tipView];
+    self.tipView = tipView;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -54,18 +95,35 @@
     [self.lineMapView mapViewDidAppear];
 }
 
-- (void)refresh {
+
+#pragma mark - Request
+- (void)refreshWithLoading:(BOOL)loading {
     if ([EBUserInfo sharedEBUserInfo].loginId.length == 0 || [EBUserInfo sharedEBUserInfo].loginName.length == 0) return;
     EB_WS(ws);
+    loading ? [MBProgressHUD showMessage:@"加载中..." toView:self.view] : nil;
     NSDictionary *parameters = @{static_Argument_userName   : [EBUserInfo sharedEBUserInfo].loginName,
                                  static_Argument_userId     : [EBUserInfo sharedEBUserInfo].loginId};
     [EBNetworkRequest GET:static_Url_TransferOfRecentLine parameters:parameters dictBlock:^(NSDictionary *dict) {
         [ws.tableView.header endRefreshing];
+        if (loading) {
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+        }
         NSDictionary *returnData = dict[static_Argument_returnData];
-        if (returnData.count == 0) return;
+        if (returnData.count == 0) {
+            self.tableViewAppear = NO;
+            return;
+        } else {
+            self.tableViewAppear = YES;
+        }
         EBTransferModel *tModel = [[EBTransferModel alloc] initWithDict:returnData];
-        EBSearchResultModel *resultModel = [[EBSearchResultModel alloc] init];
+        EBSearchResultModel *resultModel = [EBSearchResultModel resultModelFromTransferModel:tModel];
+        self.resultModel = resultModel;
+        self.transferModel = tModel;
+        [self.tableView reloadData];
     } errorBlock:^(NSError *error) {
+        if (loading) {
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+        }
         [ws.tableView.header endRefreshing];
     }];
 }
@@ -77,6 +135,7 @@
         return;
     }
     EB_WS(ws);
+    if (!self.resultModel.lineId) return;
     NSDictionary *parameters = @{static_Argument_lineId : self.resultModel.lineId};
     [EBNetworkRequest GET:static_Url_LineDetail parameters:parameters dictBlock:^(NSDictionary *dict) {
         NSDictionary *returnData = dict[static_Argument_returnData];
@@ -92,15 +151,16 @@
 #pragma mark - UITableView
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return @"乘车";
+    NSString *string = [NSString stringWithFormat:@"乘车日期：%@",self.transferModel.runDate];
+    return self.tableViewAppear ? string : nil;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
+    return self.tableViewAppear ? 1 : 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 30;
+    return self.tableViewAppear ? 30 : 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -108,10 +168,23 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    EBUsualLineCell *cell = [EBUsualLineCell cellWithTableView:tableView];
-    cell.showBuyView = NO;
-    cell.model = self.resultModel;
+    EBTransferLineCell *cell = [EBTransferLineCell cellWithTableView:tableView];
+    cell.delegate = self;
+    cell.model = self.transferModel;
     return cell;
+}
+#pragma mark - EBTransferLineCellDelegate
+- (void)transferLineOutTicktet:(EBTransferLineCell *)transeferLine transerModel:(EBTransferModel *)model type:(EBTicketType)type{
+    EBLog(@"%@, %ld",NSStringFromSelector(_cmd), type);
+    if (type == EBTicketTypeOfOut) {
+        self.lineMapView.hidden = YES;
+        self.tipView.hidden = NO;
+    } else if (type == EBTicketTypeOfCheckLine) {
+        self.lineMapView.hidden = NO;
+        self.tipView.hidden = YES;
+    } else if (type == EBTicketTypeOfWaiting) {
+        [MBProgressHUD showError:@"乘车前30分钟出票" toView:self.view];
+    }
 }
 
 @end

@@ -270,6 +270,33 @@
     attentionVC.titleSelectIndex = index;
     [vc.navigationController popToRootViewControllerAnimated:NO];
 }
+
++ (NSDateComponents *)dataComponent {
+    NSDate *date = [NSDate date];
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSUInteger unitFlags = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
+    NSDateComponents *dateComponent = [calendar components:unitFlags fromDate:date];
+    return dateComponent;
+}
+
++ (NSInteger)currentYear {
+    return [self dataComponent].year;
+}
++ (NSInteger)currentMonth {
+    return [self dataComponent].month;
+}
++ (NSInteger)currentDay {
+    return [self dataComponent].day;
+}
++ (NSInteger)currentHour {
+    return [self dataComponent].hour;
+}
++ (NSInteger)currentMinute {
+    return [self dataComponent].minute;
+}
++ (NSInteger)currentSecond {
+    return [self dataComponent].second;
+}
 @end
 
 

@@ -22,3 +22,25 @@
 }
 
 @end
+
+
+@implementation EBSearchResultModel (TransferModel)
+
++ (instancetype)resultModelFromTransferModel:(EBTransferModel *)transferModel {
+    EBSearchResultModel *resultModel = [[EBSearchResultModel alloc] init];
+    resultModel.lineId = transferModel.lineId;
+    resultModel.offStationId = transferModel.offStationId;
+    resultModel.onStationId = transferModel.onStationId;
+    resultModel.startTime = transferModel.startTime;
+    resultModel.vehTime = transferModel.vehTime;
+    resultModel.onStationName = transferModel.onStationName;
+    resultModel.offStationName = transferModel.offStationName;
+    resultModel.mileage = transferModel.mileage;
+    resultModel.needTime = transferModel.needTime;
+    resultModel.ID = transferModel.ID;
+    resultModel.price = transferModel.tradePrice;
+    return resultModel;
+
+}
+
+@end

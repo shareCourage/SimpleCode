@@ -85,6 +85,11 @@
 		A910A3EE1BF7389800EE6336 /* EBSPButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A910A3ED1BF7389800EE6336 /* EBSPButton.m */; settings = {ASSET_TAGS = (); }; };
 		A910A3F21BF740B600EE6336 /* EBSearchAddressController.m in Sources */ = {isa = PBXBuildFile; fileRef = A910A3F01BF740B600EE6336 /* EBSearchAddressController.m */; settings = {ASSET_TAGS = (); }; };
 		A910A3F31BF740B600EE6336 /* EBSearchAddressController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A910A3F11BF740B600EE6336 /* EBSearchAddressController.xib */; settings = {ASSET_TAGS = (); }; };
+		A910A3F71BF9816500EE6336 /* search_navi_check@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A910A3F51BF9816500EE6336 /* search_navi_check@3x.png */; settings = {ASSET_TAGS = (); }; };
+		A910A3F91BF9887100EE6336 /* search_navi_check@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A910A3F81BF9887100EE6336 /* search_navi_check@2x.png */; settings = {ASSET_TAGS = (); }; };
+		A910A3FC1BF9AA0300EE6336 /* EBTransferLineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A910A3FB1BF9AA0300EE6336 /* EBTransferLineCell.m */; settings = {ASSET_TAGS = (); }; };
+		A910A3FF1BF9E29400EE6336 /* EBTransferTipView.m in Sources */ = {isa = PBXBuildFile; fileRef = A910A3FE1BF9E29400EE6336 /* EBTransferTipView.m */; settings = {ASSET_TAGS = (); }; };
+		A910A4011BF9E2A700EE6336 /* EBTransferTipView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A910A4001BF9E2A700EE6336 /* EBTransferTipView.xib */; settings = {ASSET_TAGS = (); }; };
 		A91921751BDE33030005E2A3 /* EBLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A91921731BDE33030005E2A3 /* EBLoginViewController.m */; settings = {ASSET_TAGS = (); }; };
 		A91921761BDE33030005E2A3 /* EBLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A91921741BDE33030005E2A3 /* EBLoginViewController.xib */; settings = {ASSET_TAGS = (); }; };
 		A919217A1BDE37F10005E2A3 /* login_telephone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91921781BDE37F10005E2A3 /* login_telephone@2x.png */; settings = {ASSET_TAGS = (); }; };
@@ -403,6 +408,13 @@
 		A910A3EF1BF740B600EE6336 /* EBSearchAddressController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBSearchAddressController.h; sourceTree = "<group>"; };
 		A910A3F01BF740B600EE6336 /* EBSearchAddressController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBSearchAddressController.m; sourceTree = "<group>"; };
 		A910A3F11BF740B600EE6336 /* EBSearchAddressController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EBSearchAddressController.xib; sourceTree = "<group>"; };
+		A910A3F51BF9816500EE6336 /* search_navi_check@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search_navi_check@3x.png"; sourceTree = "<group>"; };
+		A910A3F81BF9887100EE6336 /* search_navi_check@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "search_navi_check@2x.png"; sourceTree = "<group>"; };
+		A910A3FA1BF9AA0300EE6336 /* EBTransferLineCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBTransferLineCell.h; sourceTree = "<group>"; };
+		A910A3FB1BF9AA0300EE6336 /* EBTransferLineCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBTransferLineCell.m; sourceTree = "<group>"; };
+		A910A3FD1BF9E29400EE6336 /* EBTransferTipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBTransferTipView.h; sourceTree = "<group>"; };
+		A910A3FE1BF9E29400EE6336 /* EBTransferTipView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBTransferTipView.m; sourceTree = "<group>"; };
+		A910A4001BF9E2A700EE6336 /* EBTransferTipView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EBTransferTipView.xib; sourceTree = "<group>"; };
 		A91921721BDE33030005E2A3 /* EBLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBLoginViewController.h; sourceTree = "<group>"; };
 		A91921731BDE33030005E2A3 /* EBLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBLoginViewController.m; sourceTree = "<group>"; };
 		A91921741BDE33030005E2A3 /* EBLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EBLoginViewController.xib; sourceTree = "<group>"; };
@@ -1767,6 +1779,11 @@
 		A9FC05201BCD02B500870580 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				A910A3FA1BF9AA0300EE6336 /* EBTransferLineCell.h */,
+				A910A3FB1BF9AA0300EE6336 /* EBTransferLineCell.m */,
+				A910A3FD1BF9E29400EE6336 /* EBTransferTipView.h */,
+				A910A3FE1BF9E29400EE6336 /* EBTransferTipView.m */,
+				A910A4001BF9E2A700EE6336 /* EBTransferTipView.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1877,6 +1894,8 @@
 				A9DF68EA1BD73CAD00368B27 /* search_checkPhoto@3x.png */,
 				A91A4AE81BEDC59D00AD7E1F /* search_lineDetailPP_background@2x.png */,
 				A9DF68EC1BD75CF400368B27 /* search_lineDetailPP_background@3x.png */,
+				A910A3F81BF9887100EE6336 /* search_navi_check@2x.png */,
+				A910A3F51BF9816500EE6336 /* search_navi_check@3x.png */,
 				A9DF685F1BCF961500368B27 /* home_current_highlighted@2x.png */,
 				A9DF68601BCF961500368B27 /* map_minus@2x.png */,
 				A9DF68611BCF961500368B27 /* map_plus@2x.png */,
@@ -2193,6 +2212,7 @@
 				A9DDC57D1BE84D8E006395E3 /* search_drag_right@2x.png in Resources */,
 				A9DDC5791BE84B51006395E3 /* search_pay_zfb@2x.png in Resources */,
 				A9DF68631BCF961500368B27 /* home_current_highlighted@2x.png in Resources */,
+				A910A3F71BF9816500EE6336 /* search_navi_check@3x.png in Resources */,
 				A9DF68CC1BD6410700368B27 /* search_map_depart@3x.png in Resources */,
 				A9DF69011BD883AB00368B27 /* search_hot@3x.png in Resources */,
 				A907EA1E1BDF5662006E99C1 /* me_header@2x.png in Resources */,
@@ -2214,6 +2234,7 @@
 				A907EA8D1BE0683C006E99C1 /* Attention_pad@2x.png in Resources */,
 				A91A4AE11BEDC51500AD7E1F /* search_map_end@2x.png in Resources */,
 				A910A3D91BF5DEF000EE6336 /* login_select@2x.png in Resources */,
+				A910A3F91BF9887100EE6336 /* search_navi_check@2x.png in Resources */,
 				A907EA4C1BDF73D4006E99C1 /* tabBar_search_normal@2x.png in Resources */,
 				A907EA8E1BE0683C006E99C1 /* Attention_register@2x.png in Resources */,
 				A907EA2F1BDF7029006E99C1 /* tabBar_byBus_select@3x.png in Resources */,
@@ -2256,6 +2277,7 @@
 				A907EAA11BE06968006E99C1 /* Attention_sponsorHL@3x.png in Resources */,
 				A91A4AD51BEDC30200AD7E1F /* search_cell_start@2x.png in Resources */,
 				A907EA891BE0683C006E99C1 /* Attention_buy@2x.png in Resources */,
+				A910A4011BF9E2A700EE6336 /* EBTransferTipView.xib in Resources */,
 				A907EA471BDF73D4006E99C1 /* tabBar_attention_select@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2393,6 +2415,7 @@
 				A9DF685E1BCF948800368B27 /* EBSysMapView.m in Sources */,
 				A910A3EE1BF7389800EE6336 /* EBSPButton.m in Sources */,
 				A9F960841BCF3A480011BC73 /* NSDictionary+PHCategory.m in Sources */,
+				A910A3FC1BF9AA0300EE6336 /* EBTransferLineCell.m in Sources */,
 				A9F9602D1BCF32E40011BC73 /* EBBaseLineCell.m in Sources */,
 				A9F960891BCF3A480011BC73 /* UIImage+PHCategory.m in Sources */,
 				A9DF68B51BD5E56900368B27 /* EBLineDetailModel.m in Sources */,
@@ -2400,6 +2423,7 @@
 				A9FC054E1BCD0B0C00870580 /* PHNavigationController.m in Sources */,
 				A9F1AB291BD8FC9200B85843 /* EBBuyTicketController.m in Sources */,
 				A9FE49BE1BE9C1C900708F62 /* NSDataEx.m in Sources */,
+				A910A3FF1BF9E29400EE6336 /* EBTransferTipView.m in Sources */,
 				A9DF686C1BCFA42900368B27 /* EBSearchMapView.m in Sources */,
 				A9FC05631BCD0B7E00870580 /* PHSettingArrowItem.m in Sources */,
 				A9DDC5821BE85C6D006395E3 /* EBOrderDetailController.m in Sources */,

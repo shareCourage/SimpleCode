@@ -14,23 +14,24 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.titleLabel.textAlignment = NSTextAlignmentLeft;
-        self.imageView.contentMode = UIViewContentModeCenter;
+        self.imageView.contentMode = UIViewContentModeScaleAspectFit;
     }
     return self;
 }
 - (CGRect)imageRectForContentRect:(CGRect)contentRect
 {
-    CGFloat imageY = 0;
-    CGFloat imageW = 50;
-    CGFloat imageX = contentRect.size.width - 50;
-    CGFloat imageH = contentRect.size.height;
+    CGFloat padding = 5;
+    CGFloat imageY = padding;
+    CGFloat imageH = contentRect.size.height - padding * 2;
+    CGFloat imageW = imageH;
+    CGFloat imageX = contentRect.size.width - imageW - 2 * padding;
     return CGRectMake(imageX, imageY, imageW, imageH);
 }
 
 - (CGRect)titleRectForContentRect:(CGRect)contentRect
 {
     CGFloat padding = 10;
-    CGFloat titleY = 5;
+    CGFloat titleY = 0;
     CGFloat titleX = padding;
     CGFloat titleW = contentRect.size.width - 50;
     CGFloat titleH = contentRect.size.height;

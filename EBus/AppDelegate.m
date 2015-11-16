@@ -72,7 +72,10 @@
     
     // Required
     EBLog(@"deviceToken ->%@ %@",NSStringFromSelector(_cmd),deviceToken);
+#if TARGET_IPHONE_SIMULATOR
+#elif TARGET_OS_IPHONE
     [APService registerDeviceToken:deviceToken];
+#endif
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {

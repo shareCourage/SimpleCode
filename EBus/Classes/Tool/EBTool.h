@@ -77,4 +77,12 @@
 + (NSString *)stringFromStatus:(NSInteger)status;
 + (NSString *)stringFromPayType:(NSInteger)payType;
 + (NSString *)stringFromZJType:(NSUInteger)certype;
+
++ (NSInteger)currentYear;
++ (NSInteger)currentMonth;
++ (NSInteger)currentDay;
++ (NSInteger)currentHour;
++ (NSInteger)currentMinute;
++ (NSInteger)currentSecond;
+
 @end

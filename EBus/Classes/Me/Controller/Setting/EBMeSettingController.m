@@ -165,7 +165,7 @@
 
 #pragma mark - UITableViewDataSource
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 50.f;
+    return (EB_WidthOfScreen <= 320) ? 44 : 50;
 }
 
 #pragma mark - UIAlertViewDelegate

@@ -8,6 +8,7 @@
 #define EB_ImageName_LocationBtn @"home_current_highlighted"
 
 #import "EBSearchMapView.h"
+#import "EBUserInfo.h"
 
 @interface EBSearchMapView ()<MAMapViewDelegate, AMapSearchDelegate>
 
@@ -35,11 +36,14 @@
     self.maMapView.showsUserLocation = YES;
     self.maMapView.allowsBackgroundLocationUpdates = YES;
     self.maMapView.userTrackingMode = MAUserTrackingModeFollow;
+    
+//    CLLocationCoordinate2D coord = [EBUserInfo sharedEBUserInfo].userLocation;
+//    [self.maMapView setCenterCoordinate:coord];
 }
 
 - (void)mapViewDidDisappear {
     [super mapViewDidDisappear];
-};
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -124,7 +128,9 @@
 
 - (void)mapView:(MAMapView *)mapView didUpdateUserLocation:(MAUserLocation *)userLocation updatingLocation:(BOOL)updatingLocation{
     EBLog(@"mapViewLocation -> %.6f, %.6f", userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude);
-    [self locationSearchThroughAMAP:userLocation.location.coordinate];
+    CLLocationCoordinate2D coord = userLocation.location.coordinate;
+    [EBUserInfo sharedEBUserInfo].userLocation = coord;
+    [self locationSearchThroughAMAP:coord];
     mapView.userTrackingMode = MAUserTrackingModeNone;//加这句代码，当调用定位时，可以让mapView不执行regionDidChange方法
 }
 

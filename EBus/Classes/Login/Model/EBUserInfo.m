@@ -13,11 +13,13 @@
 @synthesize loginName = _loginName;
 @synthesize loginId = _loginId;
 @synthesize sztNo = _sztNo;
+@synthesize userLocation = _userLocation;
 singleton_implementation(EBUserInfo)
 
 - (instancetype)init {
     self = [super init];
     if (self) {
+        _userLocation = kCLLocationCoordinate2DInvalid;
         [self reloadCurrentDate];
     }
     return self;
@@ -121,6 +123,22 @@ singleton_implementation(EBUserInfo)
 - (void)setSztNo:(NSString *)sztNo {
     _sztNo = sztNo;
     [[NSUserDefaults standardUserDefaults] setObject:sztNo forKey:@"sztNoForKey"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+
+- (CLLocationCoordinate2D)userLocation {
+    if (CLLocationCoordinate2DIsValid(_userLocation)) return _userLocation;
+    CGFloat lat = [[NSUserDefaults standardUserDefaults] doubleForKey:@"userLocationForKeyLat"];
+    CGFloat lng = [[NSUserDefaults standardUserDefaults] doubleForKey:@"userLocationForKeyLng"];
+    if (lat == 0 || lng == 0) return CLLocationCoordinate2DMake(113.958002, 22.538313);
+    CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(lat, lng);
+    return coord;
+}
+- (void)setUserLocation:(CLLocationCoordinate2D)userLocation {
+    _userLocation = userLocation;
+    [[NSUserDefaults standardUserDefaults] setDouble:userLocation.latitude forKey:@"userLocationForKeyLat"];
+    [[NSUserDefaults standardUserDefaults] setDouble:userLocation.longitude forKey:@"userLocationForKeyLng"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 

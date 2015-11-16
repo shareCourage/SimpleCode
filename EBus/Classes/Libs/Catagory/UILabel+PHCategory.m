@@ -23,6 +23,15 @@
     label.backgroundColor = [UIColor clearColor];
     return label;
 }
+- (void)setSystemFontOf12 {
+    self.font = [UIFont systemFontOfSize:12];
+}
+- (void)setSystemFontOf11 {
+    self.font = [UIFont systemFontOfSize:11];
+}
+- (void)setSystemFontOf10 {
+    self.font = [UIFont systemFontOfSize:10];
+}
 
 - (void)setSystemFontOf13 {
     self.font = [UIFont systemFontOfSize:13];

@@ -89,9 +89,13 @@
     [self titleViewImplementation];
     [self searchMapViewImplementation];
     [self tableViewImplementation];
+    
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.backBarButtonItem = backItem;
 }
 - (void)titleViewImplementation {
     EBSPButton *searchBtn = [EBSPButton buttonWithType:UIButtonTypeCustom];
+    [searchBtn setImage:[UIImage imageNamed:@"search_navi_check"] forState:UIControlStateNormal];
     searchBtn.frame = CGRectMake(0, 0, EB_WidthOfScreen - 70, 35);
     [searchBtn setTitle:@"地址查询" forState:UIControlStateNormal];
     [searchBtn setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
@@ -113,7 +117,11 @@
 }
 
 - (void)searchAddressClick {
-    EBSearchAddressController *address = [[EBSearchAddressController alloc] init];
+    EB_WS(ws);
+    EBSearchAddressController *address = [[EBSearchAddressController alloc] initWithOption:^(AMapPOI *poi) {
+        CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(poi.location.latitude, poi.location.longitude);
+        ws.option(poi.name, coord);
+    }];
     [self.navigationController pushViewController:address animated:YES];
 }
 

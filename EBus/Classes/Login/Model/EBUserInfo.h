@@ -25,4 +25,6 @@ singleton_interface(EBUserInfo)
 @property (nonatomic, strong) NSMutableArray *daysInCurrentMonth;
 @property (nonatomic, strong) NSMutableArray *daysInFollowingMonth;
 
+@property (nonatomic, assign) CLLocationCoordinate2D userLocation;
+
 @end

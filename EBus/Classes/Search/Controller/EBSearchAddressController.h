@@ -7,7 +7,11 @@
 //
 
 #import "PHViewController.h"
+@class AMapPOI;
 
 @interface EBSearchAddressController : PHViewController
+
+- (instancetype)initWithOption:(void (^)(AMapPOI *poi))option;
+
 
 @end

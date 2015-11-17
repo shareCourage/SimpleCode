@@ -13,7 +13,10 @@
 #import "EBUserInfo.h"
 #import "EBAttentionController.h"
 #import "PHNavigationController.h"
-@interface EBSponsorController () <EBSearchBusViewDelegate>
+#import <AMapSearchKit/AMapSearchKit.h>
+#import "EBTimeChooseView.h"
+
+@interface EBSponsorController () <EBSearchBusViewDelegate, AMapSearchDelegate, EBTimeChooseViewDelegate>
 
 @property (nonatomic, weak) EBSearchBusView *searchBusView;
 
@@ -26,9 +29,40 @@
 @property (nonatomic, copy) NSString *offGeogName;
 @property (nonatomic, copy) NSString *offStationName;
 
+@property (nonatomic, strong) AMapSearchAPI *searchPOI;
+@property (nonatomic, assign) EBSearchBusClickType clickType;
+@property (nonatomic, assign) BOOL timePickerViewAppear;
+@property (nonatomic, weak) EBTimeChooseView *timeChooseView;
 @end
 
 @implementation EBSponsorController
+- (AMapSearchAPI *)searchPOI {
+    if (_searchPOI == nil) {
+        _searchPOI = [[AMapSearchAPI alloc] init];
+        _searchPOI.delegate = self;
+    }
+    return _searchPOI;
+}
+
+- (void)setTimePickerViewAppear:(BOOL)timePickerViewAppear {
+    _timePickerViewAppear = timePickerViewAppear;
+    if (timePickerViewAppear) {
+        [UIView animateWithDuration:0.4f animations:^{
+            self.timeChooseView.y = EB_HeightOfScreen - self.timeChooseView.height;
+        }];
+    } else {
+        [UIView animateWithDuration:0.4f animations:^{
+            self.timeChooseView.y = EB_HeightOfScreen;
+        }];
+    }
+}
+
+- (void)setStartTime:(NSString *)startTime {
+    _startTime = startTime;
+    if (startTime) {
+        self.searchBusView.startTimeTitle = [startTime insertSymbolString:@":" atIndex:2];
+    }
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -37,7 +71,17 @@
     self.myPositionCoord = kCLLocationCoordinate2DInvalid;
     self.endPositionCoord = kCLLocationCoordinate2DInvalid;
     [self searchBusViewImplementation];
+    [self timeChooseViewImplementation];
+    [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tipClick)]];
 }
+- (void)timeChooseViewImplementation {
+    EBTimeChooseView *timeChooseView = [[EBTimeChooseView alloc] init];
+    timeChooseView.delegate = self;
+    timeChooseView.frame = CGRectMake(0, EB_HeightOfScreen, EB_WidthOfScreen, 200);
+    [self.view addSubview:timeChooseView];
+    self.timeChooseView = timeChooseView;
+}
+
 - (void)searchBusViewImplementation {
     EBSearchBusView *searchBusView = [[EBSearchBusView alloc] initWithFrame:CGRectMake(0, 64, self.view.frame.size.width, 300)];
     searchBusView.showStartTimeBtn = YES;
@@ -45,8 +89,12 @@
     [self.view addSubview:searchBusView];
     self.searchBusView = searchBusView;
 }
+- (void)tipClick {
+    self.timePickerViewAppear = NO;
+}
 #pragma mark -EBSearchBusViewDelegate
 - (void)searchBusView:(EBSearchBusView *)searchBusView clickType:(EBSearchBusClickType)type {
+    self.clickType = type;
     switch (type) {
         case EBSearchBusClickTypeMyPosition:
             [self selectPosition:type];
@@ -55,9 +103,10 @@
             [self selectPosition:type];
             break;
         case EBSearchBusClickTypeStartTime:
+            self.timePickerViewAppear = !self.timePickerViewAppear;
 #warning 先写死，稍后自定义这个view
-            self.startTime = @"0700";
-            searchBusView.startTimeTitle = self.startTime;
+//            self.startTime = @"0700";
+//            searchBusView.startTimeTitle = self.startTime;
             break;
         case EBSearchBusClickTypeDeleteOfMyPosition:
             self.myPositionCoord = kCLLocationCoordinate2DInvalid;
@@ -89,13 +138,36 @@
         if (type == EBSearchBusClickTypeMyPosition) {
             ws.searchBusView.myPositionTitle = title;
             ws.myPositionCoord = coord;
-            ws.onGeogName = district;
             ws.onStationName = title;
+            if (!district) {//如果搜索不到城区，就再次搜索
+                AMapPOIAroundSearchRequest *request = [[AMapPOIAroundSearchRequest alloc] init];
+                request.location = [AMapGeoPoint locationWithLatitude:coord.latitude longitude:coord.longitude];
+                request.keywords = @"商业|大厦";
+                request.types = @"餐饮服务|商务住宅|生活服务|交通设施服务";
+                request.sortrule = 0;
+                request.requireExtension = YES;
+                //发起周边搜索
+                [ws.searchPOI AMapPOIAroundSearch:request];
+            } else {
+                ws.onGeogName = district;
+            }
         } else if (type == EBSearchBusClickTypeEndPosition) {
             ws.searchBusView.endPositionTitle = title;
             ws.endPositionCoord = coord;
             ws.offGeogName = district;
             ws.offStationName = title;
+            if (!district) {
+                AMapPOIAroundSearchRequest *request = [[AMapPOIAroundSearchRequest alloc] init];
+                request.location = [AMapGeoPoint locationWithLatitude:coord.latitude longitude:coord.longitude];
+                request.keywords = @"商业|大厦";
+                request.types = @"餐饮服务|商务住宅|生活服务|交通设施服务";
+                request.sortrule = 0;
+                request.requireExtension = YES;
+                //发起周边搜索
+                [ws.searchPOI AMapPOIAroundSearch:request];
+            } else {
+                ws.offGeogName = district;
+            }
         }
     }];
     [self.navigationController pushViewController:selectC animated:YES];
@@ -116,10 +188,35 @@
         }
     }
 }
+#pragma mark - EBTimeChooseViewDelegate
+- (void)timeChooseView:(EBTimeChooseView *)pickerView didSelectTime:(NSString *)time {
+    self.startTime = time;
+}
 
+- (void)timeChooseView:(EBTimeChooseView *)pickerView didClickType:(EBTimeChooseViewClickType)type {
+    self.timePickerViewAppear = NO;
+}
+
+
+#pragma mark - AMapSearchDelegate
+
+- (void)onPOISearchDone:(AMapPOISearchBaseRequest *)request response:(AMapPOISearchResponse *)response {
+    
+    AMapPOI *poi = [response.pois firstObject];
+    EBLog(@"============%@============",poi.district);
+    if (self.clickType == EBSearchBusClickTypeMyPosition) {
+        self.onGeogName = poi.district;
+    } else if (self.clickType == EBSearchBusClickTypeEndPosition) {
+        self.offGeogName = poi.district;
+    }
+    
+}
+
+#pragma mark - Request
 - (void)sponsorRequest{
     
     if (self.onGeogName.length != 0 && self.onStationName.length != 0 && self.offGeogName.length != 0 && self.offStationName.length != 0) {
+        [MBProgressHUD showMessage:@"正在发起路线..." toView:self.view];
         NSDictionary *parameters = @{static_Argument_customerId     : [EBUserInfo sharedEBUserInfo].loginId,
                                      static_Argument_customerName   : [EBUserInfo sharedEBUserInfo].loginName,
                                      static_Argument_onGeogName     : self.onGeogName,
@@ -132,23 +229,25 @@
                                      static_Argument_offLat         : @(self.endPositionCoord.latitude),
                                      static_Argument_vehTime        : self.startTime};
         [EBNetworkRequest POST:static_Url_Sponsor parameters:parameters dictBlock:^(NSDictionary *dict) {
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
             NSString *code = dict[static_Argument_returnCode];
             if ([code integerValue] == 500) {
-                PHTabBarController *phTBC = (PHTabBarController *)self.tabBarController;
-                phTBC.mySelectedIndex = 2;
-                [self.navigationController popToRootViewControllerAnimated:NO];
-                NSArray *viewControlls = phTBC.viewControllers;
-                PHNavigationController *navi = [viewControlls objectAtIndex:2];
-                EBAttentionController *attentionVC = [navi.viewControllers firstObject];
-                attentionVC.titleSelectIndex = 3;
+                [MBProgressHUD showSuccess:@"发起成功" toView:self.view];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [EBTool popToAttentionControllWithIndex:3 controller:self];
+                });
             } else {
                 [MBProgressHUD showError:@"发起失败" toView:self.view];
             }
         } errorBlock:^(NSError *error) {
             [MBProgressHUD showError:@"发起失败" toView:self.view];
         }];
+    } else {
+        [MBProgressHUD showError:@"参数配置错误" toView:self.view];
     }
 }
+
+
 
 @end
 

@@ -59,6 +59,7 @@
                        @"《军官证》、《警官证》、《士兵证》",
                        @"实名制免费'深圳通'",];
     if (certype > array.count) return nil;
+    if (certype == 0) return nil;
     return array[certype - 1];
 }
 + (CLLocationManager *)locationManagerImplementation {

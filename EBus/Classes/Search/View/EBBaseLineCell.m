@@ -41,7 +41,7 @@
     UILabel *totalDistance = [[UILabel alloc] init];
     UILabel *totalTime = [[UILabel alloc] init];
     
-    [departTime setSystemFontOf18];
+    [departTime setSystemFontOf19];
     [totalDistance setSystemFontOf15];
     [totalTime setSystemFontOf15];
     totalDistance.textColor = EB_RGBColor(160, 160, 160);
@@ -125,7 +125,7 @@
     
     CGFloat totalTimeX = CGRectGetMaxX(self.totalDistanceL.frame) + padding;
     CGFloat totalTimeY = 0;
-    CGFloat totalTimeW = [self.totalTimeL boundingRectWithSize:CGSizeMake(MAXFLOAT, height)].width;
+    CGFloat totalTimeW = [self.totalTimeL boundingRectWithSize:CGSizeMake(MAXFLOAT, height)].width + 20;
     CGFloat totalTimeH = height;
     self.totalTimeL.frame  = CGRectMake(totalTimeX, totalTimeY, totalTimeW, totalTimeH);
 }
@@ -177,9 +177,29 @@
     _model = model;
     self.departPointL.text = model.onStationName;
     self.endPointL.text = model.offStationName;
-    self.totalTimeL.text = [NSString stringWithFormat:@"约%@分钟",model.needTime];
-    self.totalDistanceL.text = [NSString stringWithFormat:@"%.2f公里",[model.mileage floatValue]];
     self.departTimeL.text = [model.startTime insertSymbolString:@":" atIndex:2];
+    
+    NSString *needTimeStr = [NSString stringWithFormat:@"约%@分钟",model.needTime];
+    NSMutableAttributedString *AttributedStr = [[NSMutableAttributedString alloc] initWithString:needTimeStr];
+    [AttributedStr addAttribute:NSFontAttributeName
+                          value:[UIFont systemFontOfSize:18.0]
+                          range:NSMakeRange(1, 2)];
+    [AttributedStr addAttribute:NSForegroundColorAttributeName
+                          value:EB_RGBColor(135, 135, 135)
+                          range:NSMakeRange(1, 2)];
+    self.totalTimeL.attributedText = AttributedStr;
+    
+    NSString *totalDStr = [NSString stringWithFormat:@"%.2f公里",[model.mileage floatValue]];
+    NSMutableAttributedString *AttributedStr1 = [[NSMutableAttributedString alloc] initWithString:totalDStr];
+    [AttributedStr1 addAttribute:NSFontAttributeName
+                          value:[UIFont systemFontOfSize:18.0]
+                          range:NSMakeRange(0, 5)];
+    [AttributedStr1 addAttribute:NSForegroundColorAttributeName
+                          value:EB_RGBColor(135, 135, 135)
+                          range:NSMakeRange(0, 5)];
+    self.totalDistanceL.attributedText = AttributedStr1;
+
+
 }
 
 @end

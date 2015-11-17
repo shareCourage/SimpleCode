@@ -5,6 +5,7 @@
 //  Created by Kowloon on 15/10/26.
 //  Copyright © 2015年 Goome. All rights reserved.
 //
+#define HeightOfCalender (EB_WidthOfScreen / 7)
 #define Cell_UnableBackgroundColor EB_RGBColor(241, 241, 241)
 #define Cell_BoughtBackgroundColor EB_RGBColor(230, 146, 35)
 #define Cell_FullBackgroundColor   [UIColor redColor]
@@ -65,7 +66,7 @@
 }
 
 
-
+#pragma mark - Target
 - (void)addBusClick {
     if ([self.delegate respondsToSelector:@selector(eb_calenderViewDidApply:)]) {
         [self.delegate eb_calenderViewDidApply:self];
@@ -134,7 +135,7 @@
 }
 
 - (CGFloat)heightForRowInCalenderView:(PHCalenderView *)calenderView {
-    return 50;
+    return HeightOfCalender;
 }
 
 - (void)calenderView:(PHCalenderView *)calenderView didSelectAtRow:(NSUInteger)row column:(NSUInteger)column {
@@ -176,18 +177,18 @@
     CGFloat yearX = 0;
     CGFloat yearY = 0;
     CGFloat yearW = width;
-    CGFloat yearH = 30;
+    CGFloat yearH = 20;
     CGRect yearF = CGRectMake(yearX, yearY, yearW, yearH);
     UILabel *yearMonth = [[UILabel alloc] initWithFrame:yearF];
     yearMonth.textAlignment = NSTextAlignmentCenter;
-    [yearMonth setSystemFontOf20];
+    [yearMonth setSystemFontOf18];
     yearMonth.text = [NSString stringWithFormat:@"%@年%@月",@([EBUserInfo sharedEBUserInfo].currentCalendarDay.year),@([EBUserInfo sharedEBUserInfo].currentCalendarDay.month)];
     [self addSubview:yearMonth];
     
     CGFloat weekX = 0;
     CGFloat weekY = CGRectGetMaxY(yearMonth.frame);
     CGFloat weekW = width;
-    CGFloat weekH = 20;
+    CGFloat weekH = 15;
     CGRect weekF = CGRectMake(weekX, weekY, weekW, weekH);
     UIView *week = [[UIView alloc] initWithFrame:weekF];
     [self addSubview:week];
@@ -200,6 +201,7 @@
         CGFloat labelH = weekH;
         CGRect labelF = CGRectMake(labelX, labelY, labelW, labelH);
         UILabel *label = [[UILabel alloc] initWithFrame:labelF];
+        [label setSystemFontOf15];
         label.textAlignment = NSTextAlignmentCenter;
         label.text = labelTitles[i];
         if (i == 0 || i == 6) label.textColor = EB_RGBColor(74, 125, 210);
@@ -209,7 +211,7 @@
     CGFloat calenderX = 0;
     CGFloat calenderY = CGRectGetMaxY(week.frame);
     CGFloat calenderW = width;
-    CGFloat calenderH = [[EBUserInfo sharedEBUserInfo].currentDate numberOfWeeksInCurrentMonth] * 50;
+    CGFloat calenderH = [[EBUserInfo sharedEBUserInfo].currentDate numberOfWeeksInCurrentMonth] * HeightOfCalender;
     CGRect calenderF = CGRectMake(calenderX, calenderY, calenderW, calenderH);
     PHCalenderView *calender = [[PHCalenderView alloc] initWithFrame:calenderF];
     calender.dataSource = self;
@@ -230,7 +232,7 @@
     CGFloat colorX = 0;
     CGFloat colorY = 0;
     CGFloat colorW = width;
-    CGFloat colorH = 50;
+    CGFloat colorH = 30;
     CGRect colorF = CGRectMake(colorX, colorY, colorW, colorH);
     EBColorView *colorView = [EBColorView colorViewFromXib];
     colorView.frame = colorF;

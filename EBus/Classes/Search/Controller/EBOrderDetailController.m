@@ -77,7 +77,7 @@
     EBPayTypeView *payView = [[EBPayTypeView alloc] initWithFrame:delegate.window.bounds];
     payView.hidden = YES;
     payView.delegate = self;
-    NSArray *titles = @[@"支付宝",@"微信支付",@"其它(老认证、军人证)"];
+    NSArray *titles = @[@"支付宝",@"微信支付",@"其他(老认证、军人证)"];
     NSArray *names = @[@"search_pay_zfb",@"search_pay_wechat",@"search_pay_other"];
     for (NSInteger i = 0; i < titles.count; i ++) {
         NSString *title = titles[i];

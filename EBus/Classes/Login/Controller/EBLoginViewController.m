@@ -89,7 +89,11 @@
     [self.loginBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.loginBtn setTitle:@"登录" forState:UIControlStateNormal];
     self.loginBtn.titleLabel.font = [UIFont systemFontOfSize:19];
-    
+    [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tipClick)]];
+}
+
+- (void)tipClick {
+    [self.view endEditing:YES];
 }
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -121,6 +125,7 @@
         [self.myTimer fire];
         NSDictionary *parameters = @{static_Argument_phone : self.telephoneTF.text};
         [EBNetworkRequest GET:static_Url_GetCode parameters:parameters dictBlock:nil errorBlock:nil];
+        [self.verificationTF becomeFirstResponder];
     }
 }
 
@@ -136,16 +141,23 @@
         [MBProgressHUD showMessage:@"登录中..." toView:self.view];
         [EBNetworkRequest POST:static_Url_Login parameters:paramenters dictBlock:^(NSDictionary *dict) {
             [MBProgressHUD hideHUDForView:self.view];
-            NSString *type = [NSString stringWithFormat:@"%@",dict[static_Argument_returnData]];
-            if (type.length != 0) {
-                [EBUserInfo sharedEBUserInfo].loginName = tele;
-                [EBUserInfo sharedEBUserInfo].loginId = type;
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self leftItemClick];
-                    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-                    [notificationCenter postNotificationName:EBLoginSuccessNotification object:self];
-                });
+            NSString *code = dict[static_Argument_returnCode];
+            NSInteger codeIn = [code integerValue];
+            if (codeIn == 500) {
+                NSString *type = [NSString stringWithFormat:@"%@",dict[static_Argument_returnData]];
+                if (type.length != 0) {
+                    [EBUserInfo sharedEBUserInfo].loginName = tele;
+                    [EBUserInfo sharedEBUserInfo].loginId = type;
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self leftItemClick];
+                        NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+                        [notificationCenter postNotificationName:EBLoginSuccessNotification object:self];
+                    });
+                }
+            } else {
+                [MBProgressHUD showError:@"登录失败" toView:self.view];
             }
+            
         } errorBlock:^(NSError *error) {
             [MBProgressHUD hideHUDForView:self.view];
         }];

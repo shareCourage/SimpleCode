@@ -118,9 +118,17 @@
 
 - (void)searchAddressClick {
     EB_WS(ws);
-    EBSearchAddressController *address = [[EBSearchAddressController alloc] initWithOption:^(AMapPOI *poi) {
+    EBSearchAddressController *address = [[EBSearchAddressController alloc] initWithOption:^BOOL(AMapPOI *poi) {
         CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(poi.location.latitude, poi.location.longitude);
-        ws.option(poi.name, coord);
+        if(ws.option) {//如果是从EBSearchViewController push过来的，则返回NO
+            ws.option(poi.name, coord);
+            return NO;
+        }
+        if(ws.extraOption) {//如果是从EBSponsorController push过来的，则返回YES
+            ws.extraOption(poi.name, poi.district, coord);
+            return YES;
+        }
+        return YES;
     }];
     [self.navigationController pushViewController:address animated:YES];
 }

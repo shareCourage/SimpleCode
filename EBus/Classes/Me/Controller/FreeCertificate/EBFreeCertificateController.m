@@ -248,6 +248,7 @@
         }
         NSNumber *certType = returnData[static_Argument_certificateType];
         NSInteger certTypeIn = [certType integerValue];
+        if (!certType || certTypeIn == 0) return;
         [self.zjView setZJTypeTitle:[EBTool stringFromZJType:certTypeIn]];
     } errorBlock:^(NSError *error) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];

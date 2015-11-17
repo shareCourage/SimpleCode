@@ -57,7 +57,7 @@
 @property (nonatomic, copy) NSString *userName;
 @property (nonatomic, copy) NSString *lineName;
 @property (nonatomic, copy) NSString *arriveTime;
-
+@property (nonatomic, copy) NSString *vehCode;
 @end
 
 #import "EBSearchResultModel.h"

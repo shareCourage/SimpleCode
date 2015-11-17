@@ -29,6 +29,10 @@
 
 @implementation EBTransferController
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)setTableViewAppear:(BOOL)tableViewAppear {
     _tableViewAppear = tableViewAppear;
     if (tableViewAppear) {
@@ -68,6 +72,11 @@
     }];
     self.tableView.allowsSelection = NO;
     [self refreshWithLoading:YES];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutNotification) name:EBLogoutSuccessNotification object:nil];
+}
+- (void)logoutNotification {
+    self.tableViewAppear = NO;
+    [self.tableView reloadData];
 }
 - (void)footerViewImplementation {
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, EB_WidthOfScreen, EB_HeightOfScreen - 100 - EB_HeightOfNavigationBar - EB_HeightOfTabBar - 30)];
@@ -82,10 +91,9 @@
     lineMap.resultModel = self.resultModel;
     self.lineMapView = lineMap;
     
-    EBTransferTipView *tipView = [[EBTransferTipView alloc] init];
+    EBTransferTipView *tipView = [EBTransferTipView transferTipViewFromXib];
     tipView.frame = footerView.bounds;
     tipView.hidden = YES;
-    tipView.backgroundColor = [UIColor purpleColor];
     [footerView addSubview:tipView];
     self.tipView = tipView;
 }
@@ -98,7 +106,10 @@
 
 #pragma mark - Request
 - (void)refreshWithLoading:(BOOL)loading {
-    if ([EBUserInfo sharedEBUserInfo].loginId.length == 0 || [EBUserInfo sharedEBUserInfo].loginName.length == 0) return;
+    if ([EBUserInfo sharedEBUserInfo].loginId.length == 0 || [EBUserInfo sharedEBUserInfo].loginName.length == 0) {
+        [self.tableView.header endRefreshing];
+        return;
+    }
     EB_WS(ws);
     loading ? [MBProgressHUD showMessage:@"加载中..." toView:self.view] : nil;
     NSDictionary *parameters = @{static_Argument_userName   : [EBUserInfo sharedEBUserInfo].loginName,
@@ -179,6 +190,7 @@
     if (type == EBTicketTypeOfOut) {
         self.lineMapView.hidden = YES;
         self.tipView.hidden = NO;
+        self.tipView.transferModel = model;
     } else if (type == EBTicketTypeOfCheckLine) {
         self.lineMapView.hidden = NO;
         self.tipView.hidden = YES;

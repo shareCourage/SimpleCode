@@ -18,7 +18,7 @@
 @property (nonatomic, strong) NSArray *dataSource;
 @property (nonatomic, strong) AMapSearchAPI *searchAPI;
 
-@property (nonatomic, copy) void (^option) (AMapPOI *poi);
+@property (nonatomic, copy) BOOL (^option) (AMapPOI *poi);
 
 @end
 
@@ -34,7 +34,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (instancetype)initWithOption:(void (^)(AMapPOI *))option {
+- (instancetype)initWithOption:(BOOL (^)(AMapPOI *))option{
     self = [super init];
     if (self) {
         self.option = option;
@@ -77,8 +77,13 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     AMapPOI *poi = self.dataSource[indexPath.row];
     if (self.option) {
-        self.option(poi);
-        [self.navigationController popToRootViewControllerAnimated:YES];
+        if (self.option(poi)) {//根据block的BOOL返回值来判定应该pop到哪个控制器
+            NSArray *array = self.navigationController.viewControllers;
+            UIViewController *vc = array[array.count - 1 - 2];
+            [self.navigationController popToViewController:vc animated:YES];
+        } else {
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        }
     }
 }
 

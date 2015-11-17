@@ -90,6 +90,7 @@
 		A910A3FC1BF9AA0300EE6336 /* EBTransferLineCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A910A3FB1BF9AA0300EE6336 /* EBTransferLineCell.m */; settings = {ASSET_TAGS = (); }; };
 		A910A3FF1BF9E29400EE6336 /* EBTransferTipView.m in Sources */ = {isa = PBXBuildFile; fileRef = A910A3FE1BF9E29400EE6336 /* EBTransferTipView.m */; settings = {ASSET_TAGS = (); }; };
 		A910A4011BF9E2A700EE6336 /* EBTransferTipView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A910A4001BF9E2A700EE6336 /* EBTransferTipView.xib */; settings = {ASSET_TAGS = (); }; };
+		A910A4041BFB214000EE6336 /* EBTimeChooseView.m in Sources */ = {isa = PBXBuildFile; fileRef = A910A4031BFB214000EE6336 /* EBTimeChooseView.m */; settings = {ASSET_TAGS = (); }; };
 		A91921751BDE33030005E2A3 /* EBLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A91921731BDE33030005E2A3 /* EBLoginViewController.m */; settings = {ASSET_TAGS = (); }; };
 		A91921761BDE33030005E2A3 /* EBLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A91921741BDE33030005E2A3 /* EBLoginViewController.xib */; settings = {ASSET_TAGS = (); }; };
 		A919217A1BDE37F10005E2A3 /* login_telephone@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A91921781BDE37F10005E2A3 /* login_telephone@2x.png */; settings = {ASSET_TAGS = (); }; };
@@ -415,6 +416,8 @@
 		A910A3FD1BF9E29400EE6336 /* EBTransferTipView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBTransferTipView.h; sourceTree = "<group>"; };
 		A910A3FE1BF9E29400EE6336 /* EBTransferTipView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBTransferTipView.m; sourceTree = "<group>"; };
 		A910A4001BF9E2A700EE6336 /* EBTransferTipView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EBTransferTipView.xib; sourceTree = "<group>"; };
+		A910A4021BFB214000EE6336 /* EBTimeChooseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBTimeChooseView.h; sourceTree = "<group>"; };
+		A910A4031BFB214000EE6336 /* EBTimeChooseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBTimeChooseView.m; sourceTree = "<group>"; };
 		A91921721BDE33030005E2A3 /* EBLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBLoginViewController.h; sourceTree = "<group>"; };
 		A91921731BDE33030005E2A3 /* EBLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBLoginViewController.m; sourceTree = "<group>"; };
 		A91921741BDE33030005E2A3 /* EBLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EBLoginViewController.xib; sourceTree = "<group>"; };
@@ -1077,6 +1080,15 @@
 			path = UMeng_No_IDFA;
 			sourceTree = "<group>";
 		};
+		A910A4051BFB214A00EE6336 /* Sponsor */ = {
+			isa = PBXGroup;
+			children = (
+				A910A4021BFB214000EE6336 /* EBTimeChooseView.h */,
+				A910A4031BFB214000EE6336 /* EBTimeChooseView.m */,
+			);
+			name = Sponsor;
+			sourceTree = "<group>";
+		};
 		A91921771BDE37D50005E2A3 /* Login */ = {
 			isa = PBXGroup;
 			children = (
@@ -1727,6 +1739,7 @@
 				A99EFB6C1BDDE6D30074EC55 /* CalenderView */,
 				A9DDC5641BE75398006395E3 /* PayTypeView */,
 				A9DDC5891BE87108006395E3 /* OrderStatus */,
+				A910A4051BFB214A00EE6336 /* Sponsor */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2415,6 +2428,7 @@
 				A9DF685E1BCF948800368B27 /* EBSysMapView.m in Sources */,
 				A910A3EE1BF7389800EE6336 /* EBSPButton.m in Sources */,
 				A9F960841BCF3A480011BC73 /* NSDictionary+PHCategory.m in Sources */,
+				A910A4041BFB214000EE6336 /* EBTimeChooseView.m in Sources */,
 				A910A3FC1BF9AA0300EE6336 /* EBTransferLineCell.m in Sources */,
 				A9F9602D1BCF32E40011BC73 /* EBBaseLineCell.m in Sources */,
 				A9F960891BCF3A480011BC73 /* UIImage+PHCategory.m in Sources */,

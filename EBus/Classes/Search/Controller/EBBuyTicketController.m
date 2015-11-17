@@ -43,7 +43,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"购票";
-    EBCalenderView *calenderView = [[EBCalenderView alloc] initWithFrame:CGRectMake(0, 0, EB_WidthOfScreen, EB_HeightOfScreen - 100 - EB_HeightOfNavigationBar)];
+    CGFloat calenderH = EB_HeightOfScreen - 100 - EB_HeightOfNavigationBar;
+    if (EB_HeightOfScreen <= 480) {
+        calenderH = calenderH + 100;
+    } else if (EB_HeightOfScreen <= 568) {
+        calenderH = calenderH + 30;
+    }
+    EBCalenderView *calenderView = [[EBCalenderView alloc] initWithFrame:CGRectMake(0, 0, EB_WidthOfScreen, calenderH)];
     calenderView.delegate = self;
 //    calenderView.backgroundColor = [[UIColor greenColor] colorWithAlphaComponent:0.4f];
     self.tableView.tableFooterView = calenderView;
@@ -58,7 +64,7 @@
     EBPayTypeView *payView = [[EBPayTypeView alloc] initWithFrame:delegate.window.bounds];
     payView.hidden = YES;
     payView.delegate = self;
-    NSArray *titles = @[@"支付宝",@"微信支付",@"深圳通",@"其它(老认证、军人证)"];
+    NSArray *titles = @[@"支付宝",@"微信支付",@"深圳通",@"其他(老认证、军人证)"];
     NSArray *names = @[@"search_pay_zfb",@"search_pay_wechat",@"search_pay_szt",@"search_pay_other"];
     for (NSInteger i = 0; i < 4; i ++) {
         NSString *title = titles[i];

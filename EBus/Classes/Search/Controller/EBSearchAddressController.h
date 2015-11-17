@@ -11,7 +11,7 @@
 
 @interface EBSearchAddressController : PHViewController
 
-- (instancetype)initWithOption:(void (^)(AMapPOI *poi))option;
+- (instancetype)initWithOption:(BOOL (^)(AMapPOI *poi))option;
 
 
 @end

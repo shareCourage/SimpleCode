@@ -115,8 +115,8 @@
     if ([model isKindOfClass:[EBTransferModel class]]) {
         EBTransferModel *tranferModel = (EBTransferModel *)model;
 #if DEBUG
-        tranferModel.runDate = @"2015-11-16";
-        tranferModel.startTime = @"1910";
+//        tranferModel.runDate = @"2015-11-17";
+//        tranferModel.startTime = @"1220";
 #else
 #endif
         [self setupUI:tranferModel];
@@ -143,70 +143,42 @@
                     if ([EBTool currentMinute] <= minute) {
                         //在没有超时的情况下，才存在判断的可能
                         if ( (minute - [EBTool currentMinute]) <= 30) {
-//                            [self setTicketDisplayBtnTitleWithOut:YES];
                             self.type = EBTicketTypeOfOut;
                         } else {
-//                            [self setTicketDisplayBtnTitleWithOut:NO];
                             self.type = EBTicketTypeOfWaiting;
                         }
                     } else {
-//                        [self setTicketDisplayBtnOutOfTime];//超时
                         self.type = EBTicketTypeOfTimeOut;
                     }
                 } else if ([EBTool currentHour] == hour - 1) {//8:20
                     if (minute >= 30) {
-//                        [self setTicketDisplayBtnTitleWithOut:NO];
                         self.type = EBTicketTypeOfWaiting;
                     } else {
                         NSInteger time = 60 - [EBTool currentMinute];
                         if ((time + minute) <= 30) {
-//                            [self setTicketDisplayBtnTitleWithOut:YES];
                             self.type = EBTicketTypeOfOut;
                         } else {
-//                            [self setTicketDisplayBtnTitleWithOut:NO];
                             self.type = EBTicketTypeOfWaiting;
                         }
                     }
                 } else {
-//                    [self setTicketDisplayBtnTitleWithOut:NO];
                     self.type = EBTicketTypeOfWaiting;
                 }
             } else {
-//                [self setTicketDisplayBtnOutOfTime];//超时
                 self.type = EBTicketTypeOfTimeOut;
             }
         } else {
-//            [self setTicketDisplayBtnTitleWithOut:NO];
             self.type = EBTicketTypeOfWaiting;
         }
         
     } else {
-//        [self setTicketDisplayBtnOutOfTime];//超时
         self.type = EBTicketTypeOfTimeOut;
     }
 }
 - (void)judge {
     
 }
-//- (void)setTicketDisplayBtnTitleWithOut:(BOOL)isOut {
-//    if (isOut) {
-//        [self.ticketDisplayBtn setTitle:@"出票" forState:UIControlStateNormal];
-//        self.tipL.textColor = [UIColor lightGrayColor];
-//        [self.ticketDisplayBtn setBackgroundColor:EB_RGBColor(155, 194, 80)];
-//        self.type = EBTicketTypeOfOut;
-//    } else {
-//        [self.ticketDisplayBtn setTitle:@"待出票" forState:UIControlStateNormal];
-//        self.tipL.textColor = [[UIColor redColor] colorWithAlphaComponent:0.7f];
-//        [self.ticketDisplayBtn setBackgroundColor:EB_RGBColor(155, 194, 80)];
-//        self.type = EBTicketTypeOfWaiting;
-//    }
-//    self.ticketDisplayBtn.enabled = YES;
-//}
-//- (void)setTicketDisplayBtnOutOfTime {
-//    [self.ticketDisplayBtn setTitle:@"超时" forState:UIControlStateNormal];
-//    [self.ticketDisplayBtn setBackgroundColor:[UIColor lightGrayColor]];
-//    self.ticketDisplayBtn.enabled = NO;
-//}
+
 
 - (void)setupData:(EBTransferModel *)orderModel {
     self.priceL.text = [NSString stringWithFormat:@"￥%.1f元",[orderModel.originalPrice floatValue]];

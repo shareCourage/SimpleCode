@@ -20,6 +20,11 @@ singleton_implementation(EBUserInfo)
     self = [super init];
     if (self) {
         _userLocation = kCLLocationCoordinate2DInvalid;
+        _singletonMapView = YES;
+        _maMapView = [[MAMapView alloc] init];
+        _maMapView.showsUserLocation = YES;
+        _maMapView.allowsBackgroundLocationUpdates = YES;
+        _maMapView.userTrackingMode = MAUserTrackingModeFollow;
         [self reloadCurrentDate];
     }
     return self;

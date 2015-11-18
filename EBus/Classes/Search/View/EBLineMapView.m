@@ -37,6 +37,8 @@
 @end
 
 @implementation EBLineMapView
+
+
 - (UIImage *)leftDragImage {
     if (!_leftDragImage) {
         _leftDragImage = [UIImage imageNamed:@"search_drag_left"];
@@ -68,28 +70,36 @@
 }
 
 #pragma mark - init Method
-//保证代码实例化能创建BMKMapView
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.maMapView.delegate = self;
         [self bottomViewImplementation];
         [self leftViewImplementation];
     }
     return self;
 }
-//保证xib实例化能创建BMKMapView
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        self.maMapView.delegate = self;
         [self bottomViewImplementation];
         [self leftViewImplementation];
     }
     return self;
 }
+
+- (void)mapViewDidAppear {
+    [super mapViewDidAppear];
+    self.maMapView.delegate = self;
+    self.maMapView.zoomLevel = 13;
+}
+
+- (void)mapViewDidDisappear {
+    [super mapViewDidDisappear];
+    self.maMapView.delegate = nil;
+}
+
 #pragma mark  - Implementation
 - (void)bottomViewImplementation {
     UIView *bottom = [[UIView alloc] init];
@@ -194,15 +204,6 @@
     [super didMoveToSuperview];
     [self bottomViewAutoLayout];
     [self leftViewAutoLayout];
-}
-
-- (void)mapViewDidAppear {
-    [super mapViewDidAppear];
-    self.maMapView.zoomLevel = 13;
-}
-
-- (void)mapViewDidDisappear {
-    [super mapViewDidDisappear];
 }
 
 - (void)setLineDetailM:(EBLineDetailModel *)lineDetailM {

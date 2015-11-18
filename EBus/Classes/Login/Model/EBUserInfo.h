@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <MAMapKit/MAMapKit.h>
 #import "Singleton.h"
 @class PHCalenderDay;
 
@@ -25,6 +26,8 @@ singleton_interface(EBUserInfo)
 @property (nonatomic, strong) NSMutableArray *daysInCurrentMonth;
 @property (nonatomic, strong) NSMutableArray *daysInFollowingMonth;
 
+@property (nonatomic, strong) MAMapView *maMapView;
 @property (nonatomic, assign) CLLocationCoordinate2D userLocation;
+@property (nonatomic, assign, getter = isSingletonMapView) BOOL singletonMapView;//决定VC是否用该单例中的地图
 
 @end

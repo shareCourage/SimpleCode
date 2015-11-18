@@ -21,6 +21,8 @@
 
 @implementation EBSearchMapView
 
+
+
 - (AMapSearchAPI *)searchPOI {
     if (_searchPOI == nil) {
         _searchPOI = [[AMapSearchAPI alloc] init];
@@ -33,16 +35,11 @@
     [super mapViewDidAppear];
     self.maMapView.delegate = self;
     self.maMapView.zoomLevel = 17;
-    self.maMapView.showsUserLocation = YES;
-    self.maMapView.allowsBackgroundLocationUpdates = YES;
-    self.maMapView.userTrackingMode = MAUserTrackingModeFollow;
-    
-//    CLLocationCoordinate2D coord = [EBUserInfo sharedEBUserInfo].userLocation;
-//    [self.maMapView setCenterCoordinate:coord];
 }
 
 - (void)mapViewDidDisappear {
     [super mapViewDidDisappear];
+    self.maMapView.delegate = nil;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -140,7 +137,6 @@
 }
 
 #pragma mark - AMapSearchDelegate
-
 - (void)onPOISearchDone:(AMapPOISearchBaseRequest *)request response:(AMapPOISearchResponse *)response {
     for (AMapPOI *obj in response.pois) {
         EBLog(@"%@, %@", obj.name, obj.address);

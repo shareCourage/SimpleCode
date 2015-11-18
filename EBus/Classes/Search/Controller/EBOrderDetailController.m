@@ -42,7 +42,7 @@
 }
 - (UIAlertView *)alertViewCanFromMyOrder {
     if (!_alertViewCanFromMyOrder) {
-        _alertViewCanFromMyOrder = [[UIAlertView alloc] initWithTitle:@"确定退款？" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        _alertViewCanFromMyOrder = [[UIAlertView alloc] initWithTitle:@"确定退票？" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     }
     return _alertViewCanFromMyOrder;
 }
@@ -98,7 +98,8 @@
 }
 
 - (void)tableViewImplementation {
-    CGRect tvF = CGRectMake(0, EB_HeightOfNavigationBar + 100, EB_WidthOfScreen, 200);
+    CGFloat height = (EB_HeightOfScreen > 480) ? 200 : 130;
+    CGRect tvF = CGRectMake(0, EB_HeightOfNavigationBar + 100, EB_WidthOfScreen, height);
     UITableView *tableView = [[UITableView alloc] initWithFrame:tvF];
     tableView.backgroundColor = EB_RGBColor(246, 246, 246);
     tableView.tableFooterView = [[UIView alloc] init];

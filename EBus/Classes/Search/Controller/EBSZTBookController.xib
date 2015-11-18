@@ -8,6 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EBSZTBookController">
             <connections>
                 <outlet property="bookBtn" destination="Z92-tJ-Ecv" id="vHN-NK-FrQ"/>
+                <outlet property="bottomLayout" destination="V1j-C7-9q4" id="Vwf-I3-II0"/>
                 <outlet property="modifyBtn" destination="IwW-y4-S8R" id="h1m-Gz-ugs"/>
                 <outlet property="myActivityIndicator" destination="G9A-zc-vYy" id="bJ7-Rn-V4L"/>
                 <outlet property="myWebView" destination="OMB-ad-tdQ" id="rwB-6Q-znq"/>
@@ -21,7 +22,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="深圳通卡号" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="04S-64-we5">
-                    <rect key="frame" x="5" y="80" width="370" height="40"/>
+                    <rect key="frame" x="5" y="64" width="370" height="40"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="gHO-KU-bms"/>
                     </constraints>
@@ -30,7 +31,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="请绑定深圳通卡号" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YuE-K1-g74">
-                    <rect key="frame" x="20" y="125" width="235" height="40"/>
+                    <rect key="frame" x="20" y="109" width="235" height="40"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="2JZ-bq-ZX8"/>
                     </constraints>
@@ -39,7 +40,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IwW-y4-S8R">
-                    <rect key="frame" x="260" y="125" width="100" height="40"/>
+                    <rect key="frame" x="260" y="109" width="100" height="40"/>
                     <color key="backgroundColor" red="0.1294117719" green="0.50196081400000003" blue="0.96862751250000001" alpha="1" colorSpace="deviceRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="JN5-XU-NzP"/>
@@ -64,47 +65,48 @@
                     </connections>
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BEc-Ry-KVh">
-                    <rect key="frame" x="10" y="175" width="355" height="422"/>
+                    <rect key="frame" x="10" y="159" width="355" height="438"/>
                     <subviews>
                         <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OMB-ad-tdQ">
-                            <rect key="frame" x="0.0" y="0.0" width="355" height="422"/>
+                            <rect key="frame" x="0.0" y="0.0" width="355" height="438"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </webView>
                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="G9A-zc-vYy">
-                            <rect key="frame" x="168" y="201" width="20" height="20"/>
+                            <rect key="frame" x="168" y="209" width="20" height="20"/>
                             <color key="color" red="0.75294125079999996" green="0.75294125079999996" blue="0.75294125079999996" alpha="1" colorSpace="deviceRGB"/>
                         </activityIndicatorView>
                     </subviews>
                     <constraints>
-                        <constraint firstAttribute="trailing" secondItem="OMB-ad-tdQ" secondAttribute="trailing" id="1Ag-hb-m6F"/>
-                        <constraint firstAttribute="bottom" secondItem="OMB-ad-tdQ" secondAttribute="bottom" id="2i5-ei-ebQ"/>
-                        <constraint firstItem="G9A-zc-vYy" firstAttribute="centerX" secondItem="BEc-Ry-KVh" secondAttribute="centerX" id="Ape-Op-ZWn"/>
-                        <constraint firstItem="OMB-ad-tdQ" firstAttribute="top" secondItem="BEc-Ry-KVh" secondAttribute="top" id="UUQ-b3-NEh"/>
-                        <constraint firstItem="OMB-ad-tdQ" firstAttribute="leading" secondItem="BEc-Ry-KVh" secondAttribute="leading" id="msn-MY-MOg"/>
-                        <constraint firstItem="G9A-zc-vYy" firstAttribute="centerY" secondItem="BEc-Ry-KVh" secondAttribute="centerY" id="pt3-tc-sUq"/>
+                        <constraint firstItem="G9A-zc-vYy" firstAttribute="centerY" secondItem="BEc-Ry-KVh" secondAttribute="centerY" id="DcF-cm-hSL"/>
+                        <constraint firstItem="OMB-ad-tdQ" firstAttribute="top" secondItem="BEc-Ry-KVh" secondAttribute="top" id="OH6-pY-yGS"/>
+                        <constraint firstItem="G9A-zc-vYy" firstAttribute="centerX" secondItem="BEc-Ry-KVh" secondAttribute="centerX" id="VFa-XG-oY6"/>
+                        <constraint firstAttribute="bottom" secondItem="OMB-ad-tdQ" secondAttribute="bottom" id="bub-H5-3Pe"/>
+                        <constraint firstItem="OMB-ad-tdQ" firstAttribute="leading" secondItem="BEc-Ry-KVh" secondAttribute="leading" id="vNO-Kb-fWu"/>
+                        <constraint firstAttribute="trailing" secondItem="OMB-ad-tdQ" secondAttribute="trailing" id="yAK-cR-XiA"/>
                     </constraints>
                 </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
+                <constraint firstAttribute="trailing" secondItem="BEc-Ry-KVh" secondAttribute="trailing" constant="10" id="1JW-s8-DYW"/>
                 <constraint firstItem="YuE-K1-g74" firstAttribute="top" secondItem="04S-64-we5" secondAttribute="bottom" constant="5" id="5IX-dq-Fb5"/>
                 <constraint firstAttribute="bottom" secondItem="Z92-tJ-Ecv" secondAttribute="bottom" constant="10" id="Hfz-Sn-EU1"/>
                 <constraint firstItem="IwW-y4-S8R" firstAttribute="leading" secondItem="YuE-K1-g74" secondAttribute="trailing" constant="5" id="Hl9-2Y-Lol"/>
-                <constraint firstItem="BEc-Ry-KVh" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="10" id="MD4-Ip-s7A"/>
+                <constraint firstItem="BEc-Ry-KVh" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="10" id="R5P-LH-qbq"/>
                 <constraint firstAttribute="trailing" secondItem="04S-64-we5" secondAttribute="trailing" id="UbD-BZ-lJH"/>
+                <constraint firstAttribute="bottom" secondItem="BEc-Ry-KVh" secondAttribute="bottom" constant="70" id="V1j-C7-9q4"/>
                 <constraint firstItem="Z92-tJ-Ecv" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="XNc-ay-0mX"/>
                 <constraint firstItem="IwW-y4-S8R" firstAttribute="top" secondItem="04S-64-we5" secondAttribute="bottom" constant="5" id="Xzg-lE-Hjz"/>
-                <constraint firstAttribute="trailing" secondItem="BEc-Ry-KVh" secondAttribute="trailing" constant="10" id="gbN-yC-sCA"/>
-                <constraint firstItem="Z92-tJ-Ecv" firstAttribute="top" secondItem="BEc-Ry-KVh" secondAttribute="bottom" constant="10" id="gh0-rI-rTz"/>
-                <constraint firstItem="04S-64-we5" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="80" id="gpU-NY-3UF"/>
-                <constraint firstItem="BEc-Ry-KVh" firstAttribute="top" secondItem="IwW-y4-S8R" secondAttribute="bottom" constant="10" id="gpk-FU-xnD"/>
+                <constraint firstItem="04S-64-we5" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="64" id="gpU-NY-3UF"/>
                 <constraint firstItem="YuE-K1-g74" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="jvZ-O3-8mn"/>
                 <constraint firstAttribute="trailing" secondItem="Z92-tJ-Ecv" secondAttribute="trailing" constant="20" id="pKX-BV-sZG"/>
                 <constraint firstItem="04S-64-we5" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="5" id="qlg-Ab-N3C"/>
                 <constraint firstAttribute="trailing" secondItem="IwW-y4-S8R" secondAttribute="trailing" constant="15" id="yrz-8p-23Y"/>
+                <constraint firstItem="BEc-Ry-KVh" firstAttribute="top" secondItem="IwW-y4-S8R" secondAttribute="bottom" constant="10" id="ywL-9z-lyJ"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
-            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics"/>
+            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+            <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
             <point key="canvasLocation" x="537.5" y="334.5"/>
         </view>

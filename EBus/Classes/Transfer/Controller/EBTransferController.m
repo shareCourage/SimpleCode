@@ -31,6 +31,7 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    EBLog(@"%@ --> dealloc", NSStringFromClass([self class]));
 }
 
 - (void)setTableViewAppear:(BOOL)tableViewAppear {
@@ -65,7 +66,9 @@
     [super viewDidLoad];
     self.navigationItem.title = @"乘车";
     self.tableViewAppear = NO;
+    [EBUserInfo sharedEBUserInfo].singletonMapView = NO;
     [self footerViewImplementation];
+    [EBUserInfo sharedEBUserInfo].singletonMapView = YES;//保证这个mapView是单独实例化的，而不是从单例中拿的
     EB_WS(ws);
     self.tableView.header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [ws refreshWithLoading:NO];
@@ -74,6 +77,17 @@
     [self refreshWithLoading:YES];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutNotification) name:EBLogoutSuccessNotification object:nil];
 }
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self.lineMapView mapViewDidAppear];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [self.lineMapView mapViewDidDisappear];
+}
+
 - (void)logoutNotification {
     self.tableViewAppear = NO;
     [self.tableView reloadData];
@@ -96,11 +110,6 @@
     tipView.hidden = YES;
     [footerView addSubview:tipView];
     self.tipView = tipView;
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    [self.lineMapView mapViewDidAppear];
 }
 
 

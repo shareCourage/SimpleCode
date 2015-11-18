@@ -108,12 +108,12 @@
         cell = [[PHCalenderViewCell alloc] initWithStyle:PHCalenderViewCellStyleUpDown];
         cell.userInteractionEnabled = NO;
         NSUInteger index = calendarDay.day - [EBUserInfo sharedEBUserInfo].currentCalendarDay.day;
-        cell.detailLabel.font = [UIFont systemFontOfSize:13];
+        [cell.detailLabel setSystemFontOf10];
         if (index < self.tickets.count) {
             NSString *ticket = self.tickets[index];
             NSString *title = nil;
             if ([ticket integerValue] == -2) {
-                title = @"已购";
+//                title = @"已购";
                 cell.backgroundColor = Cell_BoughtBackgroundColor;
             } else if ([ticket integerValue] == 0) {
                 title = @"已满";
@@ -122,6 +122,7 @@
                 cell.backgroundColor = Cell_UnableBackgroundColor;
             } else {
                 title = [NSString stringWithFormat:@"余%@",ticket];
+                cell.backgroundColor = [UIColor whiteColor];
                 cell.userInteractionEnabled = YES;
             }
             cell.detailLabel.text = title;
@@ -182,6 +183,8 @@
     UILabel *yearMonth = [[UILabel alloc] initWithFrame:yearF];
     yearMonth.textAlignment = NSTextAlignmentCenter;
     [yearMonth setSystemFontOf18];
+    yearMonth.backgroundColor = Cell_UnableBackgroundColor;
+    yearMonth.textColor = EB_RGBColor(74, 125, 210);
     yearMonth.text = [NSString stringWithFormat:@"%@年%@月",@([EBUserInfo sharedEBUserInfo].currentCalendarDay.year),@([EBUserInfo sharedEBUserInfo].currentCalendarDay.month)];
     [self addSubview:yearMonth];
     
@@ -214,6 +217,7 @@
     CGFloat calenderH = [[EBUserInfo sharedEBUserInfo].currentDate numberOfWeeksInCurrentMonth] * HeightOfCalender;
     CGRect calenderF = CGRectMake(calenderX, calenderY, calenderW, calenderH);
     PHCalenderView *calender = [[PHCalenderView alloc] initWithFrame:calenderF];
+    calender.backgroundColor = EB_RGBColor(241, 241, 241);
     calender.dataSource = self;
     calender.delegate = self;
     [self addSubview:calender];
@@ -260,10 +264,11 @@
     
     CGFloat addBX = 20;
     CGFloat addBY = 0;
-    CGFloat addBW = width / 3 - 20;
+    CGFloat addBW = width / 3 - 10;
     CGFloat addBH = btnViewH;
     CGRect addBF = CGRectMake(addBX, addBY, addBW, addBH);
     UIButton *addB = [UIButton eb_buttonWithFrame:addBF target:self action:@selector(addBusClick) Title:@"我要加车"];
+    [addB.titleLabel setSystemFontOf18];
     addB.backgroundColor = EB_RGBColor(156, 193, 85);
     [btnView addSubview:addB];
     self.addBusBtn = addB;

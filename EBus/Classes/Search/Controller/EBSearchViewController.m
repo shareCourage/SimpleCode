@@ -5,8 +5,9 @@
 //  Created by Kowloon on 15/10/14.
 //  Copyright © 2015年 Goome. All rights reserved.
 //
-#import "AppDelegate.h"
 #import "EBSearchViewController.h"
+#import <MAMapKit/MAMapKit.h>
+#import "AppDelegate.h"
 #import "EBSelectPositionController.h"
 #import "EBSearchResultController.h"
 #import "EBSearchBusView.h"
@@ -15,12 +16,14 @@
 #import "EBHotView.h"
 #import "EBHotLabel.h"
 #import "EBLineDetailController.h"
+#import "EBUserInfo.h"
 
-@interface EBSearchViewController () <EBSearchBusViewDelegate, EBUsualLineCellDelegate, EBHotViewDelegate>
+@interface EBSearchViewController () <EBSearchBusViewDelegate, EBUsualLineCellDelegate, EBHotViewDelegate, MAMapViewDelegate>
 
 @property (nonatomic, strong) NSMutableArray *dataSource;
 @property (nonatomic, weak) EBSearchBusView *searchBusView;
 @property (nonatomic, weak) EBHotView *hotView;
+@property (nonatomic, weak) MAMapView *maMapView;
 
 @property (nonatomic, assign) CLLocationCoordinate2D myPositionCoord;
 @property (nonatomic, assign) CLLocationCoordinate2D endPositionCoord;
@@ -48,12 +51,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"查询";
+    self.maMapView = [EBUserInfo sharedEBUserInfo].maMapView;
     self.myPositionCoord = kCLLocationCoordinate2DInvalid;
     self.endPositionCoord = kCLLocationCoordinate2DInvalid;
     [self searchBusViewImplementation];
     [self itemImplementation];
     [self hotViewImplementation];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(usualLineSavedNotification) name:EBDidSaveUsualLineNotification object:nil];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    self.maMapView.delegate = self;
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    self.maMapView.delegate = nil;
 }
 
 - (void)searchBusViewImplementation {
@@ -240,6 +254,15 @@
         result.endPositionCoord = self.endPositionCoord;
         [self.navigationController pushViewController:result animated:YES];
     }
+}
+
+#pragma mark - MKMapViewDelegate
+- (void)mapView:(MAMapView *)mapView didUpdateUserLocation:(MAUserLocation *)userLocation updatingLocation:(BOOL)updatingLocation{
+    EBLog(@"mapViewLocation -> %.6f, %.6f", userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude);
+    CLLocationCoordinate2D coord = userLocation.location.coordinate;
+    self.myPositionCoord = coord;
+    [EBUserInfo sharedEBUserInfo].userLocation = coord;
+    mapView.userTrackingMode = MAUserTrackingModeNone;//加这句代码，当调用定位时，可以让mapView不执行regionDidChange方法
 }
 
 @end

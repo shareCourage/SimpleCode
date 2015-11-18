@@ -51,7 +51,6 @@
     }
     EBCalenderView *calenderView = [[EBCalenderView alloc] initWithFrame:CGRectMake(0, 0, EB_WidthOfScreen, calenderH)];
     calenderView.delegate = self;
-//    calenderView.backgroundColor = [[UIColor greenColor] colorWithAlphaComponent:0.4f];
     self.tableView.tableFooterView = calenderView;
     self.calenderView = calenderView;
     [calenderView reloadData];

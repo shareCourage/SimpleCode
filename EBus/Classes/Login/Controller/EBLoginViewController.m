@@ -134,6 +134,9 @@
         [MBProgressHUD showError:@"请阅读服务协议" toView:self.view];
     }
     NSString *code = self.verificationTF.text;
+    if (code.length == 0) {
+        [MBProgressHUD showError:@"请输入验证码" toView:self.view];
+    }
     NSString *tele = self.telephoneTF.text;
     if (code.length != 0 && [EBTool isPureTelephoneNumber:tele]) {
         NSDictionary *paramenters = @{static_Argument_loginCode : code,

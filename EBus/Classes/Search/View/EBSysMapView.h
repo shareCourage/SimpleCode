@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <MAMapKit/MAMapKit.h>
 #import <Masonry/Masonry.h>
+#import "EBUserInfo.h"
 
 @interface EBSysMapView : UIView
 

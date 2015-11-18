@@ -18,9 +18,16 @@
 @end
 
 @implementation EBSysMapView
-
-- (void)mapViewDidAppear {};
-- (void)mapViewDidDisappear {};
+- (void)dealloc {
+    EBLog(@"%@ --> dealloc", NSStringFromClass([self class]));
+}
+- (void)mapViewDidAppear {
+//    [self mapViewInstantiation];
+//    EBLog(@"%@, %@",NSStringFromCGRect(self.maMapView.frame),NSStringFromCGRect(self.bounds));
+//    self.maMapView.frame = self.bounds;
+};
+- (void)mapViewDidDisappear {
+};
 
 #pragma mark - init Method
 //保证代码实例化能创建BMKMapView
@@ -47,9 +54,17 @@
 //bmkMapView的实例化和基本的设置
 - (void)mapViewInstantiation
 {
-    MAMapView *mapView = [[MAMapView alloc] init];
+    MAMapView *mapView = nil;
+    if ([EBUserInfo sharedEBUserInfo].isSingletonMapView) {
+        mapView = [EBUserInfo sharedEBUserInfo].maMapView;
+    } else {
+        mapView = [[MAMapView alloc] init];
+    }
+    [mapView removeOverlays:mapView.overlays];
+    [mapView removeAnnotations:mapView.annotations];
     mapView.mapType = MAMapTypeStandard;
-    [self addSubview:mapView];
+//    [self addSubview:mapView];
+    [self insertSubview:mapView atIndex:0];
     self.maMapView = mapView;
 }
 

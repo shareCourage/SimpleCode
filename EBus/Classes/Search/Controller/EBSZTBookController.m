@@ -24,6 +24,7 @@
 @property (weak, nonatomic) IBOutlet UIWebView *myWebView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *myActivityIndicator;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomLayout;
 @end
 
 @implementation EBSZTBookController
@@ -46,6 +47,7 @@
     self.bookBtn.backgroundColor = EB_DefaultColor;
     if (self.hidenBookBtn) {
         self.bookBtn.hidden = YES;
+        self.bottomLayout.constant = 0;
     }
     if ([EBUserInfo sharedEBUserInfo].sztNo.length != 0) {
         self.sztNoL.text = [NSString stringWithFormat:@"  卡号:%@",[EBUserInfo sharedEBUserInfo].sztNo];
@@ -153,7 +155,7 @@
 
 #pragma mark - Method
 - (void)bindSZT:(NSString *)szt {
-    if (!szt) return;
+    if (szt.length == 0) return;
     NSDictionary *parameters = @{static_Argument_loginName : [EBUserInfo sharedEBUserInfo].loginName,
                                  static_Argument_sztNo : szt,
                                  static_Argument_id : [EBUserInfo sharedEBUserInfo].loginId};
@@ -161,6 +163,8 @@
         NSString *code = dict[static_Argument_returnCode];
         if ([code integerValue] == 500) {
             [MBProgressHUD showSuccess:@"绑定成功" toView:self.view];
+            [EBUserInfo sharedEBUserInfo].sztNo = szt;
+            self.sztNoL.text = [NSString stringWithFormat:@"  卡号:%@",[EBUserInfo sharedEBUserInfo].sztNo];
         } else {
             [MBProgressHUD showSuccess:@"绑定失败" toView:self.view];
         }

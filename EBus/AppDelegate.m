@@ -23,6 +23,8 @@
 #import "MobClick.h"
 #import "MobClickSocialAnalytics.h"
 
+#import "EBUserInfo.h"
+
 @interface AppDelegate () <WXApiDelegate>
 
 @end
@@ -38,7 +40,21 @@
     [EBTool openAppInitial];//该app的启动验证
     NSString *version_eBus = EB_Version;
     [WXApi registerApp:static_WeChat_AppID withDescription:[NSString stringWithFormat:@"eBus%@",version_eBus]];//向微信注册
-    [self umengSetUp];
+    [self UMengSetUp];
+    [self APServiceSetUp:launchOptions];
+    
+    return YES;
+}
+
+- (void)UMengSetUp {
+    [MobClick startWithAppkey:static_KeyOfUMeng reportPolicy:BATCH channelId:nil];
+    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    [MobClick setAppVersion:version];
+    [MobClick setEncryptEnabled:YES];
+    [MobClick setBackgroundTaskEnabled:YES];
+}
+
+- (void)APServiceSetUp:(NSDictionary *)launchOptions {
 #pragma mark - 注册推送
     // Required
     if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
@@ -56,16 +72,22 @@
     }
     // Required
     [APService setupWithOption:launchOptions];
-    
-    return YES;
+    NSSet *tags = nil;
+    NSString *alias = nil;
+    if ([EBTool loginEnable]) {
+        tags = [[NSSet alloc] initWithObjects:@"ebus", nil];
+        alias = [NSString stringWithFormat:@"ebus_%@",[EBUserInfo sharedEBUserInfo].loginId];
+    } else {
+        tags = [[NSSet alloc] initWithObjects:@"nologin", nil];
+        alias = @"";
+    }
+    [APService setTags:tags alias:alias callbackSelector:@selector(tagsAliasCallback:tags:alias:) object:self];
 }
-
-- (void)umengSetUp {
-    [MobClick startWithAppkey:static_KeyOfUMeng reportPolicy:BATCH channelId:nil];
-    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    [MobClick setAppVersion:version];
-    [MobClick setEncryptEnabled:YES];
-    [MobClick setBackgroundTaskEnabled:YES];
+- (void)tagsAliasCallback:(int)iResCode
+                     tags:(NSSet*)tags
+                    alias:(NSString*)alias
+{
+    EBLog(@"rescode: %d, \ntags: %@, \nalias: %@\n", iResCode, tags , alias);
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
@@ -87,6 +109,7 @@
     // IOS 7 Support Required
     [APService handleRemoteNotification:userInfo];
     completionHandler(UIBackgroundFetchResultNewData);
+    EBLog(@"=============\n %@", userInfo);
 }
 
 

@@ -136,7 +136,7 @@ singleton_implementation(EBUserInfo)
     if (CLLocationCoordinate2DIsValid(_userLocation)) return _userLocation;
     CGFloat lat = [[NSUserDefaults standardUserDefaults] doubleForKey:@"userLocationForKeyLat"];
     CGFloat lng = [[NSUserDefaults standardUserDefaults] doubleForKey:@"userLocationForKeyLng"];
-    if (lat == 0 || lng == 0) return CLLocationCoordinate2DMake(113.958002, 22.538313);
+    if (lat == 0 || lng == 0) return CLLocationCoordinate2DMake(22.538313, 113.958002);
     CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(lat, lng);
     return coord;
 }

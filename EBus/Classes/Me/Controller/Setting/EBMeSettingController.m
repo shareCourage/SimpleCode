@@ -19,6 +19,9 @@
 #import "EBSZTBookController.h"
 #import "EBFreeCertificateController.h"
 
+#import "APService.h"
+
+
 @interface EBMeSettingController () <UIAlertViewDelegate>
 {
     BOOL _hasLogin;
@@ -161,6 +164,7 @@
     [self.footerView removeFromSuperview];
     [self initImplementation];
     [self.tableView reloadData];
+    [self APServiceTagsAndAliasSetUp];
 }
 
 #pragma mark - UITableViewDataSource
@@ -179,9 +183,23 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
                 [notificationCenter postNotificationName:EBLogoutSuccessNotification object:self];
+                [self APServiceTagsAndAliasSetUp];
             });
         }
     }
+}
+
+- (void)APServiceTagsAndAliasSetUp {
+    NSSet *tags = nil;
+    NSString *alias = nil;
+    if ([EBTool loginEnable]) {
+        tags = [[NSSet alloc] initWithObjects:@"ebus", nil];
+        alias = [NSString stringWithFormat:@"ebus_%@",[EBUserInfo sharedEBUserInfo].loginId];
+    } else {
+        tags = [[NSSet alloc] initWithObjects:@"nologin", nil];
+        alias = @"";
+    }
+    [APService setTags:tags alias:alias callbackSelector:nil object:nil];
 }
 @end
 

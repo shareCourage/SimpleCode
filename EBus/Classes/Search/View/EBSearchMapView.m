@@ -34,7 +34,11 @@
 - (void)mapViewDidAppear {
     [super mapViewDidAppear];
     self.maMapView.delegate = self;
-    self.maMapView.zoomLevel = 17;
+    self.maMapView.zoomLevel = 15;
+    if (![EBTool locationEnable]) {//开启了定位，这里就不用设置地图中心了
+        CLLocationCoordinate2D centerCL = [EBUserInfo sharedEBUserInfo].userLocation;
+        [self.maMapView setCenterCoordinate:centerCL];
+    }
 }
 
 - (void)mapViewDidDisappear {
@@ -126,9 +130,11 @@
 - (void)mapView:(MAMapView *)mapView didUpdateUserLocation:(MAUserLocation *)userLocation updatingLocation:(BOOL)updatingLocation{
     EBLog(@"mapViewLocation -> %.6f, %.6f", userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude);
     CLLocationCoordinate2D coord = userLocation.location.coordinate;
-    [EBUserInfo sharedEBUserInfo].userLocation = coord;
-    [self locationSearchThroughAMAP:coord];
-    mapView.userTrackingMode = MAUserTrackingModeNone;//加这句代码，当调用定位时，可以让mapView不执行regionDidChange方法
+    if ([EBTool locationEnable]) {
+        [EBUserInfo sharedEBUserInfo].userLocation = coord;
+        [mapView setCenterCoordinate:coord];
+    }
+    mapView.showsUserLocation = NO;
 }
 
 - (void)mapView:(MAMapView *)mapView regionDidChangeAnimated:(BOOL)animated {

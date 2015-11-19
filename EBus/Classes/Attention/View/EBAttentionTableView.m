@@ -62,10 +62,7 @@
             [ws tableViewRefresh];
         }];
         self.tableView = tableView;
-        UIImageView *backgroundImageView = [[UIImageView alloc] init];
-        backgroundImageView.contentMode = UIViewContentModeCenter;
-        UIImage *image = [UIImage imageNamed:@"main_background"];
-        backgroundImageView.image = image;
+        UIImageView *backgroundImageView = [EBTool backgroundImageView];
         tableView.backgroundView = backgroundImageView;
         self.backgroundImageView = backgroundImageView;
     }

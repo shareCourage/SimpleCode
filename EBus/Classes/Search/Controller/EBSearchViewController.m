@@ -27,7 +27,7 @@
 
 @property (nonatomic, assign) CLLocationCoordinate2D myPositionCoord;
 @property (nonatomic, assign) CLLocationCoordinate2D endPositionCoord;
-
+@property (nonatomic, assign) BOOL comeFromSelPosition;//是否来自用户自己的选择
 @end
 
 @implementation EBSearchViewController
@@ -63,6 +63,7 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     self.maMapView.delegate = self;
+    self.maMapView.showsUserLocation = YES;
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -211,6 +212,7 @@
             break;
         case EBSearchBusClickTypeDeleteOfMyPosition:
             self.myPositionCoord = kCLLocationCoordinate2DInvalid;
+            self.comeFromSelPosition = YES;
             break;
         case EBSearchBusClickTypeDeleteOfEndPosition:
             self.endPositionCoord = kCLLocationCoordinate2DInvalid;
@@ -234,6 +236,7 @@
 - (void)selectPosition:(EBSearchBusClickType)type {
     EB_WS(ws);
     EBSelectPositionController *selectC = [[EBSelectPositionController alloc] initWithOption:^(NSString *title, CLLocationCoordinate2D coord) {
+        ws.comeFromSelPosition = YES;
         if (type == EBSearchBusClickTypeMyPosition) {
             ws.searchBusView.myPositionTitle = title;
             ws.myPositionCoord = coord;
@@ -260,9 +263,14 @@
 - (void)mapView:(MAMapView *)mapView didUpdateUserLocation:(MAUserLocation *)userLocation updatingLocation:(BOOL)updatingLocation{
     EBLog(@"mapViewLocation -> %.6f, %.6f", userLocation.location.coordinate.latitude, userLocation.location.coordinate.longitude);
     CLLocationCoordinate2D coord = userLocation.location.coordinate;
-    self.myPositionCoord = coord;
-    [EBUserInfo sharedEBUserInfo].userLocation = coord;
+    if ([EBTool locationEnable]) {
+        [EBUserInfo sharedEBUserInfo].userLocation = coord;
+    }
     mapView.userTrackingMode = MAUserTrackingModeNone;//加这句代码，当调用定位时，可以让mapView不执行regionDidChange方法
+    if (!self.comeFromSelPosition && [EBTool locationEnable]) {
+        self.myPositionCoord = coord;
+        self.searchBusView.myPositionTitle = @"我的位置";
+    }
 }
 
 @end

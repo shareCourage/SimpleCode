@@ -19,12 +19,10 @@
 
 @property (nonatomic, weak) UITableView *tableView;
 @property (nonatomic, weak) EBSearchMapView *searchMapView;
-
+@property (nonatomic, weak) UIImageView *backgroundImageView;
 @property (nonatomic, strong) NSMutableArray *dataSource;
 
-@property (nonatomic, strong) NSIndexPath *selectedIndexPath;
 @property (nonatomic, strong) EBAnnotation *selectAnnotation;
-@property (nonatomic, strong) EBSelectPositionModel *locationModel;
 
 @property (nonatomic, copy) void (^option) (NSString *title, CLLocationCoordinate2D coord);
 @property (nonatomic, copy) void (^extraOption) (NSString *title, NSString *district, CLLocationCoordinate2D coord);
@@ -49,20 +47,6 @@
     return self;
 }
 
-- (EBSelectPositionModel *)locationModel {
-    if (_locationModel == nil) {
-        _locationModel = [EBTool locationEnable] ? [[EBSelectPositionModel alloc] init] : nil;
-        _locationModel.selected = YES;
-        if (self.dataSource.count >= 1) {//为了第一次启动判断定位是否开启执行的代码
-            EBSelectPositionModel *first = [self.dataSource firstObject];
-            if (!first.regeocode) {
-                [self.dataSource insertObject:self.locationModel atIndex:0];
-                [self.tableView reloadData];
-            }
-        }
-    }
-    return _locationModel;
-}
 
 - (EBAnnotation *)selectAnnotation {
     if (_selectAnnotation == nil) {
@@ -75,9 +59,11 @@
 - (NSMutableArray *)dataSource {
     if (_dataSource == nil) {
         _dataSource = [NSMutableArray array];
-        if (self.locationModel) {
-            [_dataSource addObject:self.locationModel];
-        }
+    }
+    if (_dataSource.count > 0) {
+        self.backgroundImageView.hidden = YES;
+    } else {
+        self.backgroundImageView.hidden = NO;
     }
     return _dataSource;
 }
@@ -85,7 +71,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    self.selectedIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     [self titleViewImplementation];
     [self searchMapViewImplementation];
     [self tableViewImplementation];
@@ -146,6 +131,9 @@
     tableView.delegate = self;
     tableView.dataSource = self;
     tableView.tableFooterView = [[UIView alloc] init];
+    UIImageView *backgroundImageView = [EBTool backgroundImageView];
+    tableView.backgroundView = backgroundImageView;
+    self.backgroundImageView = backgroundImageView;
     [self.view addSubview:tableView];
     self.tableView = tableView;
     EB_WS(ws);
@@ -167,7 +155,6 @@
 
 #pragma mark - UITableView
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-//    return [EBTool locationEnable] ? self.dataSource.count + 1 : self.dataSource.count;
     return self.dataSource.count;
 }
 
@@ -182,48 +169,33 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (self.selectedIndexPath) {
-        EBSelectPositionModel *previousModel = self.dataSource[self.selectedIndexPath.row];
-        previousModel.selected = NO;
+    for (EBSelectPositionModel *seM in self.dataSource) {
+        seM.selected = NO;
     }
     EBSelectPositionModel *selectModel = self.dataSource[indexPath.row];
     selectModel.selected = YES;
-    
+    [tableView reloadData];
     [self addAnnotation:selectModel];
-    
-    if (self.selectedIndexPath) {
-        [tableView reloadRowsAtIndexPaths:@[indexPath, self.selectedIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-    } else {
-        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
-    
-    self.selectedIndexPath = indexPath;
 }
 
 #pragma mark - EBSearchMapViewDelegate 
 - (void)searchMapView:(EBSearchMapView *)searchMapView poiSearch:(NSArray *)places {
-    if ([EBTool locationEnable]) {
-        [self.dataSource removeObjectsInRange:NSMakeRange(1, self.dataSource.count - 1)];
-    } else {
-        [self.dataSource removeAllObjects];
-    }
+    [self.dataSource removeAllObjects];
     NSMutableArray *mArray = [NSMutableArray array];
+    NSInteger index = 0;
     for (AMapPOI *poi in places) {
         EBSelectPositionModel *selectModel = [[EBSelectPositionModel alloc] init];
+        if (index == 0) {
+            selectModel.selected = YES;
+        }
         selectModel.poi = poi;
         [mArray addObject:selectModel];
+        index ++;
     }
     [self.dataSource addObjectsFromArray:mArray];
     [self.tableView reloadData];
 }
 
-- (void)searchMapView:(EBSearchMapView *)searchMapView locationReGeocode:(AMapReGeocode *)reGeocode location:(CLLocation *)location{
-    if (self.locationModel) {
-        self.locationModel.regeocode = reGeocode;
-    }
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-}
 
 #pragma mark - EBSelectPositionCellDelegate
 - (void)selectPositionSureClick:(EBSelectPositionCell *)selectPositionCell title:(NSString *)title coord:(CLLocationCoordinate2D)coord district:(NSString *)district{

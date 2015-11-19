@@ -85,4 +85,5 @@
 + (NSInteger)currentMinute;
 + (NSInteger)currentSecond;
 
++ (UIImageView *)backgroundImageView;
 @end

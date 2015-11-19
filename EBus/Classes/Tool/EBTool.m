@@ -298,6 +298,14 @@
 + (NSInteger)currentSecond {
     return [self dataComponent].second;
 }
+
++ (UIImageView *)backgroundImageView {
+    UIImageView *backgroundImageView = [[UIImageView alloc] init];
+    backgroundImageView.contentMode = UIViewContentModeCenter;
+    UIImage *image = [UIImage imageNamed:@"main_background"];
+    backgroundImageView.image = image;
+    return  backgroundImageView;
+}
 @end
 
 

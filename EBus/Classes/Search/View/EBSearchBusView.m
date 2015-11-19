@@ -52,8 +52,8 @@
 }
 #pragma mark - Implementation
 - (void)searchBusButtonImplementation {
-    EBSearchBusButton *searchBtnOne = [self searchBusButtonWithTitle:@"我的位置" normalImageName:@"search_myPosition"];
-    EBSearchBusButton *searchBtnTwo = [self searchBusButtonWithTitle:@"终点" normalImageName:@"search_endPosition"];
+    EBSearchBusButton *searchBtnOne = [self searchBusButtonWithTitle:@"出发地" normalImageName:@"search_myPosition"];
+    EBSearchBusButton *searchBtnTwo = [self searchBusButtonWithTitle:@"目的地" normalImageName:@"search_endPosition"];
     searchBtnOne.tag = EBSearchBusClickTypeMyPosition;
     searchBtnTwo.tag = EBSearchBusClickTypeEndPosition;
     
@@ -248,7 +248,7 @@
         [self.myPositionBtn setTitle:myPositionTitle forState:UIControlStateNormal];
         [self.myPositionBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     } else {
-        [self.myPositionBtn setTitle:@"我的位置" forState:UIControlStateNormal];
+        [self.myPositionBtn setTitle:@"出发地" forState:UIControlStateNormal];
         [self.myPositionBtn setTitleColor:EB_RGBColor(199, 204, 215) forState:UIControlStateNormal];
     }
 }
@@ -259,7 +259,7 @@
         [self.endPositionBtn setTitle:endPositionTitle forState:UIControlStateNormal];
         [self.endPositionBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     } else {
-        [self.endPositionBtn setTitle:@"终点" forState:UIControlStateNormal];
+        [self.endPositionBtn setTitle:@"目的地" forState:UIControlStateNormal];
         [self.endPositionBtn setTitleColor:EB_RGBColor(199, 204, 215) forState:UIControlStateNormal];
     }
     

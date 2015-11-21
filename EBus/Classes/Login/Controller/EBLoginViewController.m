@@ -124,7 +124,11 @@
         btn.backgroundColor = [UIColor lightGrayColor];
         [self.myTimer fire];
         NSDictionary *parameters = @{static_Argument_phone : self.telephoneTF.text};
-        [EBNetworkRequest GET:static_Url_GetCode parameters:parameters dictBlock:nil errorBlock:nil];
+        [EBNetworkRequest GET:static_Url_GetCode parameters:parameters dictBlock:^(NSDictionary *dict) {
+            EBLog(@"验证码 -> %@", dict);
+        } errorBlock:^(NSError *error) {
+            
+        }];
         [self.verificationTF becomeFirstResponder];
     }
 }

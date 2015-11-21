@@ -16,8 +16,6 @@
  needTime = 60;
  startTime = 1535;
  vehTime = 1535;
- 
- 
  alipayCost = 0;
  dayNum = 3;
  id = 130;

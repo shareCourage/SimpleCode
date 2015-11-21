@@ -1127,12 +1127,12 @@
 			children = (
 				A9F1AB271BD8FC9200B85843 /* EBBuyTicketController.h */,
 				A9F1AB281BD8FC9200B85843 /* EBBuyTicketController.m */,
+				A9DDC5801BE85C6D006395E3 /* EBOrderDetailController.h */,
+				A9DDC5811BE85C6D006395E3 /* EBOrderDetailController.m */,
 				A907EAAF1BE1B436006E99C1 /* EBSponsorController.h */,
 				A907EAB01BE1B436006E99C1 /* EBSponsorController.m */,
 				A907EAC01BE34702006E99C1 /* EBApplyBusController.h */,
 				A907EAC11BE34702006E99C1 /* EBApplyBusController.m */,
-				A9DDC5801BE85C6D006395E3 /* EBOrderDetailController.h */,
-				A9DDC5811BE85C6D006395E3 /* EBOrderDetailController.m */,
 				A91A4AF31BF03EAC00AD7E1F /* EBSZTBookController.h */,
 				A91A4AF41BF03EAC00AD7E1F /* EBSZTBookController.m */,
 				A91A4AF51BF03EAC00AD7E1F /* EBSZTBookController.xib */,
@@ -2621,8 +2621,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = BrandAsset;
-				CODE_SIGN_IDENTITY = "iPhone Developer: guangdong biaoyue (4Q72A872JK)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: guangdong biaoyue (4Q72A872JK)";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2679,7 +2679,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = net.goome.EBus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "84d54105-6bd6-4ae6-8c38-1f7b7da1c285";
+				PROVISIONING_PROFILE = "5bed6a4f-c5d1-4d84-9a90-978f70d82446";
 			};
 			name = Debug;
 		};
@@ -2689,8 +2689,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = BrandAsset;
-				CODE_SIGN_IDENTITY = "iPhone Developer: guangdong biaoyue (4Q72A872JK)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: guangdong biaoyue (4Q72A872JK)";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2747,7 +2747,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = net.goome.EBus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "84d54105-6bd6-4ae6-8c38-1f7b7da1c285";
+				PROVISIONING_PROFILE = "5bed6a4f-c5d1-4d84-9a90-978f70d82446";
 			};
 			name = Release;
 		};

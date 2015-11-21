@@ -298,7 +298,7 @@
             //更改支付方式为微信支付
             [MBProgressHUD showMessage:nil toView:self.view];
             [self changePayTypeTo:EBPayTypeOfWeChat success:^(NSDictionary *dict) {
-                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
                 NSString *code = dict[static_Argument_returnCode];
                 EBLog(@"returnInfo -> %@  %@", dict[static_Argument_returnInfo], code);
                 if ([code integerValue] == 500) {

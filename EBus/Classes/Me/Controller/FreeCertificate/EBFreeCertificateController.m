@@ -406,7 +406,7 @@
         label.backgroundColor = EB_RGBColor(213, 213, 213);
         label.textColor = [UIColor whiteColor];
         label.textAlignment = NSTextAlignmentCenter;
-        label.text = [NSString stringWithFormat:@"%ld",i + 1];
+        label.text = [NSString stringWithFormat:@"%d",i + 1];
         [self.firView addSubview:label];
         [self.firLabels addObject:label];
     }

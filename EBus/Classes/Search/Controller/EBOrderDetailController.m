@@ -143,10 +143,34 @@
     }];
 
     if (self.canFromMyOrder && [self.specificModel.status integerValue] == 0) {//未支付状态
-        [self bottomHaveTwoButtonImplentation:btnView height:bvH];
+        NSArray *sales = [self.specificModel.saleDates componentsSeparatedByString:@","];
+        NSString *runDate = [sales firstObject];
+        NSString *startTime = self.specificModel.startTime;
+#if DEBUG
+//        runDate = @"2015-11-23";
+//        startTime = @"14:55";
+#endif
+        if ([EBTool isTimeOutWithDate:runDate startTime:startTime]) {
+            [self bottomHaveTwoButtonImplentation:btnView height:bvH];//生成支付、取消订单按钮
+        } else {
+            [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
+        }
+
     } else if (self.canFromMyOrder && [self.specificModel.status integerValue] == 2) {//已支付状态
-        NSArray *titles = @[@"退票", @"续订"];
-        [self bottomViewTwoButton:titles selector:@selector(orderAgainClick:) btnView:btnView height:bvH];//生成续订button + 退款按钮
+        NSArray *sales = [self.specificModel.saleDates componentsSeparatedByString:@","];
+        NSString *runDate = [sales firstObject];
+        NSString *startTime = self.specificModel.startTime;
+#if DEBUG
+//        runDate = @"2015-11-23";
+//        startTime = @"14:55";
+#endif
+        if ([EBTool isTimeOutWithDate:runDate startTime:startTime]) {
+            NSArray *titles = @[@"退票", @"续订"];
+            [self bottomViewTwoButton:titles selector:@selector(orderAgainClick:) btnView:btnView height:bvH];//生成续订button + 退款按钮
+        } else {
+            [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
+        }
+        
     } else if (self.canFromMyOrder) {
         [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
     } else {

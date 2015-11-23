@@ -71,6 +71,9 @@ static NSString *static_Url_Host            = @"http://app.szebus.net";
 #define static_Url_MoreDetail           [static_Url_Host stringByAppendingPathComponent:@"more/phone/record/detail"]//更多
 #define static_Url_OrderDetail          [static_Url_Host stringByAppendingPathComponent:@"order/phone/main/second/detail"]//(文档4.0，第29个接口)根据订单主表id获取主从表详情信息
 #define static_Url_LinePrice            [static_Url_Host stringByAppendingPathComponent:@"bc/phone/current/price"]//(文档4.0，第39个接口)获取当前特定班次交易价
+#define static_Url_AddLine              [static_Url_Host stringByAppendingPathComponent:@"bc/phone/apply/status"]//(文档4.0，第36个接口)通过日期段获取加车状态
+#define static_Url_ApplyLine            [static_Url_Host stringByAppendingPathComponent:@"ot/phone/apply/save"]//(文档4.0，第16个接口)加车申请
+
 
 static NSString *static_Argument_returnData     = @"returnData";
 static NSString *static_Argument_returnCode     = @"returnCode";
@@ -112,6 +115,7 @@ static NSString *static_Argument_resultStatus   = @"resultStatus";
 static NSString *static_Argument_payResult      = @"payResult";
 static NSString *static_Argument_payStatus      = @"payStatus";
 static NSString *static_Argument_runDate        = @"runDate";
+static NSString *static_Argument_runDates       = @"runDates";
 static NSString *static_Argument_status         = @"status";
 static NSString *static_Argument_perName        = @"perName";
 static NSString *static_Argument_identityNo     = @"identityNo";

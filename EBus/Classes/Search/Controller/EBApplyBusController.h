@@ -7,7 +7,10 @@
 //
 
 #import "PHViewController.h"
+@class EBSearchResultModel;
 
 @interface EBApplyBusController : PHViewController
+
+@property (nonatomic, strong) EBSearchResultModel *resultModel;
 
 @end

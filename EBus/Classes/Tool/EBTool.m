@@ -306,6 +306,77 @@
     backgroundImageView.image = image;
     return  backgroundImageView;
 }
+//出票返回NO， 超时返回NO， 等待返回YES
++ (BOOL)isTimeOutWithDate:(NSString *)runDate startTime:(NSString *)startTime {
+    BOOL value = NO;
+    NSArray *array = [NSArray seprateString:runDate characterSet:@"-"];
+    if (array.count != 3) return NO;
+    NSString *dayStr = [array lastObject];
+    NSString *hourMinute = [startTime insertSymbolString:@":" atIndex:2];
+    NSArray *array2 = [hourMinute componentsSeparatedByString:@":"];
+    if (array2.count != 2) return NO;
+    NSString *hourStr = [array2 firstObject];
+    NSString *minuteStr = [array2 lastObject];
+    NSInteger day = [dayStr integerValue];
+    NSInteger hour = [hourStr integerValue];
+    NSInteger minute = [minuteStr integerValue];//08:40
+    if ([EBTool currentDay] <= day) {
+        if ([EBTool currentDay] == day) {
+            if ([EBTool currentHour] <= hour) {
+                if ([EBTool currentHour] == hour) {
+                    if ([EBTool currentMinute] <= minute) {
+                        //在没有超时的情况下，才存在判断的可能
+                        if ( (minute - [EBTool currentMinute]) <= 30) {
+                            value = NO;//出票
+                        } else {
+                            value = YES;
+                        }
+                    } else {
+                        value = NO;
+                    }
+                } else if ([EBTool currentHour] == hour - 1) {//8:20
+                    if (minute >= 30) {
+                        value = YES;
+                    } else {
+                        NSInteger time = 60 - [EBTool currentMinute];
+                        if ((time + minute) <= 30) {
+                            value = NO;
+                        } else {
+                            value = YES;
+                        }
+                    }
+                } else {
+                    value = YES;
+                }
+            } else {
+                value = NO;
+            }
+        } else {
+            value = YES;
+        }
+        
+    } else {
+        value = NO;
+    }
+    
+    return value;
+}
+
++ (NSString *)stringFromPHCalenderDay:(PHCalenderDay *)currentDay {
+    NSString *string = [NSString stringWithFormat:@"%ld%02ld%02ld",(unsigned long)currentDay.year, (unsigned long)currentDay.month, (unsigned long)currentDay.day];
+    return string;
+}
+
++ (NSString *)stringFromPHCalenderDay:(PHCalenderDay *)currentDay space:(NSString *)space{
+    NSString *string = nil;
+    if (space.length == 0) {
+        string = [NSString stringWithFormat:@"%ld%02ld%02ld",(unsigned long)currentDay.year, (unsigned long)currentDay.month, (unsigned long)currentDay.day];
+
+    } else {
+        string = [NSString stringWithFormat:@"%ld%@%02ld%@%02ld",(unsigned long)currentDay.year,space, (unsigned long)currentDay.month,space, (unsigned long)currentDay.day];
+    }
+    return string;
+}
 @end
 
 

@@ -135,14 +135,14 @@
             NSString *returCode = dict[static_Argument_returnCode];
             if ([returCode integerValue] != 500) {
                 if ([string isEqualToString:@"深圳通卡号不可为空"]) {
-                    [MBProgressHUD showError:@"还没绑定深圳通哦" toView:self.view];
+                    [MBProgressHUD showError:@"深圳通卡号不能为空" toView:self.view];
                 } else {
                     [MBProgressHUD showError:string toView:self.view];
                 }
             } else if ([returCode integerValue] == 500){
-                [MBProgressHUD showSuccess:@"预订成功" toView:self.view];
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [self.navigationController popViewControllerAnimated:YES];
+                [MBProgressHUD showSuccess:@"预订成功，请按时乘坐" toView:self.view];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [EBTool popToAttentionControllWithIndex:0 controller:self];
                 });
                 
             }

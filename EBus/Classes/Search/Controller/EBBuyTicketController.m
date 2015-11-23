@@ -24,14 +24,14 @@
 @interface EBBuyTicketController () <EBCalenderViewDelegate, EBPayTypeViewDelegate>
 
 @property (nonatomic, weak)EBCalenderView *calenderView;
-
-@property (nonatomic, assign) CGFloat totalPrice;
-
 @property (nonatomic, weak) EBPayTypeView *payTypeView;
 
-@property (nonatomic, strong) NSArray *dates;
-
+@property (nonatomic, assign) CGFloat totalPrice;
 @property (nonatomic, assign) EBPayType payType;
+
+@property (nonatomic, strong) NSArray *dates;
+@property (nonatomic, strong) NSDictionary *ticketPricePara;
+
 @end
 
 @implementation EBBuyTicketController
@@ -41,9 +41,18 @@
     [self payCash:self.dates payType:payType];
 }
 
+- (void)setTicketPricePara:(NSDictionary *)ticketPricePara {
+    _ticketPricePara = ticketPricePara;
+    if (ticketPricePara.count != 0) {
+        self.calenderView.priceAndTicket = ticketPricePara;
+        [self.calenderView reloadData];
+    }
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"购票";
+    self.tableView.allowsSelection = NO;
     CGFloat calenderH = EB_HeightOfScreen - 100 - EB_HeightOfNavigationBar;
     if (EB_HeightOfScreen <= 480) {
         calenderH = calenderH + 100;
@@ -119,14 +128,12 @@
     }
     
     [EBNetworkRequest GET:static_Url_SurplusTicket parameters:parameters dictBlock:^(NSDictionary *dict) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
         NSDictionary *returnData = dict[static_Argument_returnData];
-        NSMutableDictionary *mutD = [NSMutableDictionary dictionaryWithDictionary:returnData];
-        [mutD setObject:dayString forKey:@"dayString"];
-        self.calenderView.priceAndTicket = mutD;
-        [self.calenderView reloadData];
+        self.ticketPricePara = returnData;
+        
     } errorBlock:^(NSError *error) {
-        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
     }];
 }
 
@@ -190,8 +197,8 @@
                 EBOrderDetailModel *orderModel = [[EBOrderDetailModel alloc] initWithDict:main];
                 if (type == EBPayTypeOfAlipay || type == EBPayTypeOfWeChat) {
                     [self alipayOrWechatPay:type orderModel:orderModel];
-                } else {
-#warning 深圳通支付 或者 其它免费证件支付
+                } else if (type == EBPayTypeOfOther){//使用免费证件支付成功后
+                    [EBTool popToAttentionControllWithIndex:0 controller:self];
                 }
             }
         } errorBlock:^(NSError *error) {
@@ -295,6 +302,7 @@
 
 - (void)eb_calenderViewDidApply:(EBCalenderView *)calenderView {
     EBApplyBusController *apply = [[EBApplyBusController alloc] init];
+    apply.resultModel = self.resultModel;
     [self.navigationController pushViewController:apply animated:YES];
 }
 
@@ -327,7 +335,6 @@
         book.resultModel = self.resultModel;
         book.totalPrice = self.totalPrice;
         [self.navigationController pushViewController:book animated:YES];
-//        self.payType = EBPayTypeOfSZT;
     } else if (index == 3) {
         self.payType = EBPayTypeOfOther;
     }

@@ -143,7 +143,7 @@
                     if ([EBTool currentMinute] <= minute) {
                         //在没有超时的情况下，才存在判断的可能
                         if ( (minute - [EBTool currentMinute]) <= 30) {
-                            self.type = EBTicketTypeOfOut;
+                            self.type = EBTicketTypeOfOut;//出票
                         } else {
                             self.type = EBTicketTypeOfWaiting;
                         }

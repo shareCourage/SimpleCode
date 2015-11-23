@@ -22,7 +22,6 @@
 @property (nonatomic, weak) UIButton *addBusBtn;
 @property (nonatomic, weak) UIButton *buyBtn;
 
-@property (nonatomic, strong) NSArray *days;
 @property (nonatomic, strong) NSArray *prices;
 @property (nonatomic, strong) NSArray *tickets;
 
@@ -41,10 +40,8 @@
 
 - (void)setPriceAndTicket:(NSDictionary *)priceAndTicket {
     _priceAndTicket = priceAndTicket;
-    NSString *dayString = priceAndTicket[@"dayString"];
     NSString *price = priceAndTicket[@"prices"];
     NSString *ticket = priceAndTicket[@"tickets"];
-    self.days = [NSArray seprateString:dayString characterSet:@","];
     self.prices = [NSArray seprateString:price characterSet:@","];
     self.tickets = [NSArray seprateString:ticket characterSet:@","];
 }

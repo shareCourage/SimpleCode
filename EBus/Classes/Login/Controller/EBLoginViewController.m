@@ -127,20 +127,19 @@
     if (![EBTool isPureTelephoneNumber:self.telephoneTF.text]) {
         [MBProgressHUD showError:@"请输入正确的手机号码" toView:self.view];
     } else {
+        UIButton *btn = sender;
+        btn.enabled = NO;
+        btn.backgroundColor = [UIColor lightGrayColor];
+        [self.myTimer fire];
         NSDictionary *parameters = @{static_Argument_phone : self.telephoneTF.text};
         [EBNetworkRequest GET:static_Url_GetCode parameters:parameters dictBlock:^(NSDictionary *dict) {
             EBLog(@"验证码 -> %@", dict);
             NSString *info = dict[static_Argument_returnInfo];
             NSString *code = dict[static_Argument_returnCode];
             NSInteger codeIn = [code integerValue];
-            if (codeIn == 500) {
-                UIButton *btn = sender;
-                btn.enabled = NO;
-                btn.backgroundColor = [UIColor lightGrayColor];
-                [self.myTimer fire];
-            } else {
+            if (codeIn != 500) {
                 [MBProgressHUD showError:info toView:self.view];
-            }
+            } 
         } errorBlock:^(NSError *error) {
             
         }];

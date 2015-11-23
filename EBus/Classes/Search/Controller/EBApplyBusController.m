@@ -6,13 +6,16 @@
 //  Copyright © 2015年 Goome. All rights reserved.
 //
 #warning 不清楚交互，暂时搁置，清楚需求后再做
-
+#define Cell_UnableBackgroundColor EB_RGBColor(241, 241, 241)
+#define Cell_BoughtBackgroundColor EB_RGBColor(230, 146, 35)
+#define Cell_FullBackgroundColor   [UIColor redColor]
 #define HeightOfCalender (EB_WidthOfScreen / 7)
 
 #import "EBApplyBusController.h"
 #import "EBUserInfo.h"
 #import "EBColorView.h"
 #import "PHCalenderKit.h"
+#import "EBSearchResultModel.h"
 
 @interface EBApplyBusController ()<PHCalenderViewDataSource, PHCalenderViewDelegate>
 
@@ -23,28 +26,104 @@
 @property (nonatomic, weak) UIButton *workDayBtn;
 @property (nonatomic, weak) UIButton *holidayBtn;
 
+@property (nonatomic, strong) NSMutableArray *selectDates;
+@property (nonatomic, strong) NSMutableArray *status;
+
 @end
 
 @implementation EBApplyBusController
+
+- (NSMutableArray *)selectDates {
+    if (!_selectDates) {
+        _selectDates = [NSMutableArray array];
+    }
+    return _selectDates;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"申请加班";
     self.view.backgroundColor = [UIColor whiteColor];
     [self commonInit];
     [self.calenderView reloadData];
+    [self addLineRequest];
 }
+#pragma mark - Request
+- (void)addLineRequest {
+    NSUInteger numberOfWeek = [[EBUserInfo sharedEBUserInfo].currentDate numberOfWeeksInCurrentMonth];
+    PHCalenderDay *beginDay = [EBUserInfo sharedEBUserInfo].calendarDays[0];
+    PHCalenderDay *endDay   = [EBUserInfo sharedEBUserInfo].calendarDays[(numberOfWeek - 1) * 7 + 6];
+    NSString *beginDate = [EBTool stringFromPHCalenderDay:beginDay];
+    NSString *endDate = [EBTool stringFromPHCalenderDay:endDay];
+    if (!self.resultModel.lineId || !self.resultModel.vehTime) return;
+    [MBProgressHUD showMessage:nil toView:self.view];
+    NSDictionary *parameters = @{static_Argument_customerName   : [EBUserInfo sharedEBUserInfo].loginName,
+                                 static_Argument_customerId     : [EBUserInfo sharedEBUserInfo].loginId,
+                                 static_Argument_lineId         : self.resultModel.lineId,
+                                 static_Argument_vehTime        : self.resultModel.vehTime,
+                                 static_Argument_beginDate      : beginDate,
+                                 static_Argument_endDate        : endDate};
+    [EBNetworkRequest GET:static_Url_AddLine parameters:parameters dictBlock:^(NSDictionary *dict) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        NSString *code = dict[static_Argument_returnCode];
+        NSString *status = dict[static_Argument_status];
+        if ([code integerValue] == 500) {
+            NSArray *array = [NSArray seprateString:status characterSet:@","];
+            self.status = [array mutableCopy];
+#if 0
+            [self.status removeAllObjects];
+            for (int i = 0; i < 35; i ++) {
+                if (i % 2 == 0) {
+                    [self.status addObject:@"1"];
+                } else {
+                    [self.status addObject:@"-1"];
+                }
+            }
+#endif
+            [self.calenderView reloadData];
+        }
+    } errorBlock:^(NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
 
-
-- (void)dateChooseClick:(UIButton *)sender {
-    if (sender.tag == 0) {
-        
-    } else if (sender.tag == 1) {
-    
-    } else if (sender.tag == 2) {
-    
-    } else if (sender.tag == 3) {
-        
+    }];
+}
+- (void)applyRequest {
+    NSString *newString = nil;
+    if (self.selectDates.count == 0) {
+        [MBProgressHUD showError:@"请选择申请加班日期" toView:self.view];
+        return;
+    } else if (self.selectDates.count == 1){
+        newString = [self.selectDates firstObject];
+    } else {
+        NSArray *sortArray = [self.selectDates sortedArrayUsingSelector:@selector(compare:)];//升序排序
+        newString = [EBTool stringConnected:sortArray connectString:@","];
+        EBLog(@"%@",newString);
     }
+    if (!self.resultModel.lineId || !self.resultModel.vehTime || !self.resultModel.startTime || !self.resultModel.onStationId || !self.resultModel.offGeogId) return;
+    [MBProgressHUD showMessage:nil toView:self.view];
+    NSDictionary *parameters = @{static_Argument_customerName   : [EBUserInfo sharedEBUserInfo].loginName,
+                                 static_Argument_customerId     : [EBUserInfo sharedEBUserInfo].loginId,
+                                 static_Argument_lineId         : self.resultModel.lineId,
+                                 static_Argument_vehTime        : self.resultModel.vehTime,
+                                 static_Argument_startTime      : self.resultModel.startTime,
+                                 static_Argument_onStationId    : self.resultModel.onStationId,
+                                 static_Argument_offStationId   : self.resultModel.offStationId,
+                                 static_Argument_runDates       : newString};
+    [EBNetworkRequest GET:static_Url_ApplyLine parameters:parameters dictBlock:^(NSDictionary *dict) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        NSString *code = dict[static_Argument_returnCode];
+        if ([code integerValue] == 500) {
+            [MBProgressHUD showSuccess:@"申请加班成功" toView:self.view];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.3f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.navigationController popViewControllerAnimated:YES];
+            });
+        } else {
+            [MBProgressHUD showError:@"申请加班失败" toView:self.view];
+        }
+    } errorBlock:^(NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [MBProgressHUD showError:@"申请加班失败" toView:self.view];
+    }];
 }
 #pragma mark - PHCalenderViewDataSource
 
@@ -55,9 +134,22 @@
 }
 - (PHCalenderViewCell *)calenderView:(PHCalenderView *)calenderView cellForRow:(NSUInteger)row column:(NSUInteger)column {
     PHCalenderViewCell *cell = [[PHCalenderViewCell alloc] initWithStyle:PHCalenderViewCellStyleDefault];
-    PHCalenderDay *calendarDay = [EBUserInfo sharedEBUserInfo].calendarDays[row * 7 + column];
-    cell.textLabel.backgroundColor = EB_RGBColor(241, 241, 241);
+    NSUInteger value = row * 7 + column;
+    PHCalenderDay *calendarDay = [EBUserInfo sharedEBUserInfo].calendarDays[value];
+    if (self.status.count != 0 && value < self.status.count) {
+        NSString *status = self.status[value];
+        NSInteger statusInt = [status integerValue];
+        if (statusInt == 1) {
+            cell.backgroundColor = [UIColor whiteColor];
+            cell.userInteractionEnabled = YES;
+        } else if (statusInt == -1) {
+            cell.textLabel.backgroundColor = Cell_UnableBackgroundColor;
+            cell.textLabel.textColor = [UIColor grayColor];
+            cell.userInteractionEnabled = NO;
+        }
+    }
     cell.textLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)calendarDay.day];
+    
     if ([calendarDay isEqualTo:[EBUserInfo sharedEBUserInfo].currentCalendarDay]) {
         cell.textLabel.textColor = [UIColor colorWithRed:249.0/255 green:75.0/255 blue:0 alpha:1];
     }
@@ -67,6 +159,39 @@
 - (CGFloat)heightForRowInCalenderView:(PHCalenderView *)calenderView {
     return HeightOfCalender;
 }
+
+- (void)calenderView:(PHCalenderView *)calenderView didSelectAtRow:(NSUInteger)row column:(NSUInteger)column {
+    NSUInteger value = row * 7 + column;
+    PHCalenderDay *calendarDay = [EBUserInfo sharedEBUserInfo].calendarDays[value];
+    PHCalenderViewCell *cell = [calenderView cellForRow:row column:column];
+    NSString *text = [EBTool stringFromPHCalenderDay:calendarDay space:@"-"];
+    if (cell.isSelected) {
+        EBLog(@"row -> %ld,column -> %ld, %@", (unsigned long)row, (unsigned long)column, cell.textLabel.text);
+        if (!text) return;
+        [self.selectDates addObject:text];
+    } else {
+        NSUInteger i = 0;
+        for (NSString *obj in self.selectDates) {
+            if ([obj isEqualToString:text]) {
+                [self.selectDates removeObjectAtIndex:i];
+                break;
+            }
+            i ++;
+        }
+    }
+    
+    for (NSString *obj in self.selectDates) {
+        EBLog(@"%@",obj);
+    }
+}
+- (void)dateChooseClick:(UIButton *)sender {
+    if (sender.tag == 3) {
+        [self applyRequest];
+    } else {
+        //其它按钮都是@"全选",@"工作日",@"节假日"，暂时被废弃
+    }
+}
+
 #pragma mark - Private
 - (void)commonInit {
     CGFloat width = EB_WidthOfScreen;
@@ -111,6 +236,7 @@
     CGFloat calenderH = [[EBUserInfo sharedEBUserInfo].currentDate numberOfWeeksInCurrentMonth] * HeightOfCalender;
     CGRect calenderF = CGRectMake(calenderX, calenderY, calenderW, calenderH);
     PHCalenderView *calender = [[PHCalenderView alloc] initWithFrame:calenderF];
+    calender.backgroundColor = EB_RGBColor(241, 241, 241);
     calender.dataSource = self;
     calender.delegate = self;
     [self.view addSubview:calender];
@@ -126,6 +252,7 @@
     colorView.backgroundColor = [UIColor purpleColor];
     [self.view addSubview:colorView];
     
+#if 1 //需求暂时被搁置,将这个view隐藏起来
     CGFloat btnH = 30;
     CGFloat btnViewX = 0;
     CGFloat btnViewY = CGRectGetMaxY(colorView.frame);
@@ -134,6 +261,7 @@
     CGRect btnViewF = CGRectMake(btnViewX, btnViewY, btnViewW, btnViewH);
     UIView *btnView = [[UIView alloc] initWithFrame:btnViewF];
     [self.view addSubview:btnView];
+    btnView.hidden = YES;
     
     NSArray *btnTitle = @[@"全选",@"工作日",@"节假日"];
     for (NSUInteger i = 0; i < 3; i ++) {
@@ -154,6 +282,7 @@
         btn.frame = btnF;
         [btnView addSubview:btn];
     }
+#endif
     
     UIButton *apply = [UIButton buttonWithType:UIButtonTypeSystem];
     apply.titleLabel.font = [UIFont systemFontOfSize:20];
@@ -172,4 +301,6 @@
     [apply addTarget:self action:@selector(dateChooseClick:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:apply];
 }
+
+
 @end

@@ -26,7 +26,7 @@
 #import "MBProgressHUD+MJ.h"
 #import "UIColor+PHCategory.h"
 #import "PHKeyValueObserver.h"
-@class EBSearchResultModel;
+@class EBSearchResultModel, PHCalenderDay;
 
 @interface EBTool : NSObject
 
@@ -86,4 +86,8 @@
 + (NSInteger)currentSecond;
 
 + (UIImageView *)backgroundImageView;
+
++ (BOOL)isTimeOutWithDate:(NSString *)runDate startTime:(NSString *)startTime;
++ (NSString *)stringFromPHCalenderDay:(PHCalenderDay *)currentDay;
++ (NSString *)stringFromPHCalenderDay:(PHCalenderDay *)currentDay space:(NSString *)space;
 @end

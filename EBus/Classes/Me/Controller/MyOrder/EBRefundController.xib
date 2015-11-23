@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EBRefundController">
+            <connections>
+                <outlet property="downL" destination="7U2-Fu-nhC" id="9hR-P7-ixL"/>
+                <outlet property="refundBtn" destination="rEW-gc-Ub2" id="Kvu-AR-maa"/>
+                <outlet property="upL" destination="cST-Lp-GuF" id="F52-Mr-nqf"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mai-rH-DmH">
+                    <rect key="frame" x="0.0" y="607" width="375" height="60"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="suQ-5g-krE" userLabel="left">
+                            <rect key="frame" x="10" y="5" width="175" height="50"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="up" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cST-Lp-GuF">
+                                    <rect key="frame" x="0.0" y="0.0" width="175" height="21"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="down" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7U2-Fu-nhC">
+                                    <rect key="frame" x="0.0" y="21" width="175" height="21"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="trailing" secondItem="cST-Lp-GuF" secondAttribute="trailing" id="0e7-HA-pzf"/>
+                                <constraint firstItem="cST-Lp-GuF" firstAttribute="leading" secondItem="suQ-5g-krE" secondAttribute="leading" id="0rr-Ch-I6R"/>
+                                <constraint firstItem="7U2-Fu-nhC" firstAttribute="width" secondItem="cST-Lp-GuF" secondAttribute="width" id="3sB-Ne-Qub"/>
+                                <constraint firstItem="7U2-Fu-nhC" firstAttribute="centerX" secondItem="suQ-5g-krE" secondAttribute="centerX" id="Q2R-AT-PmB"/>
+                                <constraint firstAttribute="height" constant="50" id="UJE-5A-HAW"/>
+                                <constraint firstItem="7U2-Fu-nhC" firstAttribute="top" secondItem="cST-Lp-GuF" secondAttribute="bottom" id="Uhr-Oz-Vlk"/>
+                                <constraint firstItem="cST-Lp-GuF" firstAttribute="top" secondItem="suQ-5g-krE" secondAttribute="top" id="bZp-7y-9RF"/>
+                                <constraint firstItem="7U2-Fu-nhC" firstAttribute="height" secondItem="cST-Lp-GuF" secondAttribute="height" id="i1d-fY-6M0"/>
+                                <constraint firstItem="cST-Lp-GuF" firstAttribute="centerX" secondItem="suQ-5g-krE" secondAttribute="centerX" id="j8W-Qd-Mjw"/>
+                            </constraints>
+                        </view>
+                        <button opaque="NO" alpha="0.90000000000000002" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rEW-gc-Ub2">
+                            <rect key="frame" x="190" y="10" width="175" height="40"/>
+                            <color key="backgroundColor" red="0.22745099660000001" green="0.62352943419999995" blue="0.87450987099999999" alpha="1" colorSpace="deviceRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="40" id="Wnu-iu-ale"/>
+                            </constraints>
+                            <state key="normal" title="退票">
+                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="refundClick:" destination="-1" eventType="touchUpInside" id="mPW-9Q-1iK"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="rEW-gc-Ub2" firstAttribute="leading" secondItem="suQ-5g-krE" secondAttribute="trailing" constant="5" id="AyS-rg-JTF"/>
+                        <constraint firstAttribute="trailing" secondItem="rEW-gc-Ub2" secondAttribute="trailing" constant="10" id="S9Y-Ga-QmZ"/>
+                        <constraint firstItem="suQ-5g-krE" firstAttribute="centerY" secondItem="mai-rH-DmH" secondAttribute="centerY" id="Zc0-Mc-GhK"/>
+                        <constraint firstAttribute="height" constant="60" id="dne-JY-UfN"/>
+                        <constraint firstItem="rEW-gc-Ub2" firstAttribute="centerY" secondItem="mai-rH-DmH" secondAttribute="centerY" id="drY-aA-imv"/>
+                        <constraint firstItem="rEW-gc-Ub2" firstAttribute="leading" secondItem="suQ-5g-krE" secondAttribute="trailing" constant="5" id="goX-4G-d70"/>
+                        <constraint firstItem="suQ-5g-krE" firstAttribute="leading" secondItem="mai-rH-DmH" secondAttribute="leading" constant="10" id="jC0-j8-uXe"/>
+                        <constraint firstItem="rEW-gc-Ub2" firstAttribute="width" secondItem="suQ-5g-krE" secondAttribute="width" id="uFX-UJ-uFE"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="mai-rH-DmH" secondAttribute="trailing" id="iA1-to-Wie"/>
+                <constraint firstItem="mai-rH-DmH" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="lt7-XY-MJb"/>
+                <constraint firstAttribute="bottom" secondItem="mai-rH-DmH" secondAttribute="bottom" id="rST-v6-pR8"/>
+            </constraints>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+        </view>
+    </objects>
+</document>

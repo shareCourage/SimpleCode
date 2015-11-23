@@ -11,6 +11,7 @@
                 <outlet property="getVerificationBtn" destination="JbH-xQ-Njq" id="f5I-wf-UKV"/>
                 <outlet property="loginBtn" destination="T7s-KE-zn4" id="wV8-nS-kGb"/>
                 <outlet property="selectedBtn" destination="LQ6-p9-IZC" id="qzg-Ur-2b4"/>
+                <outlet property="serviceProtocolBtn" destination="MAh-LD-KZK" id="bLx-ar-1ic"/>
                 <outlet property="telephoneTF" destination="dvX-tb-SsW" id="ic4-1f-SxK"/>
                 <outlet property="verificationTF" destination="Fti-c2-jti" id="0zi-3w-8Ct"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -24,7 +25,7 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ldv-Ks-9Cx" userLabel="backView">
                     <rect key="frame" x="20" y="64" width="335" height="190"/>
                     <subviews>
-                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入手机号" textAlignment="natural" adjustsFontSizeToFit="NO" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="dvX-tb-SsW" customClass="EBTextField">
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="输入手机号码" textAlignment="natural" adjustsFontSizeToFit="NO" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="dvX-tb-SsW" customClass="EBTextField">
                             <rect key="frame" x="20" y="30" width="295" height="50"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="50" id="oFD-QR-gZ4"/>
@@ -38,7 +39,7 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Xr-6U-xoZ">
                             <rect key="frame" x="0.0" y="90" width="335" height="50"/>
                             <subviews>
-                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请输入验证码" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="Fti-c2-jti" customClass="EBTextField">
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="输入验证码" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="Fti-c2-jti" customClass="EBTextField">
                                     <rect key="frame" x="20" y="0.0" width="193" height="50"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <textInputTraits key="textInputTraits"/>

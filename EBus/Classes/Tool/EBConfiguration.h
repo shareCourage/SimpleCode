@@ -69,7 +69,8 @@ static NSString *static_Url_Host            = @"http://app.szebus.net";
 
 #define static_Url_MoreList             [static_Url_Host stringByAppendingPathComponent:@"more/phone/data"]//更多
 #define static_Url_MoreDetail           [static_Url_Host stringByAppendingPathComponent:@"more/phone/record/detail"]//更多
-
+#define static_Url_OrderDetail          [static_Url_Host stringByAppendingPathComponent:@"order/phone/main/second/detail"]//(文档4.0，第29个接口)根据订单主表id获取主从表详情信息
+#define static_Url_LinePrice            [static_Url_Host stringByAppendingPathComponent:@"bc/phone/current/price"]//(文档4.0，第39个接口)获取当前特定班次交易价
 
 static NSString *static_Argument_returnData     = @"returnData";
 static NSString *static_Argument_returnCode     = @"returnCode";

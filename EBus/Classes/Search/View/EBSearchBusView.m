@@ -202,7 +202,7 @@
             make.height.mas_equalTo(height);//高度
             make.width.mas_equalTo(height);//宽度
         }];
-        [self.searchBtn setTitle:@"发起线路" forState:UIControlStateNormal];
+        [self.searchBtn setTitle:@"立即发起" forState:UIControlStateNormal];
     }
 }
 

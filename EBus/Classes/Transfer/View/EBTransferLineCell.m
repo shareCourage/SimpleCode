@@ -115,8 +115,8 @@
     if ([model isKindOfClass:[EBTransferModel class]]) {
         EBTransferModel *tranferModel = (EBTransferModel *)model;
 #if DEBUG
-//        tranferModel.runDate = @"2015-11-17";
-//        tranferModel.startTime = @"1220";
+//        tranferModel.runDate = @"2015-11-21";
+//        tranferModel.startTime = @"1850";
 #else
 #endif
         [self setupUI:tranferModel];

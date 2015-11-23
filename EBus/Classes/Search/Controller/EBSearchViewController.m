@@ -37,7 +37,9 @@
 
 - (NSMutableArray *)dataSource {
     if (!_dataSource) {
-        _dataSource = [EBTool usualLineArrayFromLocal];
+        if ([EBTool loginEnable]) {
+            _dataSource = [EBTool usualLineArrayFromLocal];
+        }
         _dataSource.count == 0 ? (self.backgroundImageViewDisappear = NO) : (self.backgroundImageViewDisappear = YES);
     }
     return _dataSource;
@@ -45,6 +47,16 @@
 - (void)usualLineSavedNotification {
     self.dataSource = [EBTool usualLineArrayFromLocal];
     self.dataSource.count == 0 ? (self.backgroundImageViewDisappear = NO) : (self.backgroundImageViewDisappear = YES);
+    [self.tableView reloadData];
+}
+
+- (void)loginNotification {
+    [self usualLineSavedNotification];
+}
+
+- (void)logoutNotification {
+    [self.dataSource removeAllObjects];
+    self.backgroundImageViewDisappear = NO;
     [self.tableView reloadData];
 }
 
@@ -58,6 +70,8 @@
     [self itemImplementation];
     [self hotViewImplementation];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(usualLineSavedNotification) name:EBDidSaveUsualLineNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginNotification) name:EBLoginSuccessNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutNotification) name:EBLogoutSuccessNotification object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -156,6 +170,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     EBUsualLineCell *cell = [EBUsualLineCell cellWithTableView:tableView];
     cell.model = self.dataSource[indexPath.row];
+    cell.priceViewHiden = YES;
     cell.delegate = self;
     return cell;
 }
@@ -167,8 +182,28 @@
 }
 - (void)pushToLineDetailController:(EBSearchResultModel *)model {
     EBLineDetailController *detail = [[EBLineDetailController alloc] init];
-    detail.resultModel = model;
-    [self.navigationController pushViewController:detail animated:YES];
+    if (model.lineId && model.vehTime) {
+        NSDictionary *parameters = @{static_Argument_lineId : model.lineId,
+                                     static_Argument_vehTime : model.vehTime};
+        [MBProgressHUD showMessage:nil toView:self.view];
+        [EBNetworkRequest GET:static_Url_LinePrice parameters:parameters dictBlock:^(NSDictionary *dict) {
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            NSString *code = dict[static_Argument_returnCode];
+            NSNumber *data = dict[static_Argument_returnData];
+            if ([code integerValue] == 500) {
+                model.price = data;
+                detail.resultModel = model;
+                [self.navigationController pushViewController:detail animated:YES];
+            } else {
+                [MBProgressHUD showError:@"获取价格失败" toView:self.view];
+            }
+
+        } errorBlock:^(NSError *error) {
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            [MBProgressHUD showError:@"获取价格失败" toView:self.view];
+        }];
+    }
+
 }
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
 {

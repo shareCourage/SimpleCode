@@ -24,7 +24,7 @@
 @end
 
 
-#import "EBOrderDetailModel.h"
+//#import "EBOrderDetailModel.h"
 
 @implementation EBSearchResultModel (OrderDetailModel)
 

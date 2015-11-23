@@ -50,6 +50,15 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginNotificationCenter) name:EBLoginSuccessNotification object:nil];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    if ([EBTool loginEnable]) {
+        for (EBAttentionTableView *tableView in self.tableViews) {
+            [tableView attentionRequestAndTableViewReloadData];
+        }
+    }
+}
+
 - (void)logoutNotificationCenter {
     for (EBAttentionTableView *tableView in self.tableViews) {
         [tableView attentionRequestAndTableViewReloadData];

@@ -37,6 +37,7 @@
         [_buyBtn.titleLabel setFont:[UIFont systemFontOfSize:19]];
         _buyBtn.layer.cornerRadius = CGRectGetWidth(_buyBtn.frame) / 2;
         [_buyBtn addTarget:self action:@selector(buyClick) forControlEvents:UIControlEventTouchUpInside];
+        _buyBtn.enabled = NO;//如果想开启这个btn的功能，可设置为YES，响应的方法会执行相应的代理
     }
     return _buyBtn;
 }
@@ -59,8 +60,9 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        [self labelImplementation];
         self.showBuyView = YES;
+        self.priceViewHiden = NO;
+        [self labelImplementation];
     }
     return self;
 }
@@ -88,6 +90,7 @@
     [super layoutSubviews];
     
     EB_WS(ws);
+    self.priceView.hidden = self.isPriceViewHiden;
     CGFloat right = (self.isShowBuyView && self.model) ?  80 : 20;
     [self.priceView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.mas_equalTo(ws.mas_centerY);

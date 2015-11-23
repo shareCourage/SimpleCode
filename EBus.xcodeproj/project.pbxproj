@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		22365DF84589D79C2029421D /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E9D84390009D9B213650D31C /* libPods.a */; };
+		A900B75A1C0017F6003B222E /* EBOrderSpecificModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A900B7591C0017F6003B222E /* EBOrderSpecificModel.m */; settings = {ASSET_TAGS = (); }; };
+		A900B75D1C001B5A003B222E /* EBSecondList.m in Sources */ = {isa = PBXBuildFile; fileRef = A900B75C1C001B5A003B222E /* EBSecondList.m */; settings = {ASSET_TAGS = (); }; };
+		A900B76D1C007C67003B222E /* EBRefundController.m in Sources */ = {isa = PBXBuildFile; fileRef = A900B76B1C007C67003B222E /* EBRefundController.m */; settings = {ASSET_TAGS = (); }; };
+		A900B76E1C007C67003B222E /* EBRefundController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A900B76C1C007C67003B222E /* EBRefundController.xib */; settings = {ASSET_TAGS = (); }; };
+		A900B7711C007C83003B222E /* EBRefundCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A900B7701C007C83003B222E /* EBRefundCell.m */; settings = {ASSET_TAGS = (); }; };
 		A907EA1C1BDF564A006E99C1 /* me_header@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A907EA1B1BDF564A006E99C1 /* me_header@3x.png */; settings = {ASSET_TAGS = (); }; };
 		A907EA1E1BDF5662006E99C1 /* me_header@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A907EA1D1BDF5662006E99C1 /* me_header@2x.png */; settings = {ASSET_TAGS = (); }; };
 		A907EA201BDF5D34006E99C1 /* me_accessoryView@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A907EA1F1BDF5D34006E99C1 /* me_accessoryView@2x.png */; settings = {ASSET_TAGS = (); }; };
@@ -311,6 +316,15 @@
 
 /* Begin PBXFileReference section */
 		644E536E4435B6B9F6173777 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		A900B7581C0017F6003B222E /* EBOrderSpecificModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBOrderSpecificModel.h; sourceTree = "<group>"; };
+		A900B7591C0017F6003B222E /* EBOrderSpecificModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBOrderSpecificModel.m; sourceTree = "<group>"; };
+		A900B75B1C001B5A003B222E /* EBSecondList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBSecondList.h; sourceTree = "<group>"; };
+		A900B75C1C001B5A003B222E /* EBSecondList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBSecondList.m; sourceTree = "<group>"; };
+		A900B76A1C007C67003B222E /* EBRefundController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBRefundController.h; sourceTree = "<group>"; };
+		A900B76B1C007C67003B222E /* EBRefundController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBRefundController.m; sourceTree = "<group>"; };
+		A900B76C1C007C67003B222E /* EBRefundController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EBRefundController.xib; sourceTree = "<group>"; };
+		A900B76F1C007C83003B222E /* EBRefundCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBRefundCell.h; sourceTree = "<group>"; };
+		A900B7701C007C83003B222E /* EBRefundCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBRefundCell.m; sourceTree = "<group>"; };
 		A907EA1B1BDF564A006E99C1 /* me_header@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "me_header@3x.png"; sourceTree = "<group>"; };
 		A907EA1D1BDF5662006E99C1 /* me_header@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "me_header@2x.png"; sourceTree = "<group>"; };
 		A907EA1F1BDF5D34006E99C1 /* me_accessoryView@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "me_accessoryView@2x.png"; sourceTree = "<group>"; };
@@ -958,6 +972,9 @@
 			children = (
 				A907EA6B1BDF77BE006E99C1 /* EBMyOrderListController.h */,
 				A907EA6C1BDF77BE006E99C1 /* EBMyOrderListController.m */,
+				A900B76A1C007C67003B222E /* EBRefundController.h */,
+				A900B76B1C007C67003B222E /* EBRefundController.m */,
+				A900B76C1C007C67003B222E /* EBRefundController.xib */,
 			);
 			path = MyOrder;
 			sourceTree = "<group>";
@@ -1145,6 +1162,8 @@
 		A91A4AFC1BF09F1C00AD7E1F /* MyOrder */ = {
 			isa = PBXGroup;
 			children = (
+				A900B76F1C007C83003B222E /* EBRefundCell.h */,
+				A900B7701C007C83003B222E /* EBRefundCell.m */,
 				A91A4AFD1BF09F3000AD7E1F /* EBMyOrderCell.h */,
 				A91A4AFE1BF09F3000AD7E1F /* EBMyOrderCell.m */,
 				A91A4B001BF09F6200AD7E1F /* EBMyOrderHeaderView.h */,
@@ -1721,6 +1740,10 @@
 				A9DDC55C1BE3940A006395E3 /* EBBaseModel.m */,
 				A9DDC5831BE85CB4006395E3 /* EBOrderDetailModel.h */,
 				A9DDC5841BE85CB4006395E3 /* EBOrderDetailModel.m */,
+				A900B7581C0017F6003B222E /* EBOrderSpecificModel.h */,
+				A900B7591C0017F6003B222E /* EBOrderSpecificModel.m */,
+				A900B75B1C001B5A003B222E /* EBSecondList.h */,
+				A900B75C1C001B5A003B222E /* EBSecondList.m */,
 				A9DF68BC1BD62DEC00368B27 /* Annotation */,
 			);
 			path = Model;
@@ -2198,6 +2221,7 @@
 				A9DDC58B1BE87120006395E3 /* EBOrderStatusView.xib in Resources */,
 				A907EA311BDF7029006E99C1 /* tabBar_me_select@3x.png in Resources */,
 				A9DF68651BCF961500368B27 /* map_plus@2x.png in Resources */,
+				A900B76E1C007C67003B222E /* EBRefundController.xib in Resources */,
 				A9DDC56F1BE780FE006395E3 /* search_pay_szt@3x.png in Resources */,
 				A9DDC56E1BE780FE006395E3 /* search_pay_other@3x.png in Resources */,
 				A9DDC5771BE84B51006395E3 /* search_pay_szt@2x.png in Resources */,
@@ -2375,11 +2399,14 @@
 				A907EAC21BE34702006E99C1 /* EBApplyBusController.m in Sources */,
 				A9FC054F1BCD0B0C00870580 /* PHTabBarController.m in Sources */,
 				A9FC056D1BCDF9AB00870580 /* EBSearchBusView.m in Sources */,
+				A900B76D1C007C67003B222E /* EBRefundController.m in Sources */,
+				A900B75D1C001B5A003B222E /* EBSecondList.m in Sources */,
 				A9FC05661BCD0B7E00870580 /* PHSettingSwitchItem.m in Sources */,
 				A91A4B1E1BF3244400AD7E1F /* EBFreeCertificateController.m in Sources */,
 				A907EABD1BE22468006E99C1 /* EBPriceView.m in Sources */,
 				A9F960831BCF3A480011BC73 /* NSDate+PHCategory.m in Sources */,
 				A91A4B0F1BF18B1D00AD7E1F /* EBMyOrderTableView.m in Sources */,
+				A900B75A1C0017F6003B222E /* EBOrderSpecificModel.m in Sources */,
 				A9F960821BCF3A480011BC73 /* NSArray+MySeperateString.m in Sources */,
 				A9DF68F01BD78E9900368B27 /* EBPhotoAnnotation.m in Sources */,
 				A9F9608B1BCF3A480011BC73 /* UIProgressView+PHCategory.m in Sources */,
@@ -2462,6 +2489,7 @@
 				A99EFB621BDDD8EA0074EC55 /* NSDate+Calender.m in Sources */,
 				A9FE49C11BE9C1C900708F62 /* RSADataVerifier.m in Sources */,
 				A9F960881BCF3A480011BC73 /* UIColor+PHCategory.m in Sources */,
+				A900B7711C007C83003B222E /* EBRefundCell.m in Sources */,
 				A91A4AC11BEB7AFA00AD7E1F /* ApiXml.mm in Sources */,
 				A910A3D31BF5D37900EE6336 /* EBMoreDetailController.m in Sources */,
 				A99EFB601BDDD8EA0074EC55 /* PHCalenderViewCell.m in Sources */,

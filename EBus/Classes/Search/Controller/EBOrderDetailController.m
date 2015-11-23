@@ -17,23 +17,26 @@
 #import "EBPayTool.h"
 #import "EBMyOrderModel.h"
 #import "EBBuyTicketController.h"
+#import "EBRefundController.h"
+#import "EBOrderSpecificModel.h"
 
 @interface EBOrderDetailController () <UITableViewDataSource, UITableViewDelegate, EBPayTypeViewDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, weak) UITableView *tableView;
 @property (nonatomic, weak) EBOrderStatusView *orderStatusView;
-@property (nonatomic, strong) NSMutableArray *dataSource;
 @property (nonatomic, weak) EBPayTypeView *payTypeView;
+@property (nonatomic, weak) EBBaseLineCell *baseCell;
+@property (nonatomic, weak) UIView *bottomView;
 
+@property (nonatomic, strong) NSMutableArray *dataSource;
 @property(nonatomic, strong)UIAlertView *alertView;
 @property(nonatomic, strong)UIAlertView *alertViewCanFromMyOrder;
 
-@property (nonatomic, weak) UIView *bottomView;
 @end
 
 @implementation EBOrderDetailController
 
-
+#pragma mark - 懒加载
 - (UIAlertView *)alertView {
     if (!_alertView) {
         _alertView = [[UIAlertView alloc] initWithTitle:@"取消订单" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
@@ -47,6 +50,7 @@
     return _alertViewCanFromMyOrder;
 }
 
+#pragma mark - 重写setter , getter方法
 - (NSMutableArray *)dataSource {
     if (!_dataSource) {
         _dataSource = [NSMutableArray array];
@@ -54,14 +58,18 @@
     return _dataSource;
 }
 
-- (void)setOrderModel:(EBOrderDetailModel *)orderModel {
-    _orderModel = orderModel;
-    if (orderModel.saleDates.length != 0) {
-        NSArray *sales = [orderModel.saleDates componentsSeparatedByString:@","];
+- (void)setSpecificModel:(EBOrderSpecificModel *)specificModel {
+    _specificModel = specificModel;
+    if (specificModel.saleDates.length != 0) {
+        NSArray *sales = [specificModel.saleDates componentsSeparatedByString:@","];
+        [self.dataSource removeAllObjects];
         [self.dataSource addObjectsFromArray:sales];
     }
+    self.orderStatusView.specificModel = specificModel;
+    self.baseCell.model = specificModel;
 }
 
+#pragma - Override Super Method
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
@@ -72,6 +80,7 @@
     [self bottomViewImplementation];
 }
 
+#pragma mark - Implementation
 - (void)payTypeViewImplementation {
     AppDelegate *delegate = EB_AppDelegate;
     EBPayTypeView *payView = [[EBPayTypeView alloc] initWithFrame:delegate.window.bounds];
@@ -93,8 +102,9 @@
     EBBaseLineCell *cell = [[EBBaseLineCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:nil];
     cell.contentView.backgroundColor = [UIColor whiteColor];
     cell.frame = cellF;
-    cell.model = self.orderModel;
+    cell.model = self.specificModel;
     [self.view addSubview:cell];
+    self.baseCell = cell;
 }
 
 - (void)tableViewImplementation {
@@ -131,10 +141,10 @@
         make.right.equalTo(infoV).with.offset(0);
         make.height.mas_equalTo(bvH);
     }];
-    if (self.canFromMyOrder && [self.orderModel.status integerValue] == 0) {//未支付状态
+
+    if (self.canFromMyOrder && [self.specificModel.status integerValue] == 0) {//未支付状态
         [self bottomHaveTwoButtonImplentation:btnView height:bvH];
-    } else if (self.canFromMyOrder && [self.orderModel.status integerValue] == 2) {//已支付状态
-//        [self bottomHaveTwoButtonImplentation:btnView height:bvH];
+    } else if (self.canFromMyOrder && [self.specificModel.status integerValue] == 2) {//已支付状态
         NSArray *titles = @[@"退票", @"续订"];
         [self bottomViewTwoButton:titles selector:@selector(orderAgainClick:) btnView:btnView height:bvH];//生成续订button + 退款按钮
     } else if (self.canFromMyOrder) {
@@ -144,7 +154,7 @@
     }
     
     EBOrderStatusView *orderV = [EBOrderStatusView orderStatusViewFromXib];
-    orderV.orderModel = self.orderModel;
+    orderV.orderModel = self.specificModel;
     [infoV addSubview:orderV];
     [orderV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(infoV).with.offset(0);
@@ -202,6 +212,11 @@
 #pragma mark - Target Method
 - (void)orderAgainClick:(UIButton *)sender {
     if (sender.tag == 0) {//退款
+#warning 这个页面暂时做不了，有一些细节交互问题不清楚，比如买了多天的票，然后又退了其中某一天的票，怎么判断其中某一天票的支付状态
+        EBRefundController *refund = [[EBRefundController alloc] init];
+        refund.specificModel = self.specificModel;
+        [self.navigationController pushViewController:refund animated:YES];
+#if 0
         if (EB_iOS(8.0)) {
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"确定退款？" message:nil preferredStyle:UIAlertControllerStyleAlert];
             [alertController addAction:[self actionWithTitle:@"取消" actionStyle:UIAlertActionStyleCancel handler:nil]];
@@ -212,9 +227,10 @@
         } else if (EB_iOS(5.0)) {
             [self.alertViewCanFromMyOrder show];
         }
+#endif
     } else if (sender.tag == 1) {//续订
         EBBuyTicketController *buy = [[EBBuyTicketController alloc] init];
-        buy.resultModel = [EBSearchResultModel resultModelFromOrderDetailModel:self.orderModel];
+        buy.resultModel = [EBSearchResultModel resultModelFromOrderDetailModel:self.specificModel];
         [self.navigationController pushViewController:buy animated:YES];
     }
 }
@@ -242,7 +258,7 @@
     }
     return [UIAlertAction actionWithTitle:title style:style handler:handler];
 }
-#pragma mark - UITableView
+#pragma mark - UITableView Delegate
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.dataSource.count + 1;
@@ -262,7 +278,7 @@
         cell.detailTextLabel.text = @"状态";
     } else {
         cell.textLabel.text = self.dataSource[indexPath.row - 1];
-        NSInteger status = [self.orderModel.status integerValue];
+        NSInteger status = [self.specificModel.status integerValue];
         cell.detailTextLabel.text = [EBTool stringFromStatus:status];//将数字转化为为文字
     }
     return cell;
@@ -271,10 +287,10 @@
 #pragma mark - EBPayTypeViewDelegate
 - (void)payTypeView:(EBPayTypeView *)titleView didSelectIndex:(NSUInteger)index {
     if (index == 0) {//点击了支付宝支付
-        if ([self.orderModel.payType integerValue] == 1) {//如果之前的支付方式是支付宝，那么不需要更改支付方式
+        if ([self.specificModel.payType integerValue] == 1) {//如果之前的支付方式是支付宝，那么不需要更改支付方式
             //这里直接进行支付宝支付
-            [self alipayOrWechatPay:EBPayTypeOfAlipay orderModel:self.orderModel];
-        } else if ([self.orderModel.payType integerValue] == 2) {//之前是微信支付，先更改为支付宝支付
+            [self alipayOrWechatPay:EBPayTypeOfAlipay orderModel:self.specificModel];
+        } else if ([self.specificModel.payType integerValue] == 2) {//之前是微信支付，先更改为支付宝支付
             //更改支付方式为支付宝支付
             [MBProgressHUD showMessage:nil toView:self.view];
             [self changePayTypeTo:EBPayTypeOfAlipay success:^(NSDictionary *dict) {
@@ -282,9 +298,9 @@
                 NSString *code = dict[static_Argument_returnCode];
                 EBLog(@"returnInfo -> %@  %@", dict[static_Argument_returnInfo], code);
                 if ([code integerValue] == 500) {
-                    self.orderModel.payType = @(1);//将原始数据model的支付方式也进行更改为支付宝支付
-                    self.orderStatusView.orderModel = self.orderModel;
-                    [self alipayOrWechatPay:EBPayTypeOfAlipay orderModel:self.orderModel];
+                    self.specificModel.payType = @(1);//将原始数据model的支付方式也进行更改为支付宝支付
+                    self.orderStatusView.orderModel = self.specificModel;
+                    [self alipayOrWechatPay:EBPayTypeOfAlipay orderModel:self.specificModel];
                 } else {
                     [MBProgressHUD showError:@"更改支付方式失败" toView:self.view];
                 }
@@ -294,7 +310,7 @@
             }];
         }
     } else if (index == 1) {//点击了微信支付
-        if ([self.orderModel.payType integerValue] == 1) {//判断之前的支付方式是不是微信支付
+        if ([self.specificModel.payType integerValue] == 1) {//判断之前的支付方式是不是微信支付
             //更改支付方式为微信支付
             [MBProgressHUD showMessage:nil toView:self.view];
             [self changePayTypeTo:EBPayTypeOfWeChat success:^(NSDictionary *dict) {
@@ -302,9 +318,9 @@
                 NSString *code = dict[static_Argument_returnCode];
                 EBLog(@"returnInfo -> %@  %@", dict[static_Argument_returnInfo], code);
                 if ([code integerValue] == 500) {
-                    self.orderModel.payType = @(2);//将原始数据model的支付方式也进行更改为微信支付
-                    self.orderStatusView.orderModel = self.orderModel;
-                    [self alipayOrWechatPay:EBPayTypeOfWeChat orderModel:self.orderModel];
+                    self.specificModel.payType = @(2);//将原始数据model的支付方式也进行更改为微信支付
+                    self.orderStatusView.orderModel = self.specificModel;
+                    [self alipayOrWechatPay:EBPayTypeOfWeChat orderModel:self.specificModel];
                 } else {
                     [MBProgressHUD showError:@"更改支付方式失败" toView:self.view];
                 }
@@ -312,9 +328,9 @@
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                 [MBProgressHUD showError:@"更改支付方式失败" toView:self.view];
             }];
-        } else if ([self.orderModel.payType integerValue] == 2) {
+        } else if ([self.specificModel.payType integerValue] == 2) {
             //这里直接进行微信支付
-            [self alipayOrWechatPay:EBPayTypeOfWeChat orderModel:self.orderModel];
+            [self alipayOrWechatPay:EBPayTypeOfWeChat orderModel:self.specificModel];
         }
     } else if (index == 2) {
         
@@ -337,8 +353,8 @@
 
 #pragma mark - Network
 - (void)cancelOrder {
-    if (self.orderModel.ID && [EBUserInfo sharedEBUserInfo].loginId.length != 0 && [EBUserInfo sharedEBUserInfo].loginName.length != 0) {
-        NSDictionary *parameters = @{static_Argument_id : self.orderModel.ID,
+    if (self.specificModel.ID && [EBUserInfo sharedEBUserInfo].loginId.length != 0 && [EBUserInfo sharedEBUserInfo].loginName.length != 0) {
+        NSDictionary *parameters = @{static_Argument_id : self.specificModel.ID,
                                      static_Argument_userName : [EBUserInfo sharedEBUserInfo].loginName,
                                      static_Argument_userId : [EBUserInfo sharedEBUserInfo].loginId};
         [EBNetworkRequest GET:static_Url_CancelOrder parameters:parameters
@@ -362,17 +378,17 @@
     NSDictionary *parameters = @{static_Argument_userName : [EBUserInfo sharedEBUserInfo].loginName,
                                  static_Argument_userId : [EBUserInfo sharedEBUserInfo].loginId};
     NSMutableDictionary *mParameters = [NSMutableDictionary dictionaryWithDictionary:parameters];
-    if (self.orderModel.vehTime.length != 0 ) {
-        [mParameters setObject:self.orderModel.vehTime forKey:static_Argument_vehTime];
+    if (self.specificModel.vehTime.length != 0 ) {
+        [mParameters setObject:self.specificModel.vehTime forKey:static_Argument_vehTime];
     }
-    if (self.orderModel.startTime != 0) {
-        [mParameters setObject:self.orderModel.startTime forKey:static_Argument_startTime];
+    if (self.specificModel.startTime != 0) {
+        [mParameters setObject:self.specificModel.startTime forKey:static_Argument_startTime];
     }
-    if (self.orderModel.saleDates != 0) {
-        [mParameters setObject:self.orderModel.saleDates forKey:static_Argument_runDate];
+    if (self.specificModel.saleDates != 0) {
+        [mParameters setObject:self.specificModel.saleDates forKey:static_Argument_runDate];
     }
-    if (self.orderModel.lineId) {
-        [mParameters setObject:self.orderModel.lineId forKey:static_Argument_lineId];
+    if (self.specificModel.lineId) {
+        [mParameters setObject:self.specificModel.lineId forKey:static_Argument_lineId];
     }
     [EBNetworkRequest GET:static_Url_Refund parameters:mParameters dictBlock:^(NSDictionary *dict) {
         EBLog(@"%@",dict);
@@ -440,7 +456,7 @@
 }
 #pragma mark - Change Pay Type
 - (void)changePayTypeTo:(EBPayType)to success:(EBOptionDict)dictB failure:(EBOptionError)errorB {
-    if (!self.orderModel.ID) return;//如果没有支付单号，结束操作
+    if (!self.specificModel.ID) return;//如果没有支付单号，结束操作
     NSNumber *payType = nil;
     if (to == EBPayTypeOfAlipay) {
         payType = @(1);
@@ -454,7 +470,7 @@
     NSDictionary *parameters = @{static_Argument_userName : [EBUserInfo sharedEBUserInfo].loginName,
                                  static_Argument_userId : [EBUserInfo sharedEBUserInfo].loginId,
                                  static_Argument_payType : payType,
-                                 static_Argument_id : self.orderModel.ID};
+                                 static_Argument_id : self.specificModel.ID};
     [EBNetworkRequest POST:static_Url_ChangePayType parameters:parameters dictBlock:dictB errorBlock:errorB];
 }
 @end

@@ -19,6 +19,7 @@
 #import "EBPayTool.h"
 #import "EBSZTBookController.h"
 #import "MobClick.h"
+#import "EBOrderSpecificModel.h"
 
 @interface EBBuyTicketController () <EBCalenderViewDelegate, EBPayTypeViewDelegate>
 
@@ -176,7 +177,7 @@
             NSString *returCode = dict[static_Argument_returnCode];
             if ([returCode integerValue] != 500) {
                 if ([string isEqualToString:@"深圳通卡号不可为空"]) {
-                    [MBProgressHUD showError:@"还没绑定深圳通哦" toView:self.view];
+                    [MBProgressHUD showError:@"深圳通卡号不能为空" toView:self.view];
                 } else if ([string isEqualToString:@"您没有免费证件支付的权限"]) {
                     [MBProgressHUD showError:@"您没有免费证件支付的权限" toView:self.view];
                 } else {
@@ -255,15 +256,37 @@
 - (void)pushToOrderDetailVCWithMode:(EBOrderDetailModel *)orderModel {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         EBOrderDetailController *orderVC = [[EBOrderDetailController alloc] init];
-        orderVC.orderModel = orderModel;
-        [self.navigationController pushViewController:orderVC animated:YES];
+        if (orderModel.ID && [EBUserInfo sharedEBUserInfo].loginId.length != 0 && [EBUserInfo sharedEBUserInfo].loginName.length) {
+            [MBProgressHUD showMessage:nil toView:self.view];
+            NSDictionary *parameters = @{static_Argument_userName : [EBUserInfo sharedEBUserInfo].loginName,
+                                         static_Argument_userId   : [EBUserInfo sharedEBUserInfo].loginId,
+                                         static_Argument_id       : orderModel.ID};
+            [EBNetworkRequest GET:static_Url_OrderDetail parameters:parameters dictBlock:^(NSDictionary *dict) {
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                NSNumber *code = dict[static_Argument_returnCode];
+                if ([code integerValue] != 500) {
+                    [MBProgressHUD showError:@"获取信息失败" toView:self.view];
+                    return;
+                }
+                NSDictionary *data = dict[static_Argument_returnData];
+                EBOrderSpecificModel *specific = [[EBOrderSpecificModel alloc] initWithDict:data];
+                orderVC.specificModel = specific;
+                [self.navigationController pushViewController:orderVC animated:YES];
+            } errorBlock:^(NSError *error) {
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                [MBProgressHUD showError:@"获取信息失败" toView:self.view];
+            }];
+            
+        }
     });
 }
+
+
 #pragma mark - EBCalenderViewDelegate
 - (void)eb_calenderView:(EBCalenderView *)calenderView didOrder:(NSArray *)dates totalPrice:(CGFloat)price{
     self.totalPrice = price;
     if (dates.count == 0) {
-        [MBProgressHUD showError:@"请选择一个购票日期" toView:self.view];
+        [MBProgressHUD showError:@"还没有选择需要购票的日期" toView:self.view];
     } else {
         self.payTypeView.hidden = NO;
         self.dates = [dates copy];

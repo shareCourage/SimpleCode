@@ -104,9 +104,6 @@
             break;
         case EBSearchBusClickTypeStartTime:
             self.timePickerViewAppear = !self.timePickerViewAppear;
-#warning 先写死，稍后自定义这个view
-//            self.startTime = @"0700";
-//            searchBusView.startTimeTitle = self.startTime;
             break;
         case EBSearchBusClickTypeDeleteOfMyPosition:
             self.myPositionCoord = kCLLocationCoordinate2DInvalid;
@@ -115,6 +112,7 @@
             self.endPositionCoord = kCLLocationCoordinate2DInvalid;
             break;
         case EBSearchBusClickTypeDeleteOfStartTime:
+            self.startTime = nil;
             break;
         case EBSearchBusClickTypeSearch:
             [self searchSpecificBus];
@@ -180,11 +178,11 @@
         [self sponsorRequest];
     } else {
         if (!my) {
-            [MBProgressHUD showError:@"请填写起始地点" toView:self.view];
+            [MBProgressHUD showError:@"上车站点不得为空" toView:self.view];
         } else if (!end) {
-            [MBProgressHUD showError:@"请填写终点地点" toView:self.view];
+            [MBProgressHUD showError:@"下车站点不得为空" toView:self.view];
         } else {
-            [MBProgressHUD showError:@"请填写上车时间" toView:self.view];
+            [MBProgressHUD showError:@"出发时间不得为空" toView:self.view];
         }
     }
 }
@@ -232,7 +230,7 @@
             [MBProgressHUD hideHUDForView:self.view animated:YES];
             NSString *code = dict[static_Argument_returnCode];
             if ([code integerValue] == 500) {
-                [MBProgressHUD showSuccess:@"发起成功" toView:self.view];
+                [MBProgressHUD showSuccess:@"操作成功" toView:self.view];
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [EBTool popToAttentionControllWithIndex:3 controller:self];
                 });

@@ -27,7 +27,7 @@
     if (!_dataSource1) {
         _dataSource1 = [NSMutableArray array];
         for (NSInteger i = 0; i < 24; i ++) {
-            NSString *string = [NSString stringWithFormat:@"%02ld",i];
+            NSString *string = [NSString stringWithFormat:@"%02ld",(long)i];
             [_dataSource1 addObject:string];
         }
     }
@@ -38,7 +38,7 @@
     if (!_dataSource2) {
         _dataSource2 = [NSMutableArray array];
         for (NSInteger i = 0; i < 6; i ++) {
-            NSString *string = [NSString stringWithFormat:@"%ld0",i];
+            NSString *string = [NSString stringWithFormat:@"%ld0",(long)i];
             [_dataSource2 addObject:string];
         }
     }
@@ -68,7 +68,7 @@
         [self addSubview:picker];
         self.myPickerView = picker;
         [picker selectRow:7 inComponent:0 animated:NO];
-        self.hourStr = @"08";
+        self.hourStr = @"07";
         self.minStr = @"00";
     }
     return self;

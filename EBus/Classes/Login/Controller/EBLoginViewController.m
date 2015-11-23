@@ -24,6 +24,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *selectedBtn;
 - (IBAction)seletedBtnClick:(UIButton *)sender;
 - (IBAction)serviceProtocolClick:(id)sender;
+@property (weak, nonatomic) IBOutlet UIButton *serviceProtocolBtn;
 @end
 
 @implementation EBLoginViewController
@@ -39,11 +40,18 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     timer = 60;
-    self.navigationItem.title = @"登录";
+    self.navigationItem.title = @"用户登录";
     [self.selectedBtn setBackgroundImage:[UIImage imageNamed:@"login_select"] forState:UIControlStateNormal];
     [self.selectedBtn setBackgroundImage:[UIImage imageNamed:@"login_selectHL"] forState:UIControlStateSelected];
-    self.selectedBtn.selected = YES;
-
+    self.selectedBtn.selected = NO;
+    
+    
+    NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:@"服务协议"];
+    NSRange strRange = {0,[str length]};
+    [str addAttribute:NSForegroundColorAttributeName value:EB_RGBColor(59, 89, 103) range:strRange];  //设置颜色
+    [str addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:strRange];
+    [self.serviceProtocolBtn setAttributedTitle:str forState:UIControlStateNormal];
+    
     UIBarButtonItem *left = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(leftItemClick)];
     self.navigationItem.leftBarButtonItem = left;
     
@@ -117,15 +125,22 @@
 }
 - (IBAction)getVerificationClick:(id)sender {
     if (![EBTool isPureTelephoneNumber:self.telephoneTF.text]) {
-        [MBProgressHUD showError:@"请输入正确的手机号码格式" toView:self.view];
+        [MBProgressHUD showError:@"请输入正确的手机号码" toView:self.view];
     } else {
-        UIButton *btn = sender;
-        btn.enabled = NO;
-        btn.backgroundColor = [UIColor lightGrayColor];
-        [self.myTimer fire];
         NSDictionary *parameters = @{static_Argument_phone : self.telephoneTF.text};
         [EBNetworkRequest GET:static_Url_GetCode parameters:parameters dictBlock:^(NSDictionary *dict) {
             EBLog(@"验证码 -> %@", dict);
+            NSString *info = dict[static_Argument_returnInfo];
+            NSString *code = dict[static_Argument_returnCode];
+            NSInteger codeIn = [code integerValue];
+            if (codeIn == 500) {
+                UIButton *btn = sender;
+                btn.enabled = NO;
+                btn.backgroundColor = [UIColor lightGrayColor];
+                [self.myTimer fire];
+            } else {
+                [MBProgressHUD showError:info toView:self.view];
+            }
         } errorBlock:^(NSError *error) {
             
         }];
@@ -135,19 +150,26 @@
 
 - (IBAction)loginClick:(id)sender {
     if (!self.selectedBtn.selected) {
-        [MBProgressHUD showError:@"请阅读服务协议" toView:self.view];
-    }
-    NSString *code = self.verificationTF.text;
-    if (code.length == 0) {
-        [MBProgressHUD showError:@"请输入验证码" toView:self.view];
+        [MBProgressHUD showError:@"请阅读乘客须知后再登录" toView:self.view];
+        return;
     }
     NSString *tele = self.telephoneTF.text;
-    if (code.length != 0 && [EBTool isPureTelephoneNumber:tele]) {
+    if (![EBTool isPureTelephoneNumber:self.telephoneTF.text]) {
+        [MBProgressHUD showError:@"请输入正确的手机号码" toView:self.view];
+        return;
+    }
+    NSString *code = self.verificationTF.text;
+    if (code.length != 4) {
+        [MBProgressHUD showError:@"请输入4位数的验证码" toView:self.view];
+        return;
+    }
+    if (code.length == 4 && [EBTool isPureTelephoneNumber:tele]) {
         NSDictionary *paramenters = @{static_Argument_loginCode : code,
                                       static_Argument_loginName : tele};
         [MBProgressHUD showMessage:@"登录中..." toView:self.view];
         [EBNetworkRequest POST:static_Url_Login parameters:paramenters dictBlock:^(NSDictionary *dict) {
             [MBProgressHUD hideHUDForView:self.view];
+            NSString *info = dict[static_Argument_returnInfo];
             NSString *code = dict[static_Argument_returnCode];
             NSInteger codeIn = [code integerValue];
             if (codeIn == 500) {
@@ -162,7 +184,7 @@
                     });
                 }
             } else {
-                [MBProgressHUD showError:@"登录失败" toView:self.view];
+                [MBProgressHUD showError:info toView:self.view];
             }
             
         } errorBlock:^(NSError *error) {

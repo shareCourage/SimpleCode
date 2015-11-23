@@ -36,7 +36,6 @@
  tradePrice = "1.5";
  saleDates = "2015-11-03,2015-11-04,2015-11-05";
 
- 
  */
 @property (nonatomic, strong) NSNumber *alipayCost;
 @property (nonatomic, strong) NSNumber *dayNum;
@@ -52,7 +51,6 @@
 @property (nonatomic, strong) NSNumber *timeKey;
 @property (nonatomic, strong) NSNumber *userId;
 @property (nonatomic, strong) NSNumber *userName;
-
 @property (nonatomic, copy) NSString *lineName;
 @property (nonatomic, copy) NSString *orderTime;
 @property (nonatomic, copy) NSString *saleDates;

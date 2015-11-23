@@ -8,6 +8,7 @@
 
 #import "EBOrderStatusView.h"
 #import "EBOrderDetailModel.h"
+#import "EBOrderSpecificModel.h"
 
 @interface EBOrderStatusView ()
 
@@ -37,6 +38,18 @@
         self.payWay.text = [NSString stringWithFormat:@"支付方式：%@",payTypeStr];
         self.orderNumber.text = [NSString stringWithFormat:@"订单编号：%@",orderModel.mainNo];
         self.orderTime.text = [NSString stringWithFormat:@"下单时间：%@",orderModel.orderTime];
+    }
+}
+
+- (void)setSpecificModel:(EBOrderSpecificModel *)specificModel {
+    _specificModel = specificModel;
+    if (specificModel) {
+        self.originalPrice.text = [NSString stringWithFormat:@"原价：%@元",specificModel.originalPrice];
+        self.payPrice.text = [NSString stringWithFormat:@"实付款：%@元",specificModel.tradePrice];
+        NSString *payTypeStr = [EBTool stringFromPayType:[specificModel.payType integerValue]];
+        self.payWay.text = [NSString stringWithFormat:@"支付方式：%@",payTypeStr];
+        self.orderNumber.text = [NSString stringWithFormat:@"订单编号：%@",specificModel.mainNo];
+        self.orderTime.text = [NSString stringWithFormat:@"下单时间：%@",specificModel.orderTime];
     }
 }
 

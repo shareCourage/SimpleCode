@@ -163,8 +163,10 @@
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     EBSearchResultModel *result = self.dataSource[indexPath.row];
     [self pushToLineDetailController:result];
-    
-    [EBTool saveResultModelToLocal:result];
+    NSNumber *openType = result.openType;
+    if ([EBTool loginEnable] && [openType integerValue] == 1) {//必须是登录，且是购状态才允许保存
+        [EBTool saveResultModelToLocal:result];
+    }
 }
 
 #pragma mark - EBUsualLineCellDelegate

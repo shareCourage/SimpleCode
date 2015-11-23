@@ -10,6 +10,9 @@
 #import "EBMyOrderTableView.h"
 #import "EBMyOrderModel.h"
 #import "EBOrderDetailController.h"
+#import "EBUserInfo.h"
+#import "EBOrderSpecificModel.h"
+
 @interface EBMyOrderListController () <UIScrollViewDelegate, EBMyOrderTableViewDelegate>
 
 @property (nonatomic, weak) UISegmentedControl *segControl;
@@ -36,9 +39,9 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-//    for (EBMyOrderTableView *tableView in self.tableViews) {
-//        [tableView myOrderRequestAndTableViewReloadData];
-//    }
+    for (EBMyOrderTableView *tableView in self.tableViews) {
+        [tableView myOrderRequestAndTableViewReloadData];
+    }
 }
 
 #pragma mark - Implementation
@@ -114,9 +117,29 @@
 - (void)mo_tableView:(EBMyOrderTableView *)tableView didSelect:(EBMyOrderModel *)orderModel {
     EBLog(@"%@",orderModel.mainNo);
     EBOrderDetailController *orderDetailVC = [[EBOrderDetailController alloc] init];
-    orderDetailVC.orderModel = orderModel;
     orderDetailVC.canFromMyOrder = YES;
-    [self.navigationController pushViewController:orderDetailVC animated:YES];
+    if (orderModel.ID && [EBUserInfo sharedEBUserInfo].loginId.length != 0 && [EBUserInfo sharedEBUserInfo].loginName.length) {
+        [MBProgressHUD showMessage:nil toView:self.view];
+        NSDictionary *parameters = @{static_Argument_userName : [EBUserInfo sharedEBUserInfo].loginName,
+                                     static_Argument_userId   : [EBUserInfo sharedEBUserInfo].loginId,
+                                     static_Argument_id       : orderModel.ID};
+        [EBNetworkRequest GET:static_Url_OrderDetail parameters:parameters dictBlock:^(NSDictionary *dict) {
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            NSNumber *code = dict[static_Argument_returnCode];
+            if ([code integerValue] != 500) {
+                [MBProgressHUD showError:@"获取信息失败" toView:self.view];
+                return;
+            }
+            NSDictionary *data = dict[static_Argument_returnData];
+            EBOrderSpecificModel *specific = [[EBOrderSpecificModel alloc] initWithDict:data];
+            orderDetailVC.specificModel = specific;
+            [self.navigationController pushViewController:orderDetailVC animated:YES];
+        } errorBlock:^(NSError *error) {
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            [MBProgressHUD showError:@"获取信息失败" toView:self.view];
+        }];
+        
+    }
 }
 @end
 

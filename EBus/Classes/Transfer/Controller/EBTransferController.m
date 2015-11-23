@@ -195,7 +195,7 @@
 }
 #pragma mark - EBTransferLineCellDelegate
 - (void)transferLineOutTicktet:(EBTransferLineCell *)transeferLine transerModel:(EBTransferModel *)model type:(EBTicketType)type{
-    EBLog(@"%@, %ld",NSStringFromSelector(_cmd), type);
+    EBLog(@"%@, %ld",NSStringFromSelector(_cmd), (unsigned long)type);
     if (type == EBTicketTypeOfOut) {
         self.lineMapView.hidden = YES;
         self.tipView.hidden = NO;

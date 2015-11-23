@@ -24,13 +24,10 @@
 @end
 
 @implementation EBLineDetailController
-- (void)dealloc {
-    EBLog(@"%@ -> dealloc", NSStringFromClass([self class]));
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.title = @"线路详情";
+    self.navigationItem.title = @"班次详情";
     EBLineMapView *lineMap = [[EBLineMapView alloc] initWithFrame:CGRectMake(0, 0, EB_WidthOfScreen, EB_HeightOfScreen - 100 - EB_HeightOfNavigationBar)];
     lineMap.delegate = self;
     lineMap.resultModel = self.resultModel;

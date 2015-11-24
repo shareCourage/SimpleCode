@@ -138,7 +138,10 @@
             [self.delegate eb_tableView:self didSelectOfTypeGroup:group];
         }
     } else if (self.tag == EBAttentionTypeSponsor) {
-        [MBProgressHUD showError:@"相关路线尚未开通，详细请咨询客服" toView:self];
+        EBSponsorModel *sponsor = self.dataSource[indexPath.row];
+        if ([self.delegate respondsToSelector:@selector(eb_tableView:didSelectOfTypeSponsor:)]) {
+            [self.delegate eb_tableView:self didSelectOfTypeSponsor:sponsor];
+        }
     }
 }
 

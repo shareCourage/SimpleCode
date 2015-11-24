@@ -11,7 +11,7 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="恭喜您！审核通过啦~~" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TxM-oZ-ydH">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="审核结果：恭喜您，认证通过！" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TxM-oZ-ydH">
                     <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -20,11 +20,11 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bcz-NN-ZRd" userLabel="failure">
                     <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="抱歉！审核未通过..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sgA-aV-X1S">
-                            <rect key="frame" x="200" y="250" width="200" height="40"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="审核结果：很抱歉，由于上传信息模糊或信息不真实等，本次认证不通过！请点击重新认证！" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sgA-aV-X1S">
+                            <rect key="frame" x="160" y="200" width="280" height="100"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="200" id="PLb-f8-GLu"/>
-                                <constraint firstAttribute="height" constant="40" id="wVa-zm-hpd"/>
+                                <constraint firstAttribute="width" constant="280" id="PLb-f8-GLu"/>
+                                <constraint firstAttribute="height" constant="100" id="wVa-zm-hpd"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -49,7 +49,7 @@
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstItem="sgA-aV-X1S" firstAttribute="centerX" secondItem="Bcz-NN-ZRd" secondAttribute="centerX" id="B9V-kc-827"/>
-                        <constraint firstItem="sgA-aV-X1S" firstAttribute="centerY" secondItem="Bcz-NN-ZRd" secondAttribute="centerY" constant="-30" id="Blf-Wn-cAM"/>
+                        <constraint firstItem="sgA-aV-X1S" firstAttribute="centerY" secondItem="Bcz-NN-ZRd" secondAttribute="centerY" constant="-50" id="Blf-Wn-cAM"/>
                         <constraint firstItem="Oj6-XH-uPn" firstAttribute="centerX" secondItem="Bcz-NN-ZRd" secondAttribute="centerX" id="tMt-pi-7DX"/>
                         <constraint firstItem="Oj6-XH-uPn" firstAttribute="centerY" secondItem="Bcz-NN-ZRd" secondAttribute="centerY" constant="30" id="wV6-0d-6tZ"/>
                     </constraints>

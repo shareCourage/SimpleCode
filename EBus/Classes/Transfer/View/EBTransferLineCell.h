@@ -29,3 +29,7 @@ typedef  NS_ENUM(NSUInteger, EBTicketType) {
 @property (nonatomic, weak) id <EBTransferLineCellDelegate> delegate;
 
 @end
+
+
+
+

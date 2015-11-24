@@ -84,7 +84,8 @@
 }
 
 - (void)signApply:(NSString *)title {
-    NSString *success = [NSString stringWithFormat:@"%@成功",title];
+    NSUInteger openType = [self.resultModel.openType integerValue];
+//    NSString *success = [NSString stringWithFormat:@"%@成功",title];
     NSString *beenSuccess = [NSString stringWithFormat:@"已%@",title];
     NSString *failure = [NSString stringWithFormat:@"%@失败",title];
     if (self.resultModel.lineId && self.resultModel.onStationId && self.resultModel.offStationId ) {
@@ -104,8 +105,14 @@
             NSString *code = dict[static_Argument_returnCode];
             NSString *info = dict[static_Argument_returnInfo];
             if ([code integerValue] == 500) {
-                [MBProgressHUD showSuccess:success toView:self.view];
-                [EBTool popToAttentionControllWithIndex:1 controller:self];
+                [MBProgressHUD showSuccess:@"操作成功" toView:self.view];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    if (openType == 2) {
+                        [EBTool popToAttentionControllWithIndex:1 controller:self];
+                    } else if (openType == 3) {
+                        [EBTool popToAttentionControllWithIndex:2 controller:self];
+                    }
+                });
             } else if ([info isEqualToString:beenSuccess]){
                 [MBProgressHUD showSuccess:beenSuccess toView:self.view];
             } else {

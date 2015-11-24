@@ -152,6 +152,8 @@
 		A99EFB611BDDD8EA0074EC55 /* PHCalenderDay.m in Sources */ = {isa = PBXBuildFile; fileRef = A99EFB5C1BDDD8EA0074EC55 /* PHCalenderDay.m */; settings = {ASSET_TAGS = (); }; };
 		A99EFB621BDDD8EA0074EC55 /* NSDate+Calender.m in Sources */ = {isa = PBXBuildFile; fileRef = A99EFB5E1BDDD8EA0074EC55 /* NSDate+Calender.m */; settings = {ASSET_TAGS = (); }; };
 		A99EFB6B1BDDE6CD0074EC55 /* EBCalenderView.m in Sources */ = {isa = PBXBuildFile; fileRef = A99EFB6A1BDDE6CD0074EC55 /* EBCalenderView.m */; settings = {ASSET_TAGS = (); }; };
+		A9BE055A1C046AE20090F5BF /* CommonUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = A9BE05571C046AE20090F5BF /* CommonUtility.m */; settings = {ASSET_TAGS = (); }; };
+		A9BE055B1C046AE20090F5BF /* LineDashPolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = A9BE05591C046AE20090F5BF /* LineDashPolyline.m */; settings = {ASSET_TAGS = (); }; };
 		A9DDC54E1BE37731006395E3 /* EBAttentionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A9DDC54D1BE37731006395E3 /* EBAttentionModel.m */; settings = {ASSET_TAGS = (); }; };
 		A9DDC5511BE3774F006395E3 /* EBBoughtModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A9DDC5501BE3774F006395E3 /* EBBoughtModel.m */; settings = {ASSET_TAGS = (); }; };
 		A9DDC5541BE37765006395E3 /* EBSignModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A9DDC5531BE37765006395E3 /* EBSignModel.m */; settings = {ASSET_TAGS = (); }; };
@@ -518,6 +520,10 @@
 		A99EFB681BDDDC670074EC55 /* PHCalenderKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PHCalenderKit.h; sourceTree = "<group>"; };
 		A99EFB691BDDE6CD0074EC55 /* EBCalenderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBCalenderView.h; sourceTree = "<group>"; };
 		A99EFB6A1BDDE6CD0074EC55 /* EBCalenderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBCalenderView.m; sourceTree = "<group>"; };
+		A9BE05561C046AE20090F5BF /* CommonUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonUtility.h; sourceTree = "<group>"; };
+		A9BE05571C046AE20090F5BF /* CommonUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonUtility.m; sourceTree = "<group>"; };
+		A9BE05581C046AE20090F5BF /* LineDashPolyline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineDashPolyline.h; sourceTree = "<group>"; };
+		A9BE05591C046AE20090F5BF /* LineDashPolyline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineDashPolyline.m; sourceTree = "<group>"; };
 		A9DDC54C1BE37731006395E3 /* EBAttentionModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBAttentionModel.h; sourceTree = "<group>"; };
 		A9DDC54D1BE37731006395E3 /* EBAttentionModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBAttentionModel.m; sourceTree = "<group>"; };
 		A9DDC54F1BE3774F006395E3 /* EBBoughtModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBBoughtModel.h; sourceTree = "<group>"; };
@@ -1313,6 +1319,10 @@
 		A9DF68781BD106D400368B27 /* AMap */ = {
 			isa = PBXGroup;
 			children = (
+				A9BE05561C046AE20090F5BF /* CommonUtility.h */,
+				A9BE05571C046AE20090F5BF /* CommonUtility.m */,
+				A9BE05581C046AE20090F5BF /* LineDashPolyline.h */,
+				A9BE05591C046AE20090F5BF /* LineDashPolyline.m */,
 				A9DF68791BD106D400368B27 /* AMapSearchKit.framework */,
 				A9DF687A1BD106D400368B27 /* MAMapKit.framework */,
 			);
@@ -2383,10 +2393,12 @@
 				A907EA7C1BE061CA006E99C1 /* EBAttentionButton.m in Sources */,
 				A9F9608F1BCF3A480011BC73 /* UIViewController+PHCategory.m in Sources */,
 				A91A4AC61BEB7CF400AD7E1F /* payRequsestHandler.mm in Sources */,
+				A9BE055A1C046AE20090F5BF /* CommonUtility.m in Sources */,
 				A9FE49BC1BE9C1C900708F62 /* DataVerifier.m in Sources */,
 				A9FE49B91BE9C1C900708F62 /* Order.m in Sources */,
 				A9FE49BF1BE9C1C900708F62 /* openssl_wrapper.m in Sources */,
 				A91A4AF61BF03EAC00AD7E1F /* EBSZTBookController.m in Sources */,
+				A9BE055B1C046AE20090F5BF /* LineDashPolyline.m in Sources */,
 				A91A4B0C1BF0AD9200AD7E1F /* EBMyOrderModel.m in Sources */,
 				A9DF68DE1BD723E200368B27 /* EBLineDetailPPAnnotationView.m in Sources */,
 				A9DF68E11BD7248C00368B27 /* EBPPAnnotation.m in Sources */,

@@ -34,7 +34,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     if (self.myTitle.length != 0) {
-        self.navigationItem.title = self.myTitle;
+        self.navigationItem.title = @"更改绑定深圳通卡";
     } else {
         self.navigationItem.title = @"深圳通卡预订";
     }
@@ -45,14 +45,17 @@
     self.sztNoL.layer.borderWidth = 1.f;
     self.modifyBtn.backgroundColor = EB_DefaultColor;
     self.bookBtn.backgroundColor = EB_DefaultColor;
+
     if (self.hidenBookBtn) {
         self.bookBtn.hidden = YES;
         self.bottomLayout.constant = 0;
     }
     if ([EBUserInfo sharedEBUserInfo].sztNo.length != 0) {
+        [self.modifyBtn setTitle:@"修改" forState:UIControlStateNormal];
         self.sztNoL.text = [NSString stringWithFormat:@"  卡号:%@",[EBUserInfo sharedEBUserInfo].sztNo];
     } else {
-        self.sztNoL.text = @"请绑定深圳通";
+        self.sztNoL.text = @"请绑定深圳通卡号";
+        [self.modifyBtn setTitle:@"绑定" forState:UIControlStateNormal];
     }
     [self webViewLoading];
 }
@@ -82,8 +85,10 @@
         [alertController addAction:[self actionWithTitle:@"取消" actionStyle:UIAlertActionStyleCancel handler:nil]];
         [alertController addAction:[self actionWithTitle:@"确定" actionStyle:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             UITextField *textF =  [alertController.textFields firstObject];
-            if (textF.text.length > 9 || textF.text.length == 0) {
-                [MBProgressHUD showError:@"请输入正确的格式"];
+            if (textF.text.length < 9) {
+                [MBProgressHUD showError:@"卡号不为9位数,请重新输入" toView:self.view];
+            } else if (textF.text.length > 9) {
+                [MBProgressHUD showError:@"文本框限制了输入数字长度,最多只可输入9位数字" toView:self.view];
             } else {
                 [self bindSZT:textF.text];
             }
@@ -92,7 +97,13 @@
     } else {
         EB_WS(ws);
         EBInputSZTNoController *settingArgu = [[EBInputSZTNoController alloc] initWithCompletion:^(NSString *value) {
-            [ws bindSZT:value];
+            if (value.length < 9) {
+                [MBProgressHUD showError:@"卡号不为9位数，请重新输入" toView:self.view];
+            } else if (value.length > 9) {
+                [MBProgressHUD showError:@"文本框限制了输入数字长度，最多只可输入9位数字" toView:self.view];
+            } else {
+                [ws bindSZT:value];
+            }
         }];
         PHNavigationController *navi = [[PHNavigationController alloc] initWithRootViewController:settingArgu];
         [self.navigationController presentViewController:navi animated:YES completion:nil];
@@ -161,12 +172,13 @@
                                  static_Argument_id : [EBUserInfo sharedEBUserInfo].loginId};
     [EBNetworkRequest POST:static_Url_SetSZTNo parameters:parameters dictBlock:^(NSDictionary *dict) {
         NSString *code = dict[static_Argument_returnCode];
+        NSString *info = dict[static_Argument_returnInfo];
         if ([code integerValue] == 500) {
             [MBProgressHUD showSuccess:@"绑定成功" toView:self.view];
             [EBUserInfo sharedEBUserInfo].sztNo = szt;
             self.sztNoL.text = [NSString stringWithFormat:@"  卡号:%@",[EBUserInfo sharedEBUserInfo].sztNo];
         } else {
-            [MBProgressHUD showSuccess:@"绑定失败" toView:self.view];
+            [MBProgressHUD showError:info toView:self.view];
         }
     } errorBlock:^(NSError *error) {
         [MBProgressHUD showSuccess:@"绑定失败" toView:self.view];

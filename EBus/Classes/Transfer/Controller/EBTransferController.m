@@ -167,11 +167,22 @@
     }];
 }
 
+- (void)issueTicketRequest {
+    if ([EBUserInfo sharedEBUserInfo].loginId && [EBUserInfo sharedEBUserInfo].loginName && self.transferModel.ID) {
+        NSDictionary *parameters = @{static_Argument_userId     : [EBUserInfo sharedEBUserInfo].loginId,
+                                     static_Argument_userName   : [EBUserInfo sharedEBUserInfo].loginName,
+                                     static_Argument_id         : self.transferModel.ID};
+        [EBNetworkRequest GET:static_Url_IssueTicket parameters:parameters dictBlock:nil errorBlock:nil];
+    }
+}
 
 #pragma mark - UITableView
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    NSString *string = [NSString stringWithFormat:@"乘车日期：%@",self.transferModel.runDate];
+    NSArray *array = [NSArray seprateString:self.transferModel.runDate characterSet:@"-"];
+    if (array.count != 3) return nil;
+    
+    NSString *string = [NSString stringWithFormat:@"乘车日期：%@月%@日",array[1], array[2]];
     return self.tableViewAppear ? string : nil;
 }
 

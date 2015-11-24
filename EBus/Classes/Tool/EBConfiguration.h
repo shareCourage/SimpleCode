@@ -74,6 +74,7 @@ static NSString *static_Url_Host            = @"http://app.szebus.net";
 #define static_Url_AddLine              [static_Url_Host stringByAppendingPathComponent:@"bc/phone/apply/status"]//(文档4.0，第36个接口)通过日期段获取加车状态
 #define static_Url_ApplyLine            [static_Url_Host stringByAppendingPathComponent:@"ot/phone/apply/save"]//(文档4.0，第16个接口)加车申请
 
+#define static_Url_IssueTicket          [static_Url_Host stringByAppendingPathComponent:@"order/phone/is/ticket"]//(文档4.0，第11.个接口)出票操作
 
 static NSString *static_Argument_returnData     = @"returnData";
 static NSString *static_Argument_returnCode     = @"returnCode";

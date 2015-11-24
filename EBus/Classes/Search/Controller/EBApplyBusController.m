@@ -5,7 +5,6 @@
 //  Created by Kowloon on 15/10/30.
 //  Copyright © 2015年 Goome. All rights reserved.
 //
-#warning 不清楚交互，暂时搁置，清楚需求后再做
 #define Cell_UnableBackgroundColor EB_RGBColor(241, 241, 241)
 #define Cell_BoughtBackgroundColor EB_RGBColor(230, 146, 35)
 #define Cell_FullBackgroundColor   [UIColor redColor]
@@ -145,6 +144,9 @@
         } else if (statusInt == -1) {
             cell.textLabel.backgroundColor = Cell_UnableBackgroundColor;
             cell.textLabel.textColor = [UIColor grayColor];
+            cell.userInteractionEnabled = NO;
+        } else if (statusInt == -2) {
+            cell.textLabel.backgroundColor = Cell_FullBackgroundColor;
             cell.userInteractionEnabled = NO;
         }
     }

@@ -37,7 +37,7 @@
 #pragma mark - 懒加载
 - (UIAlertView *)alertView {
     if (!_alertView) {
-        _alertView = [[UIAlertView alloc] initWithTitle:@"注销当前账户" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        _alertView = [[UIAlertView alloc] initWithTitle:@"确定注销?" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     }
     return _alertView;
 }

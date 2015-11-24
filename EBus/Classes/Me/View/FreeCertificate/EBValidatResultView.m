@@ -19,7 +19,7 @@
 + (instancetype)EBValidatResultViewFromXib {
     EBValidatResultView *result = [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:self options:nil] firstObject];
     result.backBtn.layer.cornerRadius = result.backBtn.height / 2;
-    [result.backBtn setBackgroundColor:EB_RGBColor(155, 194, 83)];
+    [result.backBtn setBackgroundColor:EB_RGBColor(117, 161, 219)];
     return result;
 }
 

@@ -59,21 +59,22 @@
     [super layoutSubviews];
     EB_WS(ws);
     CGFloat right = 20;
+    CGFloat width = 100;
     [self.priceView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.mas_equalTo(ws.mas_centerY);
         make.height.mas_equalTo(@(50));//高度
-        make.width.mas_equalTo(@(50));//宽度
+        make.width.mas_equalTo(@(width));//宽度
         make.right.equalTo(ws.mas_right).with.offset(-right);//离父控件右边
     }];
     
     
-    CGFloat priceW = 60;
+    CGFloat priceW = width;
     CGFloat priceH = 30;
     CGFloat priceX = 0;
     CGFloat priceY = self.payWayL.hidden ? 10 : 0;
     self.priceL.frame = CGRectMake(priceX, priceY, priceW, priceH);
     
-    CGFloat strickoutPriceW = 60;
+    CGFloat strickoutPriceW = width;
     CGFloat strickoutPriceH = 20;
     CGFloat strickoutPriceX = 0;
     CGFloat strickoutPriceY = CGRectGetMaxY(self.priceL.frame);
@@ -97,7 +98,12 @@
 - (void)setupData:(EBMyOrderModel *)orderModel {
     self.priceL.text = [NSString stringWithFormat:@"￥%@元",orderModel.originalPrice];
     NSInteger payType = [orderModel.payType integerValue];
-    self.payWayL.text = [EBTool stringFromPayType:payType];
+    NSString *typeStr = [EBTool stringFromPayType:payType];
+    if ([orderModel.status integerValue] == 2) {
+        self.payWayL.text = [NSString stringWithFormat:@"%@:实付%@元",typeStr,orderModel.tradePrice];
+    } else {
+        self.payWayL.text = typeStr;
+    }
 }
 
 @end

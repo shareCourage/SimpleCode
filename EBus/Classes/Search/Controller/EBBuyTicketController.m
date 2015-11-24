@@ -68,6 +68,7 @@
     [self payTypeViewImplementation];
     [MBProgressHUD showMessage:nil toView:self.view];
 }
+
 - (void)payTypeViewImplementation {
     AppDelegate *delegate = EB_AppDelegate;
     EBPayTypeView *payView = [[EBPayTypeView alloc] initWithFrame:delegate.window.bounds];

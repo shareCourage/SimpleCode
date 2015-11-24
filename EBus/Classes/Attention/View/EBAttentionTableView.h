@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-@class EBAttentionTableView, EBBoughtModel, EBSignModel, EBGroupModel;
+@class EBAttentionTableView, EBBoughtModel, EBSignModel, EBGroupModel, EBSponsorModel;
 
 typedef  NS_ENUM(NSUInteger, EBAttentionType) {
     EBAttentionTypePurchase = 200,
@@ -23,7 +23,7 @@ typedef  NS_ENUM(NSUInteger, EBAttentionType) {
 - (void)eb_tableView:(EBAttentionTableView *)tableView didSelectOfTypePurchase:(EBBoughtModel *)bough;
 - (void)eb_tableView:(EBAttentionTableView *)tableView didSelectOfTypeSign:(EBSignModel *)sign;
 - (void)eb_tableView:(EBAttentionTableView *)tableView didSelectOfTypeGroup:(EBGroupModel *)group;
-
+- (void)eb_tableView:(EBAttentionTableView *)tableView didSelectOfTypeSponsor:(EBSponsorModel *)sponsor;
 @end
 
 

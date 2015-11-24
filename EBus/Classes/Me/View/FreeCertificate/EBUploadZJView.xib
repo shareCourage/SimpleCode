@@ -84,13 +84,12 @@
                         <action selector="btnClick:" destination="iN0-l3-epB" eventType="touchUpInside" id="yhh-Fz-hkC"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rfe-JA-K3H" customClass="EBZJTypeButton">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rfe-JA-K3H" customClass="EBZJTypeButton">
                     <rect key="frame" x="37" y="40" width="300" height="40"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="1qQ-Cl-Mu0"/>
                         <constraint firstAttribute="width" constant="300" id="lZx-fS-7iY"/>
                     </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
                     <state key="normal" title="《深圳市敬老优待证》">
                         <color key="titleColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -122,7 +121,7 @@
                 <outlet property="nextBtn" destination="ZHw-Za-Iha" id="eHl-p6-u8y"/>
                 <outlet property="zjImageView" destination="zGE-4C-kWR" id="HuP-pB-ih4"/>
                 <outlet property="zjPhotoBtn" destination="gnt-mW-jAm" id="Bpg-Ee-Ayv"/>
-                <outlet property="zjTypeBtn" destination="rfe-JA-K3H" id="8gD-By-cSN"/>
+                <outlet property="zjTypeBtn" destination="rfe-JA-K3H" id="FvB-3v-ZML"/>
                 <outlet property="zjTypeL" destination="uCe-tb-lJ2" id="Vr1-p0-y3u"/>
             </connections>
             <point key="canvasLocation" x="423.5" y="568"/>

@@ -6,22 +6,19 @@
 //  Copyright © 2015年 Goome. All rights reserved.
 //
 
-#warning message 还需要继续修改
 #import "EBSuggestController.h"
 #import "EBUserInfo.h"
 
 @interface EBSuggestController ()
 
 @property (nonatomic, strong) IBOutletCollection(UIButton) NSArray *suggestBtns;
-
 @property (weak, nonatomic) IBOutlet UIButton *commitBtn;
-
 @property (weak, nonatomic) IBOutlet UITextView *suggestTextView;
-
 - (IBAction)commitClick:(id)sender;
-
 @property (nonatomic, strong) NSArray *btnTitles;
 @property (nonatomic, strong) NSMutableArray *types;
+
+@property (nonatomic, weak) UIButton *selectedBtn;
 @end
 
 @implementation EBSuggestController
@@ -34,7 +31,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.btnTitles = @[@"线路优化",@"功能/操作",@"司机服务",@"车辆配置",@"订单/费用",@"其它"];
+    self.navigationItem.title = @"建议";
+    self.btnTitles = @[@"线路优化",@"功能操作",@"司乘服务",@"车辆配置",@"费用/订单",@"其它"];
     self.commitBtn.layer.cornerRadius = self.commitBtn.frame.size.height / 2;
     [self.commitBtn setBackgroundColor:EB_DefaultColor];
     [self.commitBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -45,9 +43,14 @@
         btn.layer.borderColor = [[UIColor lightGrayColor] colorWithAlphaComponent:0.3f].CGColor;
         btn.layer.borderWidth = 0.5f;
         [btn setTitle:self.btnTitles[i - 1000] forState:UIControlStateNormal];
-        i ++;
         [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+        if (i == 1000) {
+            self.selectedBtn = btn;
+            btn.selected = YES;
+            [self.selectedBtn setBackgroundColor:EB_DefaultColor];
+        }
+        i ++;
     }
     self.suggestTextView.layer.cornerRadius = 5;
     self.suggestTextView.layer.borderColor = [[UIColor lightGrayColor] colorWithAlphaComponent:0.6f].CGColor;
@@ -57,11 +60,16 @@
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapClick)]];
 }
 - (void)btnClick:(UIButton *)sender {
-    sender.selected = !sender.isSelected;
-    if (sender.isSelected) {
-        [sender setBackgroundColor:EB_DefaultColor];
-    } else {
-        [sender setBackgroundColor:[UIColor whiteColor]];
+    if (sender != self.selectedBtn) {
+        sender.selected = !sender.isSelected;
+        if (sender.isSelected) {
+            [sender setBackgroundColor:EB_DefaultColor];
+        } else {
+            [sender setBackgroundColor:[UIColor whiteColor]];
+        }
+        self.selectedBtn.selected = NO;
+        [self.selectedBtn setBackgroundColor:[UIColor whiteColor]];
+        self.selectedBtn = sender;
     }
 }
 - (void)tapClick {
@@ -71,7 +79,11 @@
     [self.types removeAllObjects];
     NSString *textString = nil;
     if (self.suggestTextView.text.length == 0) {
-        textString = @" haha";
+        [MBProgressHUD showError:@"请输入您的宝贵意见" toView:self.view];
+        return;
+    } else if (self.suggestTextView.text.length > 100) {
+        [MBProgressHUD showError:@"超过100个字符！" toView:self.view];
+        return;
     } else {
         textString = self.suggestTextView.text;
     }
@@ -120,11 +132,14 @@
         NSString *string = [NSString stringWithFormat:@"%@",dict[@"returnCode"]];
         if ([string integerValue] == 500) {
             [MBProgressHUD showSuccess:@"谢谢您的建议" toView:self.view];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.navigationController popViewControllerAnimated:YES];
+            });
         } else {
-            [MBProgressHUD showError:@"投诉失败" toView:self.view];
+            [MBProgressHUD showError:@"提交失败" toView:self.view];
         }
     } errorBlock:^(NSError *error) {
-        [MBProgressHUD showError:@"投诉失败" toView:self.view];
+        [MBProgressHUD showError:@"提交失败" toView:self.view];
     }];
 }
 @end

@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-@class EBUploadZJView;
+@class EBUploadZJView, EBZJTypeButton;
 
 typedef  NS_ENUM(NSUInteger, EBUploadZJViewClickType) {
     EBUploadZJViewClickTypeOfZJType = 100000,
@@ -30,7 +30,7 @@ typedef  NS_ENUM(NSUInteger, EBUploadZJViewClickType) {
 @property (nonatomic, weak) id <EBUploadZJViewDelegate>delegate;
 
 @property (weak, nonatomic) IBOutlet UILabel *zjTypeL;
-@property (weak, nonatomic) IBOutlet UIButton *zjTypeBtn;
+@property (weak, nonatomic) IBOutlet EBZJTypeButton *zjTypeBtn;
 @property (weak, nonatomic) IBOutlet UIButton *zjPhotoBtn;
 @property (weak, nonatomic) IBOutlet UIView *imageBackView;
 @property (weak, nonatomic) IBOutlet UIImageView *zjImageView;

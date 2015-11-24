@@ -8,6 +8,7 @@
 #define EB_LineColor EB_RGBColor(90, 138, 251)
 #define EB_MaxWidthOfLineStation (EB_WidthOfScreen / 2 + 80) //左边滑动的view的最大宽度值
 #import "EBLineMapView.h"
+#import <AMapSearchKit/AMapSearchKit.h>
 #import "EBLineDetailModel.h"
 #import "EBAnnotation.h"
 #import "EBAnnotationView.h"
@@ -20,23 +21,33 @@
 #import "EBLineStation.h"
 #import "EBSearchResultModel.h"
 
-@interface EBLineMapView () <MAMapViewDelegate, EBLineStationViewDelegate>
+//高德地图规划线路用的类
+#import "CommonUtility.h"
+
+@interface EBLineMapView () <MAMapViewDelegate, AMapSearchDelegate, EBLineStationViewDelegate>
 {
     BOOL _value;//YES 表示leftDragView在右边，NO在左边
 }
 @property (nonatomic, weak) UIView *bottomView;
 @property (nonatomic, weak) UIButton *buyBtn;
-
 @property (nonatomic, weak) UIImageView *leftDragView;
 @property (nonatomic, weak) EBLineStationView *stationView;
 @property (nonatomic, weak) UIView *leftView;
 
 @property (nonatomic, strong) UIImage *leftDragImage;
 @property (nonatomic, strong) UIImage *rightDragImage;
+@property (nonatomic, strong) AMapSearchAPI *searchPOI;
 
 @end
 
 @implementation EBLineMapView
+- (AMapSearchAPI *)searchPOI {
+    if (_searchPOI == nil) {
+        _searchPOI = [[AMapSearchAPI alloc] init];
+        _searchPOI.delegate = self;
+    }
+    return _searchPOI;
+}
 
 
 - (UIImage *)leftDragImage {
@@ -68,6 +79,40 @@
         self.bottomView.hidden = NO;
     }
 }
+- (void)setLineDetailM:(EBLineDetailModel *)lineDetailM {
+    _lineDetailM = lineDetailM;
+    NSUInteger openType = [lineDetailM.openType integerValue];
+    [self addAnnotationOnLngLat:lineDetailM.onLngLat onStations:lineDetailM.onStations onFjIds:lineDetailM.onFjIds];
+    [self addAnnotationOffLngLat:lineDetailM.offLngLat offStations:lineDetailM.offStations offFjIds:lineDetailM.offFjIds];
+    if (openType == 1 || openType == 2) {//购买
+        if (lineDetailM.lineContent.length == 0) return;
+        [self addOnStations:lineDetailM.onStations offStations:lineDetailM.offStations onLngLat:lineDetailM.onLngLat offLngLat:lineDetailM.offLngLat onTime:lineDetailM.onTimes offTime:lineDetailM.offTimes];
+        NSArray *coords = [NSArray seprateString:lineDetailM.lineContent characterSet:@";"];
+        [self addPolylineWithCoords:coords];
+        [self.maMapView setCenterCoordinate:[self averageCoord:coords] animated:NO];
+    } else if (openType == 3) { //跟团
+        self.leftView.hidden = YES;
+        [self drivingRouteRequest:lineDetailM];
+    }
+}
+
+- (void)drivingRouteRequest:(EBLineDetailModel *)lineDetailM {
+    /* 驾车路径规划搜索. */
+    NSArray *onLngLats = [NSArray seprateString:lineDetailM.onLngLat characterSet:@","];
+    NSArray *offLngLats = [NSArray seprateString:lineDetailM.offLngLat characterSet:@","];
+    NSString *onlat = [onLngLats lastObject];
+    NSString *onlng = [onLngLats firstObject];
+    NSString *offlat = [offLngLats lastObject];
+    NSString *offlng = [offLngLats firstObject];
+    if (onLngLats.count != 2 || offLngLats.count != 2) return;
+    AMapDrivingRouteSearchRequest *navi = [[AMapDrivingRouteSearchRequest alloc] init];
+    navi.requireExtension = YES;
+    /* 出发点. */
+    navi.origin = [AMapGeoPoint locationWithLatitude:[onlat doubleValue] longitude:[onlng doubleValue]];
+    /* 目的地. */
+    navi.destination = [AMapGeoPoint locationWithLatitude:[offlat doubleValue] longitude:[offlng doubleValue]];
+    [self.searchPOI AMapDrivingRouteSearch:navi];
+}
 
 #pragma mark - init Method
 - (instancetype)initWithFrame:(CGRect)frame
@@ -93,6 +138,7 @@
     [super mapViewDidAppear];
     self.maMapView.delegate = self;
     self.maMapView.zoomLevel = 13;
+    self.maMapView.showsUserLocation = NO;
 }
 
 - (void)mapViewDidDisappear {
@@ -204,18 +250,6 @@
     [super didMoveToSuperview];
     [self bottomViewAutoLayout];
     [self leftViewAutoLayout];
-}
-
-- (void)setLineDetailM:(EBLineDetailModel *)lineDetailM {
-    _lineDetailM = lineDetailM;
-    if (lineDetailM.lineContent.length == 0) return;
-#warning message - 跟团的逻辑还没有实现，具体不清楚如何交互的，这里先放一下
-    [self addAnnotationOnLngLat:lineDetailM.onLngLat onStations:lineDetailM.onStations onFjIds:lineDetailM.onFjIds];
-    [self addAnnotationOffLngLat:lineDetailM.offLngLat offStations:lineDetailM.offStations offFjIds:lineDetailM.offFjIds];
-    [self addOnStations:lineDetailM.onStations offStations:lineDetailM.offStations onLngLat:lineDetailM.onLngLat offLngLat:lineDetailM.offLngLat onTime:lineDetailM.onTimes offTime:lineDetailM.offTimes];
-    NSArray *coords = [NSArray seprateString:lineDetailM.lineContent characterSet:@";"];
-    [self addPolylineWithCoords:coords];
-    [self.maMapView setCenterCoordinate:[self averageCoord:coords] animated:NO];
 }
 
 #pragma mark - Private Method
@@ -387,6 +421,7 @@
 
 - (void)addPolylineWithCoords:(NSArray *)coords
 {
+    if (coords.count == 0) return;
     CLLocationCoordinate2D *coordsC = [self transitToCoords:coords];
     MAPolyline *polyline = [MAPolyline polylineWithCoordinates:coordsC count:coords.count];
     [self.maMapView addOverlay:polyline];
@@ -427,6 +462,20 @@
         lngs += [lng doubleValue];
     }
     return CLLocationCoordinate2DMake(lats / coords.count, lngs / coords.count);
+}
+
+#pragma mark - AMapSearchDelegate
+/* 路径规划搜索回调. */
+- (void)onRouteSearchDone:(AMapRouteSearchBaseRequest *)request response:(AMapRouteSearchResponse *)response {
+    NSMutableArray *polylines = [NSMutableArray array];
+    AMapPath *path = [response.route.paths firstObject];
+    [path.steps enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (![obj isKindOfClass:[AMapStep class]]) return;
+        AMapStep *step = (AMapStep *)obj;
+        MAPolyline *polyline = [CommonUtility polylineForCoordinateString:step.polyline];
+        [polylines addObject:polyline];
+    }];
+    [self.maMapView addOverlays:polylines];
 }
 
 #pragma mark - MAMapViewDelegate

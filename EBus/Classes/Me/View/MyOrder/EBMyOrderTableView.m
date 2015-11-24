@@ -85,6 +85,7 @@
                                  static_Argument_payStatus : @(2)};
     [self myOrderRequest:parameters success:^(NSDictionary *dict) {
         [self.tableView.header endRefreshing];
+        EBLog(@"%@",dict);
         NSArray *data = dict[static_Argument_returnData];
         [self.dataSource removeAllObjects];
         for (NSDictionary *obj in data) {

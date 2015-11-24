@@ -98,7 +98,7 @@
     NSInteger status = [orderModel.status integerValue];
     NSString *string = nil;
     if (payType == 3) {
-        string = @"深圳通预订";
+        string = @"深圳通";
         if (status == 1) {
             string = @"已取消";
         } else if (status == 3) {

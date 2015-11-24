@@ -15,6 +15,8 @@
 #import "EBSignModel.h"
 #import "EBGroupModel.h"
 #import "EBLineDetailController.h"
+#import "EBSearchResultController.h"
+
 @interface EBAttentionController () <EBAttentionTitleViewDelegate, EBAttentionTableViewDelegate, UIScrollViewDelegate>
 
 @property (nonatomic, weak) EBAttentionTitleView *titleView;
@@ -102,9 +104,7 @@
         }
     }
     [self.view addSubview:scrollView];
-    self.tableScrollView = scrollView;
-    
-//    self.tableScrollView.contentOffset = CGPointMake(self.titleSelectIndex * scrollW, scrollH);
+    self.tableScrollView = scrollView;    
 }
 
 - (void)titleViewImplementation {
@@ -156,13 +156,34 @@
 }
 
 - (void)eb_tableView:(EBAttentionTableView *)tableView didSelectOfTypeSign:(EBSignModel *)sign {
-    [self pushToLineDetailController:[self searchResultModel:sign]];
+    NSInteger change = [sign.changeStatus integerValue];
+    if (change == 1) {
+        [self pushToLineDetailController:[self searchResultModel:sign]];
+    } else if (change == 2) {
+        EBSearchResultController *result = [[EBSearchResultController alloc] init];
+        CGFloat onLat = [sign.onLat doubleValue];
+        CGFloat onLng = [sign.onLng doubleValue];
+        CGFloat offLat = [sign.offLat doubleValue];
+        CGFloat offLng = [sign.offLng doubleValue];
+        CLLocationCoordinate2D onCoord = CLLocationCoordinate2DMake(onLat, onLng);
+        CLLocationCoordinate2D offCoord = CLLocationCoordinate2DMake(offLat, offLng);
+        result.myPositionCoord = onCoord;
+        result.endPositionCoord = offCoord;
+        [self.navigationController pushViewController:result animated:YES];
+    } else if (change == 3) {
+        [MBProgressHUD showError:@"该线路已撤销,详细请咨询客服!" toView:self.view];
+    } else if (change == 4) {
+        [MBProgressHUD showError:@"该线路已终止,详细请咨询客服!" toView:self.view];
+    }
 
 }
 - (void)eb_tableView:(EBAttentionTableView *)tableView didSelectOfTypeGroup:(EBGroupModel *)group {
-    [self pushToLineDetailController:[self searchResultModel:group]];
+    [MBProgressHUD showError:@"相关路线未开通,详细请咨询客服!" toView:self.view];
 }
 
+- (void)eb_tableView:(EBAttentionTableView *)tableView didSelectOfTypeSponsor:(EBSponsorModel *)sponsor {
+    [MBProgressHUD showError:@"相关路线未开通,详细请咨询客服!" toView:self.view];
+}
 #pragma mark - Private Method
 - (EBSearchResultModel *)searchResultModel:(EBBaseModel *)model {
     EBSearchResultModel *resultM = [[EBSearchResultModel alloc] init];

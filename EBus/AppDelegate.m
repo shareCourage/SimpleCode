@@ -120,7 +120,13 @@
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
-    
+    [application beginBackgroundTaskWithExpirationHandler:^{
+        EBLog(@"=======================================");
+        EBLog(@"=======================================");
+        EBLog(@"10分钟后被干掉");
+        EBLog(@"=======================================");
+        EBLog(@"=======================================");
+    }];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {

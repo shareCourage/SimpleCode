@@ -21,8 +21,6 @@
 
 @implementation EBSearchMapView
 
-
-
 - (AMapSearchAPI *)searchPOI {
     if (_searchPOI == nil) {
         _searchPOI = [[AMapSearchAPI alloc] init];

@@ -15,7 +15,7 @@
 
 @property (nonatomic, weak) UILabel *priceLabel;
 
-@property (nonatomic, weak) UIView *followView;
+@property (nonatomic, weak) UILabel *followViewL;
 @property (nonatomic, weak) UILabel *followLabel;
 @property (nonatomic, weak) UILabel *numberLabel;
 
@@ -44,23 +44,26 @@
     UILabel *priceLabel = [[UILabel alloc] init];
     priceLabel.textAlignment = NSTextAlignmentRight;
     priceLabel.font = [UIFont systemFontOfSize:20];
-    priceLabel.text = @"price";
+    priceLabel.text = nil;
     [self.contentView addSubview:priceLabel];
     self.priceLabel = priceLabel;
     
-    UIView *follow = [[UIView alloc] init];
+    UILabel *follow = [[UILabel alloc] init];
     UILabel *followL = [[UILabel alloc] init];
     UILabel *numberL = [[UILabel alloc] init];
+    follow.textAlignment = NSTextAlignmentRight;
     followL.textAlignment = NSTextAlignmentRight;
     numberL.textAlignment = NSTextAlignmentRight;
-    followL.text =@"已报名";
-    numberL.text = @"0人";
+    followL.text = nil;
+    numberL.text = nil;
+    [follow setSystemFontOf13];
     followL.font = [UIFont systemFontOfSize:11];
     numberL.font = [UIFont boldSystemFontOfSize:13];
+    follow.textColor = EB_RGBColor(236, 173, 56);
     [follow addSubview:followL];
     [followL addSubview:numberL];
     [self.contentView addSubview:follow];
-    self.followView = follow;
+    self.followViewL = follow;
     self.followLabel = followL;
     self.numberLabel = numberL;
     
@@ -79,16 +82,36 @@
 - (void)setUpData:(EBBaseModel *)model {
     if ([model isKindOfClass:[EBSignModel class]]) {
         EBSignModel *sign = (EBSignModel *)model;
+        NSInteger change = [sign.changeStatus integerValue];
+#if DEBUG
+//        change = 3;
+#endif
         self.priceLabel.text = [NSString stringWithFormat:@"￥%@元",sign.price];
-        self.followLabel.text = @"已报名:";
-        self.numberLabel.text = [NSString stringWithFormat:@"%@人",sign.perNum];
+        if (change == 1) {
+            self.followViewL.text = nil;
+            self.followLabel.text = @"已报名:";
+            self.numberLabel.text = [NSString stringWithFormat:@"%@人",sign.perNum];
+        } else if (change == 2) {
+            self.followLabel.text = nil;
+            self.numberLabel.text = nil;
+            self.followViewL.text = @"已有相关线路开通";
+        } else if (change == 3) {
+            self.followLabel.text = nil;
+            self.numberLabel.text = nil;
+            self.followViewL.text = @"该线路已撤销";
+        } else if (change == 4) {
+            self.followLabel.text = nil;
+            self.numberLabel.text = nil;
+            self.followViewL.text = @"该线路已终止";
+        }
+        
     } else if ([model isKindOfClass:[EBGroupModel class]]) {
         EBGroupModel *group = (EBGroupModel *)model;
         self.followLabel.text = @"已团:";
         self.numberLabel.text = [NSString stringWithFormat:@"%@人",group.perNum];
     } else if ([model isKindOfClass:[EBSponsorModel class]]) {
         EBSponsorModel *sponsor = (EBSponsorModel *)model;
-        self.followLabel.text = @"已跟团:";
+        self.followLabel.text = @"已跟:";
         self.numberLabel.text = [NSString stringWithFormat:@"%@人",sponsor.perNum];
     }
 }
@@ -122,26 +145,26 @@
     }];
     
     CGFloat followH = 20;
-    [self.followView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.followViewL mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(ws.priceLabel.mas_bottom).with.offset(0);
         make.right.equalTo(ws.mas_right).with.offset(-right);
         make.width.mas_equalTo(@(width * 2));
         make.height.mas_equalTo(@(followH));
     }];
     
-    CGFloat numberW = 30;
+    CGFloat numberW = 35;
     [self.numberLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.mas_equalTo(ws.followView.mas_centerY);
+        make.centerY.mas_equalTo(ws.followViewL.mas_centerY);
         make.height.mas_equalTo(@(followH));
         make.width.mas_equalTo(@(numberW));
-        make.right.equalTo(ws.followView.mas_right).with.offset(0);
+        make.right.equalTo(ws.followViewL.mas_right).with.offset(0);
     }];
     
     [self.followLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.mas_equalTo(ws.followView.mas_centerY);
+        make.centerY.mas_equalTo(ws.followViewL.mas_centerY);
         make.height.mas_equalTo(@(followH));
         make.right.equalTo(ws.numberLabel.mas_left).with.offset(0);
-        make.left.equalTo(ws.followView.mas_left).with.offset(0);
+        make.left.equalTo(ws.followViewL.mas_left).with.offset(0);
     }];
     
 }

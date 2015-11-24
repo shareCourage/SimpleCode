@@ -60,14 +60,14 @@
     [tip setSystemFontOf10];
     tip.textAlignment = NSTextAlignmentRight;
     tip.textColor = [UIColor lightGrayColor];
-    tip.text = @"乘车前30分钟出票";
+    tip.text = @"乘车前30分钟可出票";
     self.tipL = tip;
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
     EB_WS(ws);
-    CGFloat width = 60;
+    CGFloat width = 75;
     CGFloat height = 60;
     CGFloat right = 20;
     [self.priceView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -86,7 +86,7 @@
     
     CGFloat strickoutPriceW = width;
     CGFloat strickoutPriceH = height / 2;
-    CGFloat strickoutPriceX = 0;
+    CGFloat strickoutPriceX = 3;
     CGFloat strickoutPriceY = CGRectGetMaxY(self.priceL.frame);
     self.ticketDisplayBtn.frame = CGRectMake(strickoutPriceX, strickoutPriceY, strickoutPriceW, strickoutPriceH);
    
@@ -115,8 +115,8 @@
     if ([model isKindOfClass:[EBTransferModel class]]) {
         EBTransferModel *tranferModel = (EBTransferModel *)model;
 #if DEBUG
-//        tranferModel.runDate = @"2015-11-21";
-//        tranferModel.startTime = @"1850";
+//        tranferModel.runDate = @"2015-11-24";
+//        tranferModel.startTime = @"1030";
 #else
 #endif
         [self setupUI:tranferModel];
@@ -175,9 +175,6 @@
         self.type = EBTicketTypeOfTimeOut;
     }
 }
-- (void)judge {
-    
-}
 
 
 - (void)setupData:(EBTransferModel *)orderModel {
@@ -186,16 +183,21 @@
 
 - (void)setType:(EBTicketType)type {
     _type = type;
+    EBTransferModel *tranferModel = (EBTransferModel *)self.model;
     if (self.type == EBTicketTypeOfOut) {
         self.ticketDisplayBtn.enabled = YES;
         [self.ticketDisplayBtn setTitle:@"出票" forState:UIControlStateNormal];
         self.tipL.textColor = [UIColor lightGrayColor];
         [self.ticketDisplayBtn setBackgroundColor:EB_RGBColor(155, 194, 80)];
+        if (tranferModel.vehCode) {
+            self.tipL.text = [NSString stringWithFormat:@"%@",tranferModel.vehCode];
+        }
     } else if (self.type == EBTicketTypeOfWaiting) {
-        self.ticketDisplayBtn.enabled = YES;
-        [self.ticketDisplayBtn setTitle:@"待出票" forState:UIControlStateNormal];
+        self.ticketDisplayBtn.enabled = NO;
+        [self.ticketDisplayBtn setTitle:tranferModel.vehCode forState:UIControlStateNormal];
         self.tipL.textColor = [[UIColor redColor] colorWithAlphaComponent:0.7f];
-        [self.ticketDisplayBtn setBackgroundColor:EB_RGBColor(155, 194, 80)];
+        self.ticketDisplayBtn.backgroundColor = [UIColor whiteColor];
+        [self.ticketDisplayBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     } else if (self.type == EBTicketTypeOfCheckLine) {
         self.ticketDisplayBtn.enabled = YES;
         [self.ticketDisplayBtn setTitle:@"查看路线" forState:UIControlStateNormal];

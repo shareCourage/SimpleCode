@@ -234,6 +234,9 @@
         NSDictionary *returnData = dict[static_Argument_returnData];
         NSNumber *status = returnData[static_Argument_certificateStatus];
         NSInteger statusIn = [status integerValue];
+#if DEBUG
+//        statusIn = 0;
+#endif
         if (statusIn == 0) {//未认证
             [self settingTopAndBottomView:statusIn animation:NO];
         } else if (statusIn == 1) {//认证中
@@ -307,7 +310,7 @@
         return NO;
     }
     if (self.sfzView.sfzTF.text.length != 18) {
-        [MBProgressHUD showError:@"身份证格式不正确"];
+        [MBProgressHUD showError:@"身份证号长度不正确！"];
         return NO;
     }
     if (!self.sfzImage) {

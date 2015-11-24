@@ -193,7 +193,7 @@ resParams     {
 #pragma mark - wexinPayNotification
 - (void)wxpaySuccess {
     EBLog(@"%@",NSStringFromSelector(_cmd));
-#warning 这里还需要从服务器请求确认支付成功数据
+//#warning 这里还需要从服务器请求确认支付成功数据，暂时不做了，忽略
     NSDictionary *dict = @{@"payResult":@"success"};
     if (self.completion) self.completion(dict);
 }

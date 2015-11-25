@@ -87,7 +87,11 @@
 
 + (UIImageView *)backgroundImageView;
 
-+ (BOOL)isTimeOutWithDate:(NSString *)runDate startTime:(NSString *)startTime;
++ (BOOL)isWaitingWithDate:(NSString *)runDate startTime:(NSString *)startTime;
+/*
+ *全部过期日期返回YES，其它返回NO
+ */
++ (BOOL)allOutDate:(NSArray *)sales startTime:(NSString *)startTime;
 + (NSString *)stringFromPHCalenderDay:(PHCalenderDay *)currentDay;
 + (NSString *)stringFromPHCalenderDay:(PHCalenderDay *)currentDay space:(NSString *)space;
 @end

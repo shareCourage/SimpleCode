@@ -15,6 +15,8 @@
 #import "EBTransferModel.h"
 #import "EBUserInfo.h"
 #import "EBTransferTipView.h"
+#import "EBTicketViewController.h"
+
 @interface EBTransferController () <EBLineMapViewDelegate, EBTransferLineCellDelegate>
 
 @property(nonatomic, strong) NSString *filePath;//文件路径
@@ -177,27 +179,21 @@
 }
 
 #pragma mark - UITableView
-
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     NSArray *array = [NSArray seprateString:self.transferModel.runDate characterSet:@"-"];
     if (array.count != 3) return nil;
-    
     NSString *string = [NSString stringWithFormat:@"乘车日期：%@月%@日",array[1], array[2]];
     return self.tableViewAppear ? string : nil;
 }
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.tableViewAppear ? 1 : 0;
 }
-
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return self.tableViewAppear ? 30 : 0;
 }
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 100.f;
 }
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     EBTransferLineCell *cell = [EBTransferLineCell cellWithTableView:tableView];
     cell.delegate = self;
@@ -205,6 +201,14 @@
     return cell;
 }
 #pragma mark - EBTransferLineCellDelegate
+- (void)transferLineOutTicktet:(EBTransferLineCell *)transeferLine transerModel:(EBTransferModel *)model type:(EBTicketType)type{
+    if (type == EBTicketTypeOfOut) {
+        EBTicketViewController *tVC = [[EBTicketViewController alloc] init];
+        tVC.transferModel = self.transferModel;
+        [self.navigationController pushViewController:tVC animated:YES];
+    }
+}
+#if 0
 - (void)transferLineOutTicktet:(EBTransferLineCell *)transeferLine transerModel:(EBTransferModel *)model type:(EBTicketType)type{
     EBLog(@"%@, %ld",NSStringFromSelector(_cmd), (unsigned long)type);
     if (type == EBTicketTypeOfOut) {
@@ -218,5 +222,5 @@
         [MBProgressHUD showError:@"乘车前30分钟出票" toView:self.view];
     }
 }
-
+#endif
 @end

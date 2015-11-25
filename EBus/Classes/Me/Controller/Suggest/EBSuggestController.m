@@ -32,7 +32,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"建议";
-    self.btnTitles = @[@"线路优化",@"功能操作",@"司乘服务",@"车辆配置",@"费用/订单",@"其它"];
+    self.btnTitles = @[@"线路优化",@"功能操作",@"司乘服务",@"车辆配置",@"费用/订单",@"其他"];
     self.commitBtn.layer.cornerRadius = self.commitBtn.frame.size.height / 2;
     [self.commitBtn setBackgroundColor:EB_DefaultColor];
     [self.commitBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];

@@ -69,7 +69,7 @@
     self.baseCell.model = specificModel;
 }
 
-#pragma - Override Super Method
+#pragma mark - Override Super Method
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
@@ -86,8 +86,8 @@
     EBPayTypeView *payView = [[EBPayTypeView alloc] initWithFrame:delegate.window.bounds];
     payView.hidden = YES;
     payView.delegate = self;
-    NSArray *titles = @[@"支付宝",@"微信支付",@"其他(老认证、军人证)"];
-    NSArray *names = @[@"search_pay_zfb",@"search_pay_wechat",@"search_pay_other"];
+    NSArray *titles = @[@"支付宝",@"微信支付"];
+    NSArray *names = @[@"search_pay_zfb",@"search_pay_wechat"];
     for (NSInteger i = 0; i < titles.count; i ++) {
         NSString *title = titles[i];
         NSString *name = names[i];
@@ -141,7 +141,9 @@
         make.right.equalTo(infoV).with.offset(0);
         make.height.mas_equalTo(bvH);
     }];
-
+    
+    [self displayDifferentBtn:btnView height:bvH];
+#if 0
     if (self.canFromMyOrder && [self.specificModel.status integerValue] == 0) {//未支付状态
         NSArray *sales = [self.specificModel.saleDates componentsSeparatedByString:@","];
         NSString *runDate = [sales firstObject];
@@ -176,6 +178,7 @@
     } else {
         [self bottomHaveTwoButtonImplentation:btnView height:bvH];
     }
+#endif
     
     EBOrderStatusView *orderV = [EBOrderStatusView orderStatusViewFromXib];
     orderV.orderModel = self.specificModel;
@@ -187,9 +190,107 @@
         make.right.equalTo(infoV).with.offset(0);
     }];
     self.orderStatusView = orderV;
-    
-    
 }
+
+/*
+ *逻辑太复杂，我自己都无奈了
+ 1、对支付方式要判断；
+ 2、对是否支付、是否取消、是否退票要判断
+ 2、对多日期要判断
+ 3、多日期对是否全部日期过期要判断
+ 4、单日期对是否过期要判断
+ */
+- (void)displayDifferentBtn:(UIView *)btnView height:(CGFloat)bvH {
+    if (self.canFromMyOrder) {//来自我的订单页面cell的点击
+        NSArray *sales = [self.specificModel.saleDates componentsSeparatedByString:@","];
+        if (sales.count == 0) {//如果没有日期，那就不需要进行判断了
+            [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
+            return;
+        }
+        BOOL manyDates = NO;
+        if (sales.count > 1) {
+            manyDates = YES;
+        }
+        NSArray *sortArray = [sales sortedArrayUsingSelector:@selector(compare:)];//升序排序
+        NSString *runDate = [sortArray firstObject];
+        NSString *startTime = self.specificModel.startTime;
+        NSInteger payStatus = [self.specificModel.status integerValue];//支付状态
+        NSInteger payType = [self.specificModel.payType integerValue];
+        if (payType == 1 || payType == 2) {//微信或者支付宝支付
+            if (payStatus == 0) {//未支付
+                if (manyDates) {//有很多天
+                    BOOL value = [EBTool allOutDate:sales startTime:startTime];
+                    if (value) {//全部都过期了
+                        [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
+                    } else{
+                        NSArray *titles = @[@"取消订单", @"续订"];
+                        [self bottomViewTwoButton:titles selector:@selector(cancelOrderAndAgain:) btnView:btnView height:bvH];//@"取消订单", @"续订"
+                    }
+                } else {
+                    if ([EBTool isWaitingWithDate:runDate startTime:startTime]) {
+                        [self bottomHaveTwoButtonImplentation:btnView height:bvH];//生成支付、取消订单按钮
+                    } else {
+                        [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
+                    }
+                }
+            } else if (payStatus == 2) {//已经支付
+                if (manyDates) {//有很多天
+                    BOOL value = [EBTool allOutDate:sales startTime:startTime];
+                    if (value) {//全部都过期了
+                        [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
+                    } else {
+                        NSArray *titles = @[@"退票", @"续订"];
+                        [self bottomViewTwoButton:titles selector:@selector(orderAgainClick:) btnView:btnView height:bvH];//生成续订button + 退款按钮
+                    }
+                } else {//只有一天
+                    if ([EBTool isWaitingWithDate:runDate startTime:startTime]) {
+                        NSArray *titles = @[@"退票", @"续订"];
+                        [self bottomViewTwoButton:titles selector:@selector(orderAgainClick:) btnView:btnView height:bvH];//生成续订button + 退款按钮
+                    } else {
+                        [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
+                    }
+                }
+            } else if (payStatus == 3) {//已退票
+                [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
+            } else if (payStatus == 1) {//已取消
+                [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
+            }
+        } else if (payType == 3 || payType == 4) {//深圳通或者免费证件支付
+            if (payStatus == 0) {//未支付
+                if (manyDates) {//有很多天
+                    BOOL value = [EBTool allOutDate:sales startTime:startTime];
+                    if (value) {//全部都过期了
+                        [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
+                    } else {
+                        NSArray *titles = @[@"取消订单", @"续订"];
+                        [self bottomViewTwoButton:titles selector:@selector(cancelOrderAndAgain:) btnView:btnView height:bvH];//@"取消订单", @"续订"
+                    }
+                } else {//只有一天
+                    if ([EBTool isWaitingWithDate:runDate startTime:startTime]) {
+                        NSArray *titles = @[@"取消订单", @"续订"];
+                        [self bottomViewTwoButton:titles selector:@selector(cancelOrderAndAgain:) btnView:btnView height:bvH];//@"取消订单", @"续订"
+                    } else {
+                        [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
+                    }
+                }
+            } else if (payStatus == 2) {//已经支付
+                if ([EBTool isWaitingWithDate:runDate startTime:startTime]) {
+                    NSArray *titles = @[@"退票", @"续订"];
+                    [self bottomViewTwoButton:titles selector:@selector(orderAgainClick:) btnView:btnView height:bvH];//生成续订button + 退款按钮
+                } else {
+                    [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
+                }
+            } else if (payStatus == 3) {//已退票
+                [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
+            } else if (payStatus == 1) {//已取消
+                [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
+            }
+        }
+    } else {//来自购票页面不成功时候的跳转
+        [self bottomHaveTwoButtonImplentation:btnView height:bvH];
+    }
+}
+
 - (void)bottomHaveOneButtonImplentation:(UIView *)btnView height:(CGFloat)height{
     CGFloat padding = 20;
     UIButton *orderAgainBtn = [UIButton eb_buttonWithFrame:CGRectZero target:self action:@selector(orderAgainClick:) Title:@"续订"];
@@ -234,47 +335,58 @@
 
 
 #pragma mark - Target Method
-- (void)orderAgainClick:(UIButton *)sender {
-    if (sender.tag == 0) {//退款
-#warning 这个页面暂时做不了，有一些细节交互问题不清楚，比如买了多天的票，然后又退了其中某一天的票，怎么判断其中某一天票的支付状态
-        EBRefundController *refund = [[EBRefundController alloc] init];
-        refund.specificModel = self.specificModel;
-        [self.navigationController pushViewController:refund animated:YES];
-#if 0
-        if (EB_iOS(8.0)) {
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"确定退款？" message:nil preferredStyle:UIAlertControllerStyleAlert];
-            [alertController addAction:[self actionWithTitle:@"取消" actionStyle:UIAlertActionStyleCancel handler:nil]];
-            [alertController addAction:[self actionWithTitle:@"确定" actionStyle:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                [self refundRequest];
-            }]];
-            [self presentViewController:alertController animated:YES completion:nil];
-        } else if (EB_iOS(5.0)) {
-            [self.alertViewCanFromMyOrder show];
-        }
-#endif
-    } else if (sender.tag == 1) {//续订
-        EBBuyTicketController *buy = [[EBBuyTicketController alloc] init];
-        buy.resultModel = [EBSearchResultModel resultModelFromOrderDetailModel:self.specificModel];
-        [self.navigationController pushViewController:buy animated:YES];
+//取消订单、续订按钮
+- (void)cancelOrderAndAgain:(UIButton *)sender {
+    if (sender.tag == 0) {
+        [self eb_CancelOrder];
+    } else if (sender.tag == 1) {
+        [self eb_buyAgain];
     }
 }
 
-- (void)payClick:(UIButton *)sender {
-    if (sender.tag == 0) {
-        self.payTypeView.hidden = NO;
-    } else if (sender.tag == 1) {
-        if (EB_iOS(8.0)) {
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"取消订单" message:nil preferredStyle:UIAlertControllerStyleAlert];
-            [alertController addAction:[self actionWithTitle:@"取消" actionStyle:UIAlertActionStyleCancel handler:nil]];
-            [alertController addAction:[self actionWithTitle:@"确定" actionStyle:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                [self cancelOrder];
-            }]];
-            [self presentViewController:alertController animated:YES completion:nil];
-        } else if (EB_iOS(5.0)) {
-            [self.alertView show];
-        }
+//退票、续订按钮
+- (void)orderAgainClick:(UIButton *)sender {
+    if (sender.tag == 0) {//退票
+        [self eb_pushToRefundVC];
+    } else if (sender.tag == 1) {//续订
+        [self eb_buyAgain];
     }
 }
+
+//支付、取消订单按钮
+- (void)payClick:(UIButton *)sender {
+    if (sender.tag == 0) {//支付
+        self.payTypeView.hidden = NO;
+    } else if (sender.tag == 1) {//取消订单
+        [self eb_CancelOrder];
+    }
+}
+
+- (void)eb_pushToRefundVC {
+    EBRefundController *refund = [[EBRefundController alloc] init];
+    refund.specificModel = self.specificModel;
+    [self.navigationController pushViewController:refund animated:YES];
+}
+
+- (void)eb_buyAgain {
+    EBBuyTicketController *buy = [[EBBuyTicketController alloc] init];
+    buy.resultModel = [EBSearchResultModel resultModelFromOrderDetailModel:self.specificModel];
+    [self.navigationController pushViewController:buy animated:YES];
+}
+
+- (void)eb_CancelOrder {
+    if (EB_iOS(8.0)) {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"取消订单" message:nil preferredStyle:UIAlertControllerStyleAlert];
+        [alertController addAction:[self actionWithTitle:@"取消" actionStyle:UIAlertActionStyleCancel handler:nil]];
+        [alertController addAction:[self actionWithTitle:@"确定" actionStyle:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [self cancelOrder];
+        }]];
+        [self presentViewController:alertController animated:YES completion:nil];
+    } else if (EB_iOS(5.0)) {
+        [self.alertView show];
+    }
+}
+
 - (UIAlertAction *)actionWithTitle:(NSString *)title actionStyle:(UIAlertActionStyle)style handler:(void (^)(UIAlertAction *action))handler
 {
     if (style == UIAlertActionStyleCancel) {
@@ -356,9 +468,7 @@
             //这里直接进行微信支付
             [self alipayOrWechatPay:EBPayTypeOfWeChat orderModel:self.specificModel];
         }
-    } else if (index == 2) {
-        
-    }
+    } 
 }
 
 #pragma mark - UIAlertViewDelegate
@@ -370,7 +480,7 @@
         }
     } else if (alertView == self.alertViewCanFromMyOrder) {
         if (buttonIndex == 1) {
-            [self refundRequest];
+            [self eb_pushToRefundVC];
         }
     }
 }
@@ -396,39 +506,6 @@
                         [MBProgressHUD showError:@"取消失败"];
                     }];
     }
-}
-
-- (void)refundRequest {
-    NSDictionary *parameters = @{static_Argument_userName : [EBUserInfo sharedEBUserInfo].loginName,
-                                 static_Argument_userId : [EBUserInfo sharedEBUserInfo].loginId};
-    NSMutableDictionary *mParameters = [NSMutableDictionary dictionaryWithDictionary:parameters];
-    if (self.specificModel.vehTime.length != 0 ) {
-        [mParameters setObject:self.specificModel.vehTime forKey:static_Argument_vehTime];
-    }
-    if (self.specificModel.startTime != 0) {
-        [mParameters setObject:self.specificModel.startTime forKey:static_Argument_startTime];
-    }
-    if (self.specificModel.saleDates != 0) {
-        [mParameters setObject:self.specificModel.saleDates forKey:static_Argument_runDate];
-    }
-    if (self.specificModel.lineId) {
-        [mParameters setObject:self.specificModel.lineId forKey:static_Argument_lineId];
-    }
-    [EBNetworkRequest GET:static_Url_Refund parameters:mParameters dictBlock:^(NSDictionary *dict) {
-        EBLog(@"%@",dict);
-        NSString *code = dict[static_Argument_returnCode];
-        NSString *info = dict[static_Argument_returnInfo];
-        if ([code integerValue] == 500) {
-            [MBProgressHUD showSuccess:@"退票成功" toView:self.view];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.navigationController popViewControllerAnimated:YES];
-            });
-        } else {
-            [MBProgressHUD showError:info toView:self.view];
-        }
-    } errorBlock:^(NSError *error) {
-        [MBProgressHUD showError:@"退款失败" toView:self.view];
-    }];
 }
 
 

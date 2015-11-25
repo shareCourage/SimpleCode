@@ -154,6 +154,8 @@
 		A99EFB6B1BDDE6CD0074EC55 /* EBCalenderView.m in Sources */ = {isa = PBXBuildFile; fileRef = A99EFB6A1BDDE6CD0074EC55 /* EBCalenderView.m */; settings = {ASSET_TAGS = (); }; };
 		A9BE055A1C046AE20090F5BF /* CommonUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = A9BE05571C046AE20090F5BF /* CommonUtility.m */; settings = {ASSET_TAGS = (); }; };
 		A9BE055B1C046AE20090F5BF /* LineDashPolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = A9BE05591C046AE20090F5BF /* LineDashPolyline.m */; settings = {ASSET_TAGS = (); }; };
+		A9BE055E1C0586E40090F5BF /* EBRefundModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A9BE055D1C0586E40090F5BF /* EBRefundModel.m */; settings = {ASSET_TAGS = (); }; };
+		A9BE05611C05A8380090F5BF /* EBTicketViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9BE05601C05A8380090F5BF /* EBTicketViewController.m */; settings = {ASSET_TAGS = (); }; };
 		A9DDC54E1BE37731006395E3 /* EBAttentionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A9DDC54D1BE37731006395E3 /* EBAttentionModel.m */; settings = {ASSET_TAGS = (); }; };
 		A9DDC5511BE3774F006395E3 /* EBBoughtModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A9DDC5501BE3774F006395E3 /* EBBoughtModel.m */; settings = {ASSET_TAGS = (); }; };
 		A9DDC5541BE37765006395E3 /* EBSignModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A9DDC5531BE37765006395E3 /* EBSignModel.m */; settings = {ASSET_TAGS = (); }; };
@@ -524,6 +526,10 @@
 		A9BE05571C046AE20090F5BF /* CommonUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonUtility.m; sourceTree = "<group>"; };
 		A9BE05581C046AE20090F5BF /* LineDashPolyline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineDashPolyline.h; sourceTree = "<group>"; };
 		A9BE05591C046AE20090F5BF /* LineDashPolyline.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineDashPolyline.m; sourceTree = "<group>"; };
+		A9BE055C1C0586E40090F5BF /* EBRefundModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBRefundModel.h; sourceTree = "<group>"; };
+		A9BE055D1C0586E40090F5BF /* EBRefundModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBRefundModel.m; sourceTree = "<group>"; };
+		A9BE055F1C05A8380090F5BF /* EBTicketViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBTicketViewController.h; sourceTree = "<group>"; };
+		A9BE05601C05A8380090F5BF /* EBTicketViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBTicketViewController.m; sourceTree = "<group>"; };
 		A9DDC54C1BE37731006395E3 /* EBAttentionModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBAttentionModel.h; sourceTree = "<group>"; };
 		A9DDC54D1BE37731006395E3 /* EBAttentionModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EBAttentionModel.m; sourceTree = "<group>"; };
 		A9DDC54F1BE3774F006395E3 /* EBBoughtModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EBBoughtModel.h; sourceTree = "<group>"; };
@@ -1189,6 +1195,8 @@
 				A91A4B081BF0ABAD00AD7E1F /* EBMyOrderUncompletedModel.m */,
 				A91A4B0A1BF0AD9200AD7E1F /* EBMyOrderModel.h */,
 				A91A4B0B1BF0AD9200AD7E1F /* EBMyOrderModel.m */,
+				A9BE055C1C0586E40090F5BF /* EBRefundModel.h */,
+				A9BE055D1C0586E40090F5BF /* EBRefundModel.m */,
 			);
 			path = MyOrder;
 			sourceTree = "<group>";
@@ -1809,6 +1817,8 @@
 			children = (
 				A91A4AC81BECAFF400AD7E1F /* EBTransferController.h */,
 				A91A4AC91BECAFF400AD7E1F /* EBTransferController.m */,
+				A9BE055F1C05A8380090F5BF /* EBTicketViewController.h */,
+				A9BE05601C05A8380090F5BF /* EBTicketViewController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -2487,6 +2497,8 @@
 				A9DDC5511BE3774F006395E3 /* EBBoughtModel.m in Sources */,
 				A9F1AB251BD8DEC600B85843 /* EBLineStationViewCell.m in Sources */,
 				A9F1AB351BD9F00A00B85843 /* EBUserInfo.m in Sources */,
+				A9BE055E1C0586E40090F5BF /* EBRefundModel.m in Sources */,
+				A9BE05611C05A8380090F5BF /* EBTicketViewController.m in Sources */,
 				A910A3C91BF4464E00EE6336 /* EBZJTypePickerView.m in Sources */,
 				A9DDC5541BE37765006395E3 /* EBSignModel.m in Sources */,
 				A9FC05441BCD0A9100870580 /* PHTabBar.m in Sources */,

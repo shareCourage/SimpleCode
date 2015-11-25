@@ -189,9 +189,7 @@
 - (void)dateChooseClick:(UIButton *)sender {
     if (sender.tag == 3) {
         [self applyRequest];
-    } else {
-        //其它按钮都是@"全选",@"工作日",@"节假日"，暂时被废弃
-    }
+    } 
 }
 
 #pragma mark - Private

@@ -20,6 +20,7 @@
 #import "EBSZTBookController.h"
 #import "MobClick.h"
 #import "EBOrderSpecificModel.h"
+#import "EBFreeCertificateController.h"
 
 @interface EBBuyTicketController () <EBCalenderViewDelegate, EBPayTypeViewDelegate>
 
@@ -188,6 +189,10 @@
                     [MBProgressHUD showError:@"深圳通卡号不能为空" toView:self.view];
                 } else if ([string isEqualToString:@"您没有免费证件支付的权限"]) {
                     [MBProgressHUD showError:@"您没有免费证件支付的权限" toView:self.view];
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        EBFreeCertificateController *freeVC = [[EBFreeCertificateController alloc] init];
+                        [self.navigationController pushViewController:freeVC animated:YES];
+                    });
                 } else {
                     [MBProgressHUD showError:string toView:self.view];
                 }

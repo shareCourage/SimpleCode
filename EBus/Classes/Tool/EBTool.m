@@ -306,8 +306,8 @@
     backgroundImageView.image = image;
     return  backgroundImageView;
 }
-//出票返回NO， 超时返回NO， 等待返回YES
-+ (BOOL)isTimeOutWithDate:(NSString *)runDate startTime:(NSString *)startTime {
+//与当前时间对比，30分钟以前返回YES，其它返回NO
++ (BOOL)isWaitingWithDate:(NSString *)runDate startTime:(NSString *)startTime {
     BOOL value = NO;
     NSArray *array = [NSArray seprateString:runDate characterSet:@"-"];
     if (array.count != 3) return NO;
@@ -376,6 +376,19 @@
         string = [NSString stringWithFormat:@"%ld%@%02ld%@%02ld",(unsigned long)currentDay.year,space, (unsigned long)currentDay.month,space, (unsigned long)currentDay.day];
     }
     return string;
+}
+
+//全部过期日期返回YES，其它返回NO
++ (BOOL)allOutDate:(NSArray *)sales startTime:(NSString *)startTime{
+    if (!startTime) return NO;
+    NSArray *sortArray = [sales sortedArrayUsingSelector:@selector(compare:)];//升序排序
+    for (NSString *date in sortArray) {
+        BOOL value = [EBTool isWaitingWithDate:date startTime:startTime];//返回YES，说明没有过期
+        if (value) {
+            return NO;
+        }
+    }
+    return YES;
 }
 @end
 

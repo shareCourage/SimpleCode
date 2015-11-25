@@ -97,6 +97,111 @@
         make.bottom.equalTo(ws.mas_bottom).with.offset(-5);//离父控件右边
     }];
 }
+
+- (void)outClick {
+    EBLog(@"outClick");
+    if ([self.delegate respondsToSelector:@selector(transferLineOutTicktet:transerModel:type:)]) {
+        EBTransferModel *model = (EBTransferModel *)self.model;
+        [self.delegate transferLineOutTicktet:self transerModel:model type:self.type];
+    }
+}
+
+- (void)setModel:(EBBaseModel *)model {
+    [super setModel:model];
+    if ([model isKindOfClass:[EBTransferModel class]]) {
+        EBTransferModel *tranferModel = (EBTransferModel *)model;
+#if DEBUG
+        tranferModel.runDate = @"2015-11-25";
+        tranferModel.startTime = @"1620";
+#else
+#endif
+        [self setupUI:tranferModel];
+        [self setupData:tranferModel];
+    }
+}
+
+- (void)setupUI:(EBTransferModel *)tranferModel {
+    NSArray *array = [NSArray seprateString:tranferModel.runDate characterSet:@"-"];
+    if (array.count != 3) return;
+    NSString *dayStr = [array lastObject];
+    NSString *hourMinute = [tranferModel.startTime insertSymbolString:@":" atIndex:2];
+    NSArray *array2 = [hourMinute componentsSeparatedByString:@":"];
+    if (array2.count != 2) return;
+    NSString *hourStr = [array2 firstObject];
+    NSString *minuteStr = [array2 lastObject];
+    NSInteger day = [dayStr integerValue];
+    NSInteger hour = [hourStr integerValue];
+    NSInteger minute = [minuteStr integerValue];//08:40
+    if ([EBTool currentDay] <= day) {
+        if ([EBTool currentDay] == day) {
+            if ([EBTool currentHour] <= hour) {
+                if ([EBTool currentHour] == hour) {
+                    if ([EBTool currentMinute] <= minute) {
+                        //在没有超时的情况下，才存在判断的可能
+                        if ( (minute - [EBTool currentMinute]) <= 30) {
+                            self.type = EBTicketTypeOfOut;//出票
+                        } else {
+                            self.type = EBTicketTypeOfWaiting;
+                        }
+                    } else {
+                        self.type = EBTicketTypeOfTimeOut;
+                    }
+                } else if ([EBTool currentHour] == hour - 1) {//8:20
+                    if (minute >= 30) {
+                        self.type = EBTicketTypeOfWaiting;
+                    } else {
+                        NSInteger time = 60 - [EBTool currentMinute];
+                        if ((time + minute) <= 30) {
+                            self.type = EBTicketTypeOfOut;
+                        } else {
+                            self.type = EBTicketTypeOfWaiting;
+                        }
+                    }
+                } else {
+                    self.type = EBTicketTypeOfWaiting;
+                }
+            } else {
+                self.type = EBTicketTypeOfTimeOut;
+            }
+        } else {
+            self.type = EBTicketTypeOfWaiting;
+        }
+        
+    } else {
+        self.type = EBTicketTypeOfTimeOut;
+    }
+}
+
+
+- (void)setupData:(EBTransferModel *)orderModel {
+    self.priceL.text = [NSString stringWithFormat:@"￥%.1f元",[orderModel.originalPrice floatValue]];
+}
+
+- (void)setType:(EBTicketType)type {
+    _type = type;
+    EBTransferModel *tranferModel = (EBTransferModel *)self.model;
+    if (self.type == EBTicketTypeOfOut) {
+        self.ticketDisplayBtn.enabled = YES;
+        [self.ticketDisplayBtn setTitle:@"出票" forState:UIControlStateNormal];
+        self.tipL.textColor = [UIColor lightGrayColor];
+        [self.ticketDisplayBtn setBackgroundColor:EB_RGBColor(155, 194, 80)];
+        if (tranferModel.vehCode) {
+            self.tipL.text = [NSString stringWithFormat:@"%@",tranferModel.vehCode];
+        }
+    } else if (self.type == EBTicketTypeOfWaiting) {
+        self.ticketDisplayBtn.enabled = NO;
+        [self.ticketDisplayBtn setTitle:tranferModel.vehCode forState:UIControlStateNormal];
+        self.tipL.textColor = [[UIColor redColor] colorWithAlphaComponent:0.7f];
+        self.ticketDisplayBtn.backgroundColor = [UIColor whiteColor];
+        [self.ticketDisplayBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    }
+}
+
+
+
+
+
+#if 0
 - (void)outClick {
     EBLog(@"outClick");
     if ([self.delegate respondsToSelector:@selector(transferLineOutTicktet:transerModel:type:)]) {
@@ -115,8 +220,8 @@
     if ([model isKindOfClass:[EBTransferModel class]]) {
         EBTransferModel *tranferModel = (EBTransferModel *)model;
 #if DEBUG
-//        tranferModel.runDate = @"2015-11-24";
-//        tranferModel.startTime = @"1030";
+        tranferModel.runDate = @"2015-11-25";
+        tranferModel.startTime = @"1620";
 #else
 #endif
         [self setupUI:tranferModel];
@@ -208,5 +313,6 @@
         self.ticketDisplayBtn.enabled = NO;
     }
 }
+#endif
 
 @end

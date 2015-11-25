@@ -14,7 +14,6 @@
 #import "EBLineDetailModel.h"
 #import "EBTransferModel.h"
 #import "EBUserInfo.h"
-#import "EBTransferTipView.h"
 #import "EBTicketViewController.h"
 
 @interface EBTransferController () <EBLineMapViewDelegate, EBTransferLineCellDelegate>
@@ -26,7 +25,6 @@
 @property (nonatomic, assign) BOOL tableViewAppear;
 @property (nonatomic, weak) UIView *footerView;
 @property (nonatomic, weak) EBLineMapView *lineMapView;
-@property (nonatomic, weak) EBTransferTipView *tipView;
 @end
 
 @implementation EBTransferController
@@ -76,13 +74,15 @@
         [ws refreshWithLoading:NO];
     }];
     self.tableView.allowsSelection = NO;
-    [self refreshWithLoading:YES];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutNotification) name:EBLogoutSuccessNotification object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self.lineMapView mapViewDidAppear];
+    if ([EBTool loginEnable]) {
+        [self refreshWithLoading:NO];
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -106,12 +106,6 @@
     lineMap.delegate = self;
     lineMap.resultModel = self.resultModel;
     self.lineMapView = lineMap;
-    
-    EBTransferTipView *tipView = [EBTransferTipView transferTipViewFromXib];
-    tipView.frame = footerView.bounds;
-    tipView.hidden = YES;
-    [footerView addSubview:tipView];
-    self.tipView = tipView;
 }
 
 
@@ -208,19 +202,5 @@
         [self.navigationController pushViewController:tVC animated:YES];
     }
 }
-#if 0
-- (void)transferLineOutTicktet:(EBTransferLineCell *)transeferLine transerModel:(EBTransferModel *)model type:(EBTicketType)type{
-    EBLog(@"%@, %ld",NSStringFromSelector(_cmd), (unsigned long)type);
-    if (type == EBTicketTypeOfOut) {
-        self.lineMapView.hidden = YES;
-        self.tipView.hidden = NO;
-        self.tipView.transferModel = model;
-    } else if (type == EBTicketTypeOfCheckLine) {
-        self.lineMapView.hidden = NO;
-        self.tipView.hidden = YES;
-    } else if (type == EBTicketTypeOfWaiting) {
-        [MBProgressHUD showError:@"乘车前30分钟出票" toView:self.view];
-    }
-}
-#endif
+
 @end

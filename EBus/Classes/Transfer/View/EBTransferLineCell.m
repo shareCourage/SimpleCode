@@ -111,8 +111,8 @@
     if ([model isKindOfClass:[EBTransferModel class]]) {
         EBTransferModel *tranferModel = (EBTransferModel *)model;
 #if DEBUG
-        tranferModel.runDate = @"2015-11-25";
-        tranferModel.startTime = @"1620";
+//        tranferModel.runDate = @"2015-11-25";
+//        tranferModel.startTime = @"1820";
 #else
 #endif
         [self setupUI:tranferModel];
@@ -194,6 +194,10 @@
         self.tipL.textColor = [[UIColor redColor] colorWithAlphaComponent:0.7f];
         self.ticketDisplayBtn.backgroundColor = [UIColor whiteColor];
         [self.ticketDisplayBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    } else if (self.type == EBTicketTypeOfTimeOut){
+        [self.ticketDisplayBtn setTitle:@"超时" forState:UIControlStateNormal];
+        [self.ticketDisplayBtn setBackgroundColor:[UIColor lightGrayColor]];
+        self.ticketDisplayBtn.enabled = NO;
     }
 }
 

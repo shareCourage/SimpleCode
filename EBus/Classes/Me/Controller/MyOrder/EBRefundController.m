@@ -9,8 +9,8 @@
 #import "EBRefundController.h"
 #import "EBOrderSpecificModel.h"
 #import "EBRefundCell.h"
-#import "EBRefundModel.h"
 #import "EBUserInfo.h"
+#import "EBSecondList.h"
 
 @interface EBRefundController () <UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *refundBtn;
@@ -41,23 +41,17 @@
 
 - (void)setSpecificModel:(EBOrderSpecificModel *)specificModel {
     _specificModel = specificModel;
-    if (specificModel.saleDates.length != 0) {
-        NSArray *sales = [specificModel.saleDates componentsSeparatedByString:@","];
-        if (sales.count == 0) return;
-        [self.dataSource removeAllObjects];
-        for (NSString *sale in sales) {
-            if ([EBTool isWaitingWithDate:sale startTime:specificModel.startTime]) {
-                EBRefundModel *refundM = [[EBRefundModel alloc] init];
-                refundM.sale = sale;
-                refundM.payStatus = specificModel.status;
-                [self.dataSource addObject:refundM];
-            }
+    for (EBSecondList *secL in specificModel.secondList) {
+        NSInteger payStatus = [secL.status integerValue];
+        if (payStatus == 2 && [EBTool isWaitingWithDate:secL.runDate startTime:secL.startTime]) {
+            [self.dataSource addObject:secL];
         }
     }
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationItem.title = @"退票";
     self.upL.text = @"退票天数:";
     self.downL.text = @"退票金额:";
     self.refundBtn.backgroundColor = EB_DefaultColor;
@@ -94,7 +88,11 @@
     if (self.specificModel.lineId) {
         [mParameters setObject:self.specificModel.lineId forKey:static_Argument_lineId];
     }
-    NSString *salesString = [EBTool stringConnected:self.refundDates connectString:@","];
+    NSMutableArray *array = [NSMutableArray array];
+    for (EBSecondList *seclM in self.refundDates) {
+        [array addObject:seclM.runDate];
+    }
+    NSString *salesString = [EBTool stringConnected:array connectString:@","];
     if (salesString.length != 0) {
         [mParameters setObject:salesString forKey:static_Argument_runDate];
     }
@@ -103,9 +101,10 @@
         NSString *code = dict[static_Argument_returnCode];
         NSString *info = dict[static_Argument_returnInfo];
         if ([code integerValue] == 500) {
-            [MBProgressHUD showSuccess:@"退票成功" toView:self.view];
+            [MBProgressHUD showSuccess:@"操作成功" toView:self.view];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self.navigationController popViewControllerAnimated:YES];
+                UIViewController *vc = self.navigationController.viewControllers[1];
+                [self.navigationController popToViewController:vc animated:YES];
             });
         } else {
             [MBProgressHUD showError:info toView:self.view];
@@ -121,8 +120,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     EBRefundCell *cell = [EBRefundCell cellWithTableView:tableView];
-    EBRefundModel *refundM = self.dataSource[indexPath.row];
-    cell.refundModel = refundM;
+    EBSecondList *seclM = self.dataSource[indexPath.row];
+    cell.seclModel = seclM;
     return cell;
 }
 
@@ -132,14 +131,13 @@
     if (![cell isKindOfClass:[EBRefundCell class]]) return;
     EBRefundCell *refundCell = (EBRefundCell *)cell;
     refundCell.refundCellSelected = !refundCell.isRefundCellSelected;
-    EBRefundModel *refundM = self.dataSource[indexPath.row];
-    NSString *sale = refundM.sale;
+    EBSecondList *seclM = self.dataSource[indexPath.row];
     if (refundCell.isRefundCellSelected) {
-        [self.refundDates addObject:sale];
+        [self.refundDates addObject:seclM];
     } else {
         NSUInteger i = 0;
-        for (NSString *obj in self.refundDates) {
-            if ([obj isEqualToString:sale]) {
+        for (EBSecondList *objSeclM in self.refundDates) {
+            if (objSeclM == seclM) {
                 [self.refundDates removeObjectAtIndex:i];
                 break;
             }
@@ -147,15 +145,16 @@
         }
     }
     if (self.refundDates.count == 0) {
-        self.upL.text = @"退票天数:0天";
-        self.downL.text = @"退票金额:0.0元";
+        self.upL.text = @"退票天数：0天";
+        self.downL.text = @"退票金额：0.0元";
     } else {
+        CGFloat totalPrice = 0.f;
+        for (EBSecondList *seclM in self.refundDates) {
+            EBLog(@"%@",seclM.runDate);
+            totalPrice = [seclM.tradePrice doubleValue] + totalPrice;
+        }
         self.upL.text = [NSString stringWithFormat:@"退票天数：%ld天",self.refundDates.count];
-        CGFloat totalPrice = [self.specificModel.tradePrice doubleValue] * self.refundDates.count;
         self.downL.text = [NSString stringWithFormat:@"退票金额：%.1f元",totalPrice];
-    }
-    for (NSString *obj in self.refundDates) {
-        EBLog(@"%@",obj);
     }
 }
 

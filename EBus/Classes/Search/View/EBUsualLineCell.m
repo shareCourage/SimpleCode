@@ -75,8 +75,8 @@
     strickOut.font = [UIFont systemFontOfSize:11];
     price.textAlignment = NSTextAlignmentRight;
     strickOut.textAlignment = NSTextAlignmentRight;
-    price.text = @"price";
-    strickOut.text = @"strick";
+    price.text = nil;
+    strickOut.text = nil;
     
     [priceView addSubview:price];
     [priceView addSubview:strickOut];
@@ -126,7 +126,7 @@
         if ([result.openType integerValue] == 3) {//跟团
             self.priceL.text = nil;
         } else {
-            self.priceL.text = [NSString stringWithFormat:@"￥%@元",result.price];
+            self.priceL.text = result.price ? [NSString stringWithFormat:@"￥%@元",result.price] : nil;
         }
         if ([result.openType integerValue] == 1) {//购买
             self.strickoutPriceL.hidden = YES;
@@ -134,14 +134,14 @@
         } else {//报名 、 跟团
             self.strickoutPriceL.hidden = NO;
             if (self.isShowBuyView) {//判断右边的accessoryView出现的时候,用灰色的颜色，同时文字的颜色
-                self.strickoutPriceL.text = [NSString stringWithFormat:@"已有%@人",result.perNum];
+                self.strickoutPriceL.text = result.perNum ? [NSString stringWithFormat:@"已有%@人",result.perNum] : nil;
                 self.strickoutPriceL.textColor = EB_RGBColor(114, 114, 114);
             } else {
                 if ([result.openType integerValue] == 2) {//报名
-                    self.strickoutPriceL.text = [NSString stringWithFormat:@"%@人报名",result.perNum];
+                    self.strickoutPriceL.text = result.perNum ? [NSString stringWithFormat:@"%@人报名",result.perNum] : nil;
                     self.strickoutPriceL.textColor = EB_RGBColor(228, 155, 67);
                 } else if ([result.openType integerValue] == 3) {//跟团
-                    self.strickoutPriceL.text = [NSString stringWithFormat:@"%@人跟团",result.perNum];
+                    self.strickoutPriceL.text = result.perNum ? [NSString stringWithFormat:@"%@人跟团",result.perNum] : nil;
                     self.strickoutPriceL.textColor = EB_GroupColor;
                 }
                 [self.strickoutPriceL setSystemFontOf14];

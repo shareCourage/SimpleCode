@@ -14,6 +14,7 @@
 #import "EBBoughtModel.h"
 #import "EBSignModel.h"
 #import "EBGroupModel.h"
+#import "EBSponsorModel.h"
 #import "EBLineDetailController.h"
 #import "EBSearchResultController.h"
 
@@ -131,7 +132,7 @@
     EBAttentionTableView *tableView = self.tableViews[index];
     if (!tableView.isRefreshed) {
         if ([EBTool loginEnable]) {
-            [tableView beginRefresh];
+            [tableView attentionRequestAndTableViewReloadData];
         }
     }
 }
@@ -178,11 +179,48 @@
 
 }
 - (void)eb_tableView:(EBAttentionTableView *)tableView didSelectOfTypeGroup:(EBGroupModel *)group {
-    [MBProgressHUD showError:@"相关路线未开通,详细请咨询客服!" toView:self.view];
+    NSInteger change = [group.changeStatus integerValue];
+    if (change == 1) {
+        [self pushToLineDetailController:[self searchResultModel:group]];
+    } else if (change == 2) {
+        EBSearchResultController *result = [[EBSearchResultController alloc] init];
+        CGFloat onLat = [group.onLat doubleValue];
+        CGFloat onLng = [group.onLng doubleValue];
+        CGFloat offLat = [group.offLat doubleValue];
+        CGFloat offLng = [group.offLng doubleValue];
+        CLLocationCoordinate2D onCoord = CLLocationCoordinate2DMake(onLat, onLng);
+        CLLocationCoordinate2D offCoord = CLLocationCoordinate2DMake(offLat, offLng);
+        result.myPositionCoord = onCoord;
+        result.endPositionCoord = offCoord;
+        [self.navigationController pushViewController:result animated:YES];
+    } else if (change == 3) {
+        [MBProgressHUD showError:@"相关路线未开通,详细请咨询客服!" toView:self.view];
+    } else if (change == 4) {
+        [MBProgressHUD showError:@"相关路线未开通,详细请咨询客服!" toView:self.view];
+    }
 }
 
 - (void)eb_tableView:(EBAttentionTableView *)tableView didSelectOfTypeSponsor:(EBSponsorModel *)sponsor {
-    [MBProgressHUD showError:@"相关路线未开通,详细请咨询客服!" toView:self.view];
+    
+    NSInteger change = [sponsor.changeStatus integerValue];
+    if (change == 1) {
+        [self pushToLineDetailController:[self searchResultModel:sponsor]];
+    } else if (change == 2) {
+        EBSearchResultController *result = [[EBSearchResultController alloc] init];
+        CGFloat onLat = [sponsor.onLat doubleValue];
+        CGFloat onLng = [sponsor.onLng doubleValue];
+        CGFloat offLat = [sponsor.offLat doubleValue];
+        CGFloat offLng = [sponsor.offLng doubleValue];
+        CLLocationCoordinate2D onCoord = CLLocationCoordinate2DMake(onLat, onLng);
+        CLLocationCoordinate2D offCoord = CLLocationCoordinate2DMake(offLat, offLng);
+        result.myPositionCoord = onCoord;
+        result.endPositionCoord = offCoord;
+        [self.navigationController pushViewController:result animated:YES];
+    } else if (change == 3) {
+        [MBProgressHUD showError:@"相关路线未开通,详细请咨询客服!" toView:self.view];
+    } else if (change == 4) {
+        [MBProgressHUD showError:@"相关路线未开通,详细请咨询客服!" toView:self.view];
+    }
 }
 #pragma mark - Private Method
 - (EBSearchResultModel *)searchResultModel:(EBBaseModel *)model {
@@ -201,7 +239,7 @@
         resultM.offStationId = bought.offStationId;
         resultM.startTime = bought.startTime;
         resultM.vehTime = bought.vehTime;
-    } else if ([model isKindOfClass:[EBSignModel class]] || [model isKindOfClass:[EBGroupModel class]]) {
+    } else if ([model isKindOfClass:[EBSignModel class]] || [model isKindOfClass:[EBGroupModel class]] || [model isKindOfClass:[EBSponsorModel class]]) {
         EBAttentionModel *attention = (EBAttentionModel *)model;
         resultM.lineId = attention.lineId;
         resultM.startTime = attention.startTime;

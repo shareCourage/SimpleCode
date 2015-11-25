@@ -18,26 +18,43 @@
 
 @implementation EBTicketViewController
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationItem.title = @"出票";
+    self.tableView.allowsSelection = NO;
     [self footerViewImplementation];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginNotification) name:EBLoginSuccessNotification object:nil];
+}
+- (void)loginNotification {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)footerViewImplementation {
-    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, EB_WidthOfScreen, EB_HeightOfScreen - 100 - EB_HeightOfNavigationBar)];
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, EB_WidthOfScreen, EB_HeightOfScreen - 100 - EB_HeightOfNavigationBar - 30)];
     footerView.backgroundColor = [UIColor clearColor];
     self.tableView.tableFooterView = footerView;
     self.footerView = footerView;
     EBTransferTipView *tipView = [EBTransferTipView transferTipViewFromXib];
     tipView.transferModel = self.transferModel;
     tipView.frame = footerView.bounds;
-    tipView.hidden = YES;
     [footerView addSubview:tipView];
     self.tipView = tipView;
 }
 
 #pragma mark - UITableView
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    NSArray *array = [NSArray seprateString:self.transferModel.runDate characterSet:@"-"];
+    if (array.count != 3) return nil;
+    NSString *string = [NSString stringWithFormat:@"乘车日期：%@月%@日",array[1], array[2]];
+    return string;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 30;
+}
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 1;
 }

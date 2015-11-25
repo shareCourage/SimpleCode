@@ -16,12 +16,16 @@
 @end
 
 @implementation EBTransferTipView
+- (void)dealloc {
+    [self.displayLink invalidate];
+    self.displayLink = nil;
+}
 
 + (instancetype)transferTipViewFromXib {
     EBTransferTipView *tipView = [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:self options:nil] firstObject];
     tipView.payL.font = [UIFont systemFontOfSize:60];
     tipView.hmsL.textAlignment = NSTextAlignmentCenter;
-    tipView.secLeadingLayout.constant = EB_WidthOfScreen / 2 + 43;
+    tipView.secLeadingLayout.constant = EB_WidthOfScreen / 2 + 45;
     tipView.secL.textAlignment = NSTextAlignmentLeft;
     tipView.secL.textColor = EB_RGBColor(41, 61, 7);
     tipView.secL.font = [UIFont systemFontOfSize:56.f];

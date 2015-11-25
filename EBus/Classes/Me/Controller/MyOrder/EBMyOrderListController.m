@@ -110,7 +110,7 @@
     if (index >= self.tableViews.count) return;
     EBMyOrderTableView *tableView = self.tableViews[index];
     if (!tableView.isRefreshed) {
-        [tableView beginRefresh];
+        [tableView myOrderRequestAndTableViewReloadData];
     }
 }
 #pragma mark - EBMyOrderTableViewDelegate

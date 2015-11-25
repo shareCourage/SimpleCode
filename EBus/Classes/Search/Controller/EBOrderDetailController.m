@@ -19,6 +19,7 @@
 #import "EBBuyTicketController.h"
 #import "EBRefundController.h"
 #import "EBOrderSpecificModel.h"
+#import "EBSecondList.h"
 
 @interface EBOrderDetailController () <UITableViewDataSource, UITableViewDelegate, EBPayTypeViewDelegate, UIAlertViewDelegate>
 
@@ -60,10 +61,9 @@
 
 - (void)setSpecificModel:(EBOrderSpecificModel *)specificModel {
     _specificModel = specificModel;
-    if (specificModel.saleDates.length != 0) {
-        NSArray *sales = [specificModel.saleDates componentsSeparatedByString:@","];
+    if (specificModel.secondList.count != 0) {
         [self.dataSource removeAllObjects];
-        [self.dataSource addObjectsFromArray:sales];
+        [self.dataSource addObjectsFromArray:specificModel.secondList];
     }
     self.orderStatusView.specificModel = specificModel;
     self.baseCell.model = specificModel;
@@ -254,6 +254,8 @@
                 [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
             } else if (payStatus == 1) {//已取消
                 [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
+            } else if (payStatus == 4) {//退款中
+                [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
             }
         } else if (payType == 3 || payType == 4) {//深圳通或者免费证件支付
             if (payStatus == 0) {//未支付
@@ -274,15 +276,28 @@
                     }
                 }
             } else if (payStatus == 2) {//已经支付
-                if ([EBTool isWaitingWithDate:runDate startTime:startTime]) {
-                    NSArray *titles = @[@"退票", @"续订"];
-                    [self bottomViewTwoButton:titles selector:@selector(orderAgainClick:) btnView:btnView height:bvH];//生成续订button + 退款按钮
-                } else {
-                    [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
+                if (manyDates) {//有很多天
+                    BOOL value = [EBTool allOutDate:sales startTime:startTime];
+                    if (value) {//全部都过期了
+                        [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
+                    } else {
+                        NSArray *titles = @[@"退票", @"续订"];
+                        [self bottomViewTwoButton:titles selector:@selector(orderAgainClick:) btnView:btnView height:bvH];//生成续订button + 退款按钮
+                    }
+                } else {//只有一天
+                    if ([EBTool isWaitingWithDate:runDate startTime:startTime]) {
+                        NSArray *titles = @[@"退票", @"续订"];
+                        [self bottomViewTwoButton:titles selector:@selector(orderAgainClick:) btnView:btnView height:bvH];//生成续订button + 退款按钮
+                    } else {
+                        [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
+                    }
                 }
+                
             } else if (payStatus == 3) {//已退票
                 [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
             } else if (payStatus == 1) {//已取消
+                [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
+            } else if (payStatus == 4) {//退款中
                 [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
             }
         }
@@ -413,8 +428,9 @@
         cell.textLabel.text = @"乘车日期";
         cell.detailTextLabel.text = @"状态";
     } else {
-        cell.textLabel.text = self.dataSource[indexPath.row - 1];
-        NSInteger status = [self.specificModel.status integerValue];
+        EBSecondList *secondList = self.dataSource[indexPath.row - 1];
+        cell.textLabel.text = secondList.runDate;
+        NSInteger status = [secondList.status integerValue];
         cell.detailTextLabel.text = [EBTool stringFromStatus:status];//将数字转化为为文字
     }
     return cell;

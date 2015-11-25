@@ -308,6 +308,7 @@
 }
 //与当前时间对比，30分钟以前返回YES，其它返回NO
 + (BOOL)isWaitingWithDate:(NSString *)runDate startTime:(NSString *)startTime {
+    if (!runDate || !startTime) return NO;
     BOOL value = NO;
     NSArray *array = [NSArray seprateString:runDate characterSet:@"-"];
     if (array.count != 3) return NO;

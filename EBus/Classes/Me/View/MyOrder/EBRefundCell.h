@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-@class EBRefundModel;
+@class EBSecondList;
 
 @interface EBRefundCell : UITableViewCell
 
 + (instancetype)cellWithTableView:(UITableView *)tableView;
-@property (nonatomic, strong) EBRefundModel *refundModel;
+@property (nonatomic, strong) EBSecondList *seclModel;
 @property (nonatomic, assign, getter=isRefundCellSelected) BOOL refundCellSelected;
 
 @end

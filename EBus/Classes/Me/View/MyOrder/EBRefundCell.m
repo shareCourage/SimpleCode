@@ -7,7 +7,7 @@
 //
 
 #import "EBRefundCell.h"
-#import "EBRefundModel.h"
+#import "EBSecondList.h"
 
 @interface EBRefundCell ()
 @property (nonatomic, weak) UIButton *selectedBtn;
@@ -43,9 +43,9 @@
     return cell;
 }
 
-- (void)setRefundModel:(EBRefundModel *)refundModel {
-    _refundModel = refundModel;
-    self.textLabel.text = refundModel.sale;
+- (void)setSeclModel:(EBSecondList *)seclModel {
+    _seclModel = seclModel;
+    self.textLabel.text = seclModel.runDate;
     self.detailTextLabel.text = @"已支付";
 }
 

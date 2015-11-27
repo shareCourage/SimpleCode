@@ -235,7 +235,7 @@
         NSNumber *status = returnData[static_Argument_certificateStatus];
         NSInteger statusIn = [status integerValue];
 #if DEBUG
-//        statusIn = 2;
+//        statusIn = 0;
 #endif
         if (statusIn == 0) {//未认证
             [self settingTopAndBottomView:statusIn animation:NO];

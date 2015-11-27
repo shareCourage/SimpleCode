@@ -90,6 +90,7 @@
     self.searchBusView = searchBusView;
 }
 - (void)tipClick {
+    EBLog(@"%@",NSStringFromSelector(_cmd));
     self.timePickerViewAppear = NO;
 }
 #pragma mark -EBSearchBusViewDelegate
@@ -191,8 +192,13 @@
     self.startTime = time;
 }
 
-- (void)timeChooseView:(EBTimeChooseView *)pickerView didClickType:(EBTimeChooseViewClickType)type {
-    self.timePickerViewAppear = NO;
+- (void)timeChooseView:(EBTimeChooseView *)pickerView didClickType:(EBTimeChooseViewClickType)type time:(NSString *)time{
+    if (type == EBTimeChooseViewClickTypeOfSure) {
+        self.startTime = time;
+        self.timePickerViewAppear = NO;
+    } else {
+        self.timePickerViewAppear = NO;
+    }
 }
 
 

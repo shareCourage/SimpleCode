@@ -81,7 +81,10 @@
 }
 - (void)setLineDetailM:(EBLineDetailModel *)lineDetailM {
     _lineDetailM = lineDetailM;
-    if (!lineDetailM) [self.buyBtn setBackgroundColor:[UIColor grayColor]];
+    if (!lineDetailM) {
+        [self.buyBtn setBackgroundColor:[UIColor grayColor]];
+        self.buyBtn.userInteractionEnabled = NO;
+    }
     NSUInteger openType = [lineDetailM.openType integerValue];
     [self addAnnotationOnLngLat:lineDetailM.onLngLat onStations:lineDetailM.onStations onFjIds:lineDetailM.onFjIds];
     [self addAnnotationOffLngLat:lineDetailM.offLngLat offStations:lineDetailM.offStations offFjIds:lineDetailM.offFjIds];
@@ -418,6 +421,8 @@
         annotation.lineInfo.coordinate = annotation.coordinate;
         [self.maMapView addAnnotation:annotation];
     }
+    
+    [self.maMapView showAnnotations:self.maMapView.annotations animated:YES];
 }
 
 - (void)addPolylineWithCoords:(NSArray *)coords

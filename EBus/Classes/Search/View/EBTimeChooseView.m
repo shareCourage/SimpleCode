@@ -86,8 +86,9 @@
 
 - (void)barButtonClick:(UIBarButtonItem *)sender
 {
-    if ([self.delegate respondsToSelector:@selector(timeChooseView:didClickType:)]) {
-        [self.delegate timeChooseView:self didClickType:sender.tag];
+    NSString *string = [NSString stringWithFormat:@"%@%@",self.hourStr,self.minStr];
+    if ([self.delegate respondsToSelector:@selector(timeChooseView:didClickType:time:)]) {
+        [self.delegate timeChooseView:self didClickType:sender.tag time:string];
     }
 }
 #pragma mark - UIPickerViewDataSource, UIPickerViewDelegate

@@ -165,6 +165,7 @@
     [self initImplementation];
     [self.tableView reloadData];
     [self APServiceTagsAndAliasSetUp];
+    [EBTool openAppInitial];
 }
 
 #pragma mark - UITableViewDataSource

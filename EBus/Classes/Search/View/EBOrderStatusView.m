@@ -29,23 +29,29 @@
     return [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:self options:nil] firstObject];
 }
 
-- (void)setOrderModel:(EBOrderDetailModel *)orderModel {
-    _orderModel = orderModel;
-    if (orderModel) {
-        self.originalPrice.text = [NSString stringWithFormat:@"原价：%@元",orderModel.originalPrice];
-        self.payPrice.text = [NSString stringWithFormat:@"实付款：%@元",orderModel.tradePrice];
-        NSString *payTypeStr = [EBTool stringFromPayType:[orderModel.payType integerValue]];
-        self.payWay.text = [NSString stringWithFormat:@"支付方式：%@",payTypeStr];
-        self.orderNumber.text = [NSString stringWithFormat:@"订单编号：%@",orderModel.mainNo];
-        self.orderTime.text = [NSString stringWithFormat:@"下单时间：%@",orderModel.orderTime];
-    }
-}
+//- (void)setOrderModel:(EBOrderDetailModel *)orderModel {
+//    _orderModel = orderModel;
+//    if (orderModel) {
+//        self.originalPrice.text = [NSString stringWithFormat:@"原价：%@元",orderModel.originalPrice];
+//        self.payPrice.text = [NSString stringWithFormat:@"实付款：%@元",orderModel.tradePrice];
+//        NSString *payTypeStr = [EBTool stringFromPayType:[orderModel.payType integerValue]];
+//        self.payWay.text = [NSString stringWithFormat:@"支付方式：%@",payTypeStr];
+//        self.orderNumber.text = [NSString stringWithFormat:@"订单编号：%@",orderModel.mainNo];
+//        self.orderTime.text = [NSString stringWithFormat:@"下单时间：%@",orderModel.orderTime];
+//    }
+//}
 
 - (void)setSpecificModel:(EBOrderSpecificModel *)specificModel {
     _specificModel = specificModel;
     if (specificModel) {
         self.originalPrice.text = [NSString stringWithFormat:@"原价：%@元",specificModel.originalPrice];
-        self.payPrice.text = [NSString stringWithFormat:@"实付款：%@元",specificModel.tradePrice];
+        
+        if ([specificModel.payType integerValue] == 4) {
+            self.payPrice.text = @"实付款：0元";
+        } else {
+            self.payPrice.text = [NSString stringWithFormat:@"实付款：%@元",specificModel.tradePrice];
+        }
+        
         NSString *payTypeStr = [EBTool stringFromPayType:[specificModel.payType integerValue]];
         self.payWay.text = [NSString stringWithFormat:@"支付方式：%@",payTypeStr];
         self.orderNumber.text = [NSString stringWithFormat:@"订单编号：%@",specificModel.mainNo];

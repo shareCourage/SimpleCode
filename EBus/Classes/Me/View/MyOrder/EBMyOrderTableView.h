@@ -35,6 +35,8 @@ typedef  NS_ENUM(NSUInteger, EBMyOrderType) {
 /*
  *刷新数据，但没有下拉效果
  */
-- (void)myOrderRequestAndTableViewReloadData;
+- (void)xl_tableViewRefresh;
 
+- (void)myOrderTableViewDidAppear;
+- (void)myOrderTableViewDidDisAppear;
 @end

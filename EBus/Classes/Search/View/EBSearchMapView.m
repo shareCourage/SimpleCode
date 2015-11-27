@@ -142,9 +142,11 @@
 
 #pragma mark - AMapSearchDelegate
 - (void)onPOISearchDone:(AMapPOISearchBaseRequest *)request response:(AMapPOISearchResponse *)response {
+#if DEBUG
     for (AMapPOI *obj in response.pois) {
         EBLog(@"%@, %@", obj.name, obj.address);
     }
+#endif
     [self callSelfDelegate:response];
 }
 

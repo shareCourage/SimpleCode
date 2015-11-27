@@ -19,7 +19,9 @@
 #import "EBSponsorController.h"
 
 @interface EBSearchResultController () <EBUsualLineCellDelegate, UITableViewDataSource, UITableViewDelegate>
-
+{
+    NSUInteger _pageNumber;
+}
 @property (nonatomic, weak) UITableView *tableView;
 @property (nonatomic, weak) UIImageView *backgroundImageView;
 @property (nonatomic, strong) NSMutableArray *dataSource;
@@ -45,11 +47,14 @@
     [self tableViewImplementation];
     EB_WS(ws);
     self.tableView.header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        [ws refresh];
+        _pageNumber = 1;
+        [ws xl_refresh];
     }];
     self.tableView.footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
-        
+        _pageNumber ++;
+        [ws sl_refresh];
     }];
+    self.tableView.footer.hidden = YES;
     [self.tableView.header beginRefreshing];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self bottomViewImplementation];
@@ -100,42 +105,85 @@
     }
 }
 
-- (void)refresh {
-    NSDictionary *parameters = nil;
+#pragma mark - Request
+- (NSString *)urlOfRefresh {
     NSString *url = nil;
     if (self.hotLabel) {
-        parameters = @{static_Argument_labelId : self.hotLabel.labelId};
         url = static_Url_SearchBus_Label;
     } else {
         url = static_Url_SearchBus;
+    }
+    return url;
+}
+- (NSDictionary *)parametersOfRefresh {
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    if (self.hotLabel) {
+        if (self.hotLabel.labelId) {
+            [parameters setObject:self.hotLabel.labelId forKey:static_Argument_labelId];
+        }
+    } else {
         if (CLLocationCoordinate2DIsValid(self.myPositionCoord) && CLLocationCoordinate2DIsValid(self.endPositionCoord)) {//如果两个经纬度都有效
             NSString *onlnglat = [NSString stringWithFormat:@"%.6f,%.6f",self.myPositionCoord.longitude,self.myPositionCoord.latitude];
             NSString *offlnglat = [NSString stringWithFormat:@"%.6f,%.6f",self.endPositionCoord.longitude,self.endPositionCoord.latitude];
-            parameters = @{static_Argument_onLngLat : onlnglat,
-                           static_Argument_offLngLat: offlnglat};
+            if (onlnglat) {
+                [parameters setObject:onlnglat forKey:static_Argument_onLngLat];
+            }
+            if (offlnglat) {
+                [parameters setObject:offlnglat forKey:static_Argument_offLngLat];
+            }
         } else if (CLLocationCoordinate2DIsValid(self.myPositionCoord)) {//我的位置经纬度有效
             NSString *onlnglat = [NSString stringWithFormat:@"%.6f,%.6f",self.myPositionCoord.longitude,self.myPositionCoord.latitude];
-            parameters = @{static_Argument_onLngLat : onlnglat};
+            if (onlnglat) {
+                [parameters setObject:onlnglat forKey:static_Argument_onLngLat];
+            }
         } else if (CLLocationCoordinate2DIsValid(self.endPositionCoord)) {//终点经纬度有效
             NSString *offlnglat = [NSString stringWithFormat:@"%.6f,%.6f",self.endPositionCoord.longitude,self.endPositionCoord.latitude];
-            parameters = @{static_Argument_offLngLat: offlnglat};
+            if (offlnglat) {
+                [parameters setObject:offlnglat forKey:static_Argument_offLngLat];
+            }
         } else {//两个经纬度均无效
-            return;
+            return nil;
         }
     }
-    [EBNetworkRequest GET:url parameters:parameters dictBlock:^(NSDictionary *dict) {
+    [parameters setObject:@(_pageNumber) forKey:static_Argument_pageNo];
+    return parameters;
+}
+
+- (void)sl_refresh {
+    [EBNetworkRequest GET:[self urlOfRefresh] parameters:[self parametersOfRefresh] dictBlock:^(NSDictionary *dict) {
+        EBLog(@"\n %@",dict);
+        [self.tableView.footer endRefreshing];
+        NSArray *returnData = dict[static_Argument_returnData];
+        if (returnData.count == 0) {
+            return;
+        }
+        for (NSDictionary *dict in returnData) {
+            EBSearchResultModel *model = [[EBSearchResultModel alloc] initWithDict:dict];
+            [self.dataSource addObject:model];
+        }
+        [self.tableView reloadData];
+    } errorBlock:^(NSError *error) {
+        [self.tableView.footer endRefreshing];
+    } indicatorVisible:NO];
+}
+
+- (void)xl_refresh {
+    [EBNetworkRequest GET:[self urlOfRefresh] parameters:[self parametersOfRefresh] dictBlock:^(NSDictionary *dict) {
         EBLog(@"\n %@",dict);
         [self.tableView.header endRefreshing];
         NSArray *returnData = dict[static_Argument_returnData];
-        if (returnData.count == 0) return;
         [self.dataSource removeAllObjects];
         for (NSDictionary *dict in returnData) {
             EBSearchResultModel *model = [[EBSearchResultModel alloc] initWithDict:dict];
             [self.dataSource addObject:model];
         }
         if (self.dataSource.count == 0) {
+            self.tableView.footer.hidden = YES;
             self.backgroundImageView.hidden = NO;
         } else {
+            if (self.dataSource.count >= 20) {
+                self.tableView.footer.hidden = NO;
+            }
             self.backgroundImageView.hidden = YES;
         }
         [self.tableView reloadData];

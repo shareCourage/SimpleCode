@@ -172,9 +172,9 @@
         result.endPositionCoord = offCoord;
         [self.navigationController pushViewController:result animated:YES];
     } else if (change == 3) {
-        [MBProgressHUD showError:@"该线路已撤销,详细请咨询客服!" toView:self.view];
+        [MBProgressHUD showError:@"线路已撤销,详细请咨询客服!" toView:self.view];
     } else if (change == 4) {
-        [MBProgressHUD showError:@"该线路已终止,详细请咨询客服!" toView:self.view];
+        [MBProgressHUD showError:@"线路已终止,详细请咨询客服!" toView:self.view];
     }
 
 }
@@ -194,9 +194,9 @@
         result.endPositionCoord = offCoord;
         [self.navigationController pushViewController:result animated:YES];
     } else if (change == 3) {
-        [MBProgressHUD showError:@"相关路线未开通,详细请咨询客服!" toView:self.view];
+        [MBProgressHUD showError:@"线路已撤销,详细请咨询客服!" toView:self.view];
     } else if (change == 4) {
-        [MBProgressHUD showError:@"相关路线未开通,详细请咨询客服!" toView:self.view];
+        [MBProgressHUD showError:@"线路已终止,详细请咨询客服!" toView:self.view];
     }
 }
 
@@ -217,9 +217,9 @@
         result.endPositionCoord = offCoord;
         [self.navigationController pushViewController:result animated:YES];
     } else if (change == 3) {
-        [MBProgressHUD showError:@"相关路线未开通,详细请咨询客服!" toView:self.view];
+        [MBProgressHUD showError:@"线路已撤销,详细请咨询客服!" toView:self.view];
     } else if (change == 4) {
-        [MBProgressHUD showError:@"相关路线未开通,详细请咨询客服!" toView:self.view];
+        [MBProgressHUD showError:@"线路已终止,详细请咨询客服!" toView:self.view];
     }
 }
 #pragma mark - Private Method

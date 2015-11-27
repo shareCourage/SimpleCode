@@ -295,6 +295,8 @@
         result.myPositionCoord = self.myPositionCoord;
         result.endPositionCoord = self.endPositionCoord;
         [self.navigationController pushViewController:result animated:YES];
+    } else {
+        [MBProgressHUD showError:@"至少输入一个出发地或目的地" toView:self.view];
     }
 }
 

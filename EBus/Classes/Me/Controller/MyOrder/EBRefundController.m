@@ -153,7 +153,7 @@
             EBLog(@"%@",seclM.runDate);
             totalPrice = [seclM.tradePrice doubleValue] + totalPrice;
         }
-        self.upL.text = [NSString stringWithFormat:@"退票天数：%ld天",self.refundDates.count];
+        self.upL.text = [NSString stringWithFormat:@"退票天数：%ld天",(unsigned long)self.refundDates.count];
         self.downL.text = [NSString stringWithFormat:@"退票金额：%.1f元",totalPrice];
     }
 }

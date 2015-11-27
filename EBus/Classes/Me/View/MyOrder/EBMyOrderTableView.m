@@ -15,7 +15,9 @@
 #import "EBMyOrderHeaderView.h"
 
 @interface EBMyOrderTableView ()<UITableViewDataSource, UITableViewDelegate>
-
+{
+    NSUInteger _pageNumber;
+}
 @property (nonatomic, weak) UITableView *tableView;
 @property (nonatomic, weak) UIImageView *backgroundImageView;
 
@@ -36,6 +38,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
+        _pageNumber = 1;
         self.backgroundColor = [UIColor whiteColor];
         UITableView *tableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStyleGrouped];
         tableView.delegate = self;
@@ -44,8 +47,14 @@
         [self addSubview:tableView];
         EB_WS(ws);
         tableView.header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-            [ws tableViewRefresh];
+            _pageNumber = 1;
+            [ws xl_tableViewRefresh];
         }];
+        tableView.footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+            _pageNumber ++;
+            [ws sl_tableViewRefresh];
+        }];
+        tableView.footer.hidden = YES;
         self.tableView = tableView;
         UIImageView *backgroundImageView = [[UIImageView alloc] init];
         backgroundImageView.contentMode = UIViewContentModeCenter;
@@ -65,56 +74,62 @@
     [self.tableView.header beginRefreshing];
     self.refresh = YES;
 }
+- (void)myOrderTableViewDidAppear {
+    _pageNumber = 1;
+    [self xl_tableViewRefresh];
+    [self.tableView scrollsToTop];
+}
 
+- (void)myOrderTableViewDidDisAppear {
+    
+}
 #pragma mark - Private Method
-- (void)tableViewRefresh {
-    [self myOrderRequestAndTableViewReloadData];
-}
-
-- (void)myOrderRequestAndTableViewReloadData {
-    if (self.tag == EBMyOrderTypeOfCompleted) {
-        [self completedRequest];
-    } else if (self.tag == EBMyOrderTypeOfUncompleted) {
-        [self uncompletedRequest];
-    }
-}
-
-- (void)completedRequest {
-    NSDictionary *parameters = @{static_Argument_userName : [EBUserInfo sharedEBUserInfo].loginName,
-                                 static_Argument_userId : [EBUserInfo sharedEBUserInfo].loginId,
-                                 static_Argument_payStatus : @(2)};
-    [self myOrderRequest:parameters success:^(NSDictionary *dict) {
+- (void)xl_tableViewRefresh {
+    [self myOrderRequest:[self parametersOfRefresh] success:^(NSDictionary *dict) {
         [self.tableView.header endRefreshing];
         EBLog(@"%@",dict);
         NSArray *data = dict[static_Argument_returnData];
         [self.dataSource removeAllObjects];
         for (NSDictionary *obj in data) {
-            EBMyOrderModel *myOrderModel = [[EBMyOrderCompletedModel alloc] initWithDict:obj];
-            [self.dataSource addObject:myOrderModel];;
+            if (self.tag == EBMyOrderTypeOfCompleted) {
+                EBMyOrderModel *myOrderModel = [[EBMyOrderCompletedModel alloc] initWithDict:obj];
+                [self.dataSource addObject:myOrderModel];
+            } else if (self.tag == EBMyOrderTypeOfUncompleted) {
+                EBMyOrderModel *myOrderModel = [[EBMyOrderUncompletedModel alloc] initWithDict:obj];
+                [self.dataSource addObject:myOrderModel];
+            }
         }
         if (self.dataSource.count == 0) {
+            self.tableView.footer.hidden = YES;
             self.backgroundImageView.hidden = NO;
         } else {
+            if (self.dataSource.count >= 20) {
+                self.tableView.footer.hidden = NO;
+            }
             self.backgroundImageView.hidden = YES;
         }
         [self.tableView reloadData];
-
     } failure:^(NSError *error) {
         [self.tableView.header endRefreshing];
     }];
 }
 
-- (void)uncompletedRequest {
-    NSDictionary *parameters = @{static_Argument_userName : [EBUserInfo sharedEBUserInfo].loginName,
-                                 static_Argument_userId : [EBUserInfo sharedEBUserInfo].loginId,
-                                 static_Argument_payStatus : @(1)};
-    [self myOrderRequest:parameters success:^(NSDictionary *dict) {
-        [self.tableView.header endRefreshing];
+- (void)sl_tableViewRefresh {
+    [self myOrderRequest:[self parametersOfRefresh] success:^(NSDictionary *dict) {
+        [self.tableView.footer endRefreshing];
         NSArray *data = dict[static_Argument_returnData];
-        [self.dataSource removeAllObjects];
+        EBLog(@"%@, %ld",dict, (unsigned long)data.count);
+        if (data.count == 0) {
+            return;
+        }
         for (NSDictionary *obj in data) {
-            EBMyOrderModel *myOrderModel = [[EBMyOrderUncompletedModel alloc] initWithDict:obj];
-            [self.dataSource addObject:myOrderModel];;
+            if (self.tag == EBMyOrderTypeOfCompleted) {
+                EBMyOrderModel *myOrderModel = [[EBMyOrderCompletedModel alloc] initWithDict:obj];
+                [self.dataSource addObject:myOrderModel];
+            } else if (self.tag == EBMyOrderTypeOfUncompleted) {
+                EBMyOrderModel *myOrderModel = [[EBMyOrderUncompletedModel alloc] initWithDict:obj];
+                [self.dataSource addObject:myOrderModel];
+            }
         }
         if (self.dataSource.count == 0) {
             self.backgroundImageView.hidden = NO;
@@ -123,9 +138,30 @@
         }
         [self.tableView reloadData];
     } failure:^(NSError *error) {
-        [self.tableView.header endRefreshing];
+        [self.tableView.footer endRefreshing];
     }];
+
 }
+
+- (NSDictionary *)parametersOfRefresh {
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    if ([EBUserInfo sharedEBUserInfo].loginName) {
+        [parameters setObject:[EBUserInfo sharedEBUserInfo].loginName forKey:static_Argument_userName];
+    }
+    if ([EBUserInfo sharedEBUserInfo].loginId) {
+        [parameters setObject:[EBUserInfo sharedEBUserInfo].loginId forKey:static_Argument_userId];
+    }
+    NSNumber *payStatus = nil;
+    if (self.tag == EBMyOrderTypeOfCompleted) {
+        payStatus = @(2);
+    } else if (self.tag == EBMyOrderTypeOfUncompleted) {
+        payStatus = @(1);
+    }
+    [parameters setObject:payStatus forKey:static_Argument_payStatus];
+    [parameters setObject:@(_pageNumber) forKey:static_Argument_pageNo];
+    return parameters;
+}
+
 
 #pragma mark - Request
 - (void)myOrderRequest:(id)parameters success:(EBOptionDict)dictBlock failure:(EBOptionError)errorBlock{

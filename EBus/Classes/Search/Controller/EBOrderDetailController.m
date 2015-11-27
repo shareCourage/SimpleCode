@@ -181,7 +181,7 @@
 #endif
     
     EBOrderStatusView *orderV = [EBOrderStatusView orderStatusViewFromXib];
-    orderV.orderModel = self.specificModel;
+    orderV.specificModel = self.specificModel;
     [infoV addSubview:orderV];
     [orderV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(infoV).with.offset(0);
@@ -498,7 +498,7 @@
                 EBLog(@"returnInfo -> %@  %@", dict[static_Argument_returnInfo], code);
                 if ([code integerValue] == 500) {
                     self.specificModel.payType = @(1);//将原始数据model的支付方式也进行更改为支付宝支付
-                    self.orderStatusView.orderModel = self.specificModel;
+                    self.orderStatusView.specificModel = self.specificModel;
                     [self alipayOrWechatPay:EBPayTypeOfAlipay orderModel:self.specificModel];
                 } else {
                     [MBProgressHUD showError:@"更改支付方式失败" toView:self.view];
@@ -518,7 +518,7 @@
                 EBLog(@"returnInfo -> %@  %@", dict[static_Argument_returnInfo], code);
                 if ([code integerValue] == 500) {
                     self.specificModel.payType = @(2);//将原始数据model的支付方式也进行更改为微信支付
-                    self.orderStatusView.orderModel = self.specificModel;
+                    self.orderStatusView.specificModel = self.specificModel;
                     [self alipayOrWechatPay:EBPayTypeOfWeChat orderModel:self.specificModel];
                 } else {
                     [MBProgressHUD showError:@"更改支付方式失败" toView:self.view];

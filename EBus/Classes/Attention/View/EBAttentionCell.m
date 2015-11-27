@@ -80,18 +80,37 @@
 }
 
 - (void)setUpData:(EBBaseModel *)model {
-    if ([model isKindOfClass:[EBSignModel class]]) {
-        EBSignModel *sign = (EBSignModel *)model;
-        NSInteger change = [sign.changeStatus integerValue];
+    if ([model isKindOfClass:[EBAttentionModel class]]) {
+        EBAttentionModel *attenM = (EBAttentionModel *)model;
+        NSInteger change = [attenM.changeStatus integerValue];
 #if DEBUG
-//        change = 3;
+        //        change = 3;
 #endif
-        self.priceLabel.text = [NSString stringWithFormat:@"￥%@元",sign.price];
-        if (change == 1) {
-            self.followViewL.text = nil;
-            self.followLabel.text = @"已报名:";
-            self.numberLabel.text = [NSString stringWithFormat:@"%@人",sign.perNum];
-        } else if (change == 2) {
+        if ([model isKindOfClass:[EBSignModel class]]) {
+            EBSignModel *sign = (EBSignModel *)model;
+            self.priceLabel.text = [NSString stringWithFormat:@"￥%@元",sign.price];
+            if (change == 1) {
+                self.followViewL.text = nil;
+                self.followLabel.text = @"已报名:";
+                self.numberLabel.text = [NSString stringWithFormat:@"%@人",sign.perNum];
+            }
+        } else if ([model isKindOfClass:[EBGroupModel class]]) {
+            EBGroupModel *group = (EBGroupModel *)model;
+            if (change == 1) {
+                self.followViewL.text = nil;
+                self.followLabel.text = @"已团:";
+                self.numberLabel.text = [NSString stringWithFormat:@"%@人",group.perNum];
+            }
+        } else if ([model isKindOfClass:[EBSponsorModel class]]) {
+            EBSponsorModel *sponsor = (EBSponsorModel *)model;
+            if (change == 1) {
+                self.followViewL.text = nil;
+                self.followLabel.text = @"已跟:";
+                self.numberLabel.text = [NSString stringWithFormat:@"%@人",sponsor.perNum];
+            }
+        }
+        
+       if (change == 2) {
             self.followLabel.text = nil;
             self.numberLabel.text = nil;
             self.followViewL.text = @"已有相关线路开通";
@@ -104,15 +123,6 @@
             self.numberLabel.text = nil;
             self.followViewL.text = @"该线路已终止";
         }
-        
-    } else if ([model isKindOfClass:[EBGroupModel class]]) {
-        EBGroupModel *group = (EBGroupModel *)model;
-        self.followLabel.text = @"已团:";
-        self.numberLabel.text = [NSString stringWithFormat:@"%@人",group.perNum];
-    } else if ([model isKindOfClass:[EBSponsorModel class]]) {
-        EBSponsorModel *sponsor = (EBSponsorModel *)model;
-        self.followLabel.text = @"已跟:";
-        self.numberLabel.text = [NSString stringWithFormat:@"%@人",sponsor.perNum];
     }
 }
 

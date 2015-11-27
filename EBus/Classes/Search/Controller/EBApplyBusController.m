@@ -5,9 +5,8 @@
 //  Created by Kowloon on 15/10/30.
 //  Copyright © 2015年 Goome. All rights reserved.
 //
-#define Cell_UnableBackgroundColor EB_RGBColor(241, 241, 241)
-#define Cell_BoughtBackgroundColor EB_RGBColor(230, 146, 35)
-#define Cell_FullBackgroundColor   [UIColor redColor]
+#define Cell_UnableBackgroundColor      EB_RGBColor(241, 241, 241)
+#define Cell_AppliedBackgroundColor     EB_RGBColor(230, 146, 35)
 #define HeightOfCalender (EB_WidthOfScreen / 7)
 
 #import "EBApplyBusController.h"
@@ -146,7 +145,7 @@
             cell.textLabel.textColor = [UIColor grayColor];
             cell.userInteractionEnabled = NO;
         } else if (statusInt == -2) {
-            cell.textLabel.backgroundColor = Cell_FullBackgroundColor;
+            cell.textLabel.backgroundColor = Cell_AppliedBackgroundColor;
             cell.userInteractionEnabled = NO;
         }
     }
@@ -181,10 +180,11 @@
             i ++;
         }
     }
-    
+#if DEBUG
     for (NSString *obj in self.selectDates) {
         EBLog(@"%@",obj);
     }
+#endif
 }
 - (void)dateChooseClick:(UIButton *)sender {
     if (sender.tag == 3) {
@@ -249,7 +249,7 @@
     CGRect colorF = CGRectMake(colorX, colorY, colorW, colorH);
     EBColorView *colorView = [[EBColorView alloc] init];
     NSArray *titles = @[@"可选",@"已选",@"已申请",@"不可申请"];
-    NSArray *colors = @[[UIColor whiteColor], EB_RGBColor(98, 173, 252), EB_RGBColor(230, 146, 35), EB_RGBColor(241, 241, 241)];
+    NSArray *colors = @[[UIColor whiteColor], EB_RGBColor(98, 173, 252), Cell_AppliedBackgroundColor, Cell_UnableBackgroundColor];
     [colorView addSubViewTitles:titles colors:colors];
     colorView.frame = colorF;
     colorView.backgroundColor = [UIColor whiteColor];

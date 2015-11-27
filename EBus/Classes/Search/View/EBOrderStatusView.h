@@ -11,7 +11,7 @@
 
 @interface EBOrderStatusView : UIView
 
-@property (nonatomic, strong) EBOrderDetailModel *orderModel;
+//@property (nonatomic, strong) EBOrderDetailModel *orderModel;
 @property (nonatomic, strong) EBOrderSpecificModel *specificModel;
 + (instancetype)orderStatusViewFromXib;
 @end

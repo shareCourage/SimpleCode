@@ -108,8 +108,11 @@ int base64_encode( unsigned char *dst, int *dlen,
 
         *p++ = '=';
     }
-
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "Wshorten-64-to-32"
     *dlen = p - dst;
+#pragma clang diagnostic pop
+
     *p = 0;
 
     return( 0 );

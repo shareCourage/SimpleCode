@@ -40,7 +40,7 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     for (EBMyOrderTableView *tableView in self.tableViews) {
-        [tableView myOrderRequestAndTableViewReloadData];
+        [tableView myOrderTableViewDidAppear];
     }
 }
 
@@ -96,21 +96,21 @@
 - (void)segClick:(UISegmentedControl *)sender {
     CGPoint offset = CGPointMake(sender.selectedSegmentIndex * EB_WidthOfScreen, 0);
     [self.tableScrollView setContentOffset:offset animated:YES];
-    [self tableViewReloadData:sender.selectedSegmentIndex];
+//    [self tableViewReloadData:sender.selectedSegmentIndex];
 }
 
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     NSUInteger index = (NSUInteger)scrollView.contentOffset.x / EB_WidthOfScreen;
     self.segControl.selectedSegmentIndex = index;
-    [self tableViewReloadData:index];
+//    [self tableViewReloadData:index];
 }
 
 - (void)tableViewReloadData:(NSUInteger)index {
     if (index >= self.tableViews.count) return;
     EBMyOrderTableView *tableView = self.tableViews[index];
     if (!tableView.isRefreshed) {
-        [tableView myOrderRequestAndTableViewReloadData];
+        [tableView xl_tableViewRefresh];
     }
 }
 #pragma mark - EBMyOrderTableViewDelegate

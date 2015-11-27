@@ -121,6 +121,7 @@ static NSString *static_Argument_status         = @"status";
 static NSString *static_Argument_perName        = @"perName";
 static NSString *static_Argument_identityNo     = @"identityNo";
 static NSString *static_Argument_certType       = @"certType";
+static NSString *static_Argument_pageNo         = @"pageNo";
 
 static NSString *static_Argument_certificateStatus  = @"certificateStatus";
 static NSString *static_Argument_certificateType    = @"certificateType";

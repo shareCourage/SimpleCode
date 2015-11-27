@@ -17,7 +17,7 @@ typedef  NS_ENUM(NSUInteger, EBTimeChooseViewClickType) {
 @protocol EBTimeChooseViewDelegate <NSObject>
 
 @optional
-- (void)timeChooseView:(EBTimeChooseView *)pickerView didClickType:(EBTimeChooseViewClickType)type;
+- (void)timeChooseView:(EBTimeChooseView *)pickerView didClickType:(EBTimeChooseViewClickType)type time:(NSString *)time;
 - (void)timeChooseView:(EBTimeChooseView *)pickerView didSelectTime:(NSString *)time;
 
 @end

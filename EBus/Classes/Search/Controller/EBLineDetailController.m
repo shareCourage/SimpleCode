@@ -58,7 +58,10 @@
         self.lineMapView.lineDetailM = model;
         return;
     }
-    NSDictionary *parameters = @{static_Argument_lineId : self.resultModel.lineId};
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    if (self.resultModel.lineId) {
+        [parameters setObject:self.resultModel.lineId forKey:static_Argument_lineId];
+    }
     [EBNetworkRequest GET:static_Url_LineDetail parameters:parameters dictBlock:^(NSDictionary *dict) {
         NSString *code = dict[static_Argument_returnCode];
         if ([code integerValue] == 500) {

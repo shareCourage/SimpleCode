@@ -45,7 +45,10 @@
 - (NSDate *)firstDayOfCurrentMonth
 {
     NSDate *startDate = nil;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-variable"
     BOOL ok = [[NSCalendar currentCalendar] rangeOfUnit:NSMonthCalendarUnit startDate:&startDate interval:NULL forDate:self];
+#pragma clang diagnostic pop
     NSAssert1(ok, @"Failed to calculate the first day of the month based on %@", self);
     return startDate;
 }

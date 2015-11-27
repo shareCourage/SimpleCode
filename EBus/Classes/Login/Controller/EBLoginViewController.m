@@ -101,6 +101,7 @@
 }
 
 - (void)tipClick {
+    EBLog(@"%@",NSStringFromSelector(_cmd));
     [self.view endEditing:YES];
 }
 - (void)viewDidAppear:(BOOL)animated {

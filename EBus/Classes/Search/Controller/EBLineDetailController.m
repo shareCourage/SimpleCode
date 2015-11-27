@@ -35,8 +35,8 @@
     self.tableView.allowsSelection = NO;
     self.lineMapView = lineMap;
     
-    NSString *documents = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
-    self.filePath = [documents stringByAppendingPathComponent:[NSString stringWithFormat:@"%@lineId.arc",self.resultModel.lineId]];
+    self.filePath = [[EBTool filePathOfLineId] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@lineId.arc",self.resultModel.lineId]];
+    EBLog(@"filePath-> %@",self.filePath);
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -58,13 +58,24 @@
         self.lineMapView.lineDetailM = model;
         return;
     }
-    EB_WS(ws);
     NSDictionary *parameters = @{static_Argument_lineId : self.resultModel.lineId};
     [EBNetworkRequest GET:static_Url_LineDetail parameters:parameters dictBlock:^(NSDictionary *dict) {
-        NSDictionary *returnData = dict[static_Argument_returnData];
-        EBLineDetailModel *lineDetail = [[EBLineDetailModel alloc] initWithDict:returnData];
-        [NSKeyedArchiver archiveRootObject:lineDetail toFile:ws.filePath];
-        ws.lineMapView.lineDetailM = lineDetail;
+        NSString *code = dict[static_Argument_returnCode];
+        if ([code integerValue] == 500) {
+            NSDictionary *returnData = dict[static_Argument_returnData];
+            EBLineDetailModel *lineDetail = [[EBLineDetailModel alloc] initWithDict:returnData];
+            BOOL value = [NSKeyedArchiver archiveRootObject:lineDetail toFile:self.filePath];
+            if (value) {
+                EBLog(@"NSKeyedArchiver -> success");
+            } else {
+                EBLog(@"NSKeyedArchiver -> failure");
+            }
+            self.lineMapView.lineDetailM = lineDetail;
+        } else {
+            [MBProgressHUD showError:@"线路不存在" toView:self.view];
+            self.lineMapView.lineDetailM = nil;
+        }
+        
     } errorBlock:^(NSError *error) {
         
     }];

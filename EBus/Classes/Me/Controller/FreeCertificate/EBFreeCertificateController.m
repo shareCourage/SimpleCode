@@ -235,7 +235,7 @@
         NSNumber *status = returnData[static_Argument_certificateStatus];
         NSInteger statusIn = [status integerValue];
 #if DEBUG
-//        statusIn = 0;
+//        statusIn = 2;
 #endif
         if (statusIn == 0) {//未认证
             [self settingTopAndBottomView:statusIn animation:NO];
@@ -260,12 +260,13 @@
 }
 - (void)uploadUserInformation {
     if ([self canCommit]) {
-        [MBProgressHUD showMessage:@"玩命上传中..." toView:self.view];
+        [MBProgressHUD showMessage:@"上传中..." toView:self.view];
         NSData *zjData = UIImageJPEGRepresentation(self.zjImage, 1.f);
         NSData *sfzData = UIImageJPEGRepresentation(self.sfzImage, 1.f);
+        NSString *nameUTF8 = [self.sfzView.nameTF.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *parameters = @{static_Argument_customerId   : [EBUserInfo sharedEBUserInfo].loginId,
                                      static_Argument_customerName : [EBUserInfo sharedEBUserInfo].loginName,
-                                     static_Argument_perName      : self.sfzView.nameTF.text,
+                                     static_Argument_perName      : nameUTF8,
                                      static_Argument_identityNo   : self.sfzView.sfzTF.text,
                                      static_Argument_certType     : @(self.zjType)};
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];

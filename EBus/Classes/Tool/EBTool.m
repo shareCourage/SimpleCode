@@ -162,6 +162,34 @@
     return mutableArray;
 }
 
++ (BOOL)deleteUsualLineFile {
+    return [EBTool deleteFilePath:[EBTool usualLineFilePath]];
+}
+
++ (BOOL)deleteLindIdFile {
+    return [EBTool deleteFilePath:[EBTool filePathOfLineId]];
+}
+
++ (BOOL)deleteFilePath:(NSString *)filePath {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if ([fileManager fileExistsAtPath:filePath]) {
+        return [fileManager removeItemAtPath:filePath error:nil];
+    }
+    return NO;
+}
+
++ (NSString *)filePathOfLineId {
+    NSString *documents = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+    NSString *lineIdPath = [documents stringByAppendingPathComponent:@"lineId"];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL isDir = NO;
+    BOOL existed = [fileManager fileExistsAtPath:lineIdPath isDirectory:&isDir];
+    if (!(isDir == YES && existed == YES)) {
+        [fileManager createDirectoryAtPath:lineIdPath withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    return lineIdPath;
+}
+
 + (NSString *)usualLineFilePath {
     NSString *documents = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
     return [documents stringByAppendingPathComponent:@"usualLine.arc"];
@@ -391,6 +419,15 @@
     }
     return YES;
 }
+
++ (BOOL)isTheSameColor2:(UIColor*)color1 anotherColor:(UIColor*)color2 {
+    if (CGColorEqualToColor(color1.CGColor, color2.CGColor)) {
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
 @end
 
 

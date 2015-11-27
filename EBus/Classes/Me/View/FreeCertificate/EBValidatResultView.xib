@@ -11,8 +11,8 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="审核结果：恭喜您，认证通过！" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TxM-oZ-ydH">
-                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="审核结果：恭喜您，认证通过！" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TxM-oZ-ydH">
+                    <rect key="frame" x="50" y="0.0" width="550" height="600"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
@@ -38,7 +38,7 @@
                                 <constraint firstAttribute="height" constant="40" id="pwM-fu-oOd"/>
                             </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <state key="normal" title="返回">
+                            <state key="normal" title="重新上传">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -64,7 +64,7 @@
                 <constraint firstAttribute="trailing" secondItem="Bcz-NN-ZRd" secondAttribute="trailing" id="X0r-JX-9pF"/>
                 <constraint firstItem="Bcz-NN-ZRd" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="cpO-dM-GH8"/>
                 <constraint firstItem="Bcz-NN-ZRd" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="p1K-o4-wqk"/>
-                <constraint firstItem="TxM-oZ-ydH" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="pTt-89-ANq"/>
+                <constraint firstItem="TxM-oZ-ydH" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="50" id="pTt-89-ANq"/>
             </constraints>
             <connections>
                 <outlet property="backBtn" destination="Oj6-XH-uPn" id="kN9-3j-kKY"/>

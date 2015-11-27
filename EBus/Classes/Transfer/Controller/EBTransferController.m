@@ -200,7 +200,11 @@
         EBTicketViewController *tVC = [[EBTicketViewController alloc] init];
         tVC.transferModel = self.transferModel;
         [self.navigationController pushViewController:tVC animated:YES];
+        [self issueTicketRequest];
+    } else if (type == EBTicketTypeOfWaiting) {
+        [MBProgressHUD showError:@"乘车前30分钟方可出票" toView:self.view];
     }
+    
 }
 
 @end

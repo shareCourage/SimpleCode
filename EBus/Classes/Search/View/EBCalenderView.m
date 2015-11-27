@@ -231,17 +231,20 @@
     [self addSubview:bottomView];
     
     CGFloat colorX = 0;
-    CGFloat colorY = 0;
+    CGFloat colorY = 5;
     CGFloat colorW = width;
-    CGFloat colorH = 30;
+    CGFloat colorH = 15;
     CGRect colorF = CGRectMake(colorX, colorY, colorW, colorH);
-    EBColorView *colorView = [EBColorView colorViewFromXib];
+    EBColorView *colorView = [[EBColorView alloc] init];
+    NSArray *titles = @[@"可选",@"已满",@"已选",@"已购",@"不可选"];
+    NSArray *colors = @[[UIColor whiteColor], [UIColor redColor], EB_RGBColor(98, 173, 252), EB_RGBColor(230, 146, 35),EB_RGBColor(241, 241, 241)];
+    [colorView addSubViewTitles:titles colors:colors];
     colorView.frame = colorF;
-    colorView.backgroundColor = [UIColor purpleColor];
+    colorView.backgroundColor = [UIColor whiteColor];
     [bottomView addSubview:colorView];
     
     CGFloat priceX = 0;
-    CGFloat priceY = colorH;
+    CGFloat priceY = CGRectGetMaxY(colorF);
     CGFloat priceW = width;
     CGFloat priceH = bottomH - btnH - colorH - 10;
     CGRect priceF = CGRectMake(priceX, priceY, priceW, priceH);

@@ -42,7 +42,8 @@
     [WXApi registerApp:static_WeChat_AppID withDescription:[NSString stringWithFormat:@"eBus%@",version_eBus]];//向微信注册
     [self UMengSetUp];
     [self APServiceSetUp:launchOptions];
-    
+    application.applicationIconBadgeNumber = 0;
+
     return YES;
 }
 
@@ -126,6 +127,7 @@
         EBLog(@"10分钟后被干掉");
         EBLog(@"=======================================");
         EBLog(@"=======================================");
+        [EBTool deleteLindIdFile];
     }];
 }
 

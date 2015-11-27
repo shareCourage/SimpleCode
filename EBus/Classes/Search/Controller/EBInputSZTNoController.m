@@ -8,7 +8,7 @@
 
 #import "EBInputSZTNoController.h"
 
-@interface EBInputSZTNoController ()
+@interface EBInputSZTNoController ()<UITextFieldDelegate>
 
 @property (nonatomic, copy)void (^completion)(NSString *value);
 
@@ -76,6 +76,7 @@
     }
     
     UITextField *textField = [[UITextField alloc] initWithFrame:cell.contentView.frame];
+    textField.delegate = self;
     textField.placeholder = @"请输入9位深圳通卡号";
     textField.clearButtonMode = UITextFieldViewModeWhileEditing;
     textField.leftViewMode = UITextFieldViewModeAlways;
@@ -85,5 +86,11 @@
     return cell;
 }
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (range.location >= 9)
+        return NO; // return NO to not change text
+    return YES;
+}
 
 @end

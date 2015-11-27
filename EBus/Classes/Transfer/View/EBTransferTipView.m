@@ -44,7 +44,7 @@
 - (void)linkStart {
     if (!self.displayLink) {
         self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(tick)];
-        [self.displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+        [self.displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
     }
 }
 
@@ -59,29 +59,69 @@
 
 - (void)setTransferModel:(EBTransferModel *)transferModel {
     _transferModel = transferModel;
-    NSInteger payType = [transferModel.payType integerValue];
+    NSInteger status = [transferModel.status integerValue];
 #if DEBUG
-//    payType = 2;
+    //    status = 2;
 #else
 #endif
-    if (payType == 3) {
-        self.backgroundColor = EB_RGBColor(234, 234, 234);
+    if (status == 2) {
+        self.backgroundColor = [[UIColor greenColor] colorWithAlphaComponent:0.8f];
+        for (UILabel *label in self.subviews) {
+            label.textColor = EB_RGBColor(77, 85, 103);
+        }
+        self.payL.text = @"已支付";
+    } else {
+        self.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0.6f];
         self.carNumL.textColor = EB_RGBColor(77, 85, 103);
         self.hmsL.textColor = EB_RGBColor(77, 85, 103);
         self.ymdL.textColor = EB_RGBColor(77, 85, 103);
-        self.payL.textColor = EB_RGBColor(228, 156, 69);
+        self.payL.textColor = EB_RGBColor(77, 85, 103);
         self.payL.text = @"未支付";
-    } else {
-        self.backgroundColor = EB_RGBColor(228, 156, 69);
-        for (UILabel *label in self.subviews) {
-            label.textColor = [UIColor whiteColor];
-        }
-        self.secL.textColor = EB_RGBColor(41, 61, 7);
-        self.payL.text = @"已支付";
     }
     self.carNumL.text = transferModel.vehCode ? transferModel.vehCode : transferModel.lineName;
     self.ymdL.text = transferModel.runDate;
     [self linkStart];
 }
 
+#if 0
+- (void)setTransferModel:(EBTransferModel *)transferModel {
+    _transferModel = transferModel;
+    NSInteger payType = [transferModel.payType integerValue];
+    NSInteger status = [transferModel.status integerValue];
+#if DEBUG
+//    payType = 2;
+#else
+#endif
+    if (status == 2) {
+        
+    }
+    if (payType == 3) {
+//        self.backgroundColor = EB_RGBColor(234, 234, 234);
+        self.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0.6f];
+        self.carNumL.textColor = EB_RGBColor(77, 85, 103);
+        self.hmsL.textColor = EB_RGBColor(77, 85, 103);
+        self.ymdL.textColor = EB_RGBColor(77, 85, 103);
+        self.payL.textColor = EB_RGBColor(77, 85, 103);
+//        self.payL.textColor = EB_RGBColor(228, 156, 69);
+        self.payL.text = @"未支付";
+    } else {
+        self.backgroundColor = [[UIColor greenColor] colorWithAlphaComponent:0.8f];
+        for (UILabel *label in self.subviews) {
+            label.textColor = EB_RGBColor(77, 85, 103);
+        }
+        self.payL.text = @"已支付";
+#if 0
+        self.backgroundColor = EB_RGBColor(228, 156, 69);
+        for (UILabel *label in self.subviews) {
+            label.textColor = [UIColor whiteColor];
+        }
+        self.secL.textColor = EB_RGBColor(41, 61, 7);
+        self.payL.text = @"已支付";
+#endif
+    }
+    self.carNumL.text = transferModel.vehCode ? transferModel.vehCode : transferModel.lineName;
+    self.ymdL.text = transferModel.runDate;
+    [self linkStart];
+}
+#endif
 @end

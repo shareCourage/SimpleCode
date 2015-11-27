@@ -13,7 +13,9 @@
 
 @property (nonatomic, strong) IBOutletCollection(UIButton) NSArray *suggestBtns;
 @property (weak, nonatomic) IBOutlet UIButton *commitBtn;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *commitBottomLayout;
 @property (weak, nonatomic) IBOutlet UITextView *suggestTextView;
+@property (weak, nonatomic) IBOutlet UIView *inputBackView;
 - (IBAction)commitClick:(id)sender;
 @property (nonatomic, strong) NSArray *btnTitles;
 @property (nonatomic, strong) NSMutableArray *types;
@@ -22,6 +24,9 @@
 @end
 
 @implementation EBSuggestController
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 - (NSMutableArray *)types {
     if (!_types) {
         _types = [NSMutableArray array];
@@ -31,6 +36,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    if (EB_HeightOfScreen <= 480) {
+        self.commitBottomLayout.constant = 10;
+    }
     self.navigationItem.title = @"建议";
     self.btnTitles = @[@"线路优化",@"功能操作",@"司乘服务",@"车辆配置",@"费用/订单",@"其他"];
     self.commitBtn.layer.cornerRadius = self.commitBtn.frame.size.height / 2;
@@ -58,7 +66,30 @@
     self.suggestTextView.keyboardType = UIKeyboardTypeDefault;
     
     [self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapClick)]];
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center addObserver:self selector:@selector(keyBoardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [center addObserver:self selector:@selector(keyBoardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
+- (void)keyBoardWillShow:(NSNotification *)sender
+{
+    CGFloat heightFromBottom = EB_HeightOfScreen - CGRectGetMaxY(self.inputBackView.frame);
+    NSDictionary *userInfo = sender.userInfo;
+    NSValue *frameValue = userInfo[@"UIKeyboardFrameEndUserInfoKey"];
+    CGSize keyboardSize = [frameValue CGRectValue].size;
+    CGFloat value = keyboardSize.height - heightFromBottom;
+    CGFloat height = 0;
+    if (value > 0) height = value;
+    [UIView animateWithDuration:0.3f animations:^{
+        self.view.bounds = CGRectMake(0, height, self.view.width, self.view.height);
+    }];
+}
+- (void)keyBoardWillHide:(NSNotification *)sender
+{
+    [UIView animateWithDuration:0.3f animations:^{
+        self.view.bounds = CGRectMake(0, 0, self.view.width, self.view.height);
+    }];
+}
+
 - (void)btnClick:(UIButton *)sender {
     if (sender != self.selectedBtn) {
         sender.selected = !sender.isSelected;
@@ -87,7 +118,11 @@
     } else {
         textString = self.suggestTextView.text;
     }
-    NSString *unicodeStr = [NSString stringWithCString:[textString UTF8String] encoding:NSUnicodeStringEncoding];
+//    textString = @" 请 输入您的宝贵意见见请输入您的宝贵意见见请输入您的宝贵意见见请输入您的宝贵意见见请输入您的宝贵意见见请输入您的宝贵意见见请输入您的宝贵意";
+    NSString *stringWithOutSpace = [textString stringByReplacingOccurrencesOfString:@" " withString:@""];
+//    NSUInteger length = stringWithOutSpace.length;
+    NSString *unicodeStr = [stringWithOutSpace stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+
     for (UIButton *btn in self.suggestBtns) {
         if (btn.isSelected) {
             switch (btn.tag) {
@@ -124,6 +159,7 @@
             string = [string stringByAppendingString:@","];
         }
     }
+    
     NSDictionary *parameters = @{static_Argument_customerId : [EBUserInfo sharedEBUserInfo].loginId,
                                  static_Argument_customerName : [EBUserInfo sharedEBUserInfo].loginName,
                                  static_Argument_content : unicodeStr,

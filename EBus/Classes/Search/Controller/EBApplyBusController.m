@@ -243,13 +243,16 @@
     self.calenderView = calender;
     
     CGFloat colorX = 0;
-    CGFloat colorY = CGRectGetMaxY(calender.frame);
+    CGFloat colorY = CGRectGetMaxY(calender.frame) + 10;
     CGFloat colorW = width;
-    CGFloat colorH = 25;
+    CGFloat colorH = 15;
     CGRect colorF = CGRectMake(colorX, colorY, colorW, colorH);
-    EBColorView *colorView = [EBColorView colorViewFromXib];
+    EBColorView *colorView = [[EBColorView alloc] init];
+    NSArray *titles = @[@"可选",@"已选",@"已申请",@"不可申请"];
+    NSArray *colors = @[[UIColor whiteColor], EB_RGBColor(98, 173, 252), EB_RGBColor(230, 146, 35), EB_RGBColor(241, 241, 241)];
+    [colorView addSubViewTitles:titles colors:colors];
     colorView.frame = colorF;
-    colorView.backgroundColor = [UIColor purpleColor];
+    colorView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:colorView];
     
 #if 1 //需求暂时被搁置,将这个view隐藏起来

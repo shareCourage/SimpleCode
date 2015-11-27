@@ -39,6 +39,7 @@
 + (BOOL)encoderObjectArray:(NSMutableArray *)memberArray path:(NSString *)filePath;
 + (NSMutableArray *)decoderObjectPath:(NSString *)filePath;
 
++ (NSString *)filePathOfLineId;
 /*
  常用路线保存的路径
  */
@@ -51,6 +52,12 @@
  *从本地获取常用路线
  */
 + (NSMutableArray *)usualLineArrayFromLocal;
+/*
+ *删除常用路线
+ */
++ (BOOL)deleteUsualLineFile;
++ (BOOL)deleteLindIdFile;
++ (BOOL)deleteFilePath:(NSString *)filePath;
 /*
  *保存该模型到本地
  */
@@ -94,4 +101,5 @@
 + (BOOL)allOutDate:(NSArray *)sales startTime:(NSString *)startTime;
 + (NSString *)stringFromPHCalenderDay:(PHCalenderDay *)currentDay;
 + (NSString *)stringFromPHCalenderDay:(PHCalenderDay *)currentDay space:(NSString *)space;
++ (BOOL)isTheSameColor2:(UIColor*)color1 anotherColor:(UIColor*)color2;
 @end

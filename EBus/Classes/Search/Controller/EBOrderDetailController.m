@@ -192,6 +192,39 @@
     self.orderStatusView = orderV;
 }
 
+#if 0 //这串代码用来测试
+- (void)eb_displayDifferentBtn:(UIView *)btnView height:(CGFloat)bvH {
+    if (self.canFromMyOrder) {//来自我的订单页面cell的点击
+        NSArray *secondLists = self.specificModel.secondList;
+        BOOL manyDates = NO;
+        if (secondLists.count > 1) {
+            manyDates = YES;
+        }
+        EBSecondList *seclMF = [secondLists firstObject];
+        NSInteger payStatus = [self.specificModel.status integerValue];//支付状态
+        NSInteger payType = [self.specificModel.payType integerValue];
+        if (payType == 1 || payType == 2) {//微信或者支付宝支付
+            if (payStatus == 0) {//未支付
+                
+            } else if (payStatus == 2) {//已经支付
+                
+            } else if (payStatus == 3 || payStatus == 1 || payStatus == 4) {//已退票,已取消,退款中
+                [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
+            }
+        } else if (payType == 3 || payType == 4) {//深圳通或者免费证件支付
+            if (payStatus == 0) {//未支付
+                
+            } else if (payStatus == 2) {//已经支付
+                
+            } else if (payStatus == 3 || payStatus == 1 || payStatus == 4) {//已退票,已取消,退款中
+                [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
+            }
+        }
+    } else {//来自购票页面不成功时候的跳转
+        [self bottomHaveTwoButtonImplentation:btnView height:bvH];
+    }
+}
+#endif
 /*
  *逻辑太复杂，我自己都无奈了
  1、对支付方式要判断；
@@ -238,9 +271,20 @@
                     BOOL value = [EBTool allOutDate:sales startTime:startTime];
                     if (value) {//全部都过期了
                         [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
-                    } else {
-                        NSArray *titles = @[@"退票", @"续订"];
-                        [self bottomViewTwoButton:titles selector:@selector(orderAgainClick:) btnView:btnView height:bvH];//生成续订button + 退款按钮
+                    } else { //找到未过期的那张票，然后判断他的状态如何
+                        NSArray *secondLists = self.specificModel.secondList;
+                        NSInteger index = 0;
+                        for (EBSecondList *seclM in secondLists) {
+                            if ([EBTool isWaitingWithDate:seclM.runDate startTime:seclM.startTime]) break;
+                            index ++;
+                        }
+                        EBSecondList *seclM = secondLists[index];
+                        if ([seclM.status integerValue] == 2) {
+                            NSArray *titles = @[@"退票", @"续订"];
+                            [self bottomViewTwoButton:titles selector:@selector(orderAgainClick:) btnView:btnView height:bvH];//生成续订button + 退款按钮
+                        } else {
+                            [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
+                        }
                     }
                 } else {//只有一天
                     if ([EBTool isWaitingWithDate:runDate startTime:startTime]) {
@@ -250,11 +294,7 @@
                         [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
                     }
                 }
-            } else if (payStatus == 3) {//已退票
-                [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
-            } else if (payStatus == 1) {//已取消
-                [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
-            } else if (payStatus == 4) {//退款中
+            } else if (payStatus == 3 || payStatus == 1 || payStatus == 4) {//已退票,已取消,退款中
                 [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
             }
         } else if (payType == 3 || payType == 4) {//深圳通或者免费证件支付
@@ -280,9 +320,20 @@
                     BOOL value = [EBTool allOutDate:sales startTime:startTime];
                     if (value) {//全部都过期了
                         [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
-                    } else {
-                        NSArray *titles = @[@"退票", @"续订"];
-                        [self bottomViewTwoButton:titles selector:@selector(orderAgainClick:) btnView:btnView height:bvH];//生成续订button + 退款按钮
+                    } else {//找到未过期的那张票，然后判断他的状态如何
+                        NSArray *secondLists = self.specificModel.secondList;
+                        NSInteger index = 0;
+                        for (EBSecondList *seclM in secondLists) {
+                            if ([EBTool isWaitingWithDate:seclM.runDate startTime:seclM.startTime]) break;
+                            index ++;
+                        }
+                        EBSecondList *seclM = secondLists[index];
+                        if ([seclM.status integerValue] == 2) {
+                            NSArray *titles = @[@"退票", @"续订"];
+                            [self bottomViewTwoButton:titles selector:@selector(orderAgainClick:) btnView:btnView height:bvH];//生成续订button + 退款按钮
+                        } else {
+                            [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
+                        }
                     }
                 } else {//只有一天
                     if ([EBTool isWaitingWithDate:runDate startTime:startTime]) {
@@ -293,11 +344,7 @@
                     }
                 }
                 
-            } else if (payStatus == 3) {//已退票
-                [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
-            } else if (payStatus == 1) {//已取消
-                [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
-            } else if (payStatus == 4) {//退款中
+            } else if (payStatus == 3 || payStatus == 1 || payStatus == 4) {//已退票,已取消,退款中
                 [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
             }
         }

@@ -8,8 +8,10 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EBSuggestController">
             <connections>
+                <outlet property="commitBottomLayout" destination="5H9-0q-DPr" id="bJT-2a-n8z"/>
                 <outlet property="commitBtn" destination="lGN-F0-bsr" id="ZV7-bC-AyE"/>
-                <outlet property="suggestTextView" destination="y2g-FU-3Mx" id="fd6-h3-9PB"/>
+                <outlet property="inputBackView" destination="GyD-hW-Jms" id="yku-G1-iwt"/>
+                <outlet property="suggestTextView" destination="y2g-FU-3Mx" id="aPM-If-67I"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
                 <outletCollection property="suggestBtns" destination="cWE-Ln-kqy" id="idH-pr-Pfy"/>
                 <outletCollection property="suggestBtns" destination="m89-gg-FKw" id="KwE-uL-gCQ"/>
@@ -53,7 +55,7 @@
                         <constraint firstAttribute="bottom" secondItem="y2g-FU-3Mx" secondAttribute="bottom" id="ta2-9a-TO7"/>
                     </constraints>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lGN-F0-bsr" customClass="EBButton">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lGN-F0-bsr">
                     <rect key="frame" x="20" y="597" width="335" height="40"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="r6k-kd-ep8"/>
@@ -69,11 +71,11 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dbz-N3-JEw" userLabel="secondView">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cWE-Ln-kqy" customClass="EBButton">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cWE-Ln-kqy">
                                     <rect key="frame" x="0.0" y="0.0" width="188" height="50"/>
                                     <state key="normal" title="线路优化"/>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m89-gg-FKw" customClass="EBButton">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m89-gg-FKw">
                                     <rect key="frame" x="188" y="0.0" width="187" height="50"/>
                                     <state key="normal" title="功能/操作"/>
                                 </button>
@@ -94,11 +96,11 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AQB-K3-QIl" userLabel="secondView">
                             <rect key="frame" x="0.0" y="50" width="375" height="50"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wZf-9f-SC2" customClass="EBButton">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wZf-9f-SC2">
                                     <rect key="frame" x="0.0" y="0.0" width="188" height="50"/>
                                     <state key="normal" title="司机服务"/>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fcp-eK-NWj" customClass="EBButton">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fcp-eK-NWj">
                                     <rect key="frame" x="188" y="0.0" width="187" height="50"/>
                                     <state key="normal" title="车辆配置"/>
                                 </button>
@@ -119,11 +121,11 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IqX-UL-n00" userLabel="secondView">
                             <rect key="frame" x="0.0" y="100" width="375" height="50"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eAQ-FI-fjM" customClass="EBButton">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eAQ-FI-fjM">
                                     <rect key="frame" x="0.0" y="0.0" width="188" height="50"/>
                                     <state key="normal" title="订单/费用"/>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7i8-2g-RaJ" customClass="EBButton">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7i8-2g-RaJ">
                                     <rect key="frame" x="188" y="0.0" width="187" height="50"/>
                                     <state key="normal" title="其它"/>
                                 </button>

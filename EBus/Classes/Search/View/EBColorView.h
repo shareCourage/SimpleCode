@@ -10,8 +10,6 @@
 
 @interface EBColorView : UIView
 
-+ (instancetype)colorViewFromXib;
-
-
+- (void)addSubViewTitles:(NSArray *)titles colors:(NSArray *)colors;
 
 @end

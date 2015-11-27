@@ -47,6 +47,9 @@
     self.tableView.header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [ws refresh];
     }];
+    self.tableView.footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+        
+    }];
     [self.tableView.header beginRefreshing];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self bottomViewImplementation];

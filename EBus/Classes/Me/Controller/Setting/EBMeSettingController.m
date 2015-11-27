@@ -179,6 +179,7 @@
         if (buttonIndex == 1) {
             [EBUserInfo sharedEBUserInfo].loginName = nil;
             [EBUserInfo sharedEBUserInfo].loginId = nil;
+            [EBUserInfo sharedEBUserInfo].sztNo = nil;
             [self loginCenter];
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];

@@ -60,6 +60,10 @@
     [self.tableView reloadData];
 }
 
+- (void)viewControllerDidBecomeActive {
+    [self usualLineSavedNotification];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"查询";

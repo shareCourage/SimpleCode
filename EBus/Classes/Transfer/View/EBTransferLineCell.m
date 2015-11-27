@@ -98,7 +98,7 @@
     }];
 }
 
-- (void)outClick {
+- (void)outClick {//出票按钮
     EBLog(@"outClick");
     if ([self.delegate respondsToSelector:@selector(transferLineOutTicktet:transerModel:type:)]) {
         EBTransferModel *model = (EBTransferModel *)self.model;
@@ -111,8 +111,8 @@
     if ([model isKindOfClass:[EBTransferModel class]]) {
         EBTransferModel *tranferModel = (EBTransferModel *)model;
 #if DEBUG
-//        tranferModel.runDate = @"2015-11-25";
-//        tranferModel.startTime = @"1820";
+//        tranferModel.runDate = @"2015-11-26";
+//        tranferModel.startTime = @"1210";
 #else
 #endif
         [self setupUI:tranferModel];
@@ -174,7 +174,11 @@
 
 
 - (void)setupData:(EBTransferModel *)orderModel {
-    self.priceL.text = [NSString stringWithFormat:@"￥%.1f元",[orderModel.originalPrice floatValue]];
+    if ([orderModel.isFree boolValue]) {
+        self.priceL.text = @"￥0.0元";
+    } else {
+        self.priceL.text = [NSString stringWithFormat:@"￥%.1f元",[orderModel.tradePrice floatValue]];
+    }
 }
 
 - (void)setType:(EBTicketType)type {
@@ -183,140 +187,35 @@
     if (self.type == EBTicketTypeOfOut) {
         self.ticketDisplayBtn.enabled = YES;
         [self.ticketDisplayBtn setTitle:@"出票" forState:UIControlStateNormal];
-        self.tipL.textColor = [UIColor lightGrayColor];
         [self.ticketDisplayBtn setBackgroundColor:EB_RGBColor(155, 194, 80)];
-        if (tranferModel.vehCode) {
+        if (tranferModel.vehCode.length != 0) {
             self.tipL.text = [NSString stringWithFormat:@"%@",tranferModel.vehCode];
+            self.tipL.textColor = [UIColor lightGrayColor];
+        } else {
+            self.tipL.text = nil;
         }
     } else if (self.type == EBTicketTypeOfWaiting) {
-        self.ticketDisplayBtn.enabled = NO;
-        [self.ticketDisplayBtn setTitle:tranferModel.vehCode forState:UIControlStateNormal];
-        self.tipL.textColor = [[UIColor redColor] colorWithAlphaComponent:0.7f];
-        self.ticketDisplayBtn.backgroundColor = [UIColor whiteColor];
-        [self.ticketDisplayBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-    } else if (self.type == EBTicketTypeOfTimeOut){
-        [self.ticketDisplayBtn setTitle:@"超时" forState:UIControlStateNormal];
-        [self.ticketDisplayBtn setBackgroundColor:[UIColor lightGrayColor]];
-        self.ticketDisplayBtn.enabled = NO;
-    }
-}
-
-
-
-
-
-#if 0
-- (void)outClick {
-    EBLog(@"outClick");
-    if ([self.delegate respondsToSelector:@selector(transferLineOutTicktet:transerModel:type:)]) {
-        EBTransferModel *model = (EBTransferModel *)self.model;
-        [self.delegate transferLineOutTicktet:self transerModel:model type:self.type];
-    }
-    if (self.type == EBTicketTypeOfOut) {
-        self.type = EBTicketTypeOfCheckLine;
-    } else if (self.type == EBTicketTypeOfCheckLine) {
-        self.type = EBTicketTypeOfOut;
-    }
-}
-
-- (void)setModel:(EBBaseModel *)model {
-    [super setModel:model];
-    if ([model isKindOfClass:[EBTransferModel class]]) {
-        EBTransferModel *tranferModel = (EBTransferModel *)model;
-#if DEBUG
-        tranferModel.runDate = @"2015-11-25";
-        tranferModel.startTime = @"1620";
-#else
-#endif
-        [self setupUI:tranferModel];
-        [self setupData:tranferModel];
-    }
-}
-
-- (void)setupUI:(EBTransferModel *)tranferModel {
-    NSArray *array = [NSArray seprateString:tranferModel.runDate characterSet:@"-"];
-    if (array.count != 3) return;
-    NSString *dayStr = [array lastObject];
-    NSString *hourMinute = [tranferModel.startTime insertSymbolString:@":" atIndex:2];
-    NSArray *array2 = [hourMinute componentsSeparatedByString:@":"];
-    if (array2.count != 2) return;
-    NSString *hourStr = [array2 firstObject];
-    NSString *minuteStr = [array2 lastObject];
-    NSInteger day = [dayStr integerValue];
-    NSInteger hour = [hourStr integerValue];
-    NSInteger minute = [minuteStr integerValue];//08:40
-    if ([EBTool currentDay] <= day) {
-        if ([EBTool currentDay] == day) {
-            if ([EBTool currentHour] <= hour) {
-                if ([EBTool currentHour] == hour) {
-                    if ([EBTool currentMinute] <= minute) {
-                        //在没有超时的情况下，才存在判断的可能
-                        if ( (minute - [EBTool currentMinute]) <= 30) {
-                            self.type = EBTicketTypeOfOut;//出票
-                        } else {
-                            self.type = EBTicketTypeOfWaiting;
-                        }
-                    } else {
-                        self.type = EBTicketTypeOfTimeOut;
-                    }
-                } else if ([EBTool currentHour] == hour - 1) {//8:20
-                    if (minute >= 30) {
-                        self.type = EBTicketTypeOfWaiting;
-                    } else {
-                        NSInteger time = 60 - [EBTool currentMinute];
-                        if ((time + minute) <= 30) {
-                            self.type = EBTicketTypeOfOut;
-                        } else {
-                            self.type = EBTicketTypeOfWaiting;
-                        }
-                    }
-                } else {
-                    self.type = EBTicketTypeOfWaiting;
-                }
-            } else {
-                self.type = EBTicketTypeOfTimeOut;
-            }
+        if (tranferModel.vehCode.length != 0) {
+            self.ticketDisplayBtn.enabled = NO;
+            [self.ticketDisplayBtn setTitle:tranferModel.vehCode forState:UIControlStateNormal];
+            self.ticketDisplayBtn.backgroundColor = [UIColor whiteColor];
+            [self.ticketDisplayBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+            self.tipL.text = @"乘车前30分钟可出票";
+            self.tipL.textColor = [[UIColor redColor] colorWithAlphaComponent:0.7f];
         } else {
-            self.type = EBTicketTypeOfWaiting;
+            self.ticketDisplayBtn.enabled = YES;
+            [self.ticketDisplayBtn setTitle:@"待出票" forState:UIControlStateNormal];
+            [self.ticketDisplayBtn setBackgroundColor:EB_RGBColor(155, 194, 80)];
+            [self.ticketDisplayBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            self.tipL.text = nil;
         }
         
-    } else {
-        self.type = EBTicketTypeOfTimeOut;
-    }
-}
-
-
-- (void)setupData:(EBTransferModel *)orderModel {
-    self.priceL.text = [NSString stringWithFormat:@"￥%.1f元",[orderModel.originalPrice floatValue]];
-}
-
-- (void)setType:(EBTicketType)type {
-    _type = type;
-    EBTransferModel *tranferModel = (EBTransferModel *)self.model;
-    if (self.type == EBTicketTypeOfOut) {
-        self.ticketDisplayBtn.enabled = YES;
-        [self.ticketDisplayBtn setTitle:@"出票" forState:UIControlStateNormal];
-        self.tipL.textColor = [UIColor lightGrayColor];
-        [self.ticketDisplayBtn setBackgroundColor:EB_RGBColor(155, 194, 80)];
-        if (tranferModel.vehCode) {
-            self.tipL.text = [NSString stringWithFormat:@"%@",tranferModel.vehCode];
-        }
-    } else if (self.type == EBTicketTypeOfWaiting) {
-        self.ticketDisplayBtn.enabled = NO;
-        [self.ticketDisplayBtn setTitle:tranferModel.vehCode forState:UIControlStateNormal];
-        self.tipL.textColor = [[UIColor redColor] colorWithAlphaComponent:0.7f];
-        self.ticketDisplayBtn.backgroundColor = [UIColor whiteColor];
-        [self.ticketDisplayBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-    } else if (self.type == EBTicketTypeOfCheckLine) {
-        self.ticketDisplayBtn.enabled = YES;
-        [self.ticketDisplayBtn setTitle:@"查看路线" forState:UIControlStateNormal];
-        [self.ticketDisplayBtn setBackgroundColor:EB_RGBColor(155, 194, 80)];
     } else if (self.type == EBTicketTypeOfTimeOut){
         [self.ticketDisplayBtn setTitle:@"超时" forState:UIControlStateNormal];
         [self.ticketDisplayBtn setBackgroundColor:[UIColor lightGrayColor]];
         self.ticketDisplayBtn.enabled = NO;
     }
 }
-#endif
+
 
 @end

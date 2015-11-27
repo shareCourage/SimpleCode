@@ -13,7 +13,7 @@
 #import "PHCalenderDay.h"
 #import "EBUserInfo.h"
 
-@interface EBSZTBookController ()
+@interface EBSZTBookController () <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *modifyBtn;
 - (IBAction)modifyClick:(id)sender;
@@ -28,9 +28,7 @@
 @end
 
 @implementation EBSZTBookController
-- (void)dealloc {
-    EBLog(@"%@ -> dealloc", NSStringFromClass([self class]));
-}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     if (self.myTitle.length != 0) {
@@ -78,6 +76,7 @@
     if (EB_iOS(8.0)) {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"请输入深圳通卡号" message:nil preferredStyle:UIAlertControllerStyleAlert];
         [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+            textField.delegate = self;
             textField.placeholder = @"请输入9位深圳通卡号";
             textField.keyboardType = UIKeyboardTypeNumberPad;
             textField.clearButtonMode = UITextFieldViewModeWhileEditing;
@@ -85,6 +84,7 @@
         [alertController addAction:[self actionWithTitle:@"取消" actionStyle:UIAlertActionStyleCancel handler:nil]];
         [alertController addAction:[self actionWithTitle:@"确定" actionStyle:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             UITextField *textF =  [alertController.textFields firstObject];
+            textF.delegate = self;
             if (textF.text.length < 9) {
                 [MBProgressHUD showError:@"卡号不为9位数,请重新输入" toView:self.view];
             } else if (textF.text.length > 9) {
@@ -185,6 +185,13 @@
     }];
 }
 
+#pragma mark - UITextFieldDelegate
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (range.location >= 9)
+        return NO; // return NO to not change text
+    return YES;
+}
 @end
 
 

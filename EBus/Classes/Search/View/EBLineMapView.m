@@ -81,6 +81,7 @@
 }
 - (void)setLineDetailM:(EBLineDetailModel *)lineDetailM {
     _lineDetailM = lineDetailM;
+    if (!lineDetailM) [self.buyBtn setBackgroundColor:[UIColor grayColor]];
     NSUInteger openType = [lineDetailM.openType integerValue];
     [self addAnnotationOnLngLat:lineDetailM.onLngLat onStations:lineDetailM.onStations onFjIds:lineDetailM.onFjIds];
     [self addAnnotationOffLngLat:lineDetailM.offLngLat offStations:lineDetailM.offStations offFjIds:lineDetailM.offFjIds];

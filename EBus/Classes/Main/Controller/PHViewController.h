@@ -23,4 +23,6 @@
 
 - (void)viewControllerWillResignActive;
 
+@property (nonatomic, assign, getter = isAppearRefresh) BOOL appearRefresh;
+
 @end

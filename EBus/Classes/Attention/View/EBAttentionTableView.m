@@ -5,7 +5,6 @@
 //  Created by Kowloon on 15/10/28.
 //  Copyright © 2015年 Goome. All rights reserved.
 //
-
 #import "EBAttentionTableView.h"
 #import <MJRefresh/MJRefresh.h>
 #import "EBUsualLineCell.h"
@@ -18,10 +17,11 @@
 #import "EBSponsorModel.h"
 
 @interface EBAttentionTableView () <UITableViewDataSource, UITableViewDelegate>
-
+{
+    NSUInteger _pageNumber;
+}
 @property (nonatomic, weak) UITableView *tableView;
 @property (nonatomic, weak) UIImageView *backgroundImageView;
-@property (nonatomic, strong) NSDictionary *parameters;
 
 @property (nonatomic, strong) NSMutableArray *dataSource;
 
@@ -36,21 +36,11 @@
     return _dataSource;
 }
 
-- (NSDictionary *)parameters {
-    if (self.tag == EBAttentionTypePurchase) {
-        _parameters = @{static_Argument_userId          : [EBUserInfo sharedEBUserInfo].loginId,
-                        static_Argument_userName        : [EBUserInfo sharedEBUserInfo].loginName};
-    } else {
-        _parameters = @{static_Argument_customerId      : [EBUserInfo sharedEBUserInfo].loginId,
-                        static_Argument_customerName    : [EBUserInfo sharedEBUserInfo].loginName};
-    }
-    return _parameters;
-}
-
 #pragma mark - Super
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
+        _pageNumber = 1;
         self.backgroundColor = [UIColor whiteColor];
         UITableView *tableView = [[UITableView alloc] initWithFrame:frame style:UITableViewStylePlain];
         tableView.delegate = self;
@@ -59,14 +49,30 @@
         [self addSubview:tableView];
         EB_WS(ws);
         tableView.header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-            [ws tableViewRefresh];
+            _pageNumber = 1;
+            [ws xl_tableViewRefresh];
         }];
+        tableView.footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+            _pageNumber ++;
+            [ws sl_tableViewRefresh];
+        }];
+        tableView.footer.hidden = YES;
         self.tableView = tableView;
         UIImageView *backgroundImageView = [EBTool backgroundImageView];
         tableView.backgroundView = backgroundImageView;
         self.backgroundImageView = backgroundImageView;
     }
     return self;
+}
+
+- (void)attentionTableViewDidAppear {
+    _pageNumber = 1;
+    [self xl_tableViewRefresh];
+    [self.tableView scrollsToTop];
+}
+
+- (void)attentionTableViewDidDisAppear {
+    
 }
 
 - (void)layoutSubviews {
@@ -76,12 +82,26 @@
 #pragma mark - Public Method
 - (void)beginRefresh {
     [self.tableView.header beginRefreshing];
-    self.refresh = YES;
 }
 
 #pragma mark - Private Method
-- (void)tableViewRefresh {
-    [self attentionRequestAndTableViewReloadData];
+- (void)xl_tableViewRefresh {//下拉
+    if ([EBTool loginEnable]) {
+        [self xl_request:[self urlOfRefresh]];
+        self.refresh = YES;
+    } else {
+        [self.dataSource removeAllObjects];
+        [self.tableView reloadData];
+        self.backgroundImageView.hidden = NO;
+        [self.tableView.header endRefreshing];
+        self.refresh = NO;
+    }
+}
+
+- (void)sl_tableViewRefresh {//上拉
+    if ([EBTool loginEnable]) {
+        [self sl_request:[self urlOfRefresh]];
+    }
 }
 
 #pragma mark - UITableViewDataSource, UITableViewDelegate
@@ -96,8 +116,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (self.tag == EBAttentionTypePurchase) {
-        EBUsualLineCell *cell = [EBUsualLineCell cellWithTableView:tableView];
-        cell.showBuyView = NO;
+        EBAttentionCell *cell = [EBAttentionCell cellWithTableView:tableView];
         EBBoughtModel *bought = self.dataSource[indexPath.row];
         cell.model = bought;
         return cell;
@@ -146,111 +165,124 @@
 }
 
 #pragma mark - Network Request
-- (void)attentionRequestAndTableViewReloadData {
-    if ([EBTool loginEnable]) {
-        switch (self.tag) {
-            case EBAttentionTypePurchase:
-                [self boughtRequest];
-                break;
-            case EBAttentionTypeSign:
-                [self signRequest];
-                break;
-            case EBAttentionTypeGroup:
-                [self groupRequest];
-                break;
-            case EBAttentionTypeSponsor:
-                [self sponsorRequest];
-                break;
-            default:
-                break;
+- (void)xl_request:(NSString *)url {
+    if (!url) {
+        [self.tableView.header endRefreshing];
+        return;
+    }
+    [EBNetworkRequest GET:url parameters:[self parametersOfRefresh] dictBlock:^(NSDictionary *dict) {
+        EBLog(@"%@", dict);
+        [self.tableView.header endRefreshing];
+        [self.dataSource removeAllObjects];
+        NSArray *array = dict[static_Argument_returnData];
+        for (NSDictionary *dict in array) {
+            if (self.tag == EBAttentionTypePurchase) {
+                EBBoughtModel *bought = [[EBBoughtModel alloc] initWithDict:dict];
+                [self.dataSource addObject:bought];
+            } else if (self.tag == EBAttentionTypeSign) {
+                EBSignModel *bought = [[EBSignModel alloc] initWithDict:dict];
+                [self.dataSource addObject:bought];
+            } else if (self.tag == EBAttentionTypeGroup) {
+                EBGroupModel *bought = [[EBGroupModel alloc] initWithDict:dict];
+                [self.dataSource addObject:bought];
+            } else if (self.tag == EBAttentionTypeSponsor) {
+                EBSponsorModel *bought = [[EBSponsorModel alloc] initWithDict:dict];
+                [self.dataSource addObject:bought];
+            }
+        }
+        if (self.dataSource.count == 0) {
+            self.tableView.footer.hidden = YES;
+            self.backgroundImageView.hidden = NO;
+        } else {
+            if (self.dataSource.count >= EB_pageSize) {
+                self.tableView.footer.hidden = NO;
+            }
+            self.backgroundImageView.hidden = YES;
+        }
+        [self.tableView reloadData];
+    } errorBlock:^(NSError *error) {
+        [self.tableView.header endRefreshing];
+    }];
+}
+
+- (void)sl_request:(NSString *)url {
+    if (!url) {
+        [self.tableView.footer endRefreshing];
+        return;
+    }
+    [EBNetworkRequest GET:url parameters:[self parametersOfRefresh] dictBlock:^(NSDictionary *dict) {
+        EBLog(@"%@", dict);
+        [self.tableView.footer endRefreshing];
+        NSArray *array = dict[static_Argument_returnData];
+        if (array.count == 0) {
+            return;
+        }
+        for (NSDictionary *dict in array) {
+            if (self.tag == EBAttentionTypePurchase) {
+                EBBoughtModel *bought = [[EBBoughtModel alloc] initWithDict:dict];
+                [self.dataSource addObject:bought];
+            } else if (self.tag == EBAttentionTypeSign) {
+                EBSignModel *bought = [[EBSignModel alloc] initWithDict:dict];
+                [self.dataSource addObject:bought];
+            } else if (self.tag == EBAttentionTypeGroup) {
+                EBGroupModel *bought = [[EBGroupModel alloc] initWithDict:dict];
+                [self.dataSource addObject:bought];
+            } else if (self.tag == EBAttentionTypeSponsor) {
+                EBSponsorModel *bought = [[EBSponsorModel alloc] initWithDict:dict];
+                [self.dataSource addObject:bought];
+            }
+        }
+        if (self.dataSource.count == 0) {
+            self.backgroundImageView.hidden = NO;
+        } else {
+            self.backgroundImageView.hidden = YES;
+        }
+        [self.tableView reloadData];
+    } errorBlock:^(NSError *error) {
+        [self.tableView.footer endRefreshing];
+    }];
+}
+
+
+- (NSString *)urlOfRefresh {
+    NSString *url = nil;
+    switch (self.tag) {
+        case EBAttentionTypePurchase:
+            url = static_Url_AttentionOfBought;
+            break;
+        case EBAttentionTypeSign:
+            url = static_Url_AttentionOfSign;
+            break;
+        case EBAttentionTypeGroup:
+            url = static_Url_AttentionOfGroup;
+            break;
+        case EBAttentionTypeSponsor:
+            url = static_Url_AttentionOfSponsor;
+            break;
+        default:
+            break;
+    }
+    return url;
+}
+- (NSDictionary *)parametersOfRefresh {
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    if (self.tag == EBAttentionTypePurchase) {
+        if ([EBUserInfo sharedEBUserInfo].loginName) {
+            [parameters setObject:[EBUserInfo sharedEBUserInfo].loginName forKey:static_Argument_userName];
+        }
+        if ([EBUserInfo sharedEBUserInfo].loginId) {
+            [parameters setObject:[EBUserInfo sharedEBUserInfo].loginId forKey:static_Argument_userId];
         }
     } else {
-        [self.dataSource removeAllObjects];
-        [self.tableView reloadData];
-        self.backgroundImageView.hidden = NO;
-        [self.tableView.header endRefreshing];
+        if ([EBUserInfo sharedEBUserInfo].loginName) {
+            [parameters setObject:[EBUserInfo sharedEBUserInfo].loginName forKey:static_Argument_customerName];
+        }
+        if ([EBUserInfo sharedEBUserInfo].loginId) {
+            [parameters setObject:[EBUserInfo sharedEBUserInfo].loginId forKey:static_Argument_customerId];
+        }
     }
+    [parameters setObject:@(_pageNumber) forKey:static_Argument_pageNo];
+    [parameters setObject:@(EB_pageSize) forKey:static_Argument_pageSize];
+    return parameters;
 }
-
-- (void)boughtRequest {
-    [EBNetworkRequest GET:static_Url_AttentionOfBought parameters:self.parameters dictBlock:^(NSDictionary *dict) {
-        EBLog(@"%@", dict);
-        [self.tableView.header endRefreshing];
-        [self.dataSource removeAllObjects];
-        NSArray *array = dict[static_Argument_returnData];
-        for (NSDictionary *dict in array) {
-            EBBoughtModel *bought = [[EBBoughtModel alloc] initWithDict:dict];
-            [self.dataSource addObject:bought];
-        }
-        if (self.dataSource.count == 0) {
-            self.backgroundImageView.hidden = NO;
-        } else {
-            self.backgroundImageView.hidden = YES;
-        }
-        [self.tableView reloadData];
-    } errorBlock:^(NSError *error) {
-        [self.tableView.header endRefreshing];
-    }];
-}
-- (void)signRequest {
-    [EBNetworkRequest GET:static_Url_AttentionOfSign parameters:self.parameters dictBlock:^(NSDictionary *dict) {
-        EBLog(@"%@", dict);
-        [self.tableView.header endRefreshing];
-        [self.dataSource removeAllObjects];
-        NSArray *array = dict[static_Argument_returnData];
-        for (NSDictionary *dict in array) {
-            EBSignModel *bought = [[EBSignModel alloc] initWithDict:dict];
-            [self.dataSource addObject:bought];
-        }
-        if (self.dataSource.count == 0) {
-            self.backgroundImageView.hidden = NO;
-        } else {
-            self.backgroundImageView.hidden = YES;
-        }
-        [self.tableView reloadData];
-    } errorBlock:^(NSError *error) {
-        [self.tableView.header endRefreshing];
-    }];
-}
-- (void)groupRequest {
-    [EBNetworkRequest GET:static_Url_AttentionOfGroup parameters:self.parameters dictBlock:^(NSDictionary *dict) {
-        EBLog(@"%@", dict);
-        [self.tableView.header endRefreshing];
-        [self.dataSource removeAllObjects];
-        NSArray *array = dict[static_Argument_returnData];
-        for (NSDictionary *dict in array) {
-            EBGroupModel *bought = [[EBGroupModel alloc] initWithDict:dict];
-            [self.dataSource addObject:bought];
-        }
-        if (self.dataSource.count == 0) {
-            self.backgroundImageView.hidden = NO;
-        } else {
-            self.backgroundImageView.hidden = YES;
-        }
-        [self.tableView reloadData];
-    } errorBlock:^(NSError *error) {
-        [self.tableView.header endRefreshing];
-    }];
-}
-- (void)sponsorRequest {
-    [EBNetworkRequest GET:static_Url_AttentionOfSponsor parameters:self.parameters dictBlock:^(NSDictionary *dict) {
-        EBLog(@"%@", dict);
-        [self.tableView.header endRefreshing];
-        [self.dataSource removeAllObjects];
-        NSArray *array = dict[static_Argument_returnData];
-        for (NSDictionary *dict in array) {
-            EBSponsorModel *bought = [[EBSponsorModel alloc] initWithDict:dict];
-            [self.dataSource addObject:bought];
-        }
-        if (self.dataSource.count == 0) {
-            self.backgroundImageView.hidden = NO;
-        } else {
-            self.backgroundImageView.hidden = YES;
-        }
-        [self.tableView reloadData];
-    } errorBlock:^(NSError *error) {
-        [self.tableView.header endRefreshing];
-    }];
-}
-
 @end

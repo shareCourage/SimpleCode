@@ -40,6 +40,8 @@ typedef  NS_ENUM(NSUInteger, EBAttentionType) {
 /*
  *刷新数据，但没有下拉效果
  */
-- (void)attentionRequestAndTableViewReloadData;
+- (void)xl_tableViewRefresh;
 
+- (void)attentionTableViewDidAppear;
+- (void)attentionTableViewDidDisAppear;
 @end

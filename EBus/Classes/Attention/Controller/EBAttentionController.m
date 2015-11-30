@@ -43,36 +43,40 @@
     [self.titleView selectIndex:titleSelectIndex];
 }
 
+- (void)awakeFromNib {
+    EBLog(@"%@",NSStringFromClass([self class]));
+}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"关注";
     [self titleViewImplementation];
     [self scrollViewImplementation];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(logoutNotificationCenter) name:EBLogoutSuccessNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginNotificationCenter) name:EBLoginSuccessNotification object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    if ([EBTool loginEnable]) {
-        for (EBAttentionTableView *tableView in self.tableViews) {
-            [tableView attentionRequestAndTableViewReloadData];
+    if (self.isAppearRefresh) {
+        if ([EBTool loginEnable]) {
+            for (EBAttentionTableView *tableView in self.tableViews) {
+                [tableView attentionTableViewDidAppear];
+            }
         }
     }
+    [super viewDidAppear:animated];
 }
 
 - (void)logoutNotificationCenter {
     for (EBAttentionTableView *tableView in self.tableViews) {
-        [tableView attentionRequestAndTableViewReloadData];
-        tableView.refresh = NO;
+        [tableView xl_tableViewRefresh];
     }
 }
 
 - (void)loginNotificationCenter {
     EBAttentionTableView *tableView = [self.tableViews firstObject];
-    [tableView attentionRequestAndTableViewReloadData];
-    tableView.refresh = YES;
+    [tableView xl_tableViewRefresh];
 }
 
 - (void)scrollViewImplementation {
@@ -119,7 +123,7 @@
     NSArray *titleImages = @[@"Attention_buy",@"Attention_register",@"Attention_group",@"Attention_sponsor"];
     NSArray *titleImagesSel = @[@"Attention_buyHL",@"Attention_registerHL",@"Attention_groupHL",@"Attention_sponsorHL"];
     // 2.添加对应个数的按钮
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < titleImages.count; i++) {
         NSString *name = titleImages[i];
         NSString *selName = titleImagesSel[i];
         [titleView addTitleButtonWithName:name selName:selName];
@@ -127,90 +131,50 @@
     [titleView selectIndex:self.titleSelectIndex];
 }
 
-- (void)tableViewReloadData:(NSUInteger)index {
-    if (index >= self.tableViews.count) return;
-    EBAttentionTableView *tableView = self.tableViews[index];
-    if (!tableView.isRefreshed) {
-        if ([EBTool loginEnable]) {
-            [tableView attentionRequestAndTableViewReloadData];
-        }
-    }
-}
 
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     NSUInteger index = (NSUInteger)scrollView.contentOffset.x / EB_WidthOfScreen;
     [self.titleView selectIndex:index];
-    [self tableViewReloadData:index];
 }
 
 #pragma mark - EBAttentionTitleViewDelegate
 - (void)titleView:(EBAttentionTitleView *)titleView didSelectButtonFrom:(NSUInteger)from to:(NSUInteger)to {
     EBLog(@"from %ld , to %ld",(unsigned long)from, (unsigned long)to);
     [self.tableScrollView setContentOffset:CGPointMake(to * EB_WidthOfScreen, 0) animated:YES];
-    [self tableViewReloadData:to];
 }
 
 #pragma mark - EBAttentionTableViewDelegate
 - (void)eb_tableView:(EBAttentionTableView *)tableView didSelectOfTypePurchase:(EBBoughtModel *)bough {
-    [self pushToLineDetailController:[self searchResultModel:bough]];
+    NSInteger status = [bough.status integerValue];
+    if (status == 5) {
+        [self pushToLineDetailController:[self searchResultModel:bough]];
+    } else if (status == 6) {
+        [MBProgressHUD showError:@"线路已撤销,详细请咨询客服!" toView:self.view];
+    } else if (status == 8) {
+        [MBProgressHUD showError:@"线路已终止,详细请咨询客服!" toView:self.view];
+    }
 }
 
 - (void)eb_tableView:(EBAttentionTableView *)tableView didSelectOfTypeSign:(EBSignModel *)sign {
-    NSInteger change = [sign.changeStatus integerValue];
-    if (change == 1) {
-        [self pushToLineDetailController:[self searchResultModel:sign]];
-    } else if (change == 2) {
-        EBSearchResultController *result = [[EBSearchResultController alloc] init];
-        CGFloat onLat = [sign.onLat doubleValue];
-        CGFloat onLng = [sign.onLng doubleValue];
-        CGFloat offLat = [sign.offLat doubleValue];
-        CGFloat offLng = [sign.offLng doubleValue];
-        CLLocationCoordinate2D onCoord = CLLocationCoordinate2DMake(onLat, onLng);
-        CLLocationCoordinate2D offCoord = CLLocationCoordinate2DMake(offLat, offLng);
-        result.myPositionCoord = onCoord;
-        result.endPositionCoord = offCoord;
-        [self.navigationController pushViewController:result animated:YES];
-    } else if (change == 3) {
-        [MBProgressHUD showError:@"线路已撤销,详细请咨询客服!" toView:self.view];
-    } else if (change == 4) {
-        [MBProgressHUD showError:@"线路已终止,详细请咨询客服!" toView:self.view];
-    }
-
+    [self executeAction:sign];
 }
 - (void)eb_tableView:(EBAttentionTableView *)tableView didSelectOfTypeGroup:(EBGroupModel *)group {
-    NSInteger change = [group.changeStatus integerValue];
-    if (change == 1) {
-        [self pushToLineDetailController:[self searchResultModel:group]];
-    } else if (change == 2) {
-        EBSearchResultController *result = [[EBSearchResultController alloc] init];
-        CGFloat onLat = [group.onLat doubleValue];
-        CGFloat onLng = [group.onLng doubleValue];
-        CGFloat offLat = [group.offLat doubleValue];
-        CGFloat offLng = [group.offLng doubleValue];
-        CLLocationCoordinate2D onCoord = CLLocationCoordinate2DMake(onLat, onLng);
-        CLLocationCoordinate2D offCoord = CLLocationCoordinate2DMake(offLat, offLng);
-        result.myPositionCoord = onCoord;
-        result.endPositionCoord = offCoord;
-        [self.navigationController pushViewController:result animated:YES];
-    } else if (change == 3) {
-        [MBProgressHUD showError:@"线路已撤销,详细请咨询客服!" toView:self.view];
-    } else if (change == 4) {
-        [MBProgressHUD showError:@"线路已终止,详细请咨询客服!" toView:self.view];
-    }
+    [self executeAction:group];
 }
-
 - (void)eb_tableView:(EBAttentionTableView *)tableView didSelectOfTypeSponsor:(EBSponsorModel *)sponsor {
-    
-    NSInteger change = [sponsor.changeStatus integerValue];
+    [self executeAction:sponsor];
+}
+- (void)executeAction:(EBAttentionModel *)attenModel {
+    NSInteger change = [attenModel.changeStatus integerValue];
     if (change == 1) {
-        [self pushToLineDetailController:[self searchResultModel:sponsor]];
+        [self pushToLineDetailController:[self searchResultModel:attenModel]];
     } else if (change == 2) {
         EBSearchResultController *result = [[EBSearchResultController alloc] init];
-        CGFloat onLat = [sponsor.onLat doubleValue];
-        CGFloat onLng = [sponsor.onLng doubleValue];
-        CGFloat offLat = [sponsor.offLat doubleValue];
-        CGFloat offLng = [sponsor.offLng doubleValue];
+        CGFloat onLat = [attenModel.onLat doubleValue];
+        CGFloat onLng = [attenModel.onLng doubleValue];
+        CGFloat offLat = [attenModel.offLat doubleValue];
+        CGFloat offLng = [attenModel.offLng doubleValue];
         CLLocationCoordinate2D onCoord = CLLocationCoordinate2DMake(onLat, onLng);
         CLLocationCoordinate2D offCoord = CLLocationCoordinate2DMake(offLat, offLng);
         result.myPositionCoord = onCoord;
@@ -266,6 +230,7 @@
 
 - (void)pushToLineDetailController:(EBSearchResultModel *)resultModel {
     EBLineDetailController *lineDetail = [[EBLineDetailController alloc] init];
+    self.appearRefresh = NO;
     lineDetail.resultModel = resultModel;
     [self.navigationController pushViewController:lineDetail animated:YES];
 }

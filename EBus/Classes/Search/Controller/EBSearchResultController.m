@@ -146,6 +146,7 @@
         }
     }
     [parameters setObject:@(_pageNumber) forKey:static_Argument_pageNo];
+    [parameters setObject:@(EB_pageSize) forKey:static_Argument_pageSize];
     return parameters;
 }
 
@@ -181,7 +182,7 @@
             self.tableView.footer.hidden = YES;
             self.backgroundImageView.hidden = NO;
         } else {
-            if (self.dataSource.count >= 20) {
+            if (self.dataSource.count >= EB_pageSize) {
                 self.tableView.footer.hidden = NO;
             }
             self.backgroundImageView.hidden = YES;
@@ -239,6 +240,7 @@
 }
 
 - (void)pushToLineDetailController:(EBSearchResultModel *)model {
+//    [EBTool popToAttentionControllWithIndex:2 controller:self];//测试
     EBLineDetailController *detail = [[EBLineDetailController alloc] init];
     detail.resultModel = model;
     [self.navigationController pushViewController:detail animated:YES];

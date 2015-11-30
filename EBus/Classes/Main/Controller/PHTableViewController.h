@@ -17,4 +17,6 @@
 
 //默认为YES
 @property (nonatomic, assign) BOOL backgroundImageViewDisappear;
+@property (nonatomic, assign, getter = isAppearRefresh) BOOL appearRefresh;
+
 @end

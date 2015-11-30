@@ -84,7 +84,7 @@
     
 }
 #pragma mark - Private Method
-- (void)xl_tableViewRefresh {
+- (void)xl_tableViewRefresh {//下拉刷新
     [self myOrderRequest:[self parametersOfRefresh] success:^(NSDictionary *dict) {
         [self.tableView.header endRefreshing];
         EBLog(@"%@",dict);
@@ -103,7 +103,7 @@
             self.tableView.footer.hidden = YES;
             self.backgroundImageView.hidden = NO;
         } else {
-            if (self.dataSource.count >= 20) {
+            if (self.dataSource.count >= EB_pageSize) {
                 self.tableView.footer.hidden = NO;
             }
             self.backgroundImageView.hidden = YES;
@@ -114,7 +114,7 @@
     }];
 }
 
-- (void)sl_tableViewRefresh {
+- (void)sl_tableViewRefresh {//上拉刷新
     [self myOrderRequest:[self parametersOfRefresh] success:^(NSDictionary *dict) {
         [self.tableView.footer endRefreshing];
         NSArray *data = dict[static_Argument_returnData];
@@ -159,6 +159,8 @@
     }
     [parameters setObject:payStatus forKey:static_Argument_payStatus];
     [parameters setObject:@(_pageNumber) forKey:static_Argument_pageNo];
+    [parameters setObject:@(EB_pageSize) forKey:static_Argument_pageSize];
+
     return parameters;
 }
 

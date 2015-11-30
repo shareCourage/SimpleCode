@@ -198,8 +198,6 @@
                           value:EB_RGBColor(135, 135, 135)
                           range:NSMakeRange(0, 5)];
     self.totalDistanceL.attributedText = AttributedStr1;
-
-
 }
 
 @end

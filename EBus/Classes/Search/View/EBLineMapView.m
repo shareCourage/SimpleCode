@@ -30,12 +30,15 @@
 }
 @property (nonatomic, weak) UIView *bottomView;
 @property (nonatomic, weak) UIButton *buyBtn;
-@property (nonatomic, weak) UIImageView *leftDragView;
+
 @property (nonatomic, weak) EBLineStationView *stationView;
+
+@property (nonatomic, weak) UIImageView *leftImageView;
+@property (nonatomic, weak) UIImageView *rightImageView;
+@property (nonatomic, weak) UIView *leftDragView;
+
 @property (nonatomic, weak) UIView *leftView;
 
-@property (nonatomic, strong) UIImage *leftDragImage;
-@property (nonatomic, strong) UIImage *rightDragImage;
 @property (nonatomic, strong) AMapSearchAPI *searchPOI;
 
 @end
@@ -47,20 +50,6 @@
         _searchPOI.delegate = self;
     }
     return _searchPOI;
-}
-
-
-- (UIImage *)leftDragImage {
-    if (!_leftDragImage) {
-        _leftDragImage = [UIImage imageNamed:@"search_drag_left"];
-    }
-    return _leftDragImage;
-}
-- (UIImage *)rightDragImage {
-    if (!_rightDragImage) {
-        _rightDragImage = [UIImage imageNamed:@"search_drag_right"];
-    }
-    return _rightDragImage;
 }
 
 - (void)setResultModel:(EBSearchResultModel *)resultModel {
@@ -162,6 +151,7 @@
     self.bottomView = bottom;
     self.buyBtn = buy;
 }
+
 - (void)leftViewImplementation {
     UIView *left = [[UIView alloc] init];
     left.backgroundColor = [UIColor clearColor];
@@ -171,22 +161,31 @@
     [left addSubview:stationView];
     self.stationView = stationView;
     
-    UIImageView *leftDrag = [[UIImageView alloc] init];
-    leftDrag.contentMode = UIViewContentModeScaleAspectFit;
-    leftDrag.userInteractionEnabled = YES;
-    leftDrag.image = self.rightDragImage;
+    UIView *leftDragView = [[UIView alloc] init];
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)];
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureRecognized:)];
     tap.numberOfTapsRequired = 1;
-    [leftDrag addGestureRecognizer:pan];
-    [leftDrag addGestureRecognizer:tap];
-    [left addSubview:leftDrag];
-    self.leftDragView = leftDrag;
+    [leftDragView addGestureRecognizer:pan];
+    [leftDragView addGestureRecognizer:tap];
+    [left addSubview:leftDragView];
+    self.leftDragView = leftDragView;
+    
+    UIImageView *leftImageView = [[UIImageView alloc] init];
+    leftImageView.image = [UIImage imageNamed:@"search_drag_right"];
+    leftImageView.contentMode = UIViewContentModeScaleAspectFit;
+    [leftDragView addSubview:leftImageView];
+    self.leftImageView = leftImageView;
+    
+    UIImageView *rightImageView = [[UIImageView alloc] init];
+    rightImageView.hidden = YES;
+    rightImageView.image = [UIImage imageNamed:@"search_drag_left"];
+    rightImageView.contentMode = UIViewContentModeScaleAspectFit;
+    [leftDragView addSubview:rightImageView];
+    self.rightImageView = rightImageView;
     
     [self insertSubview:left belowSubview:self.bottomView];
     self.leftView = left;
 }
-
 #pragma mark - autoLayout
 - (void)leftViewAutoLayout {
     EB_WS(ws);
@@ -225,6 +224,21 @@
         make.bottom.equalTo(ws.leftView).with.offset(0);
         make.width.mas_equalTo(leftDragW);
     }];
+    
+    [self.leftImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(ws.leftDragView).with.offset(0);
+        make.top.equalTo(ws.leftDragView).with.offset(0);
+        make.bottom.equalTo(ws.leftDragView).with.offset(0);
+        make.left.equalTo(ws.leftDragView).with.offset(0);
+    }];
+    
+    [self.rightImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(ws.leftDragView).with.offset(0);
+        make.top.equalTo(ws.leftDragView).with.offset(0);
+        make.bottom.equalTo(ws.leftDragView).with.offset(0);
+        make.left.equalTo(ws.leftDragView).with.offset(0);
+    }];
+
 }
 
 - (void)bottomViewAutoLayout {
@@ -313,7 +327,8 @@
         self.leftView.x = 0;
     } completion:^(BOOL finished) {
         EBLog(@"leftViewXZero finished");
-//        self.leftDragView.image = self.leftDragImage;
+        self.leftImageView.hidden = YES;
+        self.rightImageView.hidden = NO;
         self.leftView.x = 0;
     }];
 }
@@ -322,7 +337,8 @@
         self.leftView.x = - EB_MaxWidthOfLineStation;
     } completion:^(BOOL finished) {
         EBLog(@"leftViewXMax finished");
-//        self.leftDragView.image = self.rightDragImage;
+        self.leftImageView.hidden = NO;
+        self.rightImageView.hidden = YES;
         self.leftView.x = - EB_MaxWidthOfLineStation;
     }];
 }

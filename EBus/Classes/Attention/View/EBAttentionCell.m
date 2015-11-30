@@ -8,6 +8,7 @@
 
 #import "EBAttentionCell.h"
 #import <Masonry/Masonry.h>
+#import "EBBoughtModel.h"
 #import "EBSignModel.h"
 #import "EBGroupModel.h"
 #import "EBSponsorModel.h"
@@ -123,6 +124,23 @@
             self.numberLabel.text = nil;
             self.followViewL.text = @"该线路已终止";
         }
+    } else if ([model isKindOfClass:[EBBoughtModel class]]) {
+        EBBoughtModel *boughtM = (EBBoughtModel *)model;
+        NSInteger status = [boughtM.status integerValue];
+        self.priceLabel.text = [NSString stringWithFormat:@"￥%@元",boughtM.price];
+        if (status == 5) {
+            self.followLabel.text = nil;
+            self.numberLabel.text = nil;
+            self.followViewL.text = nil;
+        } else if (status == 8) {
+            self.followLabel.text = nil;
+            self.numberLabel.text = nil;
+            self.followViewL.text = @"该线路已终止";
+        } else if (status == 6) {
+            self.followLabel.text = nil;
+            self.numberLabel.text = nil;
+            self.followViewL.text = @"该线路已撤销";
+        }
     }
 }
 
@@ -137,6 +155,9 @@
     } else if ([model isKindOfClass:[EBSponsorModel class]]) {
         self.priceLabel.hidden = YES;
         self.numberLabel.textColor = EB_RGBColor(147, 184, 251);
+    } else if ([model isKindOfClass:[EBBoughtModel class]]) {
+        self.priceLabel.hidden = NO;
+        self.followLabel.textColor = EB_RGBColor(236, 173, 56);
     }
 }
 

@@ -36,6 +36,7 @@
 #define EB_WidthOfScreen         [UIScreen mainScreen].bounds.size.width
 #define EB_HeightOfScreen        [UIScreen mainScreen].bounds.size.height
 #define EB_SystemFontSize        [UIFont systemFontSize]         /* 14px */
+#define EB_pageSize              5
 
 
 #ifdef __OBJC__

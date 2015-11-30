@@ -38,10 +38,12 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    for (EBMyOrderTableView *tableView in self.tableViews) {
-        [tableView myOrderTableViewDidAppear];
+    if (self.isAppearRefresh) {
+        for (EBMyOrderTableView *tableView in self.tableViews) {
+            [tableView myOrderTableViewDidAppear];
+        }
     }
+    [super viewDidAppear:animated];
 }
 
 #pragma mark - Implementation

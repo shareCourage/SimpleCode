@@ -73,6 +73,7 @@
     if (!lineDetailM) {
         [self.buyBtn setBackgroundColor:[UIColor grayColor]];
         self.buyBtn.userInteractionEnabled = NO;
+        return;
     }
     NSUInteger openType = [lineDetailM.openType integerValue];
     [self addAnnotationOnLngLat:lineDetailM.onLngLat onStations:lineDetailM.onStations onFjIds:lineDetailM.onFjIds];
@@ -394,7 +395,7 @@
     NSArray *onLngLatArray = [NSArray seprateString:onLngLat characterSet:@";"];
     NSArray *onStationsArray = [onStations componentsSeparatedByString:@";"];//[NSArray seprateString:onStations characterSet:@";"];
     NSArray *onFjIdsArray = [NSArray seprateString:onFjIds characterSet:@";"];
-    if (onLngLatArray.count != onStationsArray.count) return;
+    if (onLngLatArray.count != onStationsArray.count || onLngLatArray.count == 0) return;
     for (int i = 0; i < onLngLatArray.count; i ++) {
         EBAnnotation *annotation = [[EBAnnotation alloc] init];
         NSString *onLngLat = onLngLatArray[i];
@@ -418,7 +419,7 @@
     NSArray *offLngLatArray = [NSArray seprateString:offLngLat characterSet:@";"];
     NSArray *offStationsArray = [offStations componentsSeparatedByString:@";"];//[NSArray seprateString:offStations characterSet:@";"];
     NSArray *offFjIdsArray = [NSArray seprateString:offFjIds characterSet:@";"];
-    if (offLngLatArray.count != offStationsArray.count) return;
+    if (offLngLatArray.count != offStationsArray.count || offLngLatArray.count == 0) return;
     NSUInteger count = offLngLatArray.count;
     for (int i = (int)count - 1; i >= 0; i --) {
         EBAnnotation *annotation = [[EBAnnotation alloc] init];
@@ -505,7 +506,7 @@
     if ([overlay isKindOfClass:[MAPolyline class]]) {
         MAPolylineRenderer *polylineRender = [[MAPolylineRenderer alloc] initWithOverlay:overlay];
         polylineRender.strokeColor = EB_LineColor;
-        polylineRender.lineWidth = 4.0;
+        polylineRender.lineWidth = EB_MapLineWidth;
         return polylineRender;
     }
     return nil;

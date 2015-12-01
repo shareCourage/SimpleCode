@@ -98,11 +98,16 @@
 - (void)setupData:(EBMyOrderModel *)orderModel {
     self.priceL.text = [NSString stringWithFormat:@"￥%@元",orderModel.originalPrice];
     NSInteger payType = [orderModel.payType integerValue];
-    NSString *typeStr = [EBTool stringFromPayType:payType];
+//    NSString *typeStr = [EBTool stringFromPayType:payType];
     if ([orderModel.status integerValue] == 2) {
-        self.payWayL.text = [NSString stringWithFormat:@"%@:实付%@元",typeStr,orderModel.tradePrice];
+//        self.payWayL.text = [NSString stringWithFormat:@"%@:实付%@元",typeStr,orderModel.tradePrice];
+        if (payType == 3 || payType == 4) {
+            self.payWayL.text = nil;
+        } else {
+            self.payWayL.text = [NSString stringWithFormat:@"实付%@元",orderModel.tradePrice];
+        }
     } else {
-        self.payWayL.text = typeStr;
+        self.payWayL.text = nil;
     }
 }
 

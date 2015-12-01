@@ -334,60 +334,20 @@
     backgroundImageView.image = image;
     return  backgroundImageView;
 }
-//与当前时间对比，30分钟以前返回YES，其它返回NO
-+ (BOOL)isWaitingWithDate:(NSString *)runDate startTime:(NSString *)startTime {
+//时间与当前时间对比，是否大于30分钟，大于返回YES，小于返回NO
++ (BOOL)eb_isWaitingWithDate:(NSString *)runDate startTime:(NSString *)startTime {
     if (!runDate || !startTime) return NO;
     BOOL value = NO;
-    NSArray *array = [NSArray seprateString:runDate characterSet:@"-"];
-    if (array.count != 3) return NO;
-    NSString *dayStr = [array lastObject];
-    NSString *hourMinute = [startTime insertSymbolString:@":" atIndex:2];
-    NSArray *array2 = [hourMinute componentsSeparatedByString:@":"];
-    if (array2.count != 2) return NO;
-    NSString *hourStr = [array2 firstObject];
-    NSString *minuteStr = [array2 lastObject];
-    NSInteger day = [dayStr integerValue];
-    NSInteger hour = [hourStr integerValue];
-    NSInteger minute = [minuteStr integerValue];//08:40
-    if ([EBTool currentDay] <= day) {
-        if ([EBTool currentDay] == day) {
-            if ([EBTool currentHour] <= hour) {
-                if ([EBTool currentHour] == hour) {
-                    if ([EBTool currentMinute] <= minute) {
-                        //在没有超时的情况下，才存在判断的可能
-                        if ( (minute - [EBTool currentMinute]) <= 30) {
-                            value = NO;//出票
-                        } else {
-                            value = YES;
-                        }
-                    } else {
-                        value = NO;
-                    }
-                } else if ([EBTool currentHour] == hour - 1) {//8:20
-                    if (minute >= 30) {
-                        value = YES;
-                    } else {
-                        NSInteger time = 60 - [EBTool currentMinute];
-                        if ((time + minute) <= 30) {
-                            value = NO;
-                        } else {
-                            value = YES;
-                        }
-                    }
-                } else {
-                    value = YES;
-                }
-            } else {
-                value = NO;
-            }
-        } else {
-            value = YES;
-        }
-        
-    } else {
-        value = NO;
+    NSString *newStartT = [startTime insertSymbolString:@":" atIndex:2];
+    NSString *timeDate = [NSString stringWithFormat:@"%@ %@",runDate, newStartT];
+    NSDate *date1 = [NSDate dateFromString:timeDate dateFormat:@"yyyy-MM-dd HH:mm"];
+    NSTimeInterval runTime = [date1 timeIntervalSince1970];//指定时间
+    NSDate *date2 = [NSDate date];
+    NSTimeInterval nowTime = [date2 timeIntervalSince1970];//当前时间
+    NSTimeInterval minus = runTime - nowTime;//当前时间减去指定时间
+    if (minus > 30 * 60) {
+        value = YES;
     }
-    
     return value;
 }
 
@@ -412,7 +372,7 @@
     if (!startTime) return NO;
     NSArray *sortArray = [sales sortedArrayUsingSelector:@selector(compare:)];//升序排序
     for (NSString *date in sortArray) {
-        BOOL value = [EBTool isWaitingWithDate:date startTime:startTime];//返回YES，说明没有过期
+        BOOL value = [EBTool eb_isWaitingWithDate:date startTime:startTime];//返回YES，说明没有过期
         if (value) {
             return NO;
         }

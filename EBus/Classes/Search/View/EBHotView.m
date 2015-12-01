@@ -10,39 +10,38 @@
 #import "EBHotLabel.h"
 
 @interface EBHotView ()
-@property (weak, nonatomic) IBOutlet UIView *bottomView;
-@property (weak, nonatomic) IBOutlet UIView *backgroundView;
-
-@property (weak, nonatomic) IBOutlet UIView *labelView;
-@property (weak, nonatomic) IBOutlet UIImageView *hotImageView;
-@property (weak, nonatomic) IBOutlet UILabel *hotZoneL;
 
 @property (nonatomic, weak) UIScrollView *scrollView;
+@property (nonatomic, weak) UILabel *hotL;
 
 @end
 
 @implementation EBHotView
 
-+ (instancetype)hotViewFromXib {
-    EBHotView *hotView = [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil] lastObject];
-    return hotView;
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        UILabel *label = [[UILabel alloc] init];
+        label.textAlignment = NSTextAlignmentLeft;
+        [label setSystemFontOf22];
+        label.text = @"热点地区";
+        [self addSubview:label];
+        self.hotL = label;
+        
+        UIScrollView *scrollView = [[UIScrollView alloc] init];
+        scrollView.alwaysBounceHorizontal = NO;
+        [self addSubview:scrollView];
+        self.scrollView = scrollView;
+    }
+    return self;
 }
 
-- (void)awakeFromNib {
-    EBLog(@"hotView -> awakeFromNib");
-    [self.bottomView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapClick)]];
-    self.backgroundView.backgroundColor = [UIColor lightGrayColor];
-    self.hotImageView.image = [UIImage imageNamed:@"search_hot"];
-    self.hotImageView.contentMode = UIViewContentModeScaleToFill;
-    self.hotZoneL.backgroundColor = [UIColor clearColor];
-    self.labelView.backgroundColor = [UIColor clearColor];
-    
-    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.labelView.width, self.labelView.height)];
-    scrollView.alwaysBounceHorizontal = NO;
-    [self.labelView addSubview:scrollView];
-    self.scrollView = scrollView;
-    
-    
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    CGFloat hotH = 35;
+    self.hotL.frame = CGRectMake(0, 0, self.width, hotH);
+    self.scrollView.frame = CGRectMake(0, hotH, self.width, self.height - hotH);
 }
 
 - (void)setHots:(NSArray *)hots {
@@ -58,7 +57,7 @@
     for (NSUInteger i = 0; i < number; i ++) {
         for (NSUInteger j = 0; j < 3; j ++) {
             EBHotLabel *hot = hots[btnTag];
-            CGFloat btnW = self.labelView.width / 3 ;
+            CGFloat btnW = self.width / 3 ;
             CGFloat btnX = j * btnW;
             CGFloat btnY = i * btnH;
             CGRect btnF = CGRectMake(btnX, btnY, btnW, btnH);
@@ -68,7 +67,7 @@
             if (btnTag >= hots.count) break;
         }
     }
-    self.scrollView.contentSize = CGSizeMake(self.scrollView.width, btnH * number + 100);
+    self.scrollView.contentSize = CGSizeMake(self.scrollView.width, btnH * number + 20);
 }
 
 
@@ -83,14 +82,9 @@
     [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     btn.tag = tag;
     [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//    [btn setBackgroundImage:[UIImage imageNamed:@"search_hLBtn_bg"] forState:UIControlStateNormal];
     btn.frame = frame;
     return btn;
-}
-
-- (void)tapClick {
-    [UIView animateWithDuration:0.5f animations:^{
-        self.hidden = YES;
-    }];
 }
 
 - (void)btnClick:(UIButton *)sender {

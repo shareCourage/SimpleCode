@@ -20,8 +20,6 @@
 
 @property (nonatomic, weak) id <EBHotViewDelegate> delegate;
 
-+ (instancetype)hotViewFromXib;
-
 @property (nonatomic, strong) NSArray *hots;
 
 @end

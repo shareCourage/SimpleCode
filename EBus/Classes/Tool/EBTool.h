@@ -94,7 +94,7 @@
 
 + (UIImageView *)backgroundImageView;
 
-+ (BOOL)isWaitingWithDate:(NSString *)runDate startTime:(NSString *)startTime;
++ (BOOL)eb_isWaitingWithDate:(NSString *)runDate startTime:(NSString *)startTime;
 /*
  *全部过期日期返回YES，其它返回NO
  */

@@ -66,6 +66,9 @@
 - (void)setSystemFontOf23 {
     self.font = [UIFont systemFontOfSize:23];
 }
+- (void)setSystemFontOfValue:(CGFloat)value {
+    self.font = [UIFont systemFontOfSize:value];
+}
 
 - (CGSize)boundingRectWithSize:(CGSize)size
 {

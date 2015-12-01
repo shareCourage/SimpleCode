@@ -168,7 +168,11 @@
 - (void)executeAction:(EBAttentionModel *)attenModel {
     NSInteger change = [attenModel.changeStatus integerValue];
     if (change == 1) {
-        [self pushToLineDetailController:[self searchResultModel:attenModel]];
+        if ([attenModel isKindOfClass:[EBSignModel class]]) {
+            [self pushToLineDetailController:[self searchResultModel:attenModel]];
+        } else {
+            [MBProgressHUD showError:@"线路未开通,详细请咨询客服!" toView:self.view];
+        }
     } else if (change == 2) {
         EBSearchResultController *result = [[EBSearchResultController alloc] init];
         CGFloat onLat = [attenModel.onLat doubleValue];

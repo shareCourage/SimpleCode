@@ -43,7 +43,7 @@
     _specificModel = specificModel;
     for (EBSecondList *secL in specificModel.secondList) {
         NSInteger payStatus = [secL.status integerValue];
-        if (payStatus == 2 && [EBTool isWaitingWithDate:secL.runDate startTime:secL.startTime]) {
+        if (payStatus == 2 && [EBTool eb_isWaitingWithDate:secL.runDate startTime:secL.startTime]) {
             [self.dataSource addObject:secL];
         }
     }

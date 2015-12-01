@@ -65,7 +65,7 @@
 }
 - (void)scrollViewImplementation {
     CGFloat scrollX = 0;
-    CGFloat scrollY = EB_HeightOfNavigationBar + 40;
+    CGFloat scrollY = EB_HeightOfNavigationBar + self.segControl.height + 2;
     CGFloat scrollW = EB_WidthOfScreen;
     CGFloat scrollH = EB_HeightOfScreen - scrollY;
     CGRect scrollF = CGRectMake(scrollX, scrollY, scrollW, scrollH);

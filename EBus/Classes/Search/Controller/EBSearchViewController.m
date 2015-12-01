@@ -17,12 +17,14 @@
 #import "EBHotLabel.h"
 #import "EBLineDetailController.h"
 #import "EBUserInfo.h"
+#import "DXPopover.h"
 
 @interface EBSearchViewController () <EBSearchBusViewDelegate, EBUsualLineCellDelegate, EBHotViewDelegate, MAMapViewDelegate>
 
 @property (nonatomic, strong) NSMutableArray *dataSource;
 @property (nonatomic, weak) EBSearchBusView *searchBusView;
-@property (nonatomic, weak) EBHotView *hotView;
+@property (nonatomic, strong) EBHotView *hotView;
+@property (nonatomic, strong) DXPopover *popover;
 @property (nonatomic, weak) MAMapView *maMapView;
 
 @property (nonatomic, assign) CLLocationCoordinate2D myPositionCoord;
@@ -44,6 +46,15 @@
     }
     return _dataSource;
 }
+
+- (DXPopover *)popover {
+    if (!_popover) {
+        _popover = [DXPopover popover];
+        _popover.backgroundColor = [UIColor orangeColor];
+    }
+    return _popover;
+}
+
 - (void)usualLineSavedNotification {
     self.dataSource = [EBTool usualLineArrayFromLocal];
     self.dataSource.count == 0 ? (self.backgroundImageViewDisappear = NO) : (self.backgroundImageViewDisappear = YES);
@@ -111,18 +122,15 @@
 }
 
 - (void)hotViewImplementation {
-    EBHotView *hotView = [EBHotView hotViewFromXib];
+    EBHotView *hotView = [[EBHotView alloc] init];
     hotView.delegate = self;
-    hotView.frame = CGRectMake(0, 0, EB_WidthOfScreen, EB_HeightOfScreen);
-    hotView.hidden = YES;
-    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    [delegate.window addSubview:hotView];
+    CGFloat hotViewH = EB_HeightOfScreen - EB_HeightOfNavigationBar - EB_HeightOfTabBar - 40;
+    hotView.frame = CGRectMake(0, 0, EB_WidthOfScreen - 10, hotViewH);
     self.hotView = hotView;
     [self hotLabelRequest];
 }
 
 - (void)hotLabelRequest {
-    EB_WS(ws);
     [EBNetworkRequest GET:static_Url_HotLabel parameters:nil dictBlock:^(NSDictionary *dict) {
         NSArray *returnData = dict[static_Argument_returnData];
         NSMutableArray *hots = [NSMutableArray array];
@@ -130,32 +138,40 @@
             EBHotLabel *hot = [[EBHotLabel alloc] initWithDict:obj];
             [hots addObject:hot];
         }
-        ws.hotView.hots = [hots copy];
+        self.hotView.hots = [hots copy];
     } errorBlock:nil indicatorVisible:NO];
 }
 
 #pragma mark - Method
 - (void)hotBtnClick {
-    [UIView animateWithDuration:0.5f animations:^{
-        self.hotView.hidden = !self.hotView.hidden;
-    } completion:^(BOOL finished) {
-        if (!self.hotView.hidden) {
-            [self.view.window bringSubviewToFront:self.hotView];
-        }
-    }];
-    if (!self.hotView.hidden) {
-        if (self.hotView.hots.count == 0) {
-            [self hotLabelRequest];
-        }
+    if (self.hotView.hots.count == 0) {
+        [self hotLabelRequest];
     }
+    [self updateHotViewFrame];
+    self.popover.contentInset = UIEdgeInsetsMake(10, 5.0, 10, 5.0);
+    CGPoint startPoint = CGPointMake(EB_WidthOfScreen - 35, 60);
+    [self.popover showAtPoint:startPoint
+               popoverPostion:DXPopoverPositionDown
+              withContentView:self.hotView
+                       inView:self.navigationController.view];
+}
+
+- (void)updateHotViewFrame {
+    CGRect hotViewFrame = self.hotView.frame;
+    hotViewFrame.size.width = EB_WidthOfScreen - 10;
+    self.hotView.frame = hotViewFrame;
+    self.popover.contentInset = UIEdgeInsetsZero;
+    self.popover.backgroundColor = [UIColor whiteColor];
 }
 #pragma mark - EBHotViewDelegate
 - (void)hotView:(EBHotView *)hotView didSelectIndex:(NSUInteger)index hotLabel:(EBHotLabel *)hotLabel{
     EBLog(@"%ld, %@",(unsigned long)index, hotLabel.name);
-    hotView.hidden = YES;
-    EBSearchResultController *result = [[EBSearchResultController alloc] init];
-    result.hotLabel = hotLabel;
-    [self.navigationController pushViewController:result animated:YES];
+    [self.popover dismiss];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        EBSearchResultController *result = [[EBSearchResultController alloc] init];
+        result.hotLabel = hotLabel;
+        [self.navigationController pushViewController:result animated:YES];
+    });
 }
 
 #pragma mark - UITableViewDelegate

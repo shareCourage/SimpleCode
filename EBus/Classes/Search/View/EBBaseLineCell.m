@@ -175,8 +175,10 @@
 - (void)setModel:(EBBaseModel *)model {
     if (!model) return;
     _model = model;
-    self.departPointL.text = model.onStationName;
-    self.endPointL.text = model.offStationName;
+    NSArray *arrayOn = [model.onStationName componentsSeparatedByString:@"（"];
+    self.departPointL.text = [arrayOn firstObject];
+    NSArray *arrayOff = [model.offStationName componentsSeparatedByString:@"（"];
+    self.endPointL.text = [arrayOff firstObject];
     self.departTimeL.text = [model.startTime insertSymbolString:@":" atIndex:2];
     
     NSString *needTimeStr = [NSString stringWithFormat:@"约%@分钟",model.needTime];

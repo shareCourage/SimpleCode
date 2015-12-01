@@ -260,7 +260,7 @@
                         [self bottomViewTwoButton:titles selector:@selector(cancelOrderAndAgain:) btnView:btnView height:bvH];//@"取消订单", @"续订"
                     }
                 } else {
-                    if ([EBTool isWaitingWithDate:runDate startTime:startTime]) {
+                    if ([EBTool eb_isWaitingWithDate:runDate startTime:startTime]) {
                         [self bottomHaveTwoButtonImplentation:btnView height:bvH];//生成支付、取消订单按钮
                     } else {
                         [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
@@ -275,7 +275,7 @@
                         NSArray *secondLists = self.specificModel.secondList;
                         NSInteger index = 0;
                         for (EBSecondList *seclM in secondLists) {
-                            if ([EBTool isWaitingWithDate:seclM.runDate startTime:seclM.startTime]) break;
+                            if ([EBTool eb_isWaitingWithDate:seclM.runDate startTime:seclM.startTime]) break;
                             index ++;
                         }
                         EBSecondList *seclM = secondLists[index];
@@ -287,7 +287,7 @@
                         }
                     }
                 } else {//只有一天
-                    if ([EBTool isWaitingWithDate:runDate startTime:startTime]) {
+                    if ([EBTool eb_isWaitingWithDate:runDate startTime:startTime]) {
                         NSArray *titles = @[@"退票", @"续订"];
                         [self bottomViewTwoButton:titles selector:@selector(orderAgainClick:) btnView:btnView height:bvH];//生成续订button + 退款按钮
                     } else {
@@ -308,7 +308,7 @@
                         [self bottomViewTwoButton:titles selector:@selector(cancelOrderAndAgain:) btnView:btnView height:bvH];//@"取消订单", @"续订"
                     }
                 } else {//只有一天
-                    if ([EBTool isWaitingWithDate:runDate startTime:startTime]) {
+                    if ([EBTool eb_isWaitingWithDate:runDate startTime:startTime]) {
                         NSArray *titles = @[@"取消订单", @"续订"];
                         [self bottomViewTwoButton:titles selector:@selector(cancelOrderAndAgain:) btnView:btnView height:bvH];//@"取消订单", @"续订"
                     } else {
@@ -324,7 +324,7 @@
                         NSArray *secondLists = self.specificModel.secondList;
                         NSInteger index = 0;
                         for (EBSecondList *seclM in secondLists) {
-                            if ([EBTool isWaitingWithDate:seclM.runDate startTime:seclM.startTime]) break;
+                            if ([EBTool eb_isWaitingWithDate:seclM.runDate startTime:seclM.startTime]) break;
                             index ++;
                         }
                         EBSecondList *seclM = secondLists[index];
@@ -336,7 +336,7 @@
                         }
                     }
                 } else {//只有一天
-                    if ([EBTool isWaitingWithDate:runDate startTime:startTime]) {
+                    if ([EBTool eb_isWaitingWithDate:runDate startTime:startTime]) {
                         NSArray *titles = @[@"退票", @"续订"];
                         [self bottomViewTwoButton:titles selector:@selector(orderAgainClick:) btnView:btnView height:bvH];//生成续订button + 退款按钮
                     } else {

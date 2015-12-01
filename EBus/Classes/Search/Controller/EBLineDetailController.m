@@ -78,7 +78,6 @@
             [MBProgressHUD showError:@"线路不存在" toView:self.view];
             self.lineMapView.lineDetailM = nil;
         }
-        
     } errorBlock:^(NSError *error) {
         
     }];

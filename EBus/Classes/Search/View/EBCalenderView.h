@@ -24,8 +24,8 @@
 @property (nonatomic, weak) IBOutlet id <EBCalenderViewDelegate>delegate;
 
 
-@property (nonatomic, strong) NSDictionary *priceAndTicket;
-- (void)reloadData;
+@property (nonatomic, strong) NSDictionary *priceAndTicket;//当月
+@property (nonatomic, strong) NSDictionary *priceAndTicketNext;//下个月
 
-
+- (void)reloadDataAtIndex:(NSUInteger)index;
 @end

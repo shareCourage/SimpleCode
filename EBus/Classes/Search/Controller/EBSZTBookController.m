@@ -120,14 +120,7 @@
 
 - (IBAction)bookClick:(id)sender {
     
-    NSArray *sortArray = [self.dates sortedArrayUsingSelector:@selector(compare:)];//升序排序
-    NSMutableArray *newDates = [NSMutableArray array];
-    PHCalenderDay *currentDay = [EBUserInfo sharedEBUserInfo].currentCalendarDay;
-    for (NSString *obj in sortArray) {
-        NSString *string = [NSString stringWithFormat:@"%ld-%02ld-%02ld",(unsigned long)currentDay.year, (unsigned long)currentDay.month, (long)[obj integerValue]];
-        [newDates addObject:string];
-    }
-    NSString *newString = [EBTool stringConnected:newDates connectString:@","];
+    NSString *newString = [EBTool stringConnected:self.dates connectString:@","];
     EBLog(@"%@",newString);
     if (newString.length != 0 && self.resultModel.lineId && self.resultModel.vehTime && self.resultModel.startTime && self.resultModel.onStationId && self.resultModel.offStationId && [EBUserInfo sharedEBUserInfo].loginId.length != 0 && [EBUserInfo sharedEBUserInfo].loginName.length != 0) {
         NSDictionary *parameters = @{static_Argument_saleDates      : newString,

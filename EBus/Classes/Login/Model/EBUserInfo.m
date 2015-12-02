@@ -25,19 +25,27 @@ singleton_implementation(EBUserInfo)
         _maMapView.showsUserLocation = YES;
         _maMapView.allowsBackgroundLocationUpdates = YES;
         _maMapView.userTrackingMode = MAUserTrackingModeFollow;
+        _currentDate = [NSDate date];
         [self reloadCurrentDate];
     }
     return self;
 }
 
+- (void)setCurrentDate:(NSDate *)currentDate {
+    _currentDate = currentDate;
+    [_daysInCurrentMonth removeAllObjects];
+    [_daysInFollowingMonth removeAllObjects];
+    [_daysInPreviousMonth removeAllObjects];
+    [self reloadCurrentDate];
+}
+
 #pragma mark - Private Method
 - (void)reloadCurrentDate
 {
-    self.currentDate = [NSDate date];
     NSDateComponents *c = [self.currentDate YMDComponents];
-    self.currentCalendarDay = [PHCalenderDay calendarDayWithYear:c.year month:c.month day:c.day];
+    _currentCalendarDay = [PHCalenderDay calendarDayWithYear:c.year month:c.month day:c.day];
     NSUInteger weeksCount = [self.currentDate numberOfWeeksInCurrentMonth];
-    self.calendarDays = [NSMutableArray arrayWithCapacity:weeksCount * 7];
+    _calendarDays = [NSMutableArray arrayWithCapacity:weeksCount * 7];
     [self calculateDaysInPreviousMonthWithDate:self.currentDate];
     [self calculateDaysInCurrentMonthWithDate:self.currentDate];
     [self calculateDaysInFollowingMonthWithDate:self.currentDate];
@@ -55,11 +63,11 @@ singleton_implementation(EBUserInfo)
     
     NSDateComponents *components = [dayInThePreviousMonth YMDComponents];
     
-    self.daysInPreviousMonth = [NSMutableArray arrayWithCapacity:partialDaysCount];
+    _daysInPreviousMonth = [NSMutableArray arrayWithCapacity:partialDaysCount];
     for (NSUInteger i = daysCount - partialDaysCount + 1; i < daysCount + 1; ++i) {
         PHCalenderDay *calendarDay = [PHCalenderDay calendarDayWithYear:components.year month:components.month day:i];
-        [self.daysInPreviousMonth addObject:calendarDay];
-        [self.calendarDays addObject:calendarDay];
+        [_daysInPreviousMonth addObject:calendarDay];
+        [_calendarDays addObject:calendarDay];
     }
 }
 
@@ -68,11 +76,11 @@ singleton_implementation(EBUserInfo)
     NSUInteger daysCount = [date numberOfDaysInCurrentMonth];
     NSDateComponents *components = [date YMDComponents];
     
-    self.daysInCurrentMonth = [NSMutableArray arrayWithCapacity:daysCount];
+    _daysInCurrentMonth = [NSMutableArray arrayWithCapacity:daysCount];
     for (int i = 1; i < daysCount + 1; ++i) {
         PHCalenderDay *calendarDay = [PHCalenderDay calendarDayWithYear:components.year month:components.month day:i];
-        [self.daysInCurrentMonth addObject:calendarDay];
-        [self.calendarDays addObject:calendarDay];
+        [_daysInCurrentMonth addObject:calendarDay];
+        [_calendarDays addObject:calendarDay];
     }
 }
 
@@ -84,11 +92,11 @@ singleton_implementation(EBUserInfo)
     NSUInteger partialDaysCount = 7 - weeklyOrdinality;
     NSDateComponents *components = [[date dayInTheFollowingMonth] YMDComponents];
     
-    self.daysInFollowingMonth = [NSMutableArray arrayWithCapacity:partialDaysCount];
+    _daysInFollowingMonth = [NSMutableArray arrayWithCapacity:partialDaysCount];
     for (int i = 1; i < partialDaysCount + 1; ++i) {
         PHCalenderDay *calendarDay = [PHCalenderDay calendarDayWithYear:components.year month:components.month day:i];
-        [self.daysInFollowingMonth addObject:calendarDay];
-        [self.calendarDays addObject:calendarDay];
+        [_daysInFollowingMonth addObject:calendarDay];
+        [_calendarDays addObject:calendarDay];
     }
 }
 

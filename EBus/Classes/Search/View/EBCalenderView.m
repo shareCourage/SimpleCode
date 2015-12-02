@@ -14,9 +14,16 @@
 #import "EBColorView.h"
 #import "EBPriceView.h"
 
-@interface EBCalenderView () <PHCalenderViewDataSource, PHCalenderViewDelegate>
+typedef NS_ENUM(NSUInteger, EBMonth) {
+    EBMonthOfCurrent = 3000,
+    EBMonthOfNext
+};
 
-@property (nonatomic, weak) PHCalenderView *calenderView;
+@interface EBCalenderView () <PHCalenderViewDataSource, PHCalenderViewDelegate, UIScrollViewDelegate>
+
+@property (nonatomic, strong) NSMutableArray *calenderViews;
+@property (nonatomic, weak) UIScrollView *calenderSV;
+@property (nonatomic, weak) UILabel *yearMonthL;
 @property (nonatomic, weak) UIView *weekView;
 @property (nonatomic, weak) EBPriceView *priceView;
 @property (nonatomic, weak) UIButton *addBusBtn;
@@ -24,6 +31,8 @@
 
 @property (nonatomic, strong) NSArray *prices;
 @property (nonatomic, strong) NSArray *tickets;
+@property (nonatomic, strong) NSArray *pricesNext;
+@property (nonatomic, strong) NSArray *ticketsNext;
 
 @property (nonatomic, strong) NSMutableArray *selectPrices;
 
@@ -31,6 +40,13 @@
 @end
 
 @implementation EBCalenderView
+- (NSMutableArray *)calenderViews {
+    if (!_calenderViews) {
+        _calenderViews = [NSMutableArray array];
+    }
+    return _calenderViews;
+}
+
 - (NSMutableArray *)selectPrices {
     if (!_selectPrices) {
         _selectPrices = [NSMutableArray array];
@@ -44,6 +60,33 @@
     NSString *ticket = priceAndTicket[@"tickets"];
     self.prices = [NSArray seprateString:price characterSet:@","];
     self.tickets = [NSArray seprateString:ticket characterSet:@","];
+    NSUInteger length = self.tickets.count;
+    if (self.tickets.count != 0) {
+        [self reloadDataAtIndex:0];
+    }
+}
+
+- (void)setPriceAndTicketNext:(NSDictionary *)priceAndTicketNext {
+    _priceAndTicketNext = priceAndTicketNext;
+    NSString *price = priceAndTicketNext[@"prices"];
+    NSString *ticket = priceAndTicketNext[@"tickets"];
+    self.pricesNext = [NSArray seprateString:price characterSet:@","];
+    self.ticketsNext = [NSArray seprateString:ticket characterSet:@","];
+    NSUInteger length = self.ticketsNext.count;
+    if (self.ticketsNext.count != 0) {
+        [self reloadDataAtIndex:1];
+    }
+}
+
+- (void)reloadDataAtIndex:(NSUInteger)index {
+    if (index >= self.calenderViews.count) return;
+    PHCalenderView *calenderView = (PHCalenderView *)self.calenderViews[index];
+    EBLog(@"reloadDataAtIndex->tag -> %@", @(calenderView.tag));
+    [calenderView reloadData];
+    [self.selectPrices removeAllObjects];
+    self.totalPrice = 0.f;
+    self.priceView.dayLabel.text = @"共0天";
+    self.priceView.priceLabel.text = @"0元";
 }
 
 #pragma mark - Super Init
@@ -70,66 +113,102 @@
     }
 }
 - (void)buyBtnClick {
+    NSArray *sortArray = [[self.selectPrices copy] sortedArrayUsingSelector:@selector(compare:)];//升序排序
     if ([self.delegate respondsToSelector:@selector(eb_calenderView:didOrder:totalPrice:)]) {
-        [self.delegate eb_calenderView:self didOrder:[self.selectPrices copy] totalPrice:self.totalPrice];
+        [self.delegate eb_calenderView:self didOrder:sortArray totalPrice:self.totalPrice];
     }
-}
-#pragma mark - Public Method
-
-- (void)reloadData {
-    [self.calenderView reloadData];
-    [self.selectPrices removeAllObjects];
-    self.totalPrice = 0.f;
-    self.priceView.dayLabel.text = @"共0天";
-    self.priceView.priceLabel.text = @"0元";
 }
 
 #pragma mark - PHCalenderViewDataSource
 
 - (NSUInteger)numberOfRowsInCalenderView:(PHCalenderView *)calenderView {
-    
+    if (calenderView.tag == EBMonthOfCurrent) {
+        [EBUserInfo sharedEBUserInfo].currentDate = [NSDate date];
+    } else if (calenderView.tag == EBMonthOfNext) {
+        [EBUserInfo sharedEBUserInfo].currentDate = [[NSDate date] dayInTheFollowingMonth];
+    }
     NSUInteger day = [[EBUserInfo sharedEBUserInfo].currentDate numberOfWeeksInCurrentMonth];
     return day;
 }
 - (PHCalenderViewCell *)calenderView:(PHCalenderView *)calenderView cellForRow:(NSUInteger)row column:(NSUInteger)column {
-    PHCalenderViewCell *cell = nil;
-    PHCalenderDay *calendarDay = [EBUserInfo sharedEBUserInfo].calendarDays[row * 7 + column];
-    BOOL first = calendarDay.month != [EBUserInfo sharedEBUserInfo].currentCalendarDay.month;
-    BOOL second = calendarDay.day < [EBUserInfo sharedEBUserInfo].currentCalendarDay.day;
-    if (first || second) {
-        cell = [[PHCalenderViewCell alloc] initWithStyle:PHCalenderViewCellStyleDefault];
-        cell.textLabel.backgroundColor = Cell_UnableBackgroundColor;
-        cell.textLabel.textColor = [UIColor grayColor];
-        cell.userInteractionEnabled = NO;
-    } else {
-        cell = [[PHCalenderViewCell alloc] initWithStyle:PHCalenderViewCellStyleUpDown];
-        cell.userInteractionEnabled = NO;
-        NSUInteger index = calendarDay.day - [EBUserInfo sharedEBUserInfo].currentCalendarDay.day;
-        [cell.detailLabel setSystemFontOf10];
-        if (index < self.tickets.count) {
-            NSString *ticket = self.tickets[index];
-            NSString *title = nil;
-            if ([ticket integerValue] == -2) {
-//                title = @"已购";
-                cell.backgroundColor = Cell_BoughtBackgroundColor;
-            } else if ([ticket integerValue] == 0) {
-                title = @"已满";
-                cell.backgroundColor = Cell_FullBackgroundColor;
-            } else if ([ticket integerValue] == -1) {
-                cell.backgroundColor = Cell_UnableBackgroundColor;
-            } else {
-                title = [NSString stringWithFormat:@"余%@",ticket];
-                cell.backgroundColor = [UIColor whiteColor];
-                cell.userInteractionEnabled = YES;
+    EBLog(@"tag -> %@", @(calenderView.tag));
+    if (calenderView.tag == EBMonthOfCurrent) {
+        PHCalenderViewCell *cell = nil;
+        PHCalenderDay *calendarDay = [EBUserInfo sharedEBUserInfo].calendarDays[row * 7 + column];
+        BOOL first = calendarDay.month != [EBUserInfo sharedEBUserInfo].currentCalendarDay.month;
+        BOOL second = calendarDay.day < [EBUserInfo sharedEBUserInfo].currentCalendarDay.day;
+        if (first || second) {
+            cell = [[PHCalenderViewCell alloc] initWithStyle:PHCalenderViewCellStyleDefault];
+            cell.textLabel.backgroundColor = Cell_UnableBackgroundColor;
+            cell.textLabel.textColor = [UIColor grayColor];
+            cell.userInteractionEnabled = NO;
+        } else {
+            cell = [[PHCalenderViewCell alloc] initWithStyle:PHCalenderViewCellStyleUpDown];
+            cell.userInteractionEnabled = NO;
+            NSUInteger index = calendarDay.day - [EBUserInfo sharedEBUserInfo].currentCalendarDay.day;
+            [cell.detailLabel setSystemFontOf10];
+            if (index < self.tickets.count) {
+                NSString *ticket = self.tickets[index];
+                NSString *title = nil;
+                if ([ticket integerValue] == -2) {
+                    //                title = @"已购";
+                    cell.backgroundColor = Cell_BoughtBackgroundColor;
+                } else if ([ticket integerValue] == 0) {
+                    title = @"已满";
+                    cell.backgroundColor = Cell_FullBackgroundColor;
+                } else if ([ticket integerValue] == -1) {
+                    cell.backgroundColor = Cell_UnableBackgroundColor;
+                } else {
+                    title = [NSString stringWithFormat:@"余%@",ticket];
+                    cell.backgroundColor = [UIColor whiteColor];
+                    cell.userInteractionEnabled = YES;
+                }
+                cell.detailLabel.text = title;
             }
-            cell.detailLabel.text = title;
         }
+        cell.textLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)calendarDay.day];
+        if ([calendarDay isEqualTo:[EBUserInfo sharedEBUserInfo].currentCalendarDay]) {
+            cell.textLabel.textColor = [UIColor colorWithRed:249.0/255 green:75.0/255 blue:0 alpha:1];
+        }
+        return cell;
+    } else if (calenderView.tag == EBMonthOfNext) {
+        PHCalenderViewCell *cell = nil;
+        PHCalenderDay *calendarDay = [EBUserInfo sharedEBUserInfo].calendarDays[row * 7 + column];
+        BOOL first = calendarDay.month != [EBUserInfo sharedEBUserInfo].currentCalendarDay.month;
+        if (first) {
+            cell = [[PHCalenderViewCell alloc] initWithStyle:PHCalenderViewCellStyleDefault];
+            cell.textLabel.backgroundColor = Cell_UnableBackgroundColor;
+            cell.textLabel.textColor = [UIColor grayColor];
+            cell.userInteractionEnabled = NO;
+        } else {
+            cell = [[PHCalenderViewCell alloc] initWithStyle:PHCalenderViewCellStyleUpDown];
+            cell.userInteractionEnabled = NO;
+            PHCalenderDay *firstDay = [[EBUserInfo sharedEBUserInfo].daysInCurrentMonth firstObject];
+            NSUInteger index = calendarDay.day - firstDay.day;
+            [cell.detailLabel setSystemFontOf10];
+            if (index < self.ticketsNext.count) {
+                NSString *ticketNext = self.ticketsNext[index];
+                NSString *title = nil;
+                if ([ticketNext integerValue] == -2) {
+                    //                title = @"已购";
+                    cell.backgroundColor = Cell_BoughtBackgroundColor;
+                } else if ([ticketNext integerValue] == 0) {
+                    title = @"已满";
+                    cell.backgroundColor = Cell_FullBackgroundColor;
+                } else if ([ticketNext integerValue] == -1) {
+                    cell.backgroundColor = Cell_UnableBackgroundColor;
+                } else {
+                    title = [NSString stringWithFormat:@"余%@",ticketNext];
+                    cell.backgroundColor = [UIColor whiteColor];
+                    cell.userInteractionEnabled = YES;
+                }
+                cell.detailLabel.text = title;
+            }
+        }
+        cell.textLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)calendarDay.day];
+        return cell;
     }
-    cell.textLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)calendarDay.day];
-    if ([calendarDay isEqualTo:[EBUserInfo sharedEBUserInfo].currentCalendarDay]) {
-        cell.textLabel.textColor = [UIColor colorWithRed:249.0/255 green:75.0/255 blue:0 alpha:1];
-    }
-    return cell;
+    return nil;
 }
 
 - (CGFloat)heightForRowInCalenderView:(PHCalenderView *)calenderView {
@@ -139,18 +218,31 @@
 - (void)calenderView:(PHCalenderView *)calenderView didSelectAtRow:(NSUInteger)row column:(NSUInteger)column {
     PHCalenderViewCell *cell = [calenderView cellForRow:row column:column];
     NSString *selectDay = cell.textLabel.text;
-    NSInteger index = [selectDay integerValue] - [EBUserInfo sharedEBUserInfo].currentCalendarDay.day;
-    if (index < 0 || index >= self.prices.count) return;
-    NSString *price = [self.prices objectAtIndex:index];
-    CGFloat priceFloat = [price floatValue];
+    CGFloat priceFloat = 0;
+    if (calenderView.tag == EBMonthOfCurrent) {
+        [EBUserInfo sharedEBUserInfo].currentDate = [NSDate date];
+        NSInteger index = [selectDay integerValue] - [EBUserInfo sharedEBUserInfo].currentCalendarDay.day;
+        if (index < 0 || index >= self.prices.count) return;
+        NSString *price = [self.prices objectAtIndex:index];
+        priceFloat = [price floatValue];
+    } else if (calenderView.tag == EBMonthOfNext) {
+        [EBUserInfo sharedEBUserInfo].currentDate = [[NSDate date] dayInTheFollowingMonth];
+        PHCalenderDay *firstDay = [[EBUserInfo sharedEBUserInfo].daysInCurrentMonth firstObject];
+        NSInteger index = [selectDay integerValue] - firstDay.day;
+        if (index < 0 || index >= self.pricesNext.count) return;
+        NSString *price = [self.pricesNext objectAtIndex:index];
+        priceFloat = [price floatValue];
+    }
+    PHCalenderDay *currentDay = [EBUserInfo sharedEBUserInfo].currentCalendarDay;
+    NSString *selectDateStr = [NSString stringWithFormat:@"%ld-%02ld-%02ld",(unsigned long)currentDay.year, (unsigned long)currentDay.month, (long)[selectDay integerValue]];
     if (cell.isSelected) {
         EBLog(@"row -> %ld,column -> %ld, %@", (unsigned long)row, (unsigned long)column, cell.textLabel.text);
-        [self.selectPrices addObject:cell.textLabel.text];
+        selectDateStr ? [self.selectPrices addObject:selectDateStr] : nil;
         self.totalPrice = self.totalPrice + priceFloat;
     } else {
         NSUInteger i = 0;
         for (NSString *obj in self.selectPrices) {
-            if ([obj isEqualToString:cell.textLabel.text]) {
+            if ([obj isEqualToString:selectDateStr]) {
                 [self.selectPrices removeObjectAtIndex:i];
                 break;
             }
@@ -165,13 +257,25 @@
         self.priceView.dayLabel.text = [NSString stringWithFormat:@"共%ld天",(unsigned long)self.selectPrices.count];
         self.priceView.priceLabel.text = [NSString stringWithFormat:@"%.1f元",self.totalPrice];
     }
+    
+    for (NSString *obj in self.selectPrices) {
+        EBLog(@"%@",obj);
+    }
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    CGPoint contentOffset = scrollView.contentOffset;
+    if (contentOffset.x == 0) {
+        [EBUserInfo sharedEBUserInfo].currentDate = [NSDate date];
+    } else if (contentOffset.x == scrollView.width) {
+        [EBUserInfo sharedEBUserInfo].currentDate = [[NSDate date] dayInTheFollowingMonth];
+    }
+    NSString *string = [NSString stringWithFormat:@"%@年%@月",@([EBUserInfo sharedEBUserInfo].currentCalendarDay.year),@([EBUserInfo sharedEBUserInfo].currentCalendarDay.month)];
+    self.yearMonthL.text = string;
 }
 
 #pragma mark - Private
-- (void)commonInit:(CGRect)frame {
-    CGFloat width = frame.size.width;
-    CGFloat height = frame.size.height;
-    
+- (void)firstInit:(CGFloat)width height:(CGFloat)height {
     CGFloat yearX = 0;
     CGFloat yearY = 0;
     CGFloat yearW = width;
@@ -184,6 +288,7 @@
     yearMonth.textColor = EB_RGBColor(74, 125, 210);
     yearMonth.text = [NSString stringWithFormat:@"%@年%@月",@([EBUserInfo sharedEBUserInfo].currentCalendarDay.year),@([EBUserInfo sharedEBUserInfo].currentCalendarDay.month)];
     [self addSubview:yearMonth];
+    self.yearMonthL = yearMonth;
     
     CGFloat weekX = 0;
     CGFloat weekY = CGRectGetMaxY(yearMonth.frame);
@@ -207,23 +312,45 @@
         if (i == 0 || i == 6) label.textColor = EB_RGBColor(74, 125, 210);
         [week addSubview:label];
     }
-    
+}
+
+- (void)secondInit:(CGFloat)width height:(CGFloat)height {
     CGFloat calenderX = 0;
-    CGFloat calenderY = CGRectGetMaxY(week.frame);
+    CGFloat calenderY = CGRectGetMaxY(self.weekView.frame);
     CGFloat calenderW = width;
-    CGFloat calenderH = [[EBUserInfo sharedEBUserInfo].currentDate numberOfWeeksInCurrentMonth] * HeightOfCalender;
+    NSUInteger number1 = [[NSDate date] numberOfWeeksInCurrentMonth];
+    NSUInteger number2 = [[[NSDate date] dayInTheFollowingMonth] numberOfWeeksInCurrentMonth];
+    NSUInteger value = ![EBTool calenderScrollViewEnable] ? number1 : (number1 > number2 ? number1 : number2);
+    CGFloat calenderH = value * HeightOfCalender;
     CGRect calenderF = CGRectMake(calenderX, calenderY, calenderW, calenderH);
-    PHCalenderView *calender = [[PHCalenderView alloc] initWithFrame:calenderF];
-    calender.backgroundColor = EB_RGBColor(241, 241, 241);
-    calender.dataSource = self;
-    calender.delegate = self;
-    [self addSubview:calender];
-    self.calenderView = calender;
     
+    UIScrollView *calenderSV = [[UIScrollView alloc] initWithFrame:calenderF];
+    calenderSV.showsHorizontalScrollIndicator = NO;
+    calenderSV.pagingEnabled = YES;
+    calenderSV.delegate = self;
+    calenderSV.contentSize = CGSizeMake(calenderW * 2, calenderH);
+    [self addSubview:calenderSV];
+    self.calenderSV = calenderSV;
+    calenderSV.scrollEnabled = [EBTool calenderScrollViewEnable];
+    
+    for (NSUInteger i = 0; i < 2; i ++) {
+        CGRect calenF = CGRectMake(i * calenderW, 0, calenderW, calenderH);
+        PHCalenderView *calender = [[PHCalenderView alloc] initWithFrame:calenF];
+        calender.tag = EBMonthOfCurrent + i;
+        EBLog(@"PHCalenderView->tag -> %@", @(calender.tag));
+        calender.backgroundColor = EB_RGBColor(241, 241, 241);
+        calender.dataSource = self;
+        calender.delegate = self;
+        [calenderSV addSubview:calender];
+        [self.calenderViews addObject:calender];
+    }
+}
+
+- (void)thirdInit:(CGFloat)width height:(CGFloat)height {
     CGFloat btnH = 50;
     
     CGFloat bottomX = 0;
-    CGFloat bottomY = CGRectGetMaxY(calender.frame);
+    CGFloat bottomY = CGRectGetMaxY(self.calenderSV.frame);
     CGFloat bottomW = width;
     CGFloat bottomH = height - bottomY;
     CGRect bottomF = CGRectMake(bottomX, bottomY, bottomW, bottomH);
@@ -281,5 +408,13 @@
     UIButton *buyB = [UIButton eb_buttonWithFrame:buyBF target:self action:@selector(buyBtnClick) Title:@"购买"];
     [btnView addSubview:buyB];
     self.buyBtn = buyB;
+}
+
+- (void)commonInit:(CGRect)frame {
+    CGFloat width = frame.size.width;
+    CGFloat height = frame.size.height;
+    [self firstInit:width height:height];
+    [self secondInit:width height:height];
+    [self thirdInit:width height:height];
 }
 @end

@@ -388,6 +388,18 @@
     }
 }
 
++ (BOOL)calenderScrollViewEnable {
+    [EBUserInfo sharedEBUserInfo].currentDate = [NSDate date];
+    PHCalenderDay *currentDay = [EBUserInfo sharedEBUserInfo].currentCalendarDay;//当前日期
+    NSUInteger days = [EBUserInfo sharedEBUserInfo].daysInCurrentMonth.count;
+    PHCalenderDay *day = [[EBUserInfo sharedEBUserInfo].daysInCurrentMonth objectAtIndex:(days - 7)];//拿到当前日期的倒数第七天
+    if (currentDay.day >= day.day) {//跟当前日历对比
+        return YES;
+    } else {
+        return NO;
+    }
+}
+
 @end
 
 

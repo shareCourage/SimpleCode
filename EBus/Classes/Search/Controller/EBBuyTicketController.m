@@ -24,14 +24,12 @@
 
 @interface EBBuyTicketController () <EBCalenderViewDelegate, EBPayTypeViewDelegate>
 
-@property (nonatomic, weak)EBCalenderView *calenderView;
+@property (nonatomic, weak)EBCalenderView *eb_calenderView;
 @property (nonatomic, weak) EBPayTypeView *payTypeView;
 
 @property (nonatomic, assign) CGFloat totalPrice;
 @property (nonatomic, assign) EBPayType payType;
-
 @property (nonatomic, strong) NSArray *dates;
-@property (nonatomic, strong) NSDictionary *ticketPricePara;
 
 @end
 
@@ -40,14 +38,6 @@
 - (void)setPayType:(EBPayType)payType {
     _payType = payType;
     [self payCash:self.dates payType:payType];
-}
-
-- (void)setTicketPricePara:(NSDictionary *)ticketPricePara {
-    _ticketPricePara = ticketPricePara;
-    if (ticketPricePara.count != 0) {
-        self.calenderView.priceAndTicket = ticketPricePara;
-        [self.calenderView reloadData];
-    }
 }
 
 - (void)viewDidLoad {
@@ -63,8 +53,7 @@
     EBCalenderView *calenderView = [[EBCalenderView alloc] initWithFrame:CGRectMake(0, 0, EB_WidthOfScreen, calenderH)];
     calenderView.delegate = self;
     self.tableView.tableFooterView = calenderView;
-    self.calenderView = calenderView;
-    [calenderView reloadData];
+    self.eb_calenderView = calenderView;
     
     [self payTypeViewImplementation];
     [MBProgressHUD showMessage:nil toView:self.view];
@@ -87,13 +76,27 @@
 }
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self calenderNetworkRequest];
+    [self calenderRequestOfCurrentMonth:^(NSDictionary *dict) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        NSDictionary *returnData = dict[static_Argument_returnData];
+        if (returnData.count != 0) {
+            self.eb_calenderView.priceAndTicket = returnData;
+        }
+    }];
+    [self calenderRequestOfNextMonth:^(NSDictionary *dict) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        NSDictionary *returnData = dict[static_Argument_returnData];
+        if (returnData.count != 0) {
+            self.eb_calenderView.priceAndTicketNext = returnData;
+        }
+    }];
     self.dates = nil;
     self.totalPrice = 0.f;
     self.navigationController.interactivePopGestureRecognizer.enabled = YES;;
 }
 #pragma mark - Request
-- (void)calenderNetworkRequest {
+- (void)calenderRequestOfCurrentMonth:(EBOptionDict)optionDict {
+    [EBUserInfo sharedEBUserInfo].currentDate = [NSDate date];
     NSString *beginStr = [NSString stringWithFormat:@"%ld%02ld%02ld",
                           (unsigned long)[EBUserInfo sharedEBUserInfo].currentCalendarDay.year,
                           (unsigned long)[EBUserInfo sharedEBUserInfo].currentCalendarDay.month,
@@ -104,11 +107,35 @@
                         (unsigned long)calenderDay.year,
                         (unsigned long)calenderDay.month,
                         (unsigned long)calenderDay.day];
+    [self calenderNetworkRequestWithBegin:beginStr end:endStr dictBlock:optionDict];
+}
+- (void)calenderRequestOfNextMonth:(EBOptionDict)optionDict {
+    if ([EBTool calenderScrollViewEnable]) {//能滑动下个月再有数据请求
+        [EBUserInfo sharedEBUserInfo].currentDate = [[NSDate date] dayInTheFollowingMonth];
+        PHCalenderDay *firstDay = [[EBUserInfo sharedEBUserInfo].daysInCurrentMonth firstObject];
+        PHCalenderDay *lastDay = [[EBUserInfo sharedEBUserInfo].daysInCurrentMonth lastObject];
+        NSString *beginStr = [NSString stringWithFormat:@"%ld%02ld%02ld",
+                              (unsigned long)firstDay.year,
+                              (unsigned long)firstDay.month,
+                              (unsigned long)firstDay.day];
+        NSString *endStr = [NSString stringWithFormat:@"%ld%02ld%02ld",
+                            (unsigned long)lastDay.year,
+                            (unsigned long)lastDay.month,
+                            (unsigned long)lastDay.day];
+        [self calenderNetworkRequestWithBegin:beginStr end:endStr dictBlock:optionDict];
+    }
+}
+
+- (void)calenderNetworkRequestWithBegin:(NSString *)beginStr end:(NSString *)endStr dictBlock:(EBOptionDict)optionDict {
+    
+#if 0 //忘记这串代码干嘛用的，貌似没用处，先注释看看会不会有影响
     NSString *dayString = [NSString stringWithFormat:@"%@",@([EBUserInfo sharedEBUserInfo].currentCalendarDay.day)];
     for (NSUInteger i = [EBUserInfo sharedEBUserInfo].currentCalendarDay.day + 1; i <= calenderDay.day; i ++) {
         dayString = [dayString stringByAppendingString:@","];
         dayString = [dayString stringByAppendingString:[NSString stringWithFormat:@"%@",@(i)]];
     }
+#endif
+    
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     if (self.resultModel.lineId) {
         [parameters setObject:self.resultModel.lineId forKey:static_Argument_lineId];
@@ -129,16 +156,12 @@
         [parameters setObject:endStr forKey:static_Argument_endDate];
     }
     
-    [EBNetworkRequest GET:static_Url_SurplusTicket parameters:parameters dictBlock:^(NSDictionary *dict) {
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
-        NSDictionary *returnData = dict[static_Argument_returnData];
-        self.ticketPricePara = returnData;
-        
-    } errorBlock:^(NSError *error) {
+    [EBNetworkRequest GET:static_Url_SurplusTicket parameters:parameters dictBlock:optionDict errorBlock:^(NSError *error) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
     }];
 }
 
+#pragma mark - 支付宝、微信支付
 - (void)payCash:(NSArray *)dates payType:(EBPayType)type{
     if (dates.count == 0) return;
     [MobClick event:[NSString stringWithFormat:@"购票%@",NSStringFromSelector(_cmd)]];//友盟统计购票次数
@@ -160,14 +183,7 @@
         default:
             break;
     }
-    NSArray *sortArray = [dates sortedArrayUsingSelector:@selector(compare:)];//升序排序
-    NSMutableArray *newDates = [NSMutableArray array];
-    PHCalenderDay *currentDay = [EBUserInfo sharedEBUserInfo].currentCalendarDay;
-    for (NSString *obj in sortArray) {
-        NSString *string = [NSString stringWithFormat:@"%ld-%02ld-%02ld",(unsigned long)currentDay.year, (unsigned long)currentDay.month, (long)[obj integerValue]];
-        [newDates addObject:string];
-    }
-    NSString *newString = [EBTool stringConnected:newDates connectString:@","];
+    NSString *newString = [EBTool stringConnected:dates connectString:@","];
     EBLog(@"%@",newString);
     if (newString.length != 0 && self.resultModel.lineId && self.resultModel.vehTime && self.resultModel.startTime && self.resultModel.onStationId && self.resultModel.offStationId && [EBUserInfo sharedEBUserInfo].loginId.length != 0 && [EBUserInfo sharedEBUserInfo].loginName.length != 0) {
         NSDictionary *parameters = @{static_Argument_saleDates      : newString,

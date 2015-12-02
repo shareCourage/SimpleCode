@@ -34,6 +34,8 @@
 
 - (NSUInteger)weeklyOrdinality
 {
+//    return [[NSCalendar currentCalendar] ordinalityOfUnit:NSWeekdayCalendarUnit inUnit:NSWeekCalendarUnit forDate:self];
+
     return [[NSCalendar currentCalendar] ordinalityOfUnit:NSDayCalendarUnit inUnit:NSWeekCalendarUnit forDate:self];
 }
 
@@ -57,21 +59,21 @@
 {
     NSCalendarUnit calendarUnit = NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit;
     NSDateComponents *dateComponents = [[NSCalendar currentCalendar] components:calendarUnit fromDate:self];
-    dateComponents.day = [self numberOfDaysInCurrentMonth];
+    dateComponents.day = [self numberOfDaysInCurrentMonth];//该时间点
     return [[NSCalendar currentCalendar] dateFromComponents:dateComponents];
 }
 
 - (NSDate *)dayInThePreviousMonth
 {
     NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
-    dateComponents.month = -1;
+    dateComponents.month = -1;//一个月前
     return [[NSCalendar currentCalendar] dateByAddingComponents:dateComponents toDate:self options:0];
 }
 
 - (NSDate *)dayInTheFollowingMonth
 {
     NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
-    dateComponents.month = 1;
+    dateComponents.month = 1;//一个月后
     return [[NSCalendar currentCalendar] dateByAddingComponents:dateComponents toDate:self options:0];
 }
 

@@ -14,9 +14,6 @@
 #import "EBAnnotationView.h"
 #import "EBPPAnnotation.h"
 #import "EBLineDetailPPAnnotationView.h"
-#import "EBLineDetail.h"
-#import "EBPhotoAnnotation.h"
-#import "EBPhotoAnnotationView.h"
 #import "EBLineStationView.h"
 #import "EBLineStation.h"
 #import "EBSearchResultModel.h"
@@ -24,7 +21,7 @@
 //高德地图规划线路用的类
 #import "CommonUtility.h"
 
-@interface EBLineMapView () <MAMapViewDelegate, AMapSearchDelegate, EBLineStationViewDelegate>
+@interface EBLineMapView () <MAMapViewDelegate, AMapSearchDelegate, EBLineStationViewDelegate, EBLineDetailPPAnnotationViewDelegate>
 {
     BOOL _value;//YES 表示leftDragView在右边，NO在左边
 }
@@ -44,6 +41,7 @@
 @end
 
 @implementation EBLineMapView
+//懒加载
 - (AMapSearchAPI *)searchPOI {
     if (_searchPOI == nil) {
         _searchPOI = [[AMapSearchAPI alloc] init];
@@ -52,6 +50,7 @@
     return _searchPOI;
 }
 
+#pragma mark - Setter
 - (void)setResultModel:(EBSearchResultModel *)resultModel {
     
     _resultModel = resultModel;
@@ -76,11 +75,9 @@
         return;
     }
     NSUInteger openType = [lineDetailM.openType integerValue];
-    [self addAnnotationOnLngLat:lineDetailM.onLngLat onStations:lineDetailM.onStations onFjIds:lineDetailM.onFjIds];
-    [self addAnnotationOffLngLat:lineDetailM.offLngLat offStations:lineDetailM.offStations offFjIds:lineDetailM.offFjIds];
     if (openType == 1 || openType == 2) {//购买
         if (lineDetailM.lineContent.length == 0) return;
-        [self addOnStations:lineDetailM.onStations offStations:lineDetailM.offStations onLngLat:lineDetailM.onLngLat offLngLat:lineDetailM.offLngLat onTime:lineDetailM.onTimes offTime:lineDetailM.offTimes];
+        [self prepareDataSourceForLineStationView:lineDetailM];
         NSArray *coords = [NSArray seprateString:lineDetailM.lineContent characterSet:@";"];
         [self addPolylineWithCoords:coords];
         [self.maMapView setCenterCoordinate:[self averageCoord:coords] animated:NO];
@@ -90,6 +87,7 @@
     }
 }
 
+#pragma mark - 驾车路径规划
 - (void)drivingRouteRequest:(EBLineDetailModel *)lineDetailM {
     /* 驾车路径规划搜索. */
     NSArray *onLngLats = [NSArray seprateString:lineDetailM.onLngLat characterSet:@","];
@@ -108,7 +106,219 @@
     [self.searchPOI AMapDrivingRouteSearch:navi];
 }
 
-#pragma mark - init Method
+
+#pragma mark - 为EBLineStationView准备dataSource
+- (void)prepareDataSourceForLineStationView:(EBLineDetailModel *)lineM {
+    if (!lineM) return;
+    NSMutableArray *dataSource = [NSMutableArray array];
+    NSArray *onStationsArray = [lineM.onStations componentsSeparatedByString:@";"];
+    NSArray *onLngLats = [lineM.onLngLat componentsSeparatedByString:@";"];
+    NSArray *onTimes = [lineM.onTimes componentsSeparatedByString:@";"];
+    NSArray *onFjIdsArray = [NSArray seprateString:lineM.onFjIds characterSet:@";"];
+    if (onStationsArray.count != onLngLats.count) return;
+    if (onStationsArray.count != onTimes.count) return;
+    if (onStationsArray.count != onFjIdsArray.count) return;
+    NSUInteger i = 0;
+    for (NSString *onStation in onStationsArray) {
+        EBLineStation *station = [[EBLineStation alloc] init];
+        station.station = onStation;
+        station.coordinate = [EBTool coordFromString:onLngLats[i]];
+        station.time = onTimes[i];
+        station.jid = onFjIdsArray[i];
+        station.on = YES;
+        EBAnnotation *annotation = [[EBAnnotation alloc] init];
+        if (i == 0) {
+            station.firstOrEnd = YES;
+            annotation.imageString = @"search_map_depart";
+        } else {
+            station.firstOrEnd = NO;
+            annotation.imageString = @"search_map_departPass";
+        }
+        annotation.lineInfo = station;
+        [dataSource addObject:annotation];
+        i ++;
+    }
+    
+    NSArray *offStationsArray = [lineM.offStations componentsSeparatedByString:@";"];
+    NSArray *offLngLats = [lineM.offLngLat componentsSeparatedByString:@";"];
+    NSArray *offTimes = [lineM.offTimes componentsSeparatedByString:@";"];
+    NSArray *offFjIdsArray = [NSArray seprateString:lineM.offFjIds characterSet:@";"];
+    if (offStationsArray.count != offLngLats.count) return;
+    if (offStationsArray.count != offTimes.count) return;
+    if (offStationsArray.count != offFjIdsArray.count) return;
+    i = 0;
+    for (NSString *offStation in offStationsArray) {
+        EBLineStation *station = [[EBLineStation alloc] init];
+        station.station = offStation;
+        station.coordinate = [EBTool coordFromString:offLngLats[i]];
+        station.time = offTimes[i];
+        station.jid = offFjIdsArray[i];
+        station.on = NO;
+        EBAnnotation *annotation = [[EBAnnotation alloc] init];
+        if (i == offStationsArray.count - 1) {
+            station.firstOrEnd = YES;
+            annotation.imageString = @"search_map_end";
+        } else {
+            station.firstOrEnd = NO;
+            annotation.imageString = @"search_map_endPass";
+        }
+        annotation.lineInfo = station;
+        [dataSource addObject:annotation];
+        i ++;
+    }
+    self.stationView.dataSource = dataSource;
+    [self.maMapView addAnnotations:dataSource];
+    [self.maMapView showAnnotations:self.maMapView.annotations animated:YES];
+}
+
+- (void)addPolylineWithCoords:(NSArray *)coords
+{
+    if (coords.count == 0) return;
+    CLLocationCoordinate2D *coordsC = [self transitToCoords:coords];
+    MAPolyline *polyline = [MAPolyline polylineWithCoordinates:coordsC count:coords.count];
+    [self.maMapView addOverlay:polyline];
+    free(coordsC);
+}
+
+- (CLLocationCoordinate2D *)transitToCoords:(NSArray *)coords
+{
+    int count = (int)coords.count;
+    CLLocationCoordinate2D *coordsC = malloc(sizeof(CLLocationCoordinate2D) * count);
+    int i = 0;
+    for (NSString *obj in coords) {
+        NSString *newObj = nil;
+        if ([obj hasPrefix:@"!"]) newObj = [obj stringByReplacingOccurrencesOfString:@"!" withString:@""];
+        NSArray *objArray = [NSArray seprateString:newObj.length != 0 ? newObj : obj characterSet:@","];
+        NSString *lat = [objArray lastObject];
+        NSString *lng = [objArray firstObject];
+        coordsC[i].latitude = [lat doubleValue];
+        coordsC[i].longitude = [lng doubleValue];
+        i ++;
+    }
+    return coordsC;
+}
+
+/**
+ *  计算经纬度的平均值
+ */
+- (CLLocationCoordinate2D)averageCoord:(NSArray *)coords {
+    double lats = 0;
+    double lngs = 0;
+    for (NSString *obj in coords) {
+        NSString *newObj = nil;
+        if ([obj hasPrefix:@"!"]) newObj = [obj stringByReplacingOccurrencesOfString:@"!" withString:@""];
+        NSArray *objArray = [NSArray seprateString:newObj.length != 0 ? newObj : obj characterSet:@","];
+        NSString *lat = [objArray lastObject];
+        NSString *lng = [objArray firstObject];
+        lats += [lat doubleValue];
+        lngs += [lng doubleValue];
+    }
+    return CLLocationCoordinate2DMake(lats / coords.count, lngs / coords.count);
+}
+
+#pragma mark - AMapSearchDelegate
+/* 路径规划搜索回调. */
+- (void)onRouteSearchDone:(AMapRouteSearchBaseRequest *)request response:(AMapRouteSearchResponse *)response {
+    NSMutableArray *polylines = [NSMutableArray array];
+    AMapPath *path = [response.route.paths firstObject];
+    [path.steps enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (![obj isKindOfClass:[AMapStep class]]) return;
+        AMapStep *step = (AMapStep *)obj;
+        MAPolyline *polyline = [CommonUtility polylineForCoordinateString:step.polyline];
+        [polylines addObject:polyline];
+    }];
+    [self.maMapView addOverlays:polylines];
+}
+
+#pragma mark - MAMapViewDelegate
+- (MAOverlayRenderer *)mapView:(MAMapView *)mapView rendererForOverlay:(id <MAOverlay>)overlay {
+    if ([overlay isKindOfClass:[MAPolyline class]]) {
+        MAPolylineRenderer *polylineRender = [[MAPolylineRenderer alloc] initWithOverlay:overlay];
+        polylineRender.strokeColor = EB_LineColor;
+        polylineRender.lineWidth = EB_MapLineWidth;
+        return polylineRender;
+    }
+    return nil;
+}
+
+- (MAAnnotationView *)mapView:(MAMapView *)mapView viewForAnnotation:(id <MAAnnotation>)annotation {
+    if ([annotation isKindOfClass:[EBAnnotation class]]) {
+        EBAnnotationView *original = [EBAnnotationView annotationViewWithMapView:mapView];
+        original.annotation = annotation;
+        return original;
+    } else if ([annotation isKindOfClass:[EBPPAnnotation class]]) {
+        EBLineDetailPPAnnotationView *lineDetail = [EBLineDetailPPAnnotationView annotationViewWithMapView:mapView];
+        lineDetail.pp_delegate = self;
+        lineDetail.annotation = annotation;
+        return lineDetail;
+    }
+    return nil;
+}
+
+- (void)mapView:(MAMapView *)mapView didSelectAnnotationView:(MAAnnotationView *)view {
+    if ([view isKindOfClass:[EBAnnotationView class]]) {
+        EBLog(@"didSelect -> EBAnnotationView");
+        EBAnnotation *anno = (EBAnnotation *)view.annotation;
+        if (anno.isShow) return;
+        // 1.删除以前的EBPPAnnotation
+        for (id annotation in mapView.annotations) {
+            if ([annotation isKindOfClass:[EBAnnotation class]]) {
+                EBAnnotation *originalAnno = annotation;
+                originalAnno.show = NO;
+            } else if ([annotation isKindOfClass:[EBPPAnnotation class]]) {
+                [mapView removeAnnotation:annotation];
+            }
+        }
+        anno.show = YES;
+        // 2.添加新的EBPPAnnotation
+        EBPPAnnotation *pp = [[EBPPAnnotation alloc] init];
+        pp.lineInfo = anno.lineInfo;
+        [mapView addAnnotation:pp];
+    }
+}
+
+- (void)mapView:(MAMapView *)mapView didSingleTappedAtCoordinate:(CLLocationCoordinate2D)coordinate {
+    for (id annotation in mapView.annotations) {
+        if ([annotation isKindOfClass:[EBAnnotation class]]) {
+            EBAnnotation *originalAnno = annotation;
+            originalAnno.show = NO;
+        } else if ([annotation isKindOfClass:[EBPPAnnotation class]]) {
+            [mapView removeAnnotation:annotation];
+        } 
+    }
+
+}
+#pragma mark - EBLineStationViewDelegate
+- (void)lineStationView:(EBLineStationView *)lineStationView didSelectMode:(EBAnnotation *)anno {
+    
+    // 1.删除以前的EBPPAnnotation
+    for (id annotation in self.maMapView.annotations) {
+        if ([annotation isKindOfClass:[EBAnnotation class]]) {
+            EBAnnotation *originalAnno = annotation;
+            originalAnno.show = NO;
+        } else if ([annotation isKindOfClass:[EBPPAnnotation class]]) {
+            [self.maMapView removeAnnotation:annotation];
+        }
+    }
+    EBPPAnnotation *pp = [[EBPPAnnotation alloc] init];
+    pp.lineInfo = anno.lineInfo;
+    [self.maMapView addAnnotation:pp];
+    [self.maMapView setCenterCoordinate:anno.coordinate animated:YES];
+    if (self.leftView.x > EB_MaxWidthOfLineStation / 2) {
+        [self leftViewXZero];
+    } else {
+        [self leftViewXMax];
+    }
+}
+#pragma mark - EBLineDetailPPAnnotationViewDelegate
+- (void)lineDetailPPAnnotationViewCheckPhoto:(EBLineDetailPPAnnotationView *)detailV lineDetail:(EBLineStation *)lineM {
+    if ([self.delegate respondsToSelector:@selector(lineMapViewCheckPhoto:lineDetail:)]) {
+        [self.delegate lineMapViewCheckPhoto:self lineDetail:lineM];
+    }
+}
+
+
+#pragma mark - Super Method
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -131,13 +341,21 @@
 - (void)mapViewDidAppear {
     [super mapViewDidAppear];
     self.maMapView.delegate = self;
-    self.maMapView.zoomLevel = 13;
+//    self.maMapView.zoomLevel = 13;
     self.maMapView.showsUserLocation = NO;
 }
 
 - (void)mapViewDidDisappear {
     [super mapViewDidDisappear];
     self.maMapView.delegate = nil;
+}
+
+- (void)didMoveToSuperview
+{
+    if(!self.bottomView.hidden) self.bottomDistance = 60;
+    [super didMoveToSuperview];
+    [self bottomViewAutoLayout];
+    [self leftViewAutoLayout];
 }
 
 #pragma mark  - Implementation
@@ -239,7 +457,7 @@
         make.bottom.equalTo(ws.leftDragView).with.offset(0);
         make.left.equalTo(ws.leftDragView).with.offset(0);
     }];
-
+    
 }
 
 - (void)bottomViewAutoLayout {
@@ -260,15 +478,6 @@
         make.left.equalTo(ws.bottomView).with.offset(padding1 * 6);
         make.right.equalTo(ws.bottomView).with.offset(- padding1 * 6);
     }];
-}
-
-#pragma mark - superMethod
-- (void)didMoveToSuperview
-{
-    if(!self.bottomView.hidden) self.bottomDistance = 60;
-    [super didMoveToSuperview];
-    [self bottomViewAutoLayout];
-    [self leftViewAutoLayout];
 }
 
 #pragma mark - Private Method
@@ -301,13 +510,12 @@
             } else {
                 if (location.x >= EB_MaxWidthOfLineStation / 3) {
                     [self leftViewXZero];//出现
-                     EBLog(@"出现 leftViewXZero");
+                    EBLog(@"出现 leftViewXZero");
                 } else {
                     [self leftViewXMax];//消失
                     EBLog(@"消失 leftViewXMax");
                 }
             }
-            
             break;
         default:
             break;
@@ -347,255 +555,6 @@
 - (void)buyBtnClick {
     if ([self.delegate respondsToSelector:@selector(lineMapViewBuyClick:)]) {
         [self.delegate lineMapViewBuyClick:self];
-    }
-}
-
-- (void)addOnStations:(NSString *)onStations
-          offStations:(NSString *)offStations
-             onLngLat:(NSString *)onLngLat
-            offLngLat:(NSString *)offLngLat
-              onTime:(NSString *)onTime
-             offTime:(NSString *)offTime {
-    NSMutableArray *dataSource = [NSMutableArray array];
-    NSArray *onStationsArray = [onStations componentsSeparatedByString:@";"];
-    NSArray *onLngLats = [onLngLat componentsSeparatedByString:@";"];
-    NSArray *onTimes = [onTime componentsSeparatedByString:@";"];
-    if (onStationsArray.count != onLngLats.count) return;
-    if (onStationsArray.count != onTimes.count) return;
-    int i = 0;
-    for (NSString *onStation in onStationsArray) {
-        EBLineStation *station = [[EBLineStation alloc] init];
-        station.station = onStation;
-        station.lnglat = onLngLats[i];
-        station.time = onTimes[i];
-        station.on = YES;
-        if (i == 0) station.firstOrEnd = YES;
-        i ++;
-        [dataSource addObject:station];
-    }
-    i = 0;
-    NSArray *offStationsArray = [offStations componentsSeparatedByString:@";"];
-    NSArray *offLngLats = [offLngLat componentsSeparatedByString:@";"];
-    NSArray *offTimes = [offTime componentsSeparatedByString:@";"];
-    if (offStationsArray.count != offLngLats.count) return;
-    if (offStationsArray.count != offTimes.count) return;
-    for (NSString *offStation in offStationsArray) {
-        EBLineStation *station = [[EBLineStation alloc] init];
-        station.station = offStation;
-        station.lnglat = offLngLats[i];
-        station.time = offTimes[i];
-        station.on = NO;
-        if (i == offStationsArray.count - 1) station.firstOrEnd = YES;
-        i ++;
-        [dataSource addObject:station];
-    }
-    self.stationView.dataSource = dataSource;
-}
-- (void)addAnnotationOnLngLat:(NSString *)onLngLat onStations:(NSString *)onStations onFjIds:(NSString *)onFjIds {
-    NSArray *onLngLatArray = [NSArray seprateString:onLngLat characterSet:@";"];
-    NSArray *onStationsArray = [onStations componentsSeparatedByString:@";"];//[NSArray seprateString:onStations characterSet:@";"];
-    NSArray *onFjIdsArray = [NSArray seprateString:onFjIds characterSet:@";"];
-    if (onLngLatArray.count != onStationsArray.count || onLngLatArray.count == 0) return;
-    for (int i = 0; i < onLngLatArray.count; i ++) {
-        EBAnnotation *annotation = [[EBAnnotation alloc] init];
-        NSString *onLngLat = onLngLatArray[i];
-        NSString *onStation = onStationsArray[i];
-        NSString *onJid = onFjIdsArray[i];
-        if (i == 0) {
-            annotation.imageString = @"search_map_depart";
-        } else {
-            annotation.imageString = @"search_map_departPass";
-        }
-        annotation.coordinate = [onLngLat coordAndLatFirst:NO];
-        annotation.lineInfo.station = onStation;
-        annotation.lineInfo.time = self.resultModel.startTime;
-        annotation.lineInfo.jid = onJid;
-        annotation.lineInfo.coordinate = annotation.coordinate;
-        [self.maMapView addAnnotation:annotation];
-    }
-}
-
-- (void)addAnnotationOffLngLat:(NSString *)offLngLat offStations:(NSString *)offStations offFjIds:(NSString *)offFjIds {
-    NSArray *offLngLatArray = [NSArray seprateString:offLngLat characterSet:@";"];
-    NSArray *offStationsArray = [offStations componentsSeparatedByString:@";"];//[NSArray seprateString:offStations characterSet:@";"];
-    NSArray *offFjIdsArray = [NSArray seprateString:offFjIds characterSet:@";"];
-    if (offLngLatArray.count != offStationsArray.count || offLngLatArray.count == 0) return;
-    NSUInteger count = offLngLatArray.count;
-    for (int i = (int)count - 1; i >= 0; i --) {
-        EBAnnotation *annotation = [[EBAnnotation alloc] init];
-        NSString *offLngLat = offLngLatArray[i];
-        NSString *offStation = offStationsArray[i];
-        NSString *offJid = offFjIdsArray[i];
-        if (i == count - 1) {
-            annotation.imageString = @"search_map_end";
-        } else {
-            annotation.imageString = @"search_map_endPass";
-        }
-        annotation.coordinate = [offLngLat coordAndLatFirst:NO];
-        annotation.lineInfo.station = offStation;
-        annotation.lineInfo.time = self.resultModel.startTime;
-        annotation.lineInfo.jid = offJid;
-        annotation.lineInfo.coordinate = annotation.coordinate;
-        [self.maMapView addAnnotation:annotation];
-    }
-    
-    [self.maMapView showAnnotations:self.maMapView.annotations animated:YES];
-}
-
-- (void)addPolylineWithCoords:(NSArray *)coords
-{
-    if (coords.count == 0) return;
-    CLLocationCoordinate2D *coordsC = [self transitToCoords:coords];
-    MAPolyline *polyline = [MAPolyline polylineWithCoordinates:coordsC count:coords.count];
-    [self.maMapView addOverlay:polyline];
-    free(coordsC);
-}
-
-- (CLLocationCoordinate2D *)transitToCoords:(NSArray *)coords
-{
-    int count = (int)coords.count;
-    CLLocationCoordinate2D *coordsC = malloc(sizeof(CLLocationCoordinate2D) * count);
-    int i = 0;
-    for (NSString *obj in coords) {
-        NSString *newObj = nil;
-        if ([obj hasPrefix:@"!"]) newObj = [obj stringByReplacingOccurrencesOfString:@"!" withString:@""];
-        NSArray *objArray = [NSArray seprateString:newObj.length != 0 ? newObj : obj characterSet:@","];
-        NSString *lat = [objArray lastObject];
-        NSString *lng = [objArray firstObject];
-        coordsC[i].latitude = [lat doubleValue];
-        coordsC[i].longitude = [lng doubleValue];
-        i ++;
-    }
-    return coordsC;
-}
-
-/**
- *  计算经纬度的平均值
- */
-- (CLLocationCoordinate2D)averageCoord:(NSArray *)coords {
-    double lats = 0;
-    double lngs = 0;
-    for (NSString *obj in coords) {
-        NSString *newObj = nil;
-        if ([obj hasPrefix:@"!"]) newObj = [obj stringByReplacingOccurrencesOfString:@"!" withString:@""];
-        NSArray *objArray = [NSArray seprateString:newObj.length != 0 ? newObj : obj characterSet:@","];
-        NSString *lat = [objArray lastObject];
-        NSString *lng = [objArray firstObject];
-        lats += [lat doubleValue];
-        lngs += [lng doubleValue];
-    }
-    return CLLocationCoordinate2DMake(lats / coords.count, lngs / coords.count);
-}
-
-#pragma mark - AMapSearchDelegate
-/* 路径规划搜索回调. */
-- (void)onRouteSearchDone:(AMapRouteSearchBaseRequest *)request response:(AMapRouteSearchResponse *)response {
-    NSMutableArray *polylines = [NSMutableArray array];
-    AMapPath *path = [response.route.paths firstObject];
-    [path.steps enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if (![obj isKindOfClass:[AMapStep class]]) return;
-        AMapStep *step = (AMapStep *)obj;
-        MAPolyline *polyline = [CommonUtility polylineForCoordinateString:step.polyline];
-        [polylines addObject:polyline];
-    }];
-    [self.maMapView addOverlays:polylines];
-}
-
-#pragma mark - MAMapViewDelegate
-- (MAOverlayRenderer *)mapView:(MAMapView *)mapView rendererForOverlay:(id <MAOverlay>)overlay {
-    if ([overlay isKindOfClass:[MAPolyline class]]) {
-        MAPolylineRenderer *polylineRender = [[MAPolylineRenderer alloc] initWithOverlay:overlay];
-        polylineRender.strokeColor = EB_LineColor;
-        polylineRender.lineWidth = EB_MapLineWidth;
-        return polylineRender;
-    }
-    return nil;
-}
-
-- (MAAnnotationView *)mapView:(MAMapView *)mapView viewForAnnotation:(id <MAAnnotation>)annotation {
-    if ([annotation isKindOfClass:[EBAnnotation class]]) {
-        EBAnnotationView *original = [EBAnnotationView annotationViewWithMapView:mapView];
-        original.annotation = annotation;
-        return original;
-    } else if ([annotation isKindOfClass:[EBPPAnnotation class]]) {
-        EBLineDetailPPAnnotationView *lineDetail = [EBLineDetailPPAnnotationView annotationViewWithMapView:mapView];
-        lineDetail.annotation = annotation;
-        return lineDetail;
-    } else if ([annotation isKindOfClass:[EBPhotoAnnotation class]]) {
-        EBPhotoAnnotationView *photo = [EBPhotoAnnotationView annotationViewWithMapView:mapView];
-        photo.annotation = annotation;
-        [mapView setCenterCoordinate:annotation.coordinate animated:YES];
-        return photo;
-    }
-    return nil;
-}
-
-- (void)mapView:(MAMapView *)mapView didSelectAnnotationView:(MAAnnotationView *)view {
-    if ([view isKindOfClass:[EBAnnotationView class]]) {
-        EBLog(@"didSelect -> EBAnnotationView");
-
-        EBAnnotation *anno = (EBAnnotation *)view.annotation;
-        if (anno.isShow) return;
-        
-        // 1.删除以前的EBPPAnnotation
-        for (id annotation in mapView.annotations) {
-            if ([annotation isKindOfClass:[EBAnnotation class]]) {
-                EBAnnotation *originalAnno = annotation;
-                originalAnno.show = NO;
-            } else if ([annotation isKindOfClass:[EBPPAnnotation class]]) {
-                [mapView removeAnnotation:annotation];
-            }
-        }
-        
-        anno.show = YES;
-        
-        // 2.添加新的EBPPAnnotation
-        EBPPAnnotation *pp = [[EBPPAnnotation alloc] init];
-        pp.lineInfo = anno.lineInfo;
-        [mapView addAnnotation:pp];
-    } else if ([view isKindOfClass:[EBLineDetailPPAnnotationView class]]) {
-        EBLog(@"didSelect -> EBLineDetailPPAnnotationView");
-        for (id annotation in mapView.annotations) {
-            if ([annotation isKindOfClass:[EBAnnotation class]]) {
-                EBAnnotation *originalAnno = annotation;
-                originalAnno.show = NO;
-            }
-        }
-        EBPPAnnotation *anno = (EBPPAnnotation *)view.annotation;
-        EBPhotoAnnotation *photoAnno = [[EBPhotoAnnotation alloc] init];
-        photoAnno.lineInfo = anno.lineInfo;
-        [mapView removeAnnotation:anno];
-        [mapView addAnnotation:photoAnno];
-
-    } else if ([view isKindOfClass:[EBPhotoAnnotationView class]]) {
-        [mapView removeAnnotation:view.annotation];
-    }
-}
-
-- (void)mapView:(MAMapView *)mapView didSingleTappedAtCoordinate:(CLLocationCoordinate2D)coordinate {
-    for (id annotation in mapView.annotations) {
-        if ([annotation isKindOfClass:[EBAnnotation class]]) {
-            EBAnnotation *originalAnno = annotation;
-            originalAnno.show = NO;
-        } else if ([annotation isKindOfClass:[EBPPAnnotation class]]) {
-            [mapView removeAnnotation:annotation];
-        } else if ([annotation isKindOfClass:[EBPhotoAnnotation class]]) {
-            [mapView removeAnnotation:annotation];
-        }
-    }
-
-}
-#pragma mark - EBLineStationViewDelegate
-- (void)lineStationView:(EBLineStationView *)lineStationView didSelectMode:(EBLineStation *)lineStation {
-    NSArray *lnglats = [lineStation.lnglat componentsSeparatedByString:@","];
-    NSString *lng = [lnglats firstObject];
-    NSString *lat = [lnglats lastObject];
-    CLLocationCoordinate2D coord = CLLocationCoordinate2DMake([lat doubleValue], [lng doubleValue]);
-    [self.maMapView setCenterCoordinate:coord animated:YES];
-    if (self.leftView.x > EB_MaxWidthOfLineStation / 2) {
-        [self leftViewXZero];
-    } else {
-        [self leftViewXMax];
     }
 }
 

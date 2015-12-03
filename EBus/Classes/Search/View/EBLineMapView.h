@@ -7,12 +7,13 @@
 //
 
 #import "EBSysMapView.h"
-@class EBLineDetailModel, EBLineMapView, EBSearchResultModel;
+@class EBLineDetailModel, EBLineMapView, EBSearchResultModel, EBLineStation;
 
 @protocol EBLineMapViewDelegate <NSObject>
 
 @optional
 - (void)lineMapViewBuyClick:(EBLineMapView *)lineMapView;
+- (void)lineMapViewCheckPhoto:(EBLineMapView *)lineMapView lineDetail:(EBLineStation *)lineM;
 
 @end
 

@@ -13,7 +13,8 @@
 @property (nonatomic, assign, getter = isOn) BOOL on;
 @property (nonatomic, assign, getter = isFirstOrEnd) BOOL firstOrEnd;
 @property (nonatomic, copy) NSString *station;
-
-@property (nonatomic, copy) NSString *lnglat;
+@property (nonatomic, assign) CLLocationCoordinate2D coordinate;
+//@property (nonatomic, copy) NSString *lnglat;
 @property (nonatomic, copy) NSString *time;
+@property (nonatomic, copy) NSString *jid;
 @end

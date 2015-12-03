@@ -204,6 +204,7 @@
         }];
         [self.searchBtn setTitle:@"立即发起" forState:UIControlStateNormal];
     }
+    self.startTimeBtn.hidden = !self.showStartTimeBtn;
 }
 
 - (void)exchangeBtnAutoLayout {

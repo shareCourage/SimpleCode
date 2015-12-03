@@ -148,10 +148,13 @@
      popoverPostion:(DXPopoverPosition)position
     withContentView:(UIView *)contentView
              inView:(UIView *)containerView {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-variable"
     CGFloat contentWidth = CGRectGetWidth(contentView.bounds);
     CGFloat contentHeight = CGRectGetHeight(contentView.bounds);
     CGFloat containerWidth = CGRectGetWidth(containerView.bounds);
     CGFloat containerHeight = CGRectGetHeight(containerView.bounds);
+#pragma clang diagnostic pop
 
     NSAssert(contentWidth > 0 && contentHeight > 0,
              @"DXPopover contentView bounds.size should not be zero");

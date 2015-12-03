@@ -7,16 +7,15 @@
 //
 
 #import "EBAnnotation.h"
-#import "EBLineDetail.h"
+#import "EBLineStation.h"
 
 @implementation EBAnnotation
+@synthesize lineInfo = _lineInfo;
 
 
-- (EBLineDetail *)lineInfo {
-    if (!_lineInfo) {
-        _lineInfo = [[EBLineDetail alloc] init];
-    }
-    return _lineInfo;
+- (void)setLineInfo:(EBLineStation *)lineInfo {
+    _lineInfo = lineInfo;
+    self.coordinate = lineInfo.coordinate;
 }
 
 @end

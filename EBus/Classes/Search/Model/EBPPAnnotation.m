@@ -7,11 +7,11 @@
 //
 
 #import "EBPPAnnotation.h"
-#import "EBLineDetail.h"
+#import "EBLineStation.h"
 
 @implementation EBPPAnnotation
 
-- (void)setLineInfo:(EBLineDetail *)lineInfo {
+- (void)setLineInfo:(EBLineStation *)lineInfo {
     _lineInfo = lineInfo;
     self.coordinate = lineInfo.coordinate;
 }

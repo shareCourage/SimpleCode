@@ -8,6 +8,7 @@
 
 #import "EBLineStationView.h"
 #import <Masonry/Masonry.h>
+#import "EBAnnotation.h"
 #import "EBLineStation.h"
 #import "EBLineStationViewCell.h"
 
@@ -53,16 +54,16 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     EBLineStationViewCell *cell = [EBLineStationViewCell cellWithTableView:tableView];
-    EBLineStation *station = self.dataSource[indexPath.row];
-    cell.station = station;
+    EBAnnotation *annotation = self.dataSource[indexPath.row];
+    cell.station = annotation.lineInfo;
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    EBLineStation *station = self.dataSource[indexPath.row];
+    EBAnnotation *annotation = self.dataSource[indexPath.row];
     if ([self.delegate respondsToSelector:@selector(lineStationView:didSelectMode:)]) {
-        [self.delegate lineStationView:self didSelectMode:station];
+        [self.delegate lineStationView:self didSelectMode:annotation];
     }
 }
 

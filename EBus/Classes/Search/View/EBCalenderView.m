@@ -60,7 +60,7 @@ typedef NS_ENUM(NSUInteger, EBMonth) {
     NSString *ticket = priceAndTicket[@"tickets"];
     self.prices = [NSArray seprateString:price characterSet:@","];
     self.tickets = [NSArray seprateString:ticket characterSet:@","];
-    NSUInteger length = self.tickets.count;
+//    NSUInteger length = self.tickets.count;
     if (self.tickets.count != 0) {
         [self reloadDataAtIndex:0];
     }
@@ -72,7 +72,7 @@ typedef NS_ENUM(NSUInteger, EBMonth) {
     NSString *ticket = priceAndTicketNext[@"tickets"];
     self.pricesNext = [NSArray seprateString:price characterSet:@","];
     self.ticketsNext = [NSArray seprateString:ticket characterSet:@","];
-    NSUInteger length = self.ticketsNext.count;
+//    NSUInteger length = self.ticketsNext.count;
     if (self.ticketsNext.count != 0) {
         [self reloadDataAtIndex:1];
     }
@@ -257,10 +257,13 @@ typedef NS_ENUM(NSUInteger, EBMonth) {
         self.priceView.dayLabel.text = [NSString stringWithFormat:@"共%ld天",(unsigned long)self.selectPrices.count];
         self.priceView.priceLabel.text = [NSString stringWithFormat:@"%.1f元",self.totalPrice];
     }
-    
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-variable"
     for (NSString *obj in self.selectPrices) {
         EBLog(@"%@",obj);
     }
+#pragma clang diagnostic pop
+
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {

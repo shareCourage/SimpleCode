@@ -8,6 +8,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EBLoginViewController">
             <connections>
+                <outlet property="backVLeading" destination="mcM-ls-xpk" id="9fG-gt-GdQ"/>
+                <outlet property="backVTrailing" destination="Sqb-e3-uwt" id="CIt-vt-IOK"/>
                 <outlet property="getVerificationBtn" destination="JbH-xQ-Njq" id="f5I-wf-UKV"/>
                 <outlet property="loginBtn" destination="T7s-KE-zn4" id="wV8-nS-kGb"/>
                 <outlet property="selectedBtn" destination="LQ6-p9-IZC" id="qzg-Ur-2b4"/>

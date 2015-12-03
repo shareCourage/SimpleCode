@@ -39,17 +39,18 @@
     NSString *imageString = nil;
     if (station.isOn) {
         if (station.isFirstOrEnd) {
-            imageString = @"search_cell_start";
+            imageString = @"search_map_depart";
         } else {
             imageString = @"search_map_departPass";
         }
         self.detailTextLabel.text = [NSString stringWithFormat:@"约%@",[station.time insertSymbolString:@":" atIndex:2]];
     } else {
         if (station.isFirstOrEnd) {
-            imageString = @"search_cell_end";
+            imageString = @"search_map_end";
         } else {
             imageString = @"search_map_endPass";
         }
+        self.detailTextLabel.text = [NSString stringWithFormat:@"约%@",[station.time insertSymbolString:@":" atIndex:2]];
     }
     self.imageView.image = [UIImage imageNamed:imageString];
 }

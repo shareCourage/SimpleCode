@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-@class EBLineStationView, EBLineStation;
+@class EBLineStationView, EBAnnotation;
 
 @protocol EBLineStationViewDelegate <NSObject>
 
 @optional
-- (void)lineStationView:(EBLineStationView *)lineStationView didSelectMode:(EBLineStation *)lineStation;
+- (void)lineStationView:(EBLineStationView *)lineStationView didSelectMode:(EBAnnotation *)anno;
 
 @end
 

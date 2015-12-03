@@ -400,6 +400,15 @@
     }
 }
 
++ (CLLocationCoordinate2D)coordFromString:(NSString *)lnglat {
+    NSArray *lnglats = [lnglat componentsSeparatedByString:@","];
+    if (lnglats.count != 2) return kCLLocationCoordinate2DInvalid;
+    NSString *lng = [lnglats firstObject];
+    NSString *lat = [lnglats lastObject];
+    CLLocationCoordinate2D coord = CLLocationCoordinate2DMake([lat doubleValue], [lng doubleValue]);
+    return coord;
+}
+
 @end
 
 

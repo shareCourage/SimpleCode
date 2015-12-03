@@ -10,7 +10,7 @@
 #import "EBLineDetailPPView.h"
 #import "EBPPAnnotation.h"
 
-@interface EBLineDetailPPAnnotationView ()
+@interface EBLineDetailPPAnnotationView () <EBLineDetailPPViewDelegate>
 
 @property (nonatomic, weak)EBLineDetailPPView *ppView;
 
@@ -26,7 +26,7 @@
     if (annoView == nil) {
         annoView = [[self alloc] initWithAnnotation:nil reuseIdentifier:ID];
     }
-    annoView.layer.anchorPoint = CGPointMake(0.61, 1);
+    annoView.layer.anchorPoint = CGPointMake(0.615, 1);
     return annoView;
 }
 
@@ -34,7 +34,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         EBLineDetailPPView *lineDetailPPView = [EBLineDetailPPView lineDetailPPView];
-        lineDetailPPView.userInteractionEnabled = NO;
+        lineDetailPPView.delegate = self;
+//        lineDetailPPView.userInteractionEnabled = NO;
         lineDetailPPView.y = 50;
         [self addSubview:lineDetailPPView];
         self.ppView = lineDetailPPView;
@@ -63,6 +64,12 @@
     [self.layer addAnimation:anim forKey:nil];
 }
 
+#pragma mark - EBLineDetailPPViewDelegate
+- (void)lineDetailPPViewCheckPhoto:(EBLineDetailPPView *)ppView lineDetail:(EBLineStation *)lineM{
+    if ([self.pp_delegate respondsToSelector:@selector(lineDetailPPAnnotationViewCheckPhoto:lineDetail:)]) {
+        [self.pp_delegate lineDetailPPAnnotationViewCheckPhoto:self lineDetail:lineM];
+    }
+}
 
 @end
 

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <MAMapKit/MAMapKit.h>
-@class EBLineDetail;
+@class EBLineStation;
 
 @interface EBAnnotation : NSObject <MAAnnotation>
 
@@ -17,6 +17,6 @@
 @property (nonatomic, copy) NSString *imageString;
 @property (nonatomic, assign, getter = isShow) BOOL show;
 
-@property (nonatomic, strong) EBLineDetail *lineInfo;
+@property (nonatomic, strong) EBLineStation *lineInfo;
 
 @end

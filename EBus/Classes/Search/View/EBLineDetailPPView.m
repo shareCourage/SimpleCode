@@ -7,6 +7,7 @@
 //
 
 #import "EBLineDetailPPView.h"
+#import "EBLineStation.h"
 
 @interface EBLineDetailPPView ()
 @property (weak, nonatomic) IBOutlet UILabel *stationL;
@@ -22,19 +23,24 @@
     return lineView;
 }
 
-- (void)setLineDetail:(EBLineDetail *)lineDetail {
+- (void)setLineDetail:(EBLineStation *)lineDetail {
     _lineDetail = lineDetail;
-    self.stationL.text = lineDetail.station;
+    NSArray *arrayOn = [lineDetail.station componentsSeparatedByString:@"（"];
+    self.stationL.text = [arrayOn firstObject];
     NSMutableString *mString = [NSMutableString stringWithFormat:@"%@",lineDetail.time];
     [mString insertString:@":" atIndex:2];
-    self.timeL.text = [[mString copy] stringByAppendingString:@"出发"];
+    if (lineDetail.isOn) {
+        self.timeL.text = [[mString copy] stringByAppendingString:@"出发"];
+    } else {
+        self.timeL.text = [[mString copy] stringByAppendingString:@"抵达"];
+    }
 }
 
 
 - (IBAction)checkPhoto:(id)sender {
     EBLog(@"checkPhoto");
-    if ([self.delegate respondsToSelector:@selector(lineDetailPPViewDidClickRightBtn:)]) {
-        [self.delegate lineDetailPPViewDidClickRightBtn:self];
+    if ([self.delegate respondsToSelector:@selector(lineDetailPPViewCheckPhoto:lineDetail:)]) {
+        [self.delegate lineDetailPPViewCheckPhoto:self lineDetail:self.lineDetail];
     }
 }
 

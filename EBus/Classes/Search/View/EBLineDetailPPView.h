@@ -7,13 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "EBLineDetail.h"
-@class EBLineDetailPPView;
+@class EBLineDetailPPView, EBLineStation;
 
 @protocol EBLineDetailPPViewDelegate <NSObject>
 
 @optional
-- (void)lineDetailPPViewDidClickRightBtn:(EBLineDetailPPView *)ppView;
+- (void)lineDetailPPViewCheckPhoto:(EBLineDetailPPView *)ppView lineDetail:(EBLineStation *)lineM;
 
 @end
 
@@ -21,6 +20,6 @@
 
 + (instancetype)lineDetailPPView;
 @property (nonatomic, assign) id <EBLineDetailPPViewDelegate> delegate;
-@property (nonatomic, strong) EBLineDetail *lineDetail;
+@property (nonatomic, strong) EBLineStation *lineDetail;
 
 @end

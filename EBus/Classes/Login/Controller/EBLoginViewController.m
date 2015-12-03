@@ -25,6 +25,8 @@
 - (IBAction)seletedBtnClick:(UIButton *)sender;
 - (IBAction)serviceProtocolClick:(id)sender;
 @property (weak, nonatomic) IBOutlet UIButton *serviceProtocolBtn;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *backVLeading;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *backVTrailing;
 @end
 
 @implementation EBLoginViewController
@@ -39,6 +41,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    if (EB_WidthOfScreen <= 320) {
+        self.backVLeading.constant = 5;
+        self.backVTrailing.constant = 5;
+    }
     timer = 60;
     self.navigationItem.title = @"用户登录";
     [self.selectedBtn setBackgroundImage:[UIImage imageNamed:@"login_select"] forState:UIControlStateNormal];

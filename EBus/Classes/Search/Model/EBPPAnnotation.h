@@ -8,12 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import <MAMapKit/MAMapKit.h>
-@class EBLineDetail;
+@class EBLineStation;
 
 @interface EBPPAnnotation : NSObject <MAAnnotation>
 
 @property (nonatomic, assign) CLLocationCoordinate2D coordinate;
 
-@property (nonatomic, strong) EBLineDetail *lineInfo;
+@property (nonatomic, strong) EBLineStation *lineInfo;
 
 @end

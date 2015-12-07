@@ -15,6 +15,8 @@
 #import "EBTransferModel.h"
 #import "EBUserInfo.h"
 #import "EBTicketViewController.h"
+#import "EBLineStation.h"
+#import "EBPhotoViewController.h"
 
 @interface EBTransferController () <EBLineMapViewDelegate, EBTransferLineCellDelegate>
 
@@ -207,4 +209,19 @@
     
 }
 
+#pragma mark - EBLineMapViewDelegate
+- (void)lineMapViewCheckPhoto:(EBLineMapView *)lineMapView lineDetail:(EBLineStation *)lineM {
+    EBLog(@"lineMapViewCheckPhoto -> %@, %@, %@", lineM.station, lineM.time, lineM.jid);
+    [EBNetworkRequest GET:static_Url_LinePhoto parameters:@{static_Argument_bcStationId : lineM.jid} dictBlock:^(NSDictionary *dict) {
+        NSString *urlStr = dict[static_Argument_returnData];
+        if (urlStr.length == 0) {
+            [MBProgressHUD showError:@"该站点暂时没有图片" toView:self.view];
+            return;
+        } else {
+            EBPhotoViewController *photo = [[EBPhotoViewController alloc] init];
+            photo.urlOfImage = urlStr;
+            [self presentViewController:photo animated:YES completion:nil];
+        }
+    } errorBlock:nil];
+}
 @end

@@ -40,7 +40,9 @@
     resultModel.mileage = orderModel.mileage;
     resultModel.needTime = orderModel.needTime;
     resultModel.ID = orderModel.ID;
-    resultModel.price = @([orderModel.tradePrice floatValue]);
+    NSArray *array = [NSArray seprateString:orderModel.saleDates characterSet:@","];
+    CGFloat priceF = [orderModel.tradePrice floatValue] / array.count;
+    resultModel.price = @(priceF);
     resultModel.openType = @(1);
     return resultModel;
 }

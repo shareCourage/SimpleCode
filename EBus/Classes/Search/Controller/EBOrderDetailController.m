@@ -256,8 +256,7 @@
                     if (value) {//全部都过期了
                         [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
                     } else{
-                        NSArray *titles = @[@"取消订单", @"续订"];
-                        [self bottomViewTwoButton:titles selector:@selector(cancelOrderAndAgain:) btnView:btnView height:bvH];//@"取消订单", @"续订"
+                        [self bottomHaveTwoButtonImplentation:btnView height:bvH];//生成支付、取消订单按钮
                     }
                 } else {
                     if ([EBTool eb_isWaitingWithDate:runDate startTime:startTime]) {
@@ -631,6 +630,7 @@
     } else {
         return;
     }
+    if (!payType) return;
     NSDictionary *parameters = @{static_Argument_userName : [EBUserInfo sharedEBUserInfo].loginName,
                                  static_Argument_userId : [EBUserInfo sharedEBUserInfo].loginId,
                                  static_Argument_payType : payType,

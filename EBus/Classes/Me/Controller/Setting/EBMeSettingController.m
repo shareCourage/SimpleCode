@@ -146,10 +146,12 @@
     PHSettingGroup *group = [[PHSettingGroup alloc] init];
     if (_hasLogin) {
 //        group.items = @[ticket,notification,szt,freeCertificate,advice,versionUpdate,more,logout];
-        group.items = @[ticket,notification,szt,freeCertificate,advice,more,logout];
+//        group.items = @[ticket,notification,szt,freeCertificate,advice,more,logout];
+        group.items = @[ticket,szt,freeCertificate,advice,more,logout];
     } else {
 //        group.items = @[ticket,notification,szt,freeCertificate,advice,versionUpdate,more];
-        group.items = @[ticket,notification,szt,freeCertificate,advice,more];
+//        group.items = @[ticket,notification,szt,freeCertificate,advice,more];
+        group.items = @[ticket,szt,freeCertificate,advice,more];
     }
     [self.dataSource addObject:group];
 }

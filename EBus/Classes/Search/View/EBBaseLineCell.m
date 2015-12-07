@@ -5,6 +5,7 @@
 //  Created by Kowloon on 15/10/15.
 //  Copyright © 2015年 Goome. All rights reserved.
 //
+#define EB_ColorOfWord [[UIColor blackColor] colorWithAlphaComponent:0.8f]
 #define EB_Top 10
 #define EB_Height 30
 #import "EBBaseLineCell.h"
@@ -19,11 +20,11 @@
 @end
 
 @implementation EBBaseLineCell
-
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     self = [super initWithCoder:aDecoder];
     if (self) {
         [self baseInfoImplementation];
+        
     }
     return self;
 }
@@ -44,8 +45,8 @@
     [departTime setSystemFontOf19];
     [totalDistance setSystemFontOf15];
     [totalTime setSystemFontOf15];
-    totalDistance.textColor = EB_RGBColor(160, 160, 160);
-    totalTime.textColor = EB_RGBColor(160, 160, 160);
+    totalDistance.textColor = EB_ColorOfWord;
+    totalTime.textColor = EB_ColorOfWord;
 
     departTime.text = @"始发";
     totalDistance.text = @"公里";
@@ -72,8 +73,8 @@
     
     [departPoint setSystemFontOf15];
     [endPoint setSystemFontOf15];
-    departPoint.textColor = EB_RGBColor(114, 114, 114);
-    endPoint.textColor = EB_RGBColor(114, 114, 114);
+    departPoint.textColor = EB_ColorOfWord;
+    endPoint.textColor = EB_ColorOfWord;
 
     departPoint.text = @"始发站";
     endPoint.text = @"终点站";
@@ -187,7 +188,7 @@
                           value:[UIFont systemFontOfSize:18.0]
                           range:NSMakeRange(1, 2)];
     [AttributedStr addAttribute:NSForegroundColorAttributeName
-                          value:EB_RGBColor(135, 135, 135)
+                          value:EB_ColorOfWord
                           range:NSMakeRange(1, 2)];
     self.totalTimeL.attributedText = AttributedStr;
     
@@ -197,7 +198,7 @@
                           value:[UIFont systemFontOfSize:18.0]
                           range:NSMakeRange(0, 5)];
     [AttributedStr1 addAttribute:NSForegroundColorAttributeName
-                          value:EB_RGBColor(135, 135, 135)
+                          value:EB_ColorOfWord
                           range:NSMakeRange(0, 5)];
     self.totalDistanceL.attributedText = AttributedStr1;
 }

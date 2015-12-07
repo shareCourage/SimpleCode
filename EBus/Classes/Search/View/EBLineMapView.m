@@ -75,12 +75,12 @@
         return;
     }
     NSUInteger openType = [lineDetailM.openType integerValue];
+    [self prepareDataSourceForLineStationView:lineDetailM];
     if (openType == 1 || openType == 2) {//购买
         if (lineDetailM.lineContent.length == 0) return;
-        [self prepareDataSourceForLineStationView:lineDetailM];
         NSArray *coords = [NSArray seprateString:lineDetailM.lineContent characterSet:@";"];
         [self addPolylineWithCoords:coords];
-        [self.maMapView setCenterCoordinate:[self averageCoord:coords] animated:NO];
+//        [self.maMapView setCenterCoordinate:[self averageCoord:coords] animated:NO];//求出整个路线的中心经纬度，然后再将其设为中心点
     } else if (openType == 3) { //跟团
         self.leftView.hidden = YES;
         [self drivingRouteRequest:lineDetailM];

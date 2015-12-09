@@ -101,7 +101,7 @@
 + (BOOL)allOutDate:(NSArray *)sales startTime:(NSString *)startTime;
 + (NSString *)stringFromPHCalenderDay:(PHCalenderDay *)currentDay;
 + (NSString *)stringFromPHCalenderDay:(PHCalenderDay *)currentDay space:(NSString *)space;
-+ (BOOL)isTheSameColor2:(UIColor*)color1 anotherColor:(UIColor*)color2;
++ (BOOL)isTheSameColor1:(UIColor*)color1 anotherColor:(UIColor*)color2;
 + (BOOL)calenderScrollViewEnable;//判断在当前日期时，日历是否可滑动到下个月
 
 + (CLLocationCoordinate2D)coordFromString:(NSString *)lnglat;//string转化成coor

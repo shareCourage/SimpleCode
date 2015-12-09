@@ -235,6 +235,7 @@
  */
 - (void)displayDifferentBtn:(UIView *)btnView height:(CGFloat)bvH {
     if (self.canFromMyOrder) {//来自我的订单页面cell的点击
+        EBLog(@"self.specificModel.saleDates ->  %@",self.specificModel.saleDates);
         NSArray *sales = [self.specificModel.saleDates componentsSeparatedByString:@","];
         if (sales.count == 0) {//如果没有日期，那就不需要进行判断了
             [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
@@ -320,7 +321,8 @@
                     if (value) {//全部都过期了
                         [self bottomHaveOneButtonImplentation:btnView height:bvH];//生成续订button
                     } else {//找到未过期的那张票，然后判断他的状态如何
-                        NSArray *secondLists = self.specificModel.secondList;
+                        NSArray *secondLists = [self.specificModel.secondList copy];
+                        EBLog(@"secondLists - >  %@",secondLists);
                         NSInteger index = 0;
                         for (EBSecondList *seclM in secondLists) {
                             if ([EBTool eb_isWaitingWithDate:seclM.runDate startTime:seclM.startTime]) break;

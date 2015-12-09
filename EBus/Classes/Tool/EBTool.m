@@ -380,7 +380,7 @@
     return YES;
 }
 
-+ (BOOL)isTheSameColor2:(UIColor*)color1 anotherColor:(UIColor*)color2 {
++ (BOOL)isTheSameColor1:(UIColor *)color1 anotherColor:(UIColor *)color2 {
     if (CGColorEqualToColor(color1.CGColor, color2.CGColor)) {
         return YES;
     } else {

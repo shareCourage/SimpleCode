@@ -5,7 +5,7 @@
 //  Created by Kowloon on 15/10/15.
 //  Copyright © 2015年 Goome. All rights reserved.
 //
-#define EB_ImageName_LocationBtn @"home_current_highlighted"
+#define EB_ImageName_LocationBtn @"home_current_hL"
 
 #import "EBSearchMapView.h"
 #import "EBUserInfo.h"

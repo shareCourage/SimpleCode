@@ -70,7 +70,7 @@
     colorV.backgroundColor = color;
     colorV.layer.borderColor = color.CGColor;
     colorV.layer.borderWidth = 1.f;
-    if ([EBTool isTheSameColor2:color anotherColor:[UIColor whiteColor]]) {
+    if ([EBTool isTheSameColor1:color anotherColor:[UIColor whiteColor]]) {
         colorV.layer.borderColor = EB_RGBColor(241, 241, 241).CGColor;
     }
     UILabel *wordL = [[UILabel alloc] init];

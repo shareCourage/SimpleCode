@@ -31,6 +31,5 @@
     CGRect iconRect = [super textRectForBounds:bounds];
     iconRect.origin.x += 5;
     return iconRect;
-
 }
 @end

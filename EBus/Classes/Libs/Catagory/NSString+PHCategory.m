@@ -268,6 +268,139 @@ static NSString *token = @"Itisgoomesimplifiedappprivatekeyandcouldnotbegetbysom
     return returnSize;
 }
 
+
++ (NSString *)formatShowDateTime:(NSDate *)needDate
+{
+    if (needDate == nil) return @"";
+    
+    @try {
+        //实例化一个NSDateFormatter对象
+        
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        
+        NSDate * nowDate = [NSDate date];
+        
+        /////  将需要转换的时间转换成 NSDate 对象
+        /////  取当前时间和转换时间两个日期对象的时间间隔
+        /////  这里的NSTimeInterval 并不是对象，是基本型，其实是double类型，是由c定义的:  typedef double NSTimeInterval;
+        NSTimeInterval time = [nowDate timeIntervalSinceDate:needDate];
+        
+        //// 再然后，把间隔的秒数折算成天数和小时数：
+        
+        NSString *dateStr = @"";
+        
+        if (time<=60) {  //// 1分钟以内的
+            dateStr = @"1分钟前";
+        }else if(time<=60*60){  ////  一个小时以内的
+            
+            int mins = time/60;
+            dateStr = [NSString stringWithFormat:@"%d分钟前",mins];
+            
+        }else if(time<=60*60*24*2){   //// 在两天内的
+            
+            [dateFormatter setDateFormat:@"YYYY/MM/dd"];
+            NSString * need_yMd = [dateFormatter stringFromDate:needDate];
+            NSString *now_yMd = [dateFormatter stringFromDate:nowDate];
+            
+            [dateFormatter setDateFormat:@"HH:mm"];
+            if ([need_yMd isEqualToString:now_yMd]) {
+                //// 在同一天
+                //                dateStr = [NSString stringWithFormat:@"今天 %@",[dateFormatter stringFromDate:needDate]];
+                dateStr = [NSString stringWithFormat:@"%@",[dateFormatter stringFromDate:needDate]];
+            }else{
+                ////  昨天
+                //                dateStr = [NSString stringWithFormat:@"昨天 %@",[dateFormatter stringFromDate:needDate]];
+                [dateFormatter setDateFormat:@"dd"];
+                NSString *beforeYesDay = [dateFormatter stringFromDate:needDate];
+                NSString *yesDay = [dateFormatter stringFromDate:nowDate];
+                NSInteger num = [yesDay integerValue] - [beforeYesDay integerValue];
+                if (num == 1) {
+                    dateStr = @"昨天";
+                }else{
+                    [dateFormatter setDateFormat:@"MM月dd日"];
+                    dateStr = [dateFormatter stringFromDate:needDate];
+                }
+            }
+        }else {
+            
+            [dateFormatter setDateFormat:@"yyyy"];
+            NSString * yearStr = [dateFormatter stringFromDate:needDate];
+            NSString *nowYear = [dateFormatter stringFromDate:nowDate];
+            
+            if ([yearStr isEqualToString:nowYear]) {
+                ////  在同一年
+                [dateFormatter setDateFormat:@"MM月dd日"];
+                dateStr = [dateFormatter stringFromDate:needDate];
+            }else{
+                [dateFormatter setDateFormat:@"yyyy年MM月dd日"];
+                dateStr = [dateFormatter stringFromDate:needDate];
+            }
+        }
+        
+        return dateStr;
+    }
+    @catch (NSException *exception) {
+        return @"";
+    }
+}
+
++(NSString *)dateDifferenceYourDate:(NSString *)dateStr dateFormat:(NSString *)dateFormat
+{
+    //传入的时间
+    NSDateFormatter *formater = [[NSDateFormatter alloc] init];
+    [formater setDateFormat:dateFormat];
+    NSDate *date = [formater dateFromString:dateStr];
+    NSTimeInterval late=(int)[date timeIntervalSince1970];
+    
+    //格式化传入时间
+    NSDateFormatter *userFormatter = [[NSDateFormatter alloc] init];
+    [userFormatter setDateFormat:@"yyyy:MM:dd:HH:mm:ss"];
+    NSString *userDateStr = [userFormatter stringFromDate:date];
+    NSArray *userArr = [userDateStr componentsSeparatedByString:@":"];
+    
+    //当前时间
+    NSDate *nowDate = [NSDate date];
+    NSTimeInterval now=(int)[nowDate timeIntervalSince1970];
+    
+    //当前时间字符串表示法
+    NSDateFormatter *nowFormatter = [[NSDateFormatter alloc] init];
+    [nowFormatter setDateFormat:@"yyyy:MM:dd:HH:mm:ss"];
+    NSString *nowDateStr = [nowFormatter stringFromDate:nowDate];
+    //计算当前时间与当天零差多少秒
+    NSArray *tempArr = [nowDateStr componentsSeparatedByString:@":"];
+    int todayZero = [tempArr[3] intValue]*3600 + [tempArr[4] intValue]*60 + [tempArr[5] intValue];
+    //时间差（秒）
+    NSTimeInterval cha = now-late;
+    
+    NSString *timeString=@"";
+    //五分钟内返回
+    if (cha<5*60) {
+        timeString = @"5分钟内";
+    }
+    //时间差大于五分钟小于一个小时内
+    else if (cha>5*60 && cha<3600) {
+        timeString = [NSString stringWithFormat:@"%d", (int)(cha/60)];
+        timeString = [NSString stringWithFormat:@"%@分钟前",timeString];
+        
+    }
+    //当天之内
+    else if (cha/3600>1 && cha<todayZero) {
+        timeString = [NSString stringWithFormat:@"%@:%@",userArr[3],userArr[4]];
+    }
+    //昨天
+    else if (cha>todayZero && cha<(todayZero+24*60*60))
+    {
+        timeString = [NSString stringWithFormat:@"昨天 %@:%@",userArr[3],userArr[4]];
+    }
+    //昨天之前
+    else if(cha >(todayZero+24*60*60)){
+        timeString = [NSString stringWithFormat:@"%@-%@-%@ %@:%@",userArr[0],userArr[1],userArr[2],userArr[3],userArr[4]];
+    }
+    
+    return timeString;
+    
+}
+
 @end
 
 

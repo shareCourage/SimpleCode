@@ -397,8 +397,8 @@ typedef NS_ENUM(NSUInteger, EBMonth) {
     CGFloat addBW = width / 3 - 10;
     CGFloat addBH = btnViewH;
     CGRect addBF = CGRectMake(addBX, addBY, addBW, addBH);
-    UIButton *addB = [UIButton eb_buttonWithFrame:addBF target:self action:@selector(addBusClick) Title:@"我要加车"];
-    [addB.titleLabel setSystemFontOf18];
+    UIButton *addB = [UIButton eb_buttonWithFrame:addBF target:self action:@selector(addBusClick) Title:@"无票申请加班"];
+    [addB.titleLabel setSystemFontOf15];
     addB.backgroundColor = EB_RGBColor(156, 193, 85);
     [btnView addSubview:addB];
     self.addBusBtn = addB;

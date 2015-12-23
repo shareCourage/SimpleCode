@@ -2743,7 +2743,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = net.goome.EBus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "2358bd34-83a2-4032-87b5-bf11b523d335";
+				PROVISIONING_PROFILE = "84d54105-6bd6-4ae6-8c38-1f7b7da1c285";
 			};
 			name = Debug;
 		};
@@ -2811,7 +2811,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = net.goome.EBus;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "2358bd34-83a2-4032-87b5-bf11b523d335";
+				PROVISIONING_PROFILE = "84d54105-6bd6-4ae6-8c38-1f7b7da1c285";
 			};
 			name = Release;
 		};

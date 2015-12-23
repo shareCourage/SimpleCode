@@ -52,7 +52,6 @@ singleton_implementation(EBUserInfo)
 }
 
 #pragma mark - method to calculate days in previous, current and the following month.
-
 - (void)calculateDaysInPreviousMonthWithDate:(NSDate *)date
 {
     NSUInteger weeklyOrdinality = [[date firstDayOfCurrentMonth] weeklyOrdinality];

@@ -290,7 +290,7 @@
     UIButton *apply = [UIButton buttonWithType:UIButtonTypeSystem];
     apply.titleLabel.font = [UIFont systemFontOfSize:20];
     [apply setBackgroundColor:EB_DefaultColor];
-    [apply setTitle:@"申请加班" forState:UIControlStateNormal];
+    [apply setTitle:@"我要加车" forState:UIControlStateNormal];
     [apply setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     CGFloat wwwww = 30;//离左右两边的距离
     CGFloat applyW = width - wwwww * 2;

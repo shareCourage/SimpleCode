@@ -68,4 +68,8 @@
     CIImage *resoultImage = qrFilter.outputImage;
     return resoultImage;
 }
+
+
+
+
 @end

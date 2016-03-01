@@ -24,6 +24,8 @@
 #import "MobClickSocialAnalytics.h"
 
 #import "EBUserInfo.h"
+#import <SDWebImage/SDImageCache.h>
+#import <SDWebImage/SDWebImageDownloader.h>
 
 @interface AppDelegate () <WXApiDelegate>
 
@@ -141,6 +143,12 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
    
+}
+
+- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
+    [[SDImageCache sharedImageCache] clearMemory];
+    [[SDImageCache sharedImageCache] cleanDisk];
+//    [SDWebImageDownloader sharedDownloader] downloadImageWithURL:<#(NSURL *)#> options:<#(SDWebImageDownloaderOptions)#> progress:<#^(NSInteger receivedSize, NSInteger expectedSize)progressBlock#> completed:<#^(UIImage *image, NSData *data, NSError *error, BOOL finished)completedBlock#>
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {

@@ -61,7 +61,6 @@
 	<string>请打开位置服务,方便你享受更好的服务</string>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>location</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UIMainStoryboardFile</key>

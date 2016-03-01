@@ -168,6 +168,21 @@
 }
 
 
+
+- (UIImage *)imageWithOpaque:(BOOL)opaque {
+    CGSize size = self.bounds.size;
+    /*
+     *UIGraphicsBeginImageContextWithOptions(CGSize size, BOOL opaque, CGFloat scale)
+     *size 区域大小
+     *opaque 是否透明
+     *scale 比例
+     */
+    UIGraphicsBeginImageContextWithOptions(size, opaque, [UIScreen mainScreen].scale);
+    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
+}
 @end
 
 

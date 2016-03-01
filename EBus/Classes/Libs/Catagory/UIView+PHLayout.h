@@ -26,4 +26,6 @@
 @property (assign, nonatomic) CGFloat    height;
 @property (assign, nonatomic) CGSize    size;
 
+//某个view的截屏
+- (UIImage *)imageWithOpaque:(BOOL)opaqu;
 @end

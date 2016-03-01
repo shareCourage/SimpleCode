@@ -23,7 +23,7 @@ singleton_implementation(EBUserInfo)
         _singletonMapView = YES;
         _maMapView = [[MAMapView alloc] init];
         _maMapView.showsUserLocation = YES;
-        _maMapView.allowsBackgroundLocationUpdates = YES;
+//        _maMapView.allowsBackgroundLocationUpdates = YES;
         _maMapView.userTrackingMode = MAUserTrackingModeFollow;
         _currentDate = [NSDate date];
         [self reloadCurrentDate];
